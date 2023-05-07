@@ -23,7 +23,7 @@ export const useConversationStore = defineStore("conversation", () => {
       shopId: "1",
       pageId: "1",
       conversationId: "1",
-      conversationPicture: "https://picsum.photos/200",
+      conversationPicture: "",
       updatedAt: 234789,
       lastActivity: "Boom send nude picutes",
       participants: [
@@ -38,19 +38,22 @@ export const useConversationStore = defineStore("conversation", () => {
       shopId: "1",
       pageId: "1",
       conversationId: "2",
-      conversationPicture: "https://picsum.photos/200",
+      conversationPicture: "",
       updatedAt: 2347892,
       lastActivity: "Hello สวัสดี",
       participants: [
         {
-          userId: "1",
+          userId: "2",
           username: "Nhuengzii",
           profilePicture: "https://avatars.githubusercontent.com/u/86766644?v=4",
         }
       ]
     }
   ]
+  function getConversationById(conversationId: string) {
+    return computed(() => mockConversations.find((conversation) => conversation.conversationId === conversationId));
+  }
   const conversations = ref<Conversation[]>(mockConversations);
-  return { conversations }
+  return { conversations, getConversationById }
 });
 
