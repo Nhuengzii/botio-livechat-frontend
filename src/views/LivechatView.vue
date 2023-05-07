@@ -22,4 +22,5 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router"
 import ChatLeft from "@/components/ChatLeft.vue";
+import { useConversationStore } from "@/stores/conversation";
 </script>
