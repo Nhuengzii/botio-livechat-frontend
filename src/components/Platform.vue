@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-[1/3] bg-green-100 rounded-[18px] mx-[10px]">
+    <div class="flex-[1] bg-green-100 rounded-[18px] mx-[10px]">
         <div class="grid px-[14px]">
             <div class="bg-red-200">
                 <h1>This is a platform {{ $route.params.platform }}</h1>
@@ -17,14 +17,14 @@
             <div class="bg-red-400">
                 fing tag name
             </div>
-            <div v-if="$route.params.platform === 'fb'" class="bg-red-200 w-full h-full flex flex-col overflow-hidden">
+            <div v-if="$route.params.platform === 'fb'" class="bg-red-500 w-full h-full flex flex-col overflow-hidden">
                 <div class="relative overflow-hidden w-full h-full">
                     <div class="max-h-[80%]">
                         <ul>
-                            <li v-for="{conversationId, conversationPicture, lastActivity, updatedAt, participants} in store.conversations" key="conversationId" 
+                            <li v-for="{conversationId, conversationPicture, lastActivity, updatedAt, participants} in store.conversations" key="ConversationId" 
                                 class="flex border-b border-gray-300">
                                 <div class="flex gap-x-4 w-full">
-                                    <router-link :to="{ name: 'Conver', params: { conversation_id: conversationId }}" class="flex items-center px-[14px] pt-[20px] pb-[1.5rem] cursor-pointer">
+                                    <router-link to="/fb/1" class="flex items-center px-[14px] pt-[20px] pb-[1.5rem] cursor-pointer">
                                         <img v-if="conversationPicture" 
                                             class="h-12 w-12 flex-none rounded-full bg-gray-50 shrink-0 mr-[20px]" 
                                             :src="conversationPicture" alt="">
@@ -43,7 +43,8 @@
             </div>
         </div>
     </div>
-    
+    <ChatCenter/>
+    <ChatRight/>
     
 </template>
 
