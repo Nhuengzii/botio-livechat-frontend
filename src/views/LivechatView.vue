@@ -8,6 +8,7 @@
     <!--container chat left-->
     <div class="flex-[1] bg-green-100 rounded-[18px] mx-[10px]">
       <h1>This is list of conversations of platform: {{ $route.params.platform }}</h1>
+      <h1>The are {{ useConversationStore().conversations.length }} conversations</h1>
     </div>
     <!--End container chat left-->
     <RouterView />
@@ -21,4 +22,5 @@
 
 <script setup lang="ts">
 import { RouterView } from "vue-router"
+import { useConversationStore } from "@/stores/conversation";
 </script>
