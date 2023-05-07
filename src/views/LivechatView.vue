@@ -6,9 +6,9 @@
   <section class="flex h-full">
 
     <!--container chat left-->
-    <div class="flex-[1] bg-green-100 rounded-[18px] mx-[10px]">
-      <h1>This is list of conversations of platform: {{ $route.params.platform }}</h1>
-    </div>
+    
+    <ChatLeft />
+    
     <!--End container chat left-->
     <RouterView />
 
@@ -21,4 +21,5 @@
 
 <script setup lang="ts">
 import { RouterView } from "vue-router"
+import ChatLeft from "@/components/ChatLeft.vue";
 </script>
