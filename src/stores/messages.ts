@@ -25,6 +25,7 @@ export const useMessageStore = defineStore("message", () => {
   const messages = ref<Message[]>([]);
   function fetchMessages(conversationId: string) {
     if (conversationId !== "1") {
+      messages.value = [];
       return
     }
     const mockMessage: Message[] = [
