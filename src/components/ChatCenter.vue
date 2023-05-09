@@ -1,24 +1,32 @@
 <template>
     <div class="flex-[2] bg-green-100 rounded-[18px] mx-[10px] min-w-[512px]">
         <div class="flex flex-col h-full">
-            <header class="relative flex-[1] h-full w-full bg-blue-100 glow rounded-2xl border-b border-gray-300">
+            <header class="relative flex-[1] h-full w-full bg-blue-100 glow  border-b border-gray-300">
                 <div class="grid grid-cols-12 gap-3">
-                    <div class="col-start-1 col-end-5 row-start-2 bg-blue-200">
-                        <div class="flex flex-row items-center justify-start pl-[12px]">
-                            <div class="w-12 h-12 rounded-full bg-blue-400">
-                                <img :src="datauser?.participants[0].profilePicture" alt="" class="object-cover h-12 w-12 rounded-full">
+                    <div class="col-start-1 col-end-7 row-start-2 overflow-hidden">
+                        <div class="flex  items-center justify-start pl-[20px]">
+                            <div class="w-12 h-12 rounded-full">
+                                <div></div>
+                                <img v-if="conversationId !== '-1'" :src="datauser?.participants[0].profilePicture" alt="" class="object-cover h-12 w-12 rounded-full">
                             </div>
-                            <span class="ml-3">{{ datauser?.participants[0].username }}</span>
+                            <div v-if="conversationId !== '-1'" class="flex flex-col ml-4">
+                                <span class="">{{ datauser?.participants[0].username }}</span>
+                                <div class="flex items-center relative">
+                                    <div class="w-[14px] h-[14px] rounded-full bg-green-400 absolute -left-[27px] top-[10px]"></div>
+                                    <span class=" pl-[4px] text-sm leading-5 text-gray-500">Active</span>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </header>
             
 
-            <main class="flex-[7] flex-col relative overflow-x-auto w-full h-full bg-blue-50 glow rounded-2xl">
+            <main class="flex-[7] flex-col relative overflow-x-auto w-full h-full bg-blue-50 glow">
                 <div class="flex flex-col h-full">
                     <div class='grid grid-cols-12 gap-y-2'>
-                        <div v-for="item in storeMessage.messages" key="item.messageId" 
+                        <div v-for="item in storeMessage.messages" :key="item.messageId" 
                             :class="{'col-start-1 col-end-8 p-[12px] round-lg' : item.source.sourceType === 'USER', 
                                     'col-start-6 col-end-13 p-3 rounded-lg': item.source.sourceType === 'ADMIN'  
                                     }">
@@ -42,7 +50,7 @@
             
 
             <footer class="flex grow-0 basis-auto shrink-0 bg-red-100 justify-center">
-                <form class="w-full px-[8px] py-[8px]">
+                <form v-if="conversationId !== '-1'" class="w-full px-[8px] py-[8px]">
                     <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                             <label for="comment" class="sr-only">Your comment</label>
@@ -82,15 +90,53 @@
 
 import { useMessageStore } from '@/stores/messages';
 import { useConversationStore } from '../stores/conversation';
-import { useRoute } from 'vue-router';
+import {useRoute } from 'vue-router';
+import { watch, reactive, computed, onBeforeUpdate, onMounted } from 'vue';
+
+
+
+
+
+
 const storeMessage = useMessageStore();
 const storeConversation = useConversationStore();
-const route = useRoute();
+const route = useRoute()
 const conversationId = route.params.conversation_id as string;
 const datauser = storeConversation.getConversationById(conversationId)
 
+onMounted(() => {
+    storeMessage.fetchMessages(conversationId)
+})
+
+onBeforeUpdate(() => {
+    const newConversationId = route.params.conversation_id
+    if (newConversationId !== conversationId) {
+        // Update the conversation ID and fetch new messages
+        conversationId = newConversationId
+        storeMessage.fetchMessages(conversationId)
+    }
+})
+
+
+/*watch(() => conversationId, () => {
+    const conversationId = route.params.conversation_id as string;
+    storeMessage.fetchMessages(conversationId)
+    const message = computed(() => storeMessage.messages)
+})*/
+
+
+
+//const message = computed(() => storeMessage.messages)
+
+const checkConversationId = () => {
+    if (conversationId !== "-1") {
+        return true;
+    }
+}
+
+
+
+
+
+
 </script>
-
-<style lang="scss" scoped>
-
-</style>

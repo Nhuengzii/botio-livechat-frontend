@@ -10,7 +10,7 @@ import Navbar from './components/Navbar.vue';
     <!--End Navbar-->
 
     <main class="flex flex-col grow pb-[12px]">
-      <RouterView />
+      <RouterView :key="$route.params.platform" />
     </main>
   </div>
 </template>

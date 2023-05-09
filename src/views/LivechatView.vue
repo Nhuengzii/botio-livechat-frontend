@@ -10,7 +10,7 @@
     <ChatLeft />
     
     <!--End container chat left-->
-    <RouterView />
+    <router-view :key="$route.params.conversation_id"></router-view>
 
   </section>
 
