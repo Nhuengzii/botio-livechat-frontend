@@ -10,6 +10,9 @@ const router = createRouter({
       path: '/:platform',
       name: 'LivechatView',
       component: LivechatView,
+      redirect: to => {
+        return { path: `/${to.params.platform}/-1` }
+      },
       children: [
         {
           path: '/:platform/:conversation_id/',
