@@ -112,7 +112,7 @@ onBeforeUpdate(() => {
     const newConversationId = route.params.conversation_id
     if (newConversationId !== conversationId) {
         // Update the conversation ID and fetch new messages
-        conversationId = newConversationId
+        //conversationId = newConversationId
         storeMessage.fetchMessages(conversationId)
     }
 })
