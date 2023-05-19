@@ -14,7 +14,7 @@ const router = createRouter({
         {
           path: '',
           redirect(to) {
-            return `${to.params.platform}/-1`
+            return `/${to.params.platform}/-1`
           },
         },
         {
