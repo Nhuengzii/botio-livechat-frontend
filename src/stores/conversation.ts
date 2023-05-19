@@ -3,30 +3,26 @@ import { defineStore } from "pinia";
 import axios from 'axios'
 
 type Participant = {
-  userId: string,
+  userID: string,
   username: string,
   profilePicture: string,
 }
 
 type Source = {
-  sourceId: string,
+  sourceID: string,
   sourceName?: string
   sourcePicture?: string,
   sourceType: "USER" | "ADMIN",
 }
 
 type Message = {
-  shopId: string,
-  pageId: string,
   conversationId: string,
-  messageId: string,
-  message: string,
+  messageID: string,
   timeStamp: number,
   source: Source,
+  message: string,
 }
 type Conversation = {
-  shopId: string,
-  pageId: string,
   conversationId: string,
   conversationPicture: string,
   updatedAt: number,
