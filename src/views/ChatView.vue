@@ -10,8 +10,11 @@
 
 <script setup lang="ts">
 import ChatCenter from '@/components/ChatCenter.vue';
-import ChatRight from '@/components/ChatRight.vue';import { useMessageStore } from '@/stores/messages';
+import ChatRight from '@/components/ChatRight.vue';
+import { useMessageStore } from '@/stores/messages';
+import { useConversationStore } from '@/stores/conversation';
 const messsageStore = useMessageStore();
+const conversationStore = useConversationStore();
 </script>
 
 <style scoped></style>

@@ -16,14 +16,14 @@ type Source = {
 }
 
 type Message = {
-  conversationId: string,
+  conversationID: string,
   messageID: string,
   timeStamp: number,
   source: Source,
   message: string,
 }
 type Conversation = {
-  conversationId: string,
+  conversationID: string,
   conversationPicture: string,
   updatedAt: number,
   lastActivity: string,
@@ -34,8 +34,28 @@ type Conversation = {
 export const useConversationStore = defineStore("conversation", () => {
   const conversations = ref<Conversation[]>([]);
   function getConversationById(conversationId: string) {
-    return computed(() => conversations.value.find((conversation) => conversation.conversationId === conversationId));
+    return computed(() => conversations.value.find((conversation) => conversation.conversationID === conversationId));
   }
-  return { conversations, getConversationById }
+  async function fetchConversations() {
+    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
+    data.conversations.forEach(conversation => {
+      conversations.value.push({
+        conversationID: conversation.conversationID,
+        conversationPicture: conversation.conversationPic,
+        updatedAt: conversation.updatedTime,
+        lastActivity: conversation.lastActivity,
+        participants: conversation.participants.map((participant) => {
+          return {
+            userID: participant.userID,
+            username: participant.username,
+            profilePicture: participant.profilePic.src,
+          }
+        }),
+        messages: {},
+      })
+    });
+    console.log("Current conversations", conversations.value)
+  }
+  return { conversations, getConversationById, fetchConversations }
 });
 
