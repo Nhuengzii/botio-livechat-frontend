@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory,  } from 'vue-router'
+import { createRouter, createWebHistory, } from 'vue-router'
 import LivechatView from '../views/LivechatView.vue'
 import ChatView from '../views/ChatView.vue'
 import { useMessageStore } from '@/stores/messages'
@@ -10,12 +10,15 @@ const router = createRouter({
       path: '/:platform',
       name: 'LivechatView',
       component: LivechatView,
-      redirect: to => {
-        return { path: `/${to.params.platform}/-1` }
-      },
       children: [
         {
-          path: '/:platform/:conversation_id/',
+          path: '',
+          redirect(to) {
+            return `${to.params.platform}/-1`
+          },
+        },
+        {
+          path: ':conversation_id/',
           name: 'Conver',
           component: ChatView,
           beforeEnter: (to, from, next) => {
