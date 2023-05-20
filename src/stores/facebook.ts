@@ -12,6 +12,7 @@ export const useFacebookStore = defineStore("facebook", () => {
   }
   async function fetchConversations() {
     const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
+    conversations.value = [];
     data.conversations.forEach(conversation => {
       conversations.value.push({
         conversationID: conversation.conversationID,
