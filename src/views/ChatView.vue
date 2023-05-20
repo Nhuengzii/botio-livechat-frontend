@@ -1,22 +1,18 @@
 <template>
   <!-- container chat center -->
-  <div class="flex-[2] bg-green-100 rounded-[18px] mx-[10px] min-w-[512px]">
-    <h1>This is messages of conversation_id: {{ $route.params.conversation_id }} </h1>
-    <h1>The are {{ messsageStore.messages.length }} in this conversation</h1>
-
-  </div>
+  <ChatCenter />
   <!--End container chat center -->
 
   <!--container chat right-->
-  <div class="flex-[1] bg-green-100 rounded-[18px] mx-[10px]">
-    <h1>This is profile of conversation_id: {{ $route.params.conversation_id }} </h1>
-  </div>
+  <ChatRight />
   <!--End container chat right-->
 </template>
 
 <script setup lang="ts">
-import { useMessageStore } from '@/stores/messages';
-const messsageStore = useMessageStore();
+import ChatCenter from '@/components/ChatCenter.vue';
+import ChatRight from '@/components/ChatRight.vue';
+import { useConversationStore } from '@/stores/conversation';
+const conversationStore = useConversationStore();
 </script>
 
 <style scoped></style>

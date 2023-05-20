@@ -1,59 +1,92 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import axios from 'axios'
 
 type Participant = {
-  userId: string,
+  userID: string,
   username: string,
   profilePicture: string,
 }
 
+type Source = {
+  sourceID: string,
+  sourceName?: string
+  sourcePicture?: string,
+  sourceType: "USER" | "ADMIN",
+}
+
+type Message = {
+  conversationID: string,
+  messageID: string,
+  timeStamp: number,
+  source: Source,
+  message: string,
+}
 type Conversation = {
-  shopId: string,
-  pageId: string,
-  conversationId: string,
+  conversationID: string,
   conversationPicture: string,
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
+  messages: { "isAlreadyFetch": boolean, "messages": Message[] },
 }
 
+
 export const useConversationStore = defineStore("conversation", () => {
-  const mockConversations: Conversation[] = [
-    {
-      shopId: "1",
-      pageId: "1",
-      conversationId: "1",
-      conversationPicture: "",
-      updatedAt: 234789,
-      lastActivity: "Boom send nude picutes",
-      participants: [
-        {
-          userId: "1",
-          username: "Boom",
-          profilePicture: "https://avatars.githubusercontent.com/u/124413969?v=4"
-        }
-      ]
-    },
-    {
-      shopId: "1",
-      pageId: "1",
-      conversationId: "2",
-      conversationPicture: "",
-      updatedAt: 2347892,
-      lastActivity: "Hello สวัสดี",
-      participants: [
-        {
-          userId: "2",
-          username: "Nhuengzii",
-          profilePicture: "https://avatars.githubusercontent.com/u/86766644?v=4",
-        }
-      ]
-    }
-  ]
+  const conversations = ref<Conversation[]>([]);
   function getConversationById(conversationId: string) {
-    return computed(() => mockConversations.find((conversation) => conversation.conversationId === conversationId));
+    return conversations.value.find((conversation) => conversation.conversationID === conversationId);
   }
-  const conversations = ref<Conversation[]>(mockConversations);
-  return { conversations, getConversationById }
+  async function fetchConversations() {
+    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
+    data.conversations.forEach(conversation => {
+      conversations.value.push({
+        conversationID: conversation.conversationID,
+        conversationPicture: conversation.conversationPic,
+        updatedAt: conversation.updatedTime,
+        lastActivity: conversation.lastActivity,
+        participants: conversation.participants.map((participant) => {
+          return {
+            userID: participant.userID,
+            username: participant.username,
+            profilePicture: participant.profilePic.src,
+          }
+        }),
+        messages: { "isAlreadyFetch": false, "messages": [] },
+      })
+    });
+    console.log("Current conversations", conversations.value)
+  }
+
+  async function fetchMessages(conversationID: string) {
+    const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
+    if (!conversation) return;
+    if (conversation.messages.isAlreadyFetch) return conversation;
+    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
+    data.messages.forEach(element => {
+      const message: Message = {
+        conversationID: conversationID,
+        messageID: element.messageID,
+        timeStamp: element.timestamp,
+        source: {
+          sourceID: element.source.userID,
+          sourceType: element.source.type === "user" ? "USER" : "ADMIN",
+        },
+        message: element.message,
+      }
+      conversation.messages.messages.push(message);
+      conversation.messages.isAlreadyFetch = true;
+    });
+    console.log("Current conversation", conversation)
+    return conversation;
+  }
+
+  function addMessage(conversationID: string, message: Message) {
+    const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
+    if (!conversation) return;
+    conversation.messages.messages.push(message);
+  }
+
+  return { conversations, getConversationById, fetchConversations, fetchMessages, addMessage }
 });
 
