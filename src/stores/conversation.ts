@@ -66,10 +66,10 @@ export const useConversationStore = defineStore("conversation", () => {
       const message: Message = {
         conversationID: conversationID,
         messageID: element.messageID,
-        timeStamp: element.timeStamp,
+        timeStamp: element.timestamp,
         source: {
           sourceID: element.source.userID,
-          sourceType: element.source.sourceType === "user" ? "USER" : "ADMIN",
+          sourceType: element.source.type === "user" ? "USER" : "ADMIN",
         },
         message: element.message,
       }
@@ -79,6 +79,12 @@ export const useConversationStore = defineStore("conversation", () => {
     return conversation;
   }
 
-  return { conversations, getConversationById, fetchConversations, fetchMessages }
+  function addMessage(conversationID: string, message: Message) {
+    const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
+    if (!conversation) return;
+    conversation.messages.push(message);
+  }
+
+  return { conversations, getConversationById, fetchConversations, fetchMessages, addMessage }
 });
 
