@@ -28,13 +28,14 @@ type Conversation = {
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
-  messages: Record<string, Message[]>,
+  messages: Message[],
 }
+
 
 export const useConversationStore = defineStore("conversation", () => {
   const conversations = ref<Conversation[]>([]);
   function getConversationById(conversationId: string) {
-    return computed(() => conversations.value.find((conversation) => conversation.conversationID === conversationId));
+    return conversations.value.find((conversation) => conversation.conversationID === conversationId);
   }
   async function fetchConversations() {
     const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
@@ -51,11 +52,33 @@ export const useConversationStore = defineStore("conversation", () => {
             profilePicture: participant.profilePic.src,
           }
         }),
-        messages: {},
+        messages: []
       })
     });
     console.log("Current conversations", conversations.value)
   }
-  return { conversations, getConversationById, fetchConversations }
+
+  async function fetchMessages(conversationID: string) {
+    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
+    const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
+    if (!conversation) return;
+    data.messages.forEach(element => {
+      const message: Message = {
+        conversationID: conversationID,
+        messageID: element.messageID,
+        timeStamp: element.timeStamp,
+        source: {
+          sourceID: element.source.userID,
+          sourceType: element.source.sourceType === "user" ? "USER" : "ADMIN",
+        },
+        message: element.message,
+      }
+      conversation.messages.push(message)
+    });
+    console.log("Current conversation", conversation)
+    return conversation;
+  }
+
+  return { conversations, getConversationById, fetchConversations, fetchMessages }
 });
 
