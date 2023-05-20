@@ -28,7 +28,7 @@ type Conversation = {
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
-  messages: Record<string, Message>,
+  messages: Record<string, Message[]>,
 }
 
 export const useConversationStore = defineStore("conversation", () => {
