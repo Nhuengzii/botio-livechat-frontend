@@ -1,19 +1,6 @@
 import { defineStore } from "pinia";
 import { useConversationStore } from "./conversation";
-
-type Source = {
-  sourceID: string,
-  sourceName?: string
-  sourcePicture?: string, sourceType: "USER" | "ADMIN",
-}
-
-type Message = {
-  conversationID: string,
-  messageID: string,
-  timeStamp: number,
-  source: Source,
-  message: string,
-}
+import type { Message } from "@/types/conversation";
 
 export const useWebsocketStore = defineStore('websocket', {
   state: () => {

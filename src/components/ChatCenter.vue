@@ -125,21 +125,8 @@ import { useConversationStore } from '../stores/conversation';
 import { useRoute } from 'vue-router';
 import { watch, reactive, computed, onBeforeUpdate, onMounted, onBeforeMount, ref } from 'vue';
 const messages = ref([] as Message[])
+import type { Message } from '@/types/conversation'
 
-type Message = {
-    conversationID: string,
-    messageID: string,
-    timeStamp: number,
-    source: Source,
-    message: string,
-}
-
-type Source = {
-    sourceID: string,
-    sourceName?: string
-    sourcePicture?: string,
-    sourceType: "USER" | "ADMIN",
-}
 
 const conversationStore = useConversationStore();
 const route = useRoute()
