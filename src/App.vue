@@ -40,7 +40,7 @@ onMounted(() => {
       timeStamp: data.timestamp,
       source: {
         sourceID: data.source.userID,
-        sourceType: data.source.sourceType === "user" ? "USER" : "ADMIN",
+        sourceType: data.source.userType === "user" ? "USER" : "ADMIN",
       },
       message: data.message,
     }
