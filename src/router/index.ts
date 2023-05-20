@@ -6,6 +6,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      name: 'root',
+      path: '/',
+      redirect: '/fb/'
+    },
+    {
       path: '/:platform',
       name: 'LivechatView',
       component: LivechatView,
