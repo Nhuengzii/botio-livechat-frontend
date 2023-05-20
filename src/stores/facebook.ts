@@ -5,7 +5,7 @@ import type { Conversation, Message } from "@/types/conversation";
 
 
 
-export const useConversationStore = defineStore("conversation", () => {
+export const useFacebookStore = defineStore("facebook", () => {
   const conversations = ref<Conversation[]>([]);
   function getConversationById(conversationId: string) {
     return conversations.value.find((conversation) => conversation.conversationID === conversationId);

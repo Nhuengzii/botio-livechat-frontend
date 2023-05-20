@@ -79,8 +79,8 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { useConversationStore } from '../stores/conversation';
-const conversationStore = useConversationStore();
+import { useFacebookStore } from '@/stores/facebook';
+const conversationStore = useFacebookStore();
 import { onBeforeMount, onMounted } from 'vue';
 onBeforeMount(async () => {
     await conversationStore.fetchConversations();

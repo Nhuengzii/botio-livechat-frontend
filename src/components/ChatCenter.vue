@@ -121,14 +121,14 @@
 
 <script setup lang="ts">
 
-import { useConversationStore } from '../stores/conversation';
+import { useFacebookStore } from '@/stores/facebook';
 import { useRoute } from 'vue-router';
 import { watch, reactive, computed, onBeforeUpdate, onMounted, onBeforeMount, ref } from 'vue';
 const messages = ref([] as Message[])
 import type { Message } from '@/types/conversation'
 
 
-const conversationStore = useConversationStore();
+const conversationStore = useFacebookStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
 const datauser = conversationStore.getConversationById(conversationId)
