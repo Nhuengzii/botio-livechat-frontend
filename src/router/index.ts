@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, } from 'vue-router'
 import LivechatView from '../views/LivechatView.vue'
 import ChatView from '../views/ChatView.vue'
-// import { useMessageStore } from '@/stores/messages'
 import { useConversationStore } from '@/stores/conversation'
 
 const router = createRouter({
@@ -23,8 +22,6 @@ const router = createRouter({
           name: 'Conver',
           component: ChatView,
           beforeEnter: (to, from) => {
-            // useMessageStore().fetchMessages(to.params.conversation_id);
-            // useConversationStore().fetchConversations();
             return true
           }
         }

@@ -121,7 +121,6 @@
 
 <script setup lang="ts">
 
-// import { useMessageStore } from '@/stores/messages';
 import { useConversationStore } from '../stores/conversation';
 import { useRoute } from 'vue-router';
 import { watch, reactive, computed, onBeforeUpdate, onMounted, onBeforeMount, ref } from 'vue';
@@ -142,15 +141,12 @@ type Source = {
     sourceType: "USER" | "ADMIN",
 }
 
-
-// const storeMessage = useMessageStore();
 const conversationStore = useConversationStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
 const datauser = conversationStore.getConversationById(conversationId)
 
 onMounted(async () => {
-    // storeMessage.fetchMessages(conversationId)
     let conversationID = route.params.conversation_id as string;
     let currentConversation = await conversationStore.fetchMessages(conversationID)
     messages.value = currentConversation.messages
@@ -160,32 +156,14 @@ onMounted(async () => {
 onBeforeUpdate(() => {
     const newConversationId = route.params.conversation_id
     if (newConversationId !== conversationId) {
-        // Update the conversation ID and fetch new messages
-        //conversationId = newConversationId
-        //  storeMessage.fetchMessages(conversationId)
     }
 })
 
-
-/*watch(() => conversationId, () => {
-    const conversationId = route.params.conversation_id as string;
-    storeMessage.fetchMessages(conversationId)
-    const message = computed(() => storeMessage.messages)
-})*/
-
-
-
-//const message = computed(() => storeMessage.messages)
 
 const checkConversationId = () => {
     if (conversationId !== "-1") {
         return true;
     }
 }
-
-
-
-
-
 
 </script>
