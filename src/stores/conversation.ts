@@ -28,7 +28,7 @@ type Conversation = {
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
-  messages: Message[],
+  messages: { "isAlreadyFetch": boolean, "messages": Message[] },
 }
 
 
@@ -52,16 +52,17 @@ export const useConversationStore = defineStore("conversation", () => {
             profilePicture: participant.profilePic.src,
           }
         }),
-        messages: []
+        messages: { "isAlreadyFetch": false, "messages": [] },
       })
     });
     console.log("Current conversations", conversations.value)
   }
 
   async function fetchMessages(conversationID: string) {
-    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
     const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
     if (!conversation) return;
+    if (conversation.messages.isAlreadyFetch) return conversation;
+    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
     data.messages.forEach(element => {
       const message: Message = {
         conversationID: conversationID,
@@ -73,7 +74,8 @@ export const useConversationStore = defineStore("conversation", () => {
         },
         message: element.message,
       }
-      conversation.messages.push(message)
+      conversation.messages.messages.push(message);
+      conversation.messages.isAlreadyFetch = true;
     });
     console.log("Current conversation", conversation)
     return conversation;
@@ -82,7 +84,7 @@ export const useConversationStore = defineStore("conversation", () => {
   function addMessage(conversationID: string, message: Message) {
     const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
     if (!conversation) return;
-    conversation.messages.push(message);
+    conversation.messages.messages.push(message);
   }
 
   return { conversations, getConversationById, fetchConversations, fetchMessages, addMessage }
