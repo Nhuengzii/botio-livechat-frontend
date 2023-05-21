@@ -7,23 +7,30 @@ import type { Conversation, Message, RESTConversation, RESTMessage } from "@/typ
 
 export const useFacebookStore = defineStore("facebook", {
   state: () => ({
-    conversations: {} as Record<string, Conversation>,
+    conversationsRaw: {} as Record<string, Conversation>,
     isLoading: false,
   }),
   getters: {
-
+    conversations: (state): Conversation[] => {
+      // return sorted conversations by updatedAt
+      const sortedConversations = Object.values(state.conversationsRaw).sort((a, b) => {
+        return b.updatedAt - a.updatedAt;
+      })
+      console.log("Sorting success", sortedConversations);
+      return sortedConversations;
+    }
   },
   actions: {
     getConversationById(conversationId: string): Conversation {
-      const conversation: Conversation = this.conversations[conversationId];
+      const conversation: Conversation = this.conversationsRaw[conversationId];
       return conversation;
     },
     async fetchConversations() {
       this.isLoading = true;
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
-      this.conversations = {};
+      this.conversationsRaw = {};
       data.conversations.forEach(conversation => {
-        this.conversations[conversation.conversationID] = {
+        this.conversationsRaw[conversation.conversationID] = {
           conversationID: conversation.conversationID,
           conversationPicture: conversation.conversationPic.src,
           updatedAt: conversation.updatedTime,
@@ -39,10 +46,10 @@ export const useFacebookStore = defineStore("facebook", {
         }
       });
       this.isLoading = false;
-      console.log("Current conversations", this.conversations)
+      console.log("Current conversations", this.conversationsRaw)
     },
     async fetchMessages(conversationID: string) {
-      const conversation = this.conversations[conversationID];
+      const conversation = this.conversationsRaw[conversationID];
       if (!conversation) {
         console.log("Conversation not found");
         return;
@@ -67,7 +74,7 @@ export const useFacebookStore = defineStore("facebook", {
       return conversation;
     },
     addMessage(conversationID: string, message: Message) {
-      const conversation = this.conversations[conversationID];
+      const conversation = this.conversationsRaw[conversationID];
       if (!conversation) {
         console.log("Conversation not found");
         return;
