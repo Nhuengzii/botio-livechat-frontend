@@ -41,7 +41,7 @@
                 <div class="relative w-full h-full bg-white overflow-hidden">
                     <div class="max-h-[80%] absolute inset-0 top-0 left-0 right-0 overflow-scroll scrollbar-hide pb-[36px]">
                         <div class="relative flex flex-col">
-                            <div v-for="{ conversationID, conversationPicture, lastActivity, updatedAt, participants } in conversationStore.conversations"
+                            <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationStore.conversations"
                                 class="flex py-[4px] pr-[4px]">
                                 <div class="w-full">
                                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
@@ -78,10 +78,9 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
 import { useFacebookStore } from '@/stores/facebook';
 const conversationStore = useFacebookStore();
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 onBeforeMount(async () => {
     await conversationStore.fetchConversations();
 })

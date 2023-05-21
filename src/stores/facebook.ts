@@ -7,17 +7,21 @@ import type { Conversation, Message, RESTConversation, RESTMessage } from "@/typ
 
 export const useFacebookStore = defineStore("facebook", {
   state: () => ({
-    conversations: [] as Conversation[],
+    conversations: {} as Record<string, Conversation>,
   }),
+  getters: {
+
+  },
   actions: {
-    getConversationById(conversationId: string) {
-      return conversationId;
+    getConversationById(conversationId: string): Conversation {
+      const conversation: Conversation = this.conversations[conversationId];
+      return conversation;
     },
     async fetchConversations() {
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
-      this.conversations = [];
+      this.conversations = {};
       data.conversations.forEach(conversation => {
-        this.conversations.push({
+        this.conversations[conversation.conversationID] = {
           conversationID: conversation.conversationID,
           conversationPicture: conversation.conversationPic.src,
           updatedAt: conversation.updatedTime,
@@ -30,13 +34,16 @@ export const useFacebookStore = defineStore("facebook", {
             }
           }),
           messages: { "isAlreadyFetch": false, "messages": [] },
-        })
+        }
       });
       console.log("Current conversations", this.conversations)
     },
     async fetchMessages(conversationID: string) {
-      const conversation = this.conversations.find((conversation) => conversation.conversationID === conversationID);
-      if (!conversation) return;
+      const conversation = this.conversations[conversationID];
+      if (!conversation) {
+        console.log("Conversation not found");
+        return;
+      };
       if (conversation.messages.isAlreadyFetch) return conversation;
       const { data } = await axios.get<{ messages: RESTMessage[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
       data.messages.forEach(element => {
@@ -57,7 +64,11 @@ export const useFacebookStore = defineStore("facebook", {
       return conversation;
     },
     addMessage(conversationID: string, message: Message) {
-      const conversation = this.conversations.find((conversation) => conversation.conversationID === conversationID);
+      const conversation = this.conversations[conversationID];
+      if (!conversation) {
+        console.log("Conversation not found");
+        return;
+      };
       if (!conversation) return;
       conversation.messages.messages.push(message);
     }

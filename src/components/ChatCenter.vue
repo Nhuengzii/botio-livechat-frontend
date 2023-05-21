@@ -123,15 +123,15 @@
 
 import { useFacebookStore } from '@/stores/facebook';
 import { useRoute } from 'vue-router';
-import { watch, reactive, computed, onBeforeUpdate, onMounted, onBeforeMount, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 const messages = ref([] as Message[])
-import type { Message } from '@/types/conversation'
+import type { Message, Conversation } from '@/types/conversation'
 
 
 const conversationStore = useFacebookStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser = conversationStore.getConversationById(conversationId)
+const datauser: Conversation = conversationStore.getConversationById(conversationId)
 
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
@@ -149,12 +149,5 @@ onBeforeUpdate(() => {
     if (newConversationId !== conversationId) {
     }
 })
-
-
-const checkConversationId = () => {
-    if (conversationId !== "-1") {
-        return true;
-    }
-}
 
 </script>
