@@ -111,6 +111,8 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       };
       conversation.messages.messages.push(message);
+      conversation.updatedAt = message.timeStamp;
+      conversation.lastActivity = message.message;
     }
   },
 }
