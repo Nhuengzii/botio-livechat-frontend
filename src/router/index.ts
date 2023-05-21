@@ -20,6 +20,7 @@ const router = createRouter({
           redirect(to) {
             return `/${to.params.platform}/-1`
           },
+          name: 'Conversations',
         },
         {
           path: ':conversation_id/',
