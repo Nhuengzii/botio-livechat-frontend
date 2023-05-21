@@ -39,7 +39,10 @@ export const useConversationsStore = defineStore("conversations", {
       const router = useRoute();
       const currentPlatform = router.params.platform as string
       console.log("fetching conversations of " + currentPlatform + " ...");
-
+      if (currentPlatform !== 'fb') {
+        this.isLoading = false;
+        return;
+      }
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
       this.conversationsRaw[router.params.platform as string] = {};
       data.conversations.forEach(conversation => {
