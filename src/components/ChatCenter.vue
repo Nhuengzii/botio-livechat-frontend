@@ -138,7 +138,6 @@ onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
     let currentConversation = await conversationStore.fetchMessages(conversationID)
     if (currentConversation == null) {
-        console.log("currentConversation is null redirecting back")
         router.replace({ path: `/${route.params.platform as string}/` })
         return
     }

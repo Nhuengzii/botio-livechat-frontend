@@ -16,7 +16,8 @@ export const useFacebookStore = defineStore("facebook", {
       const sortedConversations = Object.values(state.conversationsRaw).sort((a, b) => {
         return b.updatedAt - a.updatedAt;
       })
-      console.log("Sorting success", sortedConversations);
+      console.log("Sorted success");
+
       return sortedConversations;
     }
   },
@@ -46,12 +47,10 @@ export const useFacebookStore = defineStore("facebook", {
         }
       });
       this.isLoading = false;
-      console.log("Current conversations", this.conversationsRaw)
     },
     async fetchMessages(conversationID: string) {
       const conversation = this.conversationsRaw[conversationID];
       if (!conversation) {
-        console.log("Conversation not found");
         return;
       };
       if (conversation.messages.isAlreadyFetch) return conversation;
@@ -70,13 +69,11 @@ export const useFacebookStore = defineStore("facebook", {
         conversation.messages.messages.push(message);
         conversation.messages.isAlreadyFetch = true;
       });
-      console.log("Current conversation", conversation)
       return conversation;
     },
     addMessage(conversationID: string, message: Message) {
       const conversation = this.conversationsRaw[conversationID];
       if (!conversation) {
-        console.log("Conversation not found");
         return;
       };
       if (!conversation) return;
