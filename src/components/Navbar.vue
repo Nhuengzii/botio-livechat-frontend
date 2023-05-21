@@ -9,7 +9,7 @@
 
             </div>
             <div class="bg-blue-100 p-2">
-                <router-link to="/fb">
+                <router-link to="/facebook">
                     <button>FB</button>
                 </router-link>
             </div>
