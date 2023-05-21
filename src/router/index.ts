@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory, } from 'vue-router'
 import LivechatView from '../views/LivechatView.vue'
 import ChatView from '../views/ChatView.vue'
-import { useConversationStore } from '@/stores/conversation'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      name: 'root',
+      path: '/',
+      redirect: '/facebook/'
+    },
     {
       path: '/:platform',
       name: 'LivechatView',
@@ -16,6 +20,7 @@ const router = createRouter({
           redirect(to) {
             return `/${to.params.platform}/-1`
           },
+          name: 'Conversations',
         },
         {
           path: ':conversation_id/',

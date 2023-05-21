@@ -6,6 +6,10 @@ import { useWebsocketStore } from './stores/websocket';
 const websocketStore = useWebsocketStore();
 onMounted(() => {
   console.log('App mounted!');
+  console.log(import.meta.env.VITE_AUTOCONNECT)
+  if (import.meta.env.AUTOCONNECT === 'true') {
+    websocketStore.disableAutoConnect = false;
+  }
   websocketStore.connect();
 });
 

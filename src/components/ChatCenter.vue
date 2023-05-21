@@ -121,36 +121,24 @@
 
 <script setup lang="ts">
 
-import { useConversationStore } from '../stores/conversation';
+import { useConversationsStore } from '@/stores/conversations';
 import { useRoute } from 'vue-router';
-import { watch, reactive, computed, onBeforeUpdate, onMounted, onBeforeMount, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 const messages = ref([] as Message[])
+import type { Message, Conversation } from '@/types/conversation'
+import router from '@/router';
 
-type Message = {
-    conversationID: string,
-    messageID: string,
-    timeStamp: number,
-    source: Source,
-    message: string,
-}
 
-type Source = {
-    sourceID: string,
-    sourceName?: string
-    sourcePicture?: string,
-    sourceType: "USER" | "ADMIN",
-}
-
-const conversationStore = useConversationStore();
+const conversationsStore = useConversationsStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser = conversationStore.getConversationById(conversationId)
+const datauser: Conversation = conversationsStore.getConversationById(conversationId)
 
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
-    let currentConversation = await conversationStore.fetchMessages(conversationID)
+    let currentConversation = await conversationsStore.fetchMessages(conversationID)
     if (currentConversation == null) {
-        console.log("currentConversation is null")
+        router.replace({ path: `/${route.params.platform as string}/` })
         return
     }
     messages.value = currentConversation.messages.messages
@@ -162,12 +150,5 @@ onBeforeUpdate(() => {
     if (newConversationId !== conversationId) {
     }
 })
-
-
-const checkConversationId = () => {
-    if (conversationId !== "-1") {
-        return true;
-    }
-}
 
 </script>

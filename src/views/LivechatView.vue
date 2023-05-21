@@ -6,11 +6,11 @@
   <section class="flex h-full">
 
     <!--container chat left-->
-    
+
     <ChatLeft />
-    
+
     <!--End container chat left-->
-    <router-view :key="$route.params.conversation_id"></router-view>
+    <router-view :key="$route.params.conversation_id as string"></router-view>
 
   </section>
 
@@ -22,5 +22,4 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router"
 import ChatLeft from "@/components/ChatLeft.vue";
-import { useConversationStore } from "@/stores/conversation";
 </script>

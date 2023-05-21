@@ -2,12 +2,12 @@
     <div
         class="flex-1 bg-green-100 rounded-[18px] mx-[10px] relative max-h-[100%] overflow-hidden pb-[10px] overscroll-contain font-serif">
         <!-- num message box-->
-        <div v-if="$route.params.platform === 'fb'" class="w-full h-full">
+        <div v-if="$route.params.platform === 'facebook'" class="w-full h-full">
             <div class="grid grid-cols-2 px-[14px] pb-[1.25rem] pt-[20px]">
                 <div class="bg-red-100 flex items-center justify-center py-[1rem]">
                     <p class="text-base">ข้อความทั้งหมด</p>
                     <div class=" flex w-[25px] h-[25px] bg-blue-400 rounded-full items-center justify-center ml-[10px]">
-                        <span class="text-white">{{ conversationStore.conversations.length }}</span>
+                        <span class="text-white">{{ conversationsStore.conversations.length }}</span>
                     </div>
                 </div>
                 <div class="bg-red-200 justify-end"></div>
@@ -41,7 +41,7 @@
                 <div class="relative w-full h-full bg-white overflow-hidden">
                     <div class="max-h-[80%] absolute inset-0 top-0 left-0 right-0 overflow-scroll scrollbar-hide pb-[36px]">
                         <div class="relative flex flex-col">
-                            <div v-for="{ conversationID, conversationPicture, lastActivity, updatedAt, participants } in conversationStore.conversations"
+                            <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
                                 class="flex py-[4px] pr-[4px]">
                                 <div class="w-full">
                                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
@@ -78,12 +78,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { useConversationStore } from '../stores/conversation';
-const conversationStore = useConversationStore();
-import { onBeforeMount, onMounted } from 'vue';
+import { useConversationsStore } from '@/stores/conversations';
+const conversationsStore = useConversationsStore();
+import { onBeforeMount } from 'vue';
 onBeforeMount(async () => {
-    await conversationStore.fetchConversations();
+    await conversationsStore.fetchConversations();
 })
 
 </script>

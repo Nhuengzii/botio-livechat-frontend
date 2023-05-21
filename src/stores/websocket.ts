@@ -1,19 +1,6 @@
 import { defineStore } from "pinia";
-import { useConversationStore } from "./conversation";
-
-type Source = {
-  sourceID: string,
-  sourceName?: string
-  sourcePicture?: string, sourceType: "USER" | "ADMIN",
-}
-
-type Message = {
-  conversationID: string,
-  messageID: string,
-  timeStamp: number,
-  source: Source,
-  message: string,
-}
+import { useConversationsStore } from "@/stores/conversations";
+import type { Message, StandardMessage } from "@/types/conversation";
 
 export const useWebsocketStore = defineStore('websocket', {
   state: () => {
@@ -24,7 +11,7 @@ export const useWebsocketStore = defineStore('websocket', {
   },
   actions: {
     connect() {
-      if (this.connection === null || this.disableAutoConnect) {
+      if (this.connection === null && !this.disableAutoConnect) {
         return
       }
       this.connection = new WebSocket('wss://mgec4plwk7.execute-api.ap-southeast-1.amazonaws.com/test?shopId=1')
@@ -40,20 +27,19 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        const data: StandardMessage = JSON.parse(event.data);
         console.log(JSON.stringify(data, null, 2))
-
         const newMessage: Message = {
-          conversationID: data.conversationID,
           messageID: data.messageID,
           timeStamp: data.timestamp,
           source: {
             sourceID: data.source.userID,
-            sourceType: data.source.userType === "user" ? "USER" : "ADMIN",
+            sourceType: data.source.userType.toUpperCase() as "USER" | "ADMIN",
           },
           message: data.message,
+          conversationID: data.conversationID,
         }
-        useConversationStore().addMessage(newMessage.conversationID, newMessage);
+        useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
 
       }
     },

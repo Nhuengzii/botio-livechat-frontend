@@ -19,7 +19,8 @@
             <div class="bg-red-400">
                 fing tag name
             </div>
-            <div v-if="$route.params.platform === 'fb'" class="bg-red-500 w-full h-full flex flex-col overflow-hidden">
+            <div v-if="$route.params.platform === 'facebook'"
+                class="bg-red-500 w-full h-full flex flex-col overflow-hidden">
                 <div class="relative overflow-hidden w-full h-full">
                     <div class="max-h-[80%]">
                         <ul>
@@ -56,8 +57,8 @@
 
 import ChatCenter from '@/components/ChatCenter.vue';
 import ChatRight from '@/components/ChatRight.vue';
-import { useConversationStore } from '../stores/conversation';
-const store = useConversationStore();
+import { useConversationsStore } from '@/stores/conversations';
+const store = useConversationsStore();
 
 
 </script>

@@ -11,8 +11,6 @@
 <script setup lang="ts">
 import ChatCenter from '@/components/ChatCenter.vue';
 import ChatRight from '@/components/ChatRight.vue';
-import { useConversationStore } from '@/stores/conversation';
-const conversationStore = useConversationStore();
 </script>
 
 <style scoped></style>
