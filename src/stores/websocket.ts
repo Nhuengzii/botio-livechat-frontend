@@ -11,7 +11,7 @@ export const useWebsocketStore = defineStore('websocket', {
   },
   actions: {
     connect() {
-      if (this.connection === null || this.disableAutoConnect) {
+      if (this.connection === null && !this.disableAutoConnect) {
         return
       }
       this.connection = new WebSocket('wss://mgec4plwk7.execute-api.ap-southeast-1.amazonaws.com/test?shopId=1')
