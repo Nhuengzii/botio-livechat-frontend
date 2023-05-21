@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useUIStore = defineStore('toggle', {
+export const useUIStore = defineStore('ui', {
     state: () => ({
         is_expanded: false,
         is_activeButton: false,
