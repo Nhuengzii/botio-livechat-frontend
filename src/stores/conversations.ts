@@ -44,6 +44,11 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const getConversationsEndpoint = import.meta.env.VITE_GET_CONVERSATIONS_ENDPOINT as string;
+      if (getConversationsEndpoint === undefined) {
+        console.error("VITE_GET_CONVERSATIONS_ENDPOINT is not defined");
+        this.isLoading = false;
+        return;
+      }
       const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
       data.conversations.forEach(conversation => {
         const equivalentConversation = this.conversationsRaw[currentPlatform][conversation.conversationID];
@@ -80,6 +85,10 @@ export const useConversationsStore = defineStore("conversations", {
       if (conversation.messages.isAlreadyFetch) return conversation;
       console.log("fetching messages of " + conversationID + "of " + currentPlatform + " ...");
       const getMessagesEndpoint = import.meta.env.VITE_GET_MESSAGES_ENDPOINT as string;
+      if (getMessagesEndpoint === undefined) {
+        console.error("VITE_GET_MESSAGES_ENDPOINT is not defined");
+        return;
+      }
       const { data } = await axios.get<{ messages: RESTMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
       data.messages.forEach(element => {
         const message: Message = {
