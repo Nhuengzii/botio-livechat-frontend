@@ -110,7 +110,6 @@ export const useConversationsStore = defineStore("conversations", {
       if (!conversation) {
         return;
       };
-      if (!conversation) return;
       conversation.messages.messages.push(message);
     }
   },
