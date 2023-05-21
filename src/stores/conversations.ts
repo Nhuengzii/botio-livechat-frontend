@@ -9,7 +9,7 @@ import { useRoute } from "vue-router";
 export const useConversationsStore = defineStore("conversations", {
   state: () => ({
     conversationsRaw: {
-      "fb": {},
+      "facebook": {},
       "line": {},
       "ig": {}
     } as Record<string, Record<string, Conversation>>,
@@ -39,7 +39,7 @@ export const useConversationsStore = defineStore("conversations", {
       const router = useRoute();
       const currentPlatform = router.params.platform as string
       console.log("fetching conversations of " + currentPlatform + " ...");
-      if (currentPlatform !== 'fb') {
+      if (currentPlatform !== 'facebook') {
         this.isLoading = false;
         return;
       }
@@ -96,9 +96,16 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
-    addMessage(conversationID: string, message: Message) {
-      const router = useRoute();
-      const currentPlatform = router.params.platform as string
+    addMessage(conversationID: string, message: Message, platform: string | undefined = undefined) {
+      console.log(`platform: ${platform}`);
+      let currentPlatform: string;
+      if (!platform) {
+        const router = useRoute();
+        currentPlatform = router.params.platform as string
+      }
+      else {
+        currentPlatform = platform;
+      }
       const conversation = this.conversationsRaw[currentPlatform][conversationID];
       if (!conversation) {
         return;

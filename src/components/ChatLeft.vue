@@ -2,7 +2,7 @@
     <div
         class="flex-1 bg-green-100 rounded-[18px] mx-[10px] relative max-h-[100%] overflow-hidden pb-[10px] overscroll-contain font-serif">
         <!-- num message box-->
-        <div v-if="$route.params.platform === 'fb'" class="w-full h-full">
+        <div v-if="$route.params.platform === 'facebook'" class="w-full h-full">
             <div class="grid grid-cols-2 px-[14px] pb-[1.25rem] pt-[20px]">
                 <div class="bg-red-100 flex items-center justify-center py-[1rem]">
                     <p class="text-base">ข้อความทั้งหมด</p>
