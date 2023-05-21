@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useFacebookStore } from "@/stores/facebook";
+import { useConversationsStore } from "@/stores/conversations";
 import type { Message } from "@/types/conversation";
 
 export const useWebsocketStore = defineStore('websocket', {
@@ -40,7 +40,7 @@ export const useWebsocketStore = defineStore('websocket', {
           },
           message: data.message,
         }
-        useFacebookStore().addMessage(newMessage.conversationID, newMessage);
+        useConversationsStore().addMessage(newMessage.conversationID, newMessage);
 
       }
     },

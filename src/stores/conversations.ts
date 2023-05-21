@@ -2,18 +2,24 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from 'axios'
 import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
+import { useRoute } from "vue-router";
 
 
 
-export const useFacebookStore = defineStore("facebook", {
+export const useConversationsStore = defineStore("conversations", {
   state: () => ({
-    conversationsRaw: {} as Record<string, Conversation>,
+    conversationsRaw: {
+      "fb": {},
+      "line": {},
+      "ig": {}
+    } as Record<string, Record<string, Conversation>>,
     isLoading: false,
   }),
   getters: {
     conversations: (state): Conversation[] => {
       // return sorted conversations by updatedAt
-      const sortedConversations = Object.values(state.conversationsRaw).sort((a, b) => {
+      const router = useRoute();
+      const sortedConversations = Object.values(state.conversationsRaw[router.params.platform as string]).sort((a, b) => {
         return b.updatedAt - a.updatedAt;
       })
       console.log("Sorted success");
@@ -23,15 +29,19 @@ export const useFacebookStore = defineStore("facebook", {
   },
   actions: {
     getConversationById(conversationId: string): Conversation {
-      const conversation: Conversation = this.conversationsRaw[conversationId];
+      const router = useRoute();
+      const currentPlatform = router.params.platform as string
+      const conversation: Conversation = this.conversationsRaw[currentPlatform][conversationId];
       return conversation;
     },
     async fetchConversations() {
       this.isLoading = true;
+      const router = useRoute();
+      const currentPlatform = router.params.platform as string
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
-      this.conversationsRaw = {};
+      this.conversationsRaw[router.params.platform as string] = {};
       data.conversations.forEach(conversation => {
-        this.conversationsRaw[conversation.conversationID] = {
+        this.conversationsRaw[currentPlatform][conversation.conversationID] = {
           conversationID: conversation.conversationID,
           conversationPicture: conversation.conversationPic.src,
           updatedAt: conversation.updatedTime,
@@ -49,7 +59,9 @@ export const useFacebookStore = defineStore("facebook", {
       this.isLoading = false;
     },
     async fetchMessages(conversationID: string) {
-      const conversation = this.conversationsRaw[conversationID];
+      const router = useRoute();
+      const currentPlatform = router.params.platform as string
+      const conversation = this.conversationsRaw[currentPlatform][conversationID];
       if (!conversation) {
         return;
       };
@@ -72,7 +84,9 @@ export const useFacebookStore = defineStore("facebook", {
       return conversation;
     },
     addMessage(conversationID: string, message: Message) {
-      const conversation = this.conversationsRaw[conversationID];
+      const router = useRoute();
+      const currentPlatform = router.params.platform as string
+      const conversation = this.conversationsRaw[currentPlatform][conversationID];
       if (!conversation) {
         return;
       };

@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 
-import { useFacebookStore } from '@/stores/facebook';
+import { useConversationsStore } from '@/stores/conversations';
 import { useRoute } from 'vue-router';
 import { onBeforeUpdate, onMounted, ref } from 'vue';
 const messages = ref([] as Message[])
@@ -129,14 +129,14 @@ import type { Message, Conversation } from '@/types/conversation'
 import router from '@/router';
 
 
-const conversationStore = useFacebookStore();
+const conversationsStore = useConversationsStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser: Conversation = conversationStore.getConversationById(conversationId)
+const datauser: Conversation = conversationsStore.getConversationById(conversationId)
 
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
-    let currentConversation = await conversationStore.fetchMessages(conversationID)
+    let currentConversation = await conversationsStore.fetchMessages(conversationID)
     if (currentConversation == null) {
         router.replace({ path: `/${route.params.platform as string}/` })
         return
