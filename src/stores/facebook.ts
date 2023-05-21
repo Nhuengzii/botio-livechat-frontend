@@ -8,6 +8,7 @@ import type { Conversation, Message, RESTConversation, RESTMessage } from "@/typ
 export const useFacebookStore = defineStore("facebook", {
   state: () => ({
     conversations: {} as Record<string, Conversation>,
+    isLoading: false,
   }),
   getters: {
 
@@ -18,6 +19,7 @@ export const useFacebookStore = defineStore("facebook", {
       return conversation;
     },
     async fetchConversations() {
+      this.isLoading = true;
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
       this.conversations = {};
       data.conversations.forEach(conversation => {
@@ -36,6 +38,7 @@ export const useFacebookStore = defineStore("facebook", {
           messages: { "isAlreadyFetch": false, "messages": [] },
         }
       });
+      this.isLoading = false;
       console.log("Current conversations", this.conversations)
     },
     async fetchMessages(conversationID: string) {
