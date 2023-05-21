@@ -59,3 +59,20 @@ export type RESTMessage = {
   deliveryStatys: boolean,
   unsendStatus: boolean,
 }
+
+export type StandardMessage = {
+  shopID: string,
+  platform: string,
+  conversationID: string,
+  messageID: string,
+  timestamp: number,
+  source: {
+    userID: string,
+    userType: "user" | "admin",
+  },
+  message: string,
+  attachments: any[] | null,
+  replyTo: {
+    messageID: string,
+  }
+}
