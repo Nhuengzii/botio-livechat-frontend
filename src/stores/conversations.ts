@@ -68,6 +68,8 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       };
       if (conversation.messages.isAlreadyFetch) return conversation;
+      console.log("fetching messages of " + conversationID + "of " + currentPlatform + " ...");
+
       const { data } = await axios.get<{ messages: RESTMessage[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
       data.messages.forEach(element => {
         const message: Message = {
