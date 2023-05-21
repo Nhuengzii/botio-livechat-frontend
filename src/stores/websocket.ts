@@ -39,7 +39,7 @@ export const useWebsocketStore = defineStore('websocket', {
           message: data.message,
           conversationID: data.conversationID,
         }
-        useConversationsStore().addMessage(data.conversationID, newMessage, data.platform.toLowerCase());
+        useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
 
       }
     },

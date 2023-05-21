@@ -96,7 +96,7 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
-    addMessage(conversationID: string, message: Message, platform: string | undefined = undefined) {
+    addMessageFromWebsocket(conversationID: string, message: Message, platform: string | undefined = undefined) {
       console.log(`platform: ${platform}`);
       let currentPlatform: string;
       if (!platform) {
