@@ -43,7 +43,8 @@ export const useConversationsStore = defineStore("conversations", {
         this.isLoading = false;
         return;
       }
-      const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
+      const getConversationsEndpoint = import.meta.env.VITE_GET_CONVERSATIONS_ENDPOINT as string;
+      const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
       data.conversations.forEach(conversation => {
         const equivalentConversation = this.conversationsRaw[currentPlatform][conversation.conversationID];
         if (equivalentConversation) {
