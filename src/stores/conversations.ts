@@ -44,8 +44,14 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
-      this.conversationsRaw[router.params.platform as string] = {};
       data.conversations.forEach(conversation => {
+        const equivalentConversation = this.conversationsRaw[currentPlatform][conversation.conversationID];
+        if (equivalentConversation) {
+          if (equivalentConversation.updatedAt === conversation.updatedTime) {
+            return;
+          }
+        }
+        console.log("new conversation for " + conversation.conversationID + " of " + currentPlatform + " ...");
         this.conversationsRaw[currentPlatform][conversation.conversationID] = {
           conversationID: conversation.conversationID,
           conversationPicture: conversation.conversationPic.src,
