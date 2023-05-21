@@ -26,3 +26,36 @@ export type Conversation = {
   participants: Participant[],
   messages: { "isAlreadyFetch": boolean, "messages": Message[] },
 }
+
+export type RESTConversation = {
+  conversationID: string,
+  conversationPic: {
+    src: string,
+  }
+  updatedTime: number,
+  participants: {
+    userID: string,
+    profilePic: {
+      src: string,
+    },
+    username: string,
+  }[],
+  lastActivity: string,
+}
+
+export type RESTMessage = {
+  messageID: string,
+  timestamp: number,
+  source: {
+    userID: string,
+    type: "user" | "admin",
+  }
+  message: string,
+  attachments: any[] | null,
+  replyTo: {
+    messageID: string,
+  },
+  readStatus: boolean,
+  deliveryStatys: boolean,
+  unsendStatus: boolean,
+}

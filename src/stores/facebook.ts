@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from 'axios'
-import type { Conversation, Message } from "@/types/conversation";
+import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
 
 
 
@@ -11,12 +11,12 @@ export const useFacebookStore = defineStore("facebook", () => {
     return conversations.value.find((conversation) => conversation.conversationID === conversationId);
   }
   async function fetchConversations() {
-    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
+    const { data } = await axios.get<{ conversations: RESTConversation[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations");
     conversations.value = [];
     data.conversations.forEach(conversation => {
       conversations.value.push({
         conversationID: conversation.conversationID,
-        conversationPicture: conversation.conversationPic,
+        conversationPicture: conversation.conversationPic.src,
         updatedAt: conversation.updatedTime,
         lastActivity: conversation.lastActivity,
         participants: conversation.participants.map((participant) => {
@@ -36,7 +36,7 @@ export const useFacebookStore = defineStore("facebook", () => {
     const conversation = conversations.value.find((conversation) => conversation.conversationID === conversationID);
     if (!conversation) return;
     if (conversation.messages.isAlreadyFetch) return conversation;
-    const { data } = await axios.get("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
+    const { data } = await axios.get<{ messages: RESTMessage[] }>("https://ut9v4vi439.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/" + conversationID + "/messages");
     data.messages.forEach(element => {
       const message: Message = {
         conversationID: conversationID,
