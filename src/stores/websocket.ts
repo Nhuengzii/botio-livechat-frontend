@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useConversationsStore } from "@/stores/conversations";
-import type { Message } from "@/types/conversation";
+import type { Message, StandardMessage } from "@/types/conversation";
 
 export const useWebsocketStore = defineStore('websocket', {
   state: () => {
@@ -27,20 +27,19 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        const data: StandardMessage = JSON.parse(event.data);
         console.log(JSON.stringify(data, null, 2))
-
         const newMessage: Message = {
-          conversationID: data.conversationID,
           messageID: data.messageID,
           timeStamp: data.timestamp,
           source: {
             sourceID: data.source.userID,
-            sourceType: data.source.userType === "user" ? "USER" : "ADMIN",
+            sourceType: data.source.userType.toUpperCase() as "USER" | "ADMIN",
           },
           message: data.message,
+          conversationID: data.conversationID,
         }
-        useConversationsStore().addMessage(newMessage.conversationID, newMessage);
+        useConversationsStore().addMessage(data.conversationID, newMessage, data.platform.toLowerCase());
 
       }
     },
