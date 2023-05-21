@@ -1,17 +1,17 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useUiStore = defineStore('toggle', () => {
-    const is_expanded = ref(false)
-    const ToggleMenu = () => {
-        is_expanded.value = !is_expanded.value
+export const useUIStore = defineStore('toggle', {
+    state: () => ({
+        is_expanded: false,
+        is_activeButton: false,
+    }),
+    actions: {
+        ToggleMenu() {
+            this.is_expanded = !this.is_expanded
+        },
+        activeButtonNav() {
+            this.is_activeButton = !this.is_activeButton
+        }
     }
-    const is_activeButton = ref(false)
-
-    const activeButtonNav = () => {
-        is_activeButton.value = !is_activeButton.value
-    }
-
-
-    return { is_expanded, ToggleMenu, is_activeButton, activeButtonNav }
 })
