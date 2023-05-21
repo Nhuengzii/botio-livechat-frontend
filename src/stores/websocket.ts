@@ -14,6 +14,11 @@ export const useWebsocketStore = defineStore('websocket', {
       if (this.connection === null && !this.disableAutoConnect) {
         return
       }
+      const websocketEndpoint = import.meta.env.VITE_WEBSOCKET_ENDPOINT as string
+      if (websocketEndpoint === undefined) {
+        console.error("VITE_WEBSOCKET_ENDPOINT is not defined")
+        return
+      }
       this.connection = new WebSocket('wss://mgec4plwk7.execute-api.ap-southeast-1.amazonaws.com/test?shopId=1')
       this.connection.onopen = () => {
         console.log('connected')
