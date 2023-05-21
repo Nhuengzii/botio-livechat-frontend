@@ -98,6 +98,7 @@ export const useConversationsStore = defineStore("conversations", {
           source: {
             sourceID: element.source.userID,
             sourceType: element.source.type === "user" ? "USER" : "ADMIN",
+            sourcePicture: conversation.participants.find(participant => participant.userID === element.source.userID)?.profilePicture,
           },
           message: element.message,
         }
