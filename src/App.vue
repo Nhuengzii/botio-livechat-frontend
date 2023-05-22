@@ -6,10 +6,11 @@ import { useWebsocketStore } from './stores/websocket';
 const websocketStore = useWebsocketStore();
 onMounted(() => {
   console.log('App mounted!');
-  console.log(import.meta.env.VITE_AUTOCONNECT)
-  if (import.meta.env.AUTOCONNECT === 'true') {
-    websocketStore.disableAutoConnect = false;
+  const disableAutoConnect = import.meta.env.VITE_DISABLE_WEBSOCKET_AUTO_CONNECT;
+  if (disableAutoConnect === undefined) {
+    console.log('VITE_DISABLE_WEBSOCKET_AUTO_CONNECT is undefined')
   }
+  websocketStore.disableAutoConnect = disableAutoConnect == "true";
   websocketStore.connect();
 });
 
