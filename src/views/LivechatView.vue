@@ -1,6 +1,6 @@
 <template>
   <!-- header space-->
-  <header class="h-[8%]"></header>
+  <header class="h-[8%] min-h-[80px]"></header>
   <!--End header space-->
 
   <section class="flex h-full">
