@@ -114,20 +114,11 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
-    async addMessageFromWebsocket(conversationID: string, message: Message, platform: string | undefined = undefined) {
-      console.log(`platform: ${platform}`);
-      let currentPlatform: string;
-      if (!platform) {
-        const router = useRoute();
-        currentPlatform = router.params.platform as string
-      }
-      else {
-        currentPlatform = platform;
-      }
-      let conversation = this.conversationsRaw[currentPlatform][conversationID];
+    async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
+      let conversation = this.conversationsRaw[platform][conversationID];
       if (!conversation) {
         await this.fetchConversations(platform);
-        conversation = this.conversationsRaw[currentPlatform][conversationID];
+        conversation = this.conversationsRaw[platform][conversationID];
         if (!conversation) {
           console.error("conversation not found");
           return;
