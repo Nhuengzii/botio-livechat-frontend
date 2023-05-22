@@ -17,6 +17,7 @@ export type Message = {
   timeStamp: number,
   source: Source,
   message: string,
+  attachments: Attachment[] | null,
 }
 export type Conversation = {
   conversationID: string,
