@@ -34,12 +34,10 @@ export const useConversationsStore = defineStore("conversations", {
       const conversation: Conversation = this.conversationsRaw[currentPlatform][conversationId];
       return conversation;
     },
-    async fetchConversations(currentPlatform: string = "facebook") {
+    async fetchConversations(platform: string) {
       this.isLoading = true;
-      // const router = useRoute();
-      // const currentPlatform = router.params.platform as string
-      console.log("fetching conversations of " + currentPlatform + " ...");
-      if (currentPlatform !== 'facebook') {
+      console.log("fetching conversations of " + platform + " ...");
+      if (platform !== 'facebook') {
         this.isLoading = false;
         return;
       }
@@ -56,14 +54,14 @@ export const useConversationsStore = defineStore("conversations", {
       }
       const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
       data.conversations.forEach(conversation => {
-        const equivalentConversation = this.conversationsRaw[currentPlatform][conversation.conversationID];
+        const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
         if (equivalentConversation) {
           if (equivalentConversation.updatedAt === conversation.updatedTime) {
             return;
           }
         }
-        console.log("new conversation for " + conversation.conversationID + " of " + currentPlatform + " ...");
-        this.conversationsRaw[currentPlatform][conversation.conversationID] = {
+        console.log("new conversation for " + conversation.conversationID + " of " + platform + " ...");
+        this.conversationsRaw[platform][conversation.conversationID] = {
           conversationID: conversation.conversationID,
           conversationPicture: conversation.conversationPic.src,
           updatedAt: conversation.updatedTime,
@@ -80,15 +78,13 @@ export const useConversationsStore = defineStore("conversations", {
       });
       this.isLoading = false;
     },
-    async fetchMessages(conversationID: string) {
-      const router = useRoute();
-      const currentPlatform = router.params.platform as string
-      const conversation = this.conversationsRaw[currentPlatform][conversationID];
+    async fetchMessages(conversationID: string, platform: string) {
+      const conversation = this.conversationsRaw[platform][conversationID];
       if (!conversation) {
         return;
       };
       if (conversation.messages.isAlreadyFetch) return conversation;
-      console.log("fetching messages of " + conversationID + "of " + currentPlatform + " ...");
+      console.log("fetching messages of " + conversationID + "of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
       if (botio_rest_api_id === undefined) {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
