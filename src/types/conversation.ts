@@ -78,7 +78,7 @@ export type StandardMessage = {
     userType: "user" | "admin",
   },
   message: string,
-  attachments: any[] | null,
+  attachments: Attachment[] | null,
   replyTo: {
     messageID: string,
   }
