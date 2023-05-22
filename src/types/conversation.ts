@@ -27,6 +27,13 @@ export type Conversation = {
   messages: { "isAlreadyFetch": boolean, "messages": Message[] },
 }
 
+export type Attachment = {
+  type: "image" | "video" | "file",
+  payload: {
+    src: string,
+  }
+}
+
 export type RESTConversation = {
   conversationID: string,
   conversationPic: {
@@ -51,7 +58,7 @@ export type RESTMessage = {
     type: "user" | "admin",
   }
   message: string,
-  attachments: any[] | null,
+  attachments: Attachment[] | null,
   replyTo: {
     messageID: string,
   },
