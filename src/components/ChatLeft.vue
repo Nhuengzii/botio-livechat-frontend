@@ -81,8 +81,10 @@
 import { useConversationsStore } from '@/stores/conversations';
 const conversationsStore = useConversationsStore();
 import { onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 onBeforeMount(async () => {
-    await conversationsStore.fetchConversations();
+    await conversationsStore.fetchConversations(route.params.platform as string);
 })
 
 </script>

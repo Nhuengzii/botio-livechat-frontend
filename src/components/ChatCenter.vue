@@ -136,7 +136,7 @@ const datauser: Conversation = conversationsStore.getConversationById(conversati
 
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
-    let currentConversation = await conversationsStore.fetchMessages(conversationID)
+    let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
     if (currentConversation == null) {
         router.replace({ path: `/${route.params.platform as string}/` })
         return
