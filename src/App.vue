@@ -25,7 +25,7 @@ onUnmounted(() => {
 
 <template >
   <!-- Navbar -->
-  <div class="flex flex-[1] w-screen h-screen">
+  <div class="flex flex-[1] grow-0 shrink-0 w-screen h-screen">
     <Navbar />
     <main class="flex flex-col grow pb-[12px]">
       <RouterView :key="platform"/>
