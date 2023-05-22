@@ -19,6 +19,7 @@ export type Message = {
   message: string,
 }
 export type Conversation = {
+[x: string]: any
   conversationID: string,
   conversationPicture: string,
   updatedAt: number,

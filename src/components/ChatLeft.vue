@@ -16,18 +16,23 @@
 
             <!-- search name box-->
             <div class=" flex bg-blue-100 justify-around py-[1rem]">
-                <button class="flex bg-blue-200 w-[85%] h-full items-center justify-start py-[.75rem] rounded-[20px]">
+                <!---<button class="flex bg-blue-200 w-[85%] h-full items-center justify-start py-[.75rem] rounded-[20px]">
                     <div class="pl-[20px]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                             class="bi bi-search" viewBox="0 0 16 16">
                             <path
                                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                         </svg>
+                        
                     </div>
-
                     <span class="pl-[20px] text-base leading-6 text-gray-900">ค้นหาจากชื่อ</span>
-
-                </button>
+                </button>-->
+                <div class=" pl-[20px]">
+                <div  style="padding: 0px 20px 14px 1.25rem; position: relative;"><p >ค้นหาจากชื่อ</p> 
+                    <input  placeholder="ค้นหา..." class="input__search" v-model="message"> 
+                    <div  title="icon" ></div>
+                </div>
+            </div>
             </div>
             <!-- end search name box-->
 
@@ -45,7 +50,7 @@
                                 class="flex py-[4px] pr-[4px]">
                                 <div class="w-full">
                                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
-                                        class="flex px-[14px] pt-[20px] pb-[1.25rem] ml-[10px] border-2 rounded-[20px]">
+                                        class="flex px-[14px] pt-[20px] pb-[1.25rem] ml-[10px] border-2 rounded-[20px]" v-if="filteredList(participants[0].username)">
                                         <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px]">
                                             <div class="overflow-hidden w-[45px] h-[45px] bg-blue-200 rounded-full">
                                                 <img v-if="conversationPicture" :src="conversationPicture" alt=""
@@ -78,13 +83,23 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useConversationsStore } from '@/stores/conversations';
 const conversationsStore = useConversationsStore();
 import { onBeforeMount } from 'vue';
 onBeforeMount(async () => {
     await conversationsStore.fetchConversations();
 })
-
+let message= ref("");
+function filteredList(text:String) {
+  
+  if(text.toLowerCase().includes(message.value.toLowerCase())){
+    return true;
+  }
+  else{
+    return false;   
+  }
+}
 </script>
 
 <style scoped>

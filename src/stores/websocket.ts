@@ -33,6 +33,7 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = (event) => {
+        alert("5555")
         const data: StandardMessage = JSON.parse(event.data);
         console.log(JSON.stringify(data, null, 2))
         const newMessage: Message = {
@@ -48,6 +49,7 @@ export const useWebsocketStore = defineStore('websocket', {
         useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
 
       }
+      
     },
     disconnect() {
       if (this.connection) {
