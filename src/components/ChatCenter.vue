@@ -1,11 +1,5 @@
 <template>
-    <div class="flex-[2] bg-green-100 rounded-[18px] mx-[10px] min-w-[512px] flex-shrink-1">
-        <div v-if="conversationId !== '-1'" class="flex flex-col h-full">
-            <ChatBoxHeaderVue :datauser="datauser" :conversation_id="conversationId"/>
-            <ChatBoxMessage :message="messages"/>
-            <ChatBoxInput/>
-        </div>
-    </div>
+
 </template>
 
 <script setup lang="ts">

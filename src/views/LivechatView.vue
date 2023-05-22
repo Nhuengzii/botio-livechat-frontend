@@ -10,16 +10,17 @@
     <ChatLeft />
 
     <!--End container chat left-->
-    <router-view :key="$route.params.conversation_id as string"></router-view>
+    <router-view :key="route.params.conversation_id as string"/>
 
   </section>
 
-  <!-- footer space-->
-  <footer class="h-[3%]"></footer>
+  <footer class="h-[3%]">
+  </footer>
   <!--End footer space-->
 </template>
 
 <script setup lang="ts">
-import { RouterView } from "vue-router"
+import { RouterView, useRoute } from "vue-router"
+const route = useRoute()
 import ChatLeft from "@/components/ChatLeft.vue";
 </script>
