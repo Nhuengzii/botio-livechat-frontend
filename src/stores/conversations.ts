@@ -108,6 +108,7 @@ export const useConversationsStore = defineStore("conversations", {
             sourcePicture: conversation.participants.find(participant => participant.userID === element.source.userID)?.profilePicture,
           },
           message: element.message,
+          attachments: element.attachments
         }
         conversation.messages.messages.push(message);
         conversation.messages.isAlreadyFetch = true;
