@@ -19,7 +19,7 @@ export const useWebsocketStore = defineStore('websocket', {
         console.error("VITE_BOTIO_WEBSOCKET_API_ID is not defined")
         return
       }
-      const websocketEndpoint = `wss://${botio_websocket_api_id}.execute-api.ap-southeast1.amazonaws.com/test?shopId=1`
+      const websocketEndpoint = `wss://${botio_websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/test?shopId=1`
       this.connection = new WebSocket(websocketEndpoint)
       this.connection.onopen = () => {
         console.log('connected')
