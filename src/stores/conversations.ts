@@ -95,7 +95,7 @@ export const useConversationsStore = defineStore("conversations", {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
-      const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/${conversationID}/messages`;
+      const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/`;
       const { data } = await axios.get<{ messages: RESTMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
       data.messages.forEach(element => {
         const message: Message = {
