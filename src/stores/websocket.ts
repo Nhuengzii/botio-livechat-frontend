@@ -44,6 +44,7 @@ export const useWebsocketStore = defineStore('websocket', {
           },
           message: data.message,
           conversationID: data.conversationID,
+          attachments: data.attachments,
         }
         useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
 
