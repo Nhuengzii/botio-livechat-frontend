@@ -40,7 +40,7 @@ export const useWebsocketStore = defineStore('websocket', {
           timeStamp: data.timestamp,
           source: {
             sourceID: data.source.userID,
-            sourceType: data.source.userType.toUpperCase() as "USER" | "ADMIN",
+            sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
           },
           message: data.message,
           conversationID: data.conversationID,
