@@ -99,7 +99,7 @@ export const useConversationsStore = defineStore("conversations", {
           timeStamp: element.timestamp,
           source: {
             sourceID: element.source.userID,
-            sourceType: element.source.type === "user" ? "USER" : "ADMIN",
+            sourceType: element.source.type.toUpperCase() as "USER" | "ADMIN",
             sourcePicture: conversation.participants.find(participant => participant.userID === element.source.userID)?.profilePicture,
           },
           message: element.message,
