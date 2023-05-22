@@ -43,7 +43,13 @@ export const useConversationsStore = defineStore("conversations", {
         this.isLoading = false;
         return;
       }
-      const getConversationsEndpoint = import.meta.env.VITE_GET_CONVERSATIONS_ENDPOINT as string;
+      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
+      if (botio_rest_api_id === undefined) {
+        console.error("VITE_BOTIO_REST_API_ID is not defined");
+        this.isLoading = false;
+        return;
+      }
+      const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations`;
       if (getConversationsEndpoint === undefined) {
         console.error("VITE_GET_CONVERSATIONS_ENDPOINT is not defined");
         this.isLoading = false;
@@ -84,11 +90,12 @@ export const useConversationsStore = defineStore("conversations", {
       };
       if (conversation.messages.isAlreadyFetch) return conversation;
       console.log("fetching messages of " + conversationID + "of " + currentPlatform + " ...");
-      const getMessagesEndpoint = import.meta.env.VITE_GET_MESSAGES_ENDPOINT as string;
-      if (getMessagesEndpoint === undefined) {
-        console.error("VITE_GET_MESSAGES_ENDPOINT is not defined");
+      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
+      if (botio_rest_api_id === undefined) {
+        console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
+      const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/facebook/108362942229009/conversations/${conversationID}/messages`;
       const { data } = await axios.get<{ messages: RESTMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
       data.messages.forEach(element => {
         const message: Message = {
