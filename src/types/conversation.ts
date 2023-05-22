@@ -17,6 +17,7 @@ export type Message = {
   timeStamp: number,
   source: Source,
   message: string,
+  attachments: Attachment[],
 }
 export type Conversation = {
   conversationID: string,
@@ -25,6 +26,13 @@ export type Conversation = {
   lastActivity: string,
   participants: Participant[],
   messages: { "isAlreadyFetch": boolean, "messages": Message[] },
+}
+
+export type Attachment = {
+  type: "image" | "video" | "file",
+  payload: {
+    src: string,
+  }
 }
 
 export type RESTConversation = {
@@ -51,7 +59,7 @@ export type RESTMessage = {
     type: "user" | "admin",
   }
   message: string,
-  attachments: any[] | null,
+  attachments: Attachment[],
   replyTo: {
     messageID: string,
   },
@@ -68,10 +76,10 @@ export type StandardMessage = {
   timestamp: number,
   source: {
     userID: string,
-    userType: "user" | "admin",
+    type: "user" | "admin",
   },
   message: string,
-  attachments: any[] | null,
+  attachments: Attachment[],
   replyTo: {
     messageID: string,
   }

@@ -16,6 +16,7 @@ import { useConversationsStore } from '@/stores/conversations';
 import ShowListConversation from './ShowListConversation.vue';
 import HeaderChatLeft from './HeaderChatLeft.vue';
 const conversationsStore = useConversationsStore();
+<<<<<<< HEAD
 import { onBeforeMount, onBeforeUpdate, onUpdated, ref, watch } from 'vue';
 const numConversation = ref<number>(0)
 
@@ -29,6 +30,13 @@ watch(numConversation, function(){
     if (numConversation.value != newNumConversation){
         numConversation.value = newNumConversation
     }
+=======
+import { onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+onBeforeMount(async () => {
+    await conversationsStore.fetchConversations(route.params.platform as string);
+>>>>>>> ba6ed38a49cb6d5c3afaa19f47970f094f324508
 })
 
 

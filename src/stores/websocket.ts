@@ -7,6 +7,7 @@ export const useWebsocketStore = defineStore('websocket', {
     return {
       connection: null as WebSocket | null,
       disableAutoConnect: true,
+      conversationStore: useConversationsStore()
     }
   },
   actions: {
@@ -19,7 +20,7 @@ export const useWebsocketStore = defineStore('websocket', {
         console.error("VITE_BOTIO_WEBSOCKET_API_ID is not defined")
         return
       }
-      const websocketEndpoint = `wss://${botio_websocket_api_id}.execute-api.ap-southeast1.amazonaws.com/test?shopId=1`
+      const websocketEndpoint = `wss://${botio_websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/test?shopId=1`
       this.connection = new WebSocket(websocketEndpoint)
       this.connection.onopen = () => {
         console.log('connected')
@@ -32,7 +33,7 @@ export const useWebsocketStore = defineStore('websocket', {
         console.log('failed to connect', error)
         this.connection = null
       }
-      this.connection.onmessage = (event) => {
+      this.connection.onmessage = async (event) => {
         const data: StandardMessage = JSON.parse(event.data);
         console.log(JSON.stringify(data, null, 2))
         const newMessage: Message = {
@@ -40,12 +41,17 @@ export const useWebsocketStore = defineStore('websocket', {
           timeStamp: data.timestamp,
           source: {
             sourceID: data.source.userID,
-            sourceType: data.source.userType.toUpperCase() as "USER" | "ADMIN",
+            sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
           },
           message: data.message,
           conversationID: data.conversationID,
+          attachments: data.attachments,
         }
-        useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+        try {
+          await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+        } catch {
+          console.log("Error adding message from websocket")
+        }
 
       }
     },
