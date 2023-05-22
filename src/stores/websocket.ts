@@ -7,6 +7,7 @@ export const useWebsocketStore = defineStore('websocket', {
     return {
       connection: null as WebSocket | null,
       disableAutoConnect: true,
+      conversationStore: useConversationsStore()
     }
   },
   actions: {
@@ -32,7 +33,7 @@ export const useWebsocketStore = defineStore('websocket', {
         console.log('failed to connect', error)
         this.connection = null
       }
-      this.connection.onmessage = (event) => {
+      this.connection.onmessage = async (event) => {
         const data: StandardMessage = JSON.parse(event.data);
         console.log(JSON.stringify(data, null, 2))
         const newMessage: Message = {
@@ -46,7 +47,11 @@ export const useWebsocketStore = defineStore('websocket', {
           conversationID: data.conversationID,
           attachments: data.attachments,
         }
-        useConversationsStore().addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+        try {
+          await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+        } catch {
+          console.log("Error adding message from websocket")
+        }
 
       }
     },

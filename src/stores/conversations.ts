@@ -34,17 +34,16 @@ export const useConversationsStore = defineStore("conversations", {
       const conversation: Conversation = this.conversationsRaw[currentPlatform][conversationId];
       return conversation;
     },
-    async fetchConversations() {
+    async fetchConversations(currentPlatform: string = "facebook") {
       this.isLoading = true;
-      const router = useRoute();
-      const currentPlatform = router.params.platform as string
+      // const router = useRoute();
+      // const currentPlatform = router.params.platform as string
       console.log("fetching conversations of " + currentPlatform + " ...");
       if (currentPlatform !== 'facebook') {
         this.isLoading = false;
         return;
       }
-      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
-      if (botio_rest_api_id === undefined) {
+      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string; if (botio_rest_api_id === undefined) {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         this.isLoading = false;
         return;
@@ -115,7 +114,7 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
-    addMessageFromWebsocket(conversationID: string, message: Message, platform: string | undefined = undefined) {
+    async addMessageFromWebsocket(conversationID: string, message: Message, platform: string | undefined = undefined) {
       console.log(`platform: ${platform}`);
       let currentPlatform: string;
       if (!platform) {
@@ -125,9 +124,14 @@ export const useConversationsStore = defineStore("conversations", {
       else {
         currentPlatform = platform;
       }
-      const conversation = this.conversationsRaw[currentPlatform][conversationID];
+      let conversation = this.conversationsRaw[currentPlatform][conversationID];
       if (!conversation) {
-        return;
+        await this.fetchConversations(platform);
+        conversation = this.conversationsRaw[currentPlatform][conversationID];
+        if (!conversation) {
+          console.error("conversation not found");
+          return;
+        }
       };
       conversation.messages.messages.push(message);
       conversation.updatedAt = message.timeStamp;
