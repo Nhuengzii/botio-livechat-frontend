@@ -1,5 +1,5 @@
 <template>
-    <main class="flex-[7] flex-col relative overflow-x-auto w-full h-full bg-blue-50 glow">
+    <main class="flex-[7] flex-col relative overflow-x-auto h-full bg-blue-50 mb-4">
         <div class="flex flex-col h-full">
             <div class='grid grid-cols-12 gap-y-2'>
                 <div v-for="item in props.message" :key="item.messageID" :class="{

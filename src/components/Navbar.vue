@@ -1,25 +1,7 @@
 <template>
     <aside class="flex-row justify-center bg-indigo-950 h-[96%] w-[18rem] rounded-3xl ml-2 p-4 border transition-all 
-        duration-500 border-solid border-glass relative" :class="{ 'w-[5.8rem]': store.is_expanded }">
-        <div class="text-black bg-red-100 w-[4rem] h-[8rem] left-[80%]">
-            <div class="p-2">
-                <router-link to="/line">
-                    <button>Line</button>
-                </router-link>
-
-            </div>
-            <div class="bg-blue-100 p-2">
-                <router-link to="/facebook">
-                    <button>FB</button>
-                </router-link>
-            </div>
-            <div class="bg-blue-100 p-2">
-                <router-link to="/ig">
-                    <button>IG</button>
-                </router-link>
-            </div>
-        </div>
-        <div class="w-[12rem] -top-[8rem]">
+        duration-500 border-solid border-glass relative">
+        <div class="w-[12rem]">
             <UserProfile />
             <div class="top-3 px-6 py-4 overflow-hidden bg-gray-50 h-[calc(100vh-220px)] rounded-2xl items-center">
                 <div class="space-y-2 font-medium ">
@@ -102,7 +84,7 @@
                 </div>
 
                 <div class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-                    <router-link to="/"
+                    <router-link to="/line"
                         class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-200 ">
                         <svg class="flex-shrink-0 w-7 h-7 text-gray-500 transition duration-75 group-hover:text-gray-900"
                             fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -113,9 +95,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                             </path>
                         </svg>
-                        <span class="ml-4">Setting</span>
+                        <span class="ml-4">Line</span>
                     </router-link>
-                    <router-link to="/"
+                    <router-link to="/facebook"
                         class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-200 ">
                         <svg class="flex-shrink-0 w-7 h-7 text-gray-500 transition duration-75 group-hover:text-gray-900"
                             fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -124,9 +106,9 @@
                                 d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z">
                             </path>
                         </svg>
-                        <span class="ml-4">Help</span>
+                        <span class="ml-4">FaceBook</span>
                     </router-link>
-                    <router-link to="/"
+                    <router-link to="/ig"
                         class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-200 ">
                         <svg class="flex-shrink-0 w-7 h-7 text-gray-500 transition duration-75 group-hover:text-gray-900"
                             fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -135,7 +117,7 @@
                                 d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75">
                             </path>
                         </svg>
-                        <span class="ml-4">Logout</span>
+                        <span class="ml-4">Instagram</span>
                     </router-link>
                 </div>
             </div>
@@ -148,6 +130,5 @@ import { RouterLink, RouterView } from 'vue-router'
 import { useUIStore } from '@/stores/UI';
 import UserProfile from './UserProfile.vue';
 
-const store = useUIStore();
 
 </script>

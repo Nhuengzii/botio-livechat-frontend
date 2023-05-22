@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-[2] bg-green-100 rounded-[18px] mx-[10px] min-w-[512px]">
+    <div class="flex-[2] bg-green-100 rounded-[18px] mx-[10px] min-w-[512px] flex-shrink-1">
         <div v-if="conversationId !== '-1'" class="flex flex-col h-full">
             <ChatBoxHeaderVue :datauser="datauser" :conversation_id="conversationId"/>
             <ChatBoxMessage :message="messages"/>
@@ -29,11 +29,13 @@ const datauser: Conversation = conversationsStore.getConversationById(conversati
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
     let currentConversation = await conversationsStore.fetchMessages(conversationID)
+    console.log(messages)
     if (currentConversation == null) {
         router.replace({ path: `/${route.params.platform as string}/` })
         return
     }
     messages.value = currentConversation.messages.messages
+    
 })
 
 
