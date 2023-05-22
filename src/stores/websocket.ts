@@ -14,7 +14,7 @@ export const useWebsocketStore = defineStore('websocket', {
       if (this.connection === null && !this.disableAutoConnect) {
         return
       }
-      const botio_websocket_api_id = import.meta.env.VITE_WEBSOCKET_ENDPOINT as string
+      const botio_websocket_api_id = import.meta.env.VITE_BOTIO_WEBSOCKET_API_ID as string
       if (botio_websocket_api_id === undefined) {
         console.error("VITE_BOTIO_WEBSOCKET_API_ID is not defined")
         return
