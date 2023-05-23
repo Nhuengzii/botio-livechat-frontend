@@ -28,10 +28,8 @@ export const useConversationsStore = defineStore("conversations", {
     }
   },
   actions: {
-    getConversationById(conversationId: string): Conversation {
-      const router = useRoute();
-      const currentPlatform = router.params.platform as string
-      const conversation: Conversation = this.conversationsRaw[currentPlatform][conversationId];
+    getConversationById(conversationId: string, platform: string): Conversation {
+      const conversation: Conversation = this.conversationsRaw[platform][conversationId];
       return conversation;
     },
     async fetchConversations(platform: string) {
