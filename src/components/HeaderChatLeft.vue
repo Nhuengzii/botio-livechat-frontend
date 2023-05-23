@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[25%] h-[100%] bg-green-400 rounded-[18px]">
+    <aside class="flex-row justify-center w-[25%] h-[100%] bg-green-400 rounded-[18px] p-1 duration-500 border-solid border-glass relative  mt-2  shadow-inner">
         <div v-if="$route.params.platform === 'facebook'" class="w-full h-full">
             <div class="grid grid-cols-1 px-[14px] pb-[1.25rem] pt-[20px] w-full">
                 <div class="flex gap-3 items-center   rounded-2xl ml-3">
@@ -12,8 +12,7 @@
                 </div>
             </div>
             <!-- end num message box-->
-
-            <div class=" flex  justify-around py-[1rem]">
+            <div class=" flex bg-blue-100 justify-around py-[1rem]">
                 <button class="flex bg-blue-200 w-[85%] h-full items-center justify-start py-[.75rem] rounded-[20px]">
                     <div class="pl-[20px]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -30,15 +29,15 @@
             <!-- end search name box-->
 
             <!--- conversation list-->
-            <div class="relative flex flex-col overflow-hidden w-full h-full">
+            <div class="relative flex flex-col overflow-hidden w-full h-full ">
                 <div class="relative w-full h-full bg-white overflow-hidden">
                     <div class="max-h-[80%] absolute inset-0 top-0 left-0 right-0 overflow-scroll scrollbar-hide pb-[36px]">
                         <div class="relative flex flex-col">
                             <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
                                 class="flex py-[4px] pr-[4px]">
-                                <div class="w-full">
+                                <div class="w-full ">
                                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
-                                        class="flex px-[14px] pt-[20px] pb-[1.25rem] ml-[10px] border-2 rounded-[20px]">
+                                        class="flex px-[14px] pt-[20px] pb-[1.25rem]  border-2 rounded-[20px]">
                                         <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px]">
                                             <div class="overflow-hidden w-[45px] h-[45px] bg-blue-200 rounded-full">
                                                 <img v-if="conversationPicture" :src="conversationPicture" alt=""
@@ -69,7 +68,7 @@
 
 
         </div>
-    </div>
+    </aside>
 </template>
 
 <script setup lang="ts">
@@ -79,4 +78,17 @@ const props = defineProps(['numConversation'])
 const conversationsStore = useConversationsStore();
 </script>
 
-<style scoped></style>
+
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+</style>
