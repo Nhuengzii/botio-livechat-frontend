@@ -74,6 +74,7 @@ export const useConversationsStore = defineStore("conversations", {
             }
           }),
           messages: { "isAlreadyFetch": false, "messages": [] },
+          isRead: conversation.isRead,
         }
       });
       this.isLoading = false;

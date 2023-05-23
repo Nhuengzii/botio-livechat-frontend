@@ -25,6 +25,7 @@ export type Conversation = {
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
+  isRead: boolean,
   messages: { "isAlreadyFetch": boolean, "messages": Message[] },
 }
 
@@ -49,6 +50,7 @@ export type RESTConversation = {
     username: string,
   }[],
   lastActivity: string,
+  isRead: boolean,
 }
 
 export type RESTMessage = {
