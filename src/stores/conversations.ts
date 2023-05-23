@@ -121,11 +121,12 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
-      const { data } = await axios.post<{ message_id: string, recipient_id: string }>(sendMessageEndpoint, { message: message });
+      const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
+      console.log(JSON.stringify(data, null, 2))
       const newMessage: Message = {
         conversationID: conversationID,
         messageID: data.message_id,
-        timeStamp: new Date().getTime(),
+        timeStamp: data.timestamp,
         source: {
           sourceID: data.recipient_id,
           sourceType: "ADMIN",

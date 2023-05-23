@@ -1,8 +1,8 @@
 <template>
     <div class="flex-[2] bg-blue-300 shrink-1 rounded-3xl mx-[10] overflow-x-hidden">
         <div v-if="conversationId !== '-1'" class="flex flex-col h-full overflow-x-hidden">
-            
-            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser"/>
+
+            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
 
             <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-red-100">
                 <!--
@@ -47,9 +47,9 @@
                     </div>
                 </div>
             </main>
-            <ChatBoxInput/>
+            <ChatBoxInput />
 
-            
+
         </div>
     </div>
 </template>
@@ -70,7 +70,7 @@ import ChatBoxHeader from './ChatBoxHeader.vue';
 const conversationsStore = useConversationsStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser: Conversation = conversationsStore.getConversationById(conversationId)
+const datauser: Conversation = conversationsStore.getConversationById(conversationId, route.params.platform as string)
 
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
@@ -80,7 +80,7 @@ onMounted(async () => {
         return
     }
     messages.value = currentConversation.messages.messages
-    
+
 })
 
 
