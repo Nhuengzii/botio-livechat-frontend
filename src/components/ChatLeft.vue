@@ -1,6 +1,8 @@
 <template>
-    <div class="flex-[1] bg-blue-100 shrink-0 rounded-3xl mx-[10px] font-sans">
-        <div class="w-full h-full">
+    <div class="flex-1 bg-green-100 rounded-[18px] mx-[10px] relative max-h-[100%] overflow-hidden pb-[10px] " >
+        <div v-if="route.params.platform === 'facebook'" class="w-full h-full">
+
+            <!-- Search and show all number converation -->
             <HeaderChatLeft/>
 
             

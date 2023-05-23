@@ -1,91 +1,168 @@
 <template>
-    <aside class="flex flex-col p-[1rem] text-white bg-gray-700 transition duration-75 hover:text-green-300" :class="{ 'w-[300px]': is_expanded, 'w-[calc(2rem + 32px)]': !is_expanded }">
-        <div class="flex flex-end mb-[1rem] relative transition duration-200" :class="{ 'rotate-180': is_expanded }">
-            <button @click="ToggleMenu" class="flex flex-end mb-[1rem] relative top-[0] px-[10px] py-[5px]">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6 ">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
-                </svg>
-            </button>
+    <aside class="flex-row justify-center bg-stone-00 h-[96%] w-[10rem] rounded-3xl ml-2 p-4 border transition-all  bg-gray-700 
+        duration-500 border-solid border-glass relative  mt-2  shadow-inner">
+
+
+        <div class=" overflow-hidden bg-gray-700    rounded-2xl items-center h-full w-full">
+            <UserProfile />
+            <router-link to="/Start">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4">เริ่มต้น
+                </button>
+            </router-link>
+
+            <router-link to="/Services">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">บริการ
+                </button>
+            </router-link>
+
+            <router-link to="/Stock">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">คลังสินค้า
+                </button>
+            </router-link>
+
+            <router-link to="/Order">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ออเดอร์
+                </button>
+            </router-link>
+
+            <router-link to="/Customer">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ลูกค้า
+                </button>
+            </router-link>
+
+            <router-link to="/Modify">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ปรับแต่ง
+                </button>
+            </router-link>
+
+            <router-link to="/facebook">
+                <button @click="{
+                    show_Chat = true; show_Line = false; show_Instagram = false;
+                    if (show_Chat) { show_Facebook = true; };
+                }" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">แชท
+
+                </button>
+            </router-link>
+
+            <router-link to="/Setting">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4">ตั้งค่า
+                </button>
+            </router-link>
+
+            <router-link to="/Help">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ช่วยเหลือ
+                </button>
+            </router-link>
+
+            <router-link to="/Logout">
+                <button @click="{ show_Chat = false; }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ออกระบบ
+                </button>
+            </router-link>
         </div>
-        <div class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200">
-            <router-link to="/line"
-                class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100  hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-line text-green-500"
-                    viewBox="0 0 16 16">
-                    <path
-                        d="M8 0c4.411 0 8 2.912 8 6.492 0 1.433-.555 2.723-1.715 3.994-1.678 1.932-5.431 4.285-6.285 4.645-.83.35-.734-.197-.696-.413l.003-.018.114-.685c.027-.204.055-.521-.026-.723-.09-.223-.444-.339-.704-.395C2.846 12.39 0 9.701 0 6.492 0 2.912 3.59 0 8 0ZM5.022 7.686H3.497V4.918a.156.156 0 0 0-.155-.156H2.78a.156.156 0 0 0-.156.156v3.486c0 .041.017.08.044.107v.001l.002.002.002.002a.154.154 0 0 0 .108.043h2.242c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157Zm.791-2.924a.156.156 0 0 0-.156.156v3.486c0 .086.07.155.156.155h.562c.086 0 .155-.07.155-.155V4.918a.156.156 0 0 0-.155-.156h-.562Zm3.863 0a.156.156 0 0 0-.156.156v2.07L7.923 4.832a.17.17 0 0 0-.013-.015v-.001a.139.139 0 0 0-.01-.01l-.003-.003a.092.092 0 0 0-.011-.009h-.001L7.88 4.79l-.003-.002a.029.029 0 0 0-.005-.003l-.008-.005h-.002l-.003-.002-.01-.004-.004-.002a.093.093 0 0 0-.01-.003h-.002l-.003-.001-.009-.002h-.006l-.003-.001h-.004l-.002-.001h-.574a.156.156 0 0 0-.156.155v3.486c0 .086.07.155.156.155h.56c.087 0 .157-.07.157-.155v-2.07l1.6 2.16a.154.154 0 0 0 .039.038l.001.001.01.006.004.002a.066.066 0 0 0 .008.004l.007.003.005.002a.168.168 0 0 0 .01.003h.003a.155.155 0 0 0 .04.006h.56c.087 0 .157-.07.157-.155V4.918a.156.156 0 0 0-.156-.156h-.561Zm3.815.717v-.56a.156.156 0 0 0-.155-.157h-2.242a.155.155 0 0 0-.108.044h-.001l-.001.002-.002.003a.155.155 0 0 0-.044.107v3.486c0 .041.017.08.044.107l.002.003.002.002a.155.155 0 0 0 .108.043h2.242c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157H11.81v-.589h1.525c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157H11.81v-.589h1.525c.086 0 .155-.07.155-.156Z" />
-                </svg>
-                <span v-if="is_expanded" class="ml-4 text-white hover:text-gray-700">Line</span>
-            </router-link>
-            <router-link to="/facebook"
-                class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-facebook text-blue-500" viewBox="0 0 16 16">
-                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                </svg>
-                <span v-if="is_expanded" class="ml-4 text-white hover:text-gray-700">Facebook</span>
-            </router-link>
-            <router-link to="/ig"
-                class="flex items-center p-3 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-instagram text-red-500" viewBox="0 0 16 16">
-                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
-                </svg>
-                <span v-if="is_expanded" class="ml-4 text-white hover:text-gray-700">Instagram</span>
-            </router-link>
-        </div>
+
     </aside>
+    <Transition name="nested">
+        <div v-if="show_Chat" class="mt-2 h-[96%] bg-gray-300 rounded-2xl  items-center p-3   ">
+
+            <div class="mt-4">
+                <router-link to="/facebook">
+                    <button @click="{ show_Instagram = false; show_Line = false; show_Facebook = true; }" type="button"
+                        data-te-ripple-init data-te-ripple-color="light"
+                        class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                        style="background-color: #1877f2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                        </svg>
+                    </button>
+                </router-link>
+            </div>
+
+            <div class="mt-4">
+                <router-link to="/ig">
+                    <button @click="{ show_Facebook = false; show_Line = false; show_Instagram = true; }" type="button"
+                        data-te-ripple-init data-te-ripple-color="light"
+                        class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                        style="background-color: #c13584">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </button>
+                </router-link>
+
+            </div>
+        </div>
+    </Transition>
 </template>
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useUIStore } from '@/stores/UI';
 import UserProfile from './UserProfile.vue';
+import ChatLeft from './ChatLeft.vue'
 import { ref } from 'vue'
-const is_expanded = ref(false)
-
-const ToggleMenu = () => {
-    is_expanded.value = !is_expanded.value
-}
-
-
+const show_Line = ref(false)
+const show_Facebook = ref(false)
+const show_Instagram = ref(false)
+const show_Chat = ref(false)
 </script>
-
-<style lang="css" scoped>
-:root {
-    --dark: #1e293b;
-    --light: #f1f5f9;
-    --dark-alt: #334155;
-    --primary: #4ade80;
+<style>
+.outer,
+.inner {
+    background: #eee;
+    padding: 30px;
+    min-height: 100px;
 }
 
-.asides {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 1rem;
-    background-color: #1e293b;
-    color: #f1f5f9;
-    min-height: 100vh;
-    transition: 0.2s ease-in-out;
-
-    @media (max-width: 768px) {
-        position: fixed;
-        z-index: 99;
-    }
+.inner {
+    background: #ccc;
 }
 
-.menu-toggle-warp {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-
-    position: relative;
-    top: 0;
-    transition: 0.2s ease-in-out;
+.nested-enter-active,
+.nested-leave-active {
+    transition: all 0.3s ease-in-out;
 }
 
-.menu-toggle {
-    transition: 0.2s ease-in-out;
+/* delay leave of parent element */
+.nested-leave-active {
+    transition-delay: 0.25s;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+    transform: translateY(30px);
+    opacity: 0;
+}
+
+/* we can also transition nested elements using nested selectors */
+.nested-enter-active .inner,
+.nested-leave-active .inner {
+    transition: all 0.3s ease-in-out;
+}
+
+/* delay enter of nested element */
+.nested-enter-active .inner {
+    transition-delay: 0.25s;
+}
+
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+    transform: translateX(30px);
+    /*
+  	Hack around a Chrome 96 bug in handling nested opacity transitions.
+    This is not needed in other browsers or Chrome 99+ where the bug
+    has been fixed.
+  */
+    opacity: 0.001;
 }
 </style>
