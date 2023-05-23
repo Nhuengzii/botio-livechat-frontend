@@ -26,7 +26,7 @@
             </div>
             <!-- end search name box-->
         </div>
-    </div>
+    </aside>
 </template>
 
 <script setup lang="ts">
@@ -36,4 +36,8 @@ const props = defineProps(['numConversation'])
 const conversationsStore = useConversationsStore();
 </script>
 
-<style scoped></style>
+
+
+<style scoped>
+
+</style>

@@ -110,6 +110,32 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
+    async sendTextMessage(conversationID: string, senderID: string, message: string, platform: string) {
+      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
+      if (botio_rest_api_id === undefined) {
+        console.error("VITE_BOTIO_REST_API_ID is not defined");
+        return;
+      }
+      const conversation = this.conversationsRaw[platform][conversationID];
+      if (!conversation) {
+        console.log("Cannot send Text message. Conversation not found");
+        return;
+      }
+      const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
+      const { data } = await axios.post<{ message_id: string, recipient_id: string }>(sendMessageEndpoint, { message: message });
+      const newMessage: Message = {
+        conversationID: conversationID,
+        messageID: data.message_id,
+        timeStamp: new Date().getTime(),
+        source: {
+          sourceID: data.recipient_id,
+          sourceType: "ADMIN",
+        },
+        message: message,
+        attachments: [],
+      }
+      conversation.messages.messages.push(newMessage);
+    },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
       let conversation = this.conversationsRaw[platform][conversationID];
       if (!conversation) {
