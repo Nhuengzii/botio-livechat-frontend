@@ -41,33 +41,26 @@ export const useWebsocketStore = defineStore('websocket', {
             this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
             return;
             break;
-          case "message":
-            break
+          case "userMessage":
+            let data: StandardMessage = incommingEvent.message;
+            const newMessage: Message = {
+              messageID: data.messageID,
+              timeStamp: data.timestamp,
+              source: {
+                sourceID: data.source.userID,
+                sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
+              },
+              message: data.message,
+              conversationID: data.conversationID,
+              attachments: data.attachments,
+            }
+            try {
+              await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+            } catch {
+              console.log("Error adding message from websocket")
+            }
           case "defalt":
             console.log("Incomming WebSocket Default");
-        }
-        let data: StandardMessage
-        try {
-          data = JSON.parse(event.data);
-        } catch {
-          console.log(JSON.stringify(event.data, null, 2));
-          return;
-        }
-        const newMessage: Message = {
-          messageID: data.messageID,
-          timeStamp: data.timestamp,
-          source: {
-            sourceID: data.source.userID,
-            sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
-          },
-          message: data.message,
-          conversationID: data.conversationID,
-          attachments: data.attachments,
-        }
-        try {
-          await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
-        } catch {
-          console.log("Error adding message from websocket")
         }
 
       }
