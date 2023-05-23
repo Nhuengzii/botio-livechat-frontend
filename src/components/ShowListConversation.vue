@@ -4,16 +4,16 @@
             <div class="max-h-[80%] absolute inset-0 top-0 left-0 right-0 overflow-scroll scrollbar-hide pb-[36px]">
                 <div class="relative flex flex-col">
                     <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
-                        class="flex py-[4px] pr-[4px]">
+                        class="flex py-[2px] pr-[4px]">
                         <div class="w-full">
                             <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
-                                class="flex px-[14px] pt-[20px] pb-[1.25rem] ml-[10px] border-2 rounded-[20px]">
+                                class="flex px-[14px] pt-[20px] pb-[1.25rem] ml-[10px] border-b-2">
                                 <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px]">
                                     <div class="overflow-hidden w-[45px] h-[45px] bg-blue-200 rounded-full">
                                         <img v-if="conversationPicture" :src="conversationPicture" alt=""
                                             class="object-cover w-full h-full rounded-full">
                                         <img v-else :src="participants[0].profilePicture" alt=""
-                                                    class="object-cover w-full h-full rounded-full">
+                                            class="object-cover w-full h-full rounded-full">
                                     </div>
                                 </div>
                                 <div class="grow-2 overflow-hidden">

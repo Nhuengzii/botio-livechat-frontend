@@ -1,8 +1,6 @@
 <template>
-    <aside class="flex-row justify-center bg-stone-00 h-[96%] w-[10rem] rounded-3xl ml-2 p-4 border transition-all  bg-gray-700 
+    <aside class="flex-row justify-cente min-w-[180px] bg-stone-00 h-[96%] w-[10rem] rounded-3xl ml-2 p-4 border transition-all  bg-gray-700 
         duration-500 border-solid border-glass relative  mt-2  shadow-inner">
-
-
         <div class=" overflow-hidden bg-gray-700    rounded-2xl items-center h-full w-full">
             <UserProfile />
             <router-link to="/Start">

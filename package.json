@@ -13,7 +13,8 @@
     "axios": "^1.4.0",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-virtual-scroller": "^0.2.3"
   },
   "devDependencies": {
     "@types/node": "^18.14.2",

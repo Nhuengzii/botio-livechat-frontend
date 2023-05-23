@@ -4,7 +4,7 @@
             <img src="https://graph.facebook.com/108362942229009/picture?type=normal" alt=""
                 class="w-full h-full rounded-full object-cover">
         </div>
-        <div :class="{ 'opacity-0 delay-200 text-[0.75rem]': uiStore.is_expanded }">
+        <div>
             <h3 class="text-xl text-white">TestPage</h3>
             <button class="bg-gray-600 hover:bg-gray-500 text-white text-[0.75rem]  py-2 px-4 rounded w-full mt-1">เปลี่ยนเพจ
             </button>

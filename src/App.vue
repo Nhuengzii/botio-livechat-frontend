@@ -25,9 +25,9 @@ onUnmounted(() => {
 
 <template >
   <!-- Navbar -->
-  <div class="flex w-screen h-screen  reset bg-pink-100">
+  <div class="flex w-screen h-screen  reset">
     <Navbar />
-    <main class="flex flex-col grow bg-pink-400">
+    <main class="flex flex-col grow">
       <RouterView :key="platform"/>
     </main>
   </div>
