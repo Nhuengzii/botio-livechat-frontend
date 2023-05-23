@@ -59,6 +59,7 @@ export const useWebsocketStore = defineStore('websocket', {
             } catch {
               console.log("Error adding message from websocket")
             }
+            break;
           case "defalt":
             console.log("Incomming WebSocket Default");
         }
