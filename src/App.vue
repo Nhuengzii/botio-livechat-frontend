@@ -25,12 +25,18 @@ onUnmounted(() => {
 
 <template >
   <!-- Navbar -->
-  <div class="flex flex-[1] grow-0 shrink-0 w-screen h-screen">
+  <div class="flex w-screen h-screen  reset bg-pink-100">
     <Navbar />
-    <main class="flex flex-col grow pb-[12px]">
+    <main class="flex flex-col grow bg-pink-400">
       <RouterView :key="platform"/>
     </main>
   </div>
 </template>
 
-<style></style>
+<style scoped>
+.reset {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>

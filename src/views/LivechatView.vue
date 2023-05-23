@@ -1,22 +1,9 @@
 <template>
-  <!-- header space-->
-  <header class="h-[8%] min-h-[80px]"></header>
-  <!--End header space-->
-
-  <section class="flex h-full">
-
-    <!--container chat left-->
-
-    <ChatLeft />
-
-    <!--End container chat left-->
-    <router-view :key="route.params.conversation_id as string"/>
-
-  </section>
-
-  <footer class="h-[3%]">
-  </footer>
-  <!--End footer space-->
+  <header class="pt-8 pb-3 px-3  bg-green-300"></header>
+  <main class="flex h-[calc(100vh-48px)] bg-green-500">
+    <ChatLeft/>
+    <router-view :key="(route.params.conversation_id as string)"></router-view>
+  </main>
 </template>
 
 <script setup lang="ts">

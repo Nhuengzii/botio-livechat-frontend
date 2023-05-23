@@ -1,5 +1,11 @@
 <template>
+    <div class="flex-[1] bg-blue-100 shrink-0 rounded-3xl mx-[10px] font-sans">
+        <div class="w-full h-full">
+            <HeaderChatLeft/>
 
+            
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
