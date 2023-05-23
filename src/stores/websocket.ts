@@ -35,13 +35,16 @@ export const useWebsocketStore = defineStore('websocket', {
       }
       this.connection.onmessage = async (event) => {
         const incommingEvent: { action: string, message: any } = JSON.parse(event.data);
-        if (incommingEvent.action !== "broadcast") {
-          return;
-        }
-        else {
-          const message: Message = incommingEvent.message;
-          this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
-          return;
+        switch (incommingEvent.action) {
+          case "broadcast":
+            const message: Message = incommingEvent.message;
+            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
+            return;
+            break;
+          case "message":
+            break
+          case "defalt":
+            console.log("Incomming WebSocket Default");
         }
         let data: StandardMessage
         try {
