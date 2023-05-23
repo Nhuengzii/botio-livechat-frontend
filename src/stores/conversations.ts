@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import axios from 'axios'
 import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
+import { useWebsocketStore } from "./websocket";
 
 
 
@@ -145,6 +146,8 @@ export const useConversationsStore = defineStore("conversations", {
       } finally {
         conversation.messages.messages[newMessageIndex] = newMessage;
       }
+      const websocketStore = useWebsocketStore()
+      websocketStore.broadcastMessage(newMessage);
     },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
       let conversation = this.conversationsRaw[platform][conversationID];

@@ -34,8 +34,22 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = async (event) => {
-        const data: StandardMessage = JSON.parse(event.data);
-        console.log(JSON.stringify(data, null, 2))
+        const incommingEvent: { action: string, message: any } = JSON.parse(event.data);
+        if (incommingEvent.action !== "broadcast") {
+          return;
+        }
+        else {
+          const message: Message = incommingEvent.message;
+          this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
+          return;
+        }
+        let data: StandardMessage
+        try {
+          data = JSON.parse(event.data);
+        } catch {
+          console.log(JSON.stringify(event.data, null, 2));
+          return;
+        }
         const newMessage: Message = {
           messageID: data.messageID,
           timeStamp: data.timestamp,
@@ -61,6 +75,13 @@ export const useWebsocketStore = defineStore('websocket', {
         console.log('disconnected')
         this.connection = null
       }
+    },
+    broadcastMessage(message: Message) {
+      if (!this.connection) {
+        console.log("No connection");
+        return;
+      }
+      this.connection.send(JSON.stringify({ action: "broadcast", message: message }));
     }
   },
 })
