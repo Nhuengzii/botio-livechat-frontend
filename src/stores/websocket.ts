@@ -42,7 +42,7 @@ export const useWebsocketStore = defineStore('websocket', {
             return;
             break;
           case "userMessage":
-            let data: StandardMessage = incommingEvent.message;
+            let data: StandardMessage = JSON.parse(incommingEvent.message);
             const newMessage: Message = {
               messageID: data.messageID,
               timeStamp: data.timestamp,
