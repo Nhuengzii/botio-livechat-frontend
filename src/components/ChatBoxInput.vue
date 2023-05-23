@@ -71,12 +71,15 @@ const route = useRoute()
 async function sendMessage() {
     const currentConversation = conversationsStore.getConversationById(route.params.conversation_id as string, route.params.platform as string)
     try {
-        await conversationsStore.sendTextMessage(route.params.conversation_id as string, currentConversation.participants[0].userID, newMessage.value, route.params.platform as string)
+        const text = newMessage.value;
+        newMessage.value = '';
+        await conversationsStore.sendTextMessage(route.params.conversation_id as string, currentConversation.participants[0].userID, text, route.params.platform as string)
         console.log("Sending true")
     }
     catch {
         console.log("Sending new message failed")
     }
+
 }
 async function a() {
     console.log('a')
