@@ -8,7 +8,7 @@ const router = createRouter({
     {
       name: 'root',
       path: '/',
-      redirect: '/facebook/'
+      redirect: ''
     },
     {
       path: '/:platform',
