@@ -1,5 +1,5 @@
 <template>
-    <aside class="w-[100%] h-[20%] bg-green-400 rounded-[18px]">
+    <aside class="w-[100%] h-120 bg-gray-100 rounded-t-[18px] ">
         <div v-if="$route.params.platform === 'facebook'" class="w-full h-full">
             <div class="grid grid-cols-1 px-[14px] pb-[1.25rem] pt-[20px] w-full">
                 <div class="flex gap-3 items-center   rounded-2xl ml-3">
@@ -11,7 +11,7 @@
                 </div>
             </div>
             <!-- end num message box-->
-            <div class=" flex  justify-around py-[1rem]">
+            <div class=" flex  justify-around py-[1rem] ">
                 <button class="flex bg-blue-200 w-[85%] h-full items-center justify-start py-[.75rem] rounded-[20px]">
                     <div class="pl-[20px]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 bg-green-100 rounded-[18px] mx-[10px] relative max-h-[100%] overflow-hidden pb-[10px] " >
+    <div class="flex-1 bg-gray-100  rounded-[18px] mx-[10px] relative max-h-[100%] overflow-hidden pb-[10px] " >
         <div v-if="route.params.platform === 'facebook'" class="w-full h-full">
 
             <!-- Search and show all number converation -->

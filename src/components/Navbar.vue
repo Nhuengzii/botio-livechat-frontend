@@ -1,41 +1,41 @@
 <template>
-    <aside class="flex-row justify-cente min-w-[180px] bg-stone-00 h-[96%] w-[10rem] rounded-3xl ml-2 p-4 border transition-all  bg-gray-700 
-        duration-500 border-solid border-glass relative  mt-2  shadow-inner">
+    <aside class="flex-row justify-cente min-w-[180px] bg-stone-00 h-[98%] w-[10rem] rounded-3xl ml-2 p-4 border transition-all  bg-gray-700 
+        duration-500 border-solid border-glass relative  mt-2  shadow-inner ">
         <div class=" overflow-hidden bg-gray-700    rounded-2xl items-center h-full w-full">
             <UserProfile />
             <router-link to="/Start">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4">เริ่มต้น
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4 motion-safe:hover:scale-110">เริ่มต้น
                 </button>
             </router-link>
 
             <router-link to="/Services">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">บริการ
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">บริการ
                 </button>
             </router-link>
 
             <router-link to="/Stock">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">คลังสินค้า
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">คลังสินค้า
                 </button>
             </router-link>
 
             <router-link to="/Order">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ออเดอร์
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">ออเดอร์
                 </button>
             </router-link>
 
             <router-link to="/Customer">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ลูกค้า
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">ลูกค้า
                 </button>
             </router-link>
 
             <router-link to="/Modify">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ปรับแต่ง
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">ปรับแต่ง
                 </button>
             </router-link>
 
@@ -43,33 +43,33 @@
                 <button @click="{
                     show_Chat = true; show_Line = false; show_Instagram = false;
                     if (show_Chat) { show_Facebook = true; };
-                }" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">แชท
+                }" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110 ">แชท
 
                 </button>
             </router-link>
 
             <router-link to="/Setting">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4">ตั้งค่า
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4 motion-safe:hover:scale-110">ตั้งค่า
                 </button>
             </router-link>
 
             <router-link to="/Help">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ช่วยเหลือ
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">ช่วยเหลือ
                 </button>
             </router-link>
 
             <router-link to="/Logout">
                 <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1">ออกระบบ
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110">ออกระบบ
                 </button>
             </router-link>
         </div>
 
     </aside>
     <Transition name="nested">
-        <div v-if="show_Chat" class="mt-2 h-[96%] bg-gray-300 rounded-2xl  items-center p-3   ">
+        <div v-if="show_Chat" class="mt-2 h-[98%] bg-gray-300 rounded-2xl  items-center p-3   ">
 
             <div class="mt-4">
                 <router-link to="/facebook">
