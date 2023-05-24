@@ -80,6 +80,7 @@ export const useConversationsStore = defineStore("conversations", {
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
       this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+      useWebsocketStore().broadcastTypingEvent(conversationID, platform, status);
     },
     async fetchMessages(conversationID: string, platform: string) {
       const conversation = this.conversationsRaw[platform][conversationID];

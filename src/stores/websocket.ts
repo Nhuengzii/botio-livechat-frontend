@@ -86,6 +86,13 @@ export const useWebsocketStore = defineStore('websocket', {
         return;
       }
       this.connection.send(JSON.stringify({ action: "broadcast", message: message }));
+    },
+    broadcastTypingEvent(conversationID: string, platform: string, typing: boolean) {
+      if (!this.connection) {
+        console.log("No connection");
+        return;
+      }
+      this.connection.send(JSON.stringify({ action: "typing_broadcast", message: { conversationID: conversationID, platform: platform, typing: typing } }));
     }
   },
 })
