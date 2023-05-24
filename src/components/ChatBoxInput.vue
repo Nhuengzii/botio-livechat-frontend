@@ -5,10 +5,10 @@
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <textarea id="comment" rows="4"
                         class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                        placeholder="ข้อความ" required></textarea>
+                        v-model="newMessage" placeholder="Write a comment..." required></textarea>
                 </div>
                 <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                    <button type="button"
+                    <button type="button" @click="sendMessage"
                         class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
                         Send Message
                     </button>
@@ -72,15 +72,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import Modal from './Modal.vue'
+import { ref, watch } from 'vue';
+import { useConversationsStore } from '@/stores/conversations';
+import { useRoute, } from 'vue-router';
+const conversationsStore = useConversationsStore();
+const newMessage = ref('');
+const route = useRoute()
+async function sendMessage() {
+    const currentConversation = conversationsStore.getConversationById(route.params.conversation_id as string, route.params.platform as string)
+    try {
+        const text = newMessage.value;
+        newMessage.value = '';
+        await conversationsStore.sendTextMessage(route.params.conversation_id as string, currentConversation.participants[0].userID, text, route.params.platform as string)
+        console.log("Sending true")
+    }
+    catch {
+        console.log("Sending new message failed")
+    }
 
-const showModal = ref(false)
-
-
-const toggleMessaging = ref();
+}
+async function a() {
+    console.log('a')
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

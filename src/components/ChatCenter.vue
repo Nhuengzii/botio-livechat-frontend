@@ -4,6 +4,8 @@
 
             <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
 
+            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
+
             <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200" id="containMessage" ref="containMessage" >
                 <div class='grid grid-cols-12 gap-y-2'>
                     <div  v-for="(item, index) in messages" :key="index" :class="{
@@ -51,7 +53,19 @@ import ChatBoxHeader from './ChatBoxHeader.vue';
 const conversationsStore = useConversationsStore();
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser: Conversation = conversationsStore.getConversationById(conversationId)
+const datauser: Conversation = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+
+const scrollToBottom = () => {
+    // Use document safely here
+    let objContain = document.getElementById("containMessage") as any
+    console.log(objContain)
+    objContain.scrollTop = objContain?.scrollHeight
+    
+}
+
+
+
+
 
 const scrollToBottom = () => {
     // Use document safely here

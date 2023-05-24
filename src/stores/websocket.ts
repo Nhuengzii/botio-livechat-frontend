@@ -34,23 +34,41 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = async (event) => {
-        const data: StandardMessage = JSON.parse(event.data);
-        console.log(JSON.stringify(data, null, 2))
-        const newMessage: Message = {
-          messageID: data.messageID,
-          timeStamp: data.timestamp,
-          source: {
-            sourceID: data.source.userID,
-            sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
-          },
-          message: data.message,
-          conversationID: data.conversationID,
-          attachments: data.attachments,
-        }
-        try {
-          await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
-        } catch {
-          console.log("Error adding message from websocket")
+        const incommingEvent: { action: string, message: any } = JSON.parse(event.data);
+        switch (incommingEvent.action) {
+          case "broadcast":
+            const message: Message = incommingEvent.message;
+            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
+            return;
+            break;
+          case "userMessage":
+            let data: StandardMessage = JSON.parse(incommingEvent.message);
+            const currentConversation = this.conversationStore.getConversationById(data.conversationID, data.platform.toLowerCase());
+            if (currentConversation === undefined) {
+              console.log("Conversation not found in usermessage action");
+              return;
+            }
+            const conversationPicture = currentConversation.participants[0].profilePicture
+            const newMessage: Message = {
+              messageID: data.messageID,
+              timeStamp: data.timestamp,
+              source: {
+                sourceID: data.source.userID,
+                sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
+                sourcePicture: conversationPicture,
+              },
+              message: data.message,
+              conversationID: data.conversationID,
+              attachments: data.attachments,
+            }
+            try {
+              await this.conversationStore.addMessageFromWebsocket(data.conversationID, newMessage, data.platform.toLowerCase());
+            } catch {
+              console.log("Error adding message from websocket")
+            }
+            break;
+          case "defalt":
+            console.log("Incomming WebSocket Default");
         }
 
       }
@@ -61,6 +79,13 @@ export const useWebsocketStore = defineStore('websocket', {
         console.log('disconnected')
         this.connection = null
       }
+    },
+    broadcastMessage(message: Message) {
+      if (!this.connection) {
+        console.log("No connection");
+        return;
+      }
+      this.connection.send(JSON.stringify({ action: "broadcast", message: message }));
     }
   },
 })
