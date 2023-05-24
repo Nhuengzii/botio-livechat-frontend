@@ -4,7 +4,6 @@
 
             <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
 
-            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
 
             <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200" id="containMessage" ref="containMessage" >
                 <div class='grid grid-cols-12 gap-y-2'>
@@ -25,7 +24,6 @@
                                 'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl': item.source.sourceType === 'ADMIN'
                             }">
                                 <div>{{ item.message }}</div>
-                                <div>{{ messages[messages.length-1].message }}</div>
                             </div>
                         </div>
                     </div>
