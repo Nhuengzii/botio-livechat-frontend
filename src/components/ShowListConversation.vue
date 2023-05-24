@@ -1,11 +1,6 @@
 <template>
     <!--- conversation list-->
-    <div v-if="isFetching"
-        class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-        role="status">
-        <span
-            class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
-    </div>
+    <LoadingIndicator v-if="isFetching" />
     <template v-else>
         <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
             class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
@@ -37,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import LoadingIndicator from '@/components/LoadingIndicator.vue';
 import { useConversationsStore } from '@/stores/conversations';
 import { storeToRefs } from 'pinia';
 import { onBeforeMount, ref, watch } from 'vue';
