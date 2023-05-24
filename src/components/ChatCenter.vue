@@ -8,7 +8,7 @@
                 id="containMessage" ref="containMessage">
                 <div class='grid grid-cols-12 gap-y-2'>
                     <template v-if="isFetching">
-                        <div>
+                        <div class="">
                             <LoadingIndicator />
                         </div>
                     </template>

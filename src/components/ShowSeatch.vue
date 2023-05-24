@@ -1,15 +1,9 @@
-<template>
-    <!--- conversation list-->
-    <template v-if="isFetching">
-        <div class="justify-center">
-            <LoadingIndicator />
-        </div>
-    </template>
+
     <template v-else>
         <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
-            class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
-            <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
-                class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
+            c  >
+            <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } } "
+                class="flex px-[14px] pt-[20px] pb-[1.25rem]     w-full  border-b-2  hover:bg-blue-100 " v-if="filteredList(participants[0].username)">
                 <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
                     <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
                         <img v-if="conversationPicture" :src="conversationPicture" alt=""
@@ -23,17 +17,12 @@
                         <span class="text-sm font-semibold leading-6 text-gray-900  whitespace-nowrap">{{
                             participants[0].username }}</span>
                     </div>
-                    <div class="flex items-end justify-between whitespace-nowrap ">
-                        <span class="text-ellipsis whitespace-nowrap mt-1 truncate text-xs leading-5 text-gray-500 ">{{
-                            lastActivity }}</span>
-                    </div>
+
                 </div>
             </router-link>
         </div>
     </template>
 
-    <!--- end conversation list-->
-</template>
 
 <script setup lang="ts">
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
@@ -49,6 +38,19 @@ onBeforeMount(async () => {
     await conversationsStore.fetchConversations(route.params.platform as string);
     isFetching.value = false;
 })
+
+const props = defineProps(['propA']);
+
+
+function filteredList(text:String) {
+  console.log(props.propA)
+  if(text.toLowerCase().includes(props.propA.toLowerCase())){
+    return true;
+  }
+  else{
+    return false;   
+  }
+}
 </script>
 
 <style scoped>
