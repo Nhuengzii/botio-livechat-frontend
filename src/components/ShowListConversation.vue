@@ -1,6 +1,10 @@
 <template>
     <!--- conversation list-->
-    <LoadingIndicator v-if="isFetching" />
+    <template v-if="isFetching">
+        <div>
+            <LoadingIndicator />
+        </div>
+    </template>
     <template v-else>
         <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
             class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
