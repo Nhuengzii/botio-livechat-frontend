@@ -75,6 +75,10 @@
 import { ref, watch } from 'vue';
 import { useConversationsStore } from '@/stores/conversations';
 import { useRoute, } from 'vue-router';
+import Modal from './Modal.vue'
+
+const showModal = ref(false)
+
 const conversationsStore = useConversationsStore();
 const newMessage = ref('');
 const route = useRoute()
