@@ -146,6 +146,9 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       } finally {
         conversation.messages.messages[newMessageIndex] = newMessage;
+        conversation.updatedAt = newMessage.timeStamp;
+        conversation.isRead = true;
+        conversation.lastActivity = "คุณ: " + newMessage.message;
       }
       const websocketStore = useWebsocketStore()
       websocketStore.broadcastMessage(newMessage);
