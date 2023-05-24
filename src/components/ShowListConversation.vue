@@ -2,7 +2,7 @@
     <!--- conversation list-->
     <template v-if="isFetching">
         <div class="justify-center">
-            <LoadingIndicator />
+            <SkletonBoxMessage />
         </div>
     </template>
     <template v-else>
@@ -42,6 +42,8 @@ import { useConversationsStore } from '@/stores/conversations';
 import { storeToRefs } from 'pinia';
 import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import SkletonBoxMessage from './SkletonBoxMessage.vue';
+
 const conversationsStore = useConversationsStore();
 const isFetching = ref(true);
 const route = useRoute();
