@@ -64,21 +64,6 @@ const scrollToBottom = () => {
 }
 
 
-
-
-
-const scrollToBottom = () => {
-    // Use document safely here
-    let objContain = document.getElementById("containMessage") as any
-    console.log(objContain)
-    objContain.scrollTop = objContain?.scrollHeight
-    
-}
-
-
-
-
-
 onMounted(async () => {
     let conversationID = route.params.conversation_id as string;
     let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
