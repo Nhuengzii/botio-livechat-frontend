@@ -143,6 +143,7 @@ export const useConversationsStore = defineStore("conversations", {
       } catch (error) {
         console.error(error);
         conversation.messages.messages.splice(newMessageIndex, 1);
+        return;
       } finally {
         conversation.messages.messages[newMessageIndex] = newMessage;
       }
