@@ -3,7 +3,7 @@
         <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
               >
             <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } } " @click=""
-                class="flex px-[14px] pt-[20px] pb-[1.25rem]     w-full  border-b-2  hover:bg-blue-100 " v-if="filteredList(participants[0].username)">
+                class="flex px-[14px] pt-[20px] pb-[1.25rem]  items-center	   w-full  border-b-2  hover:bg-blue-100 " v-if="filteredList(participants[0].username)">
                 <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
                     <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
                         <img v-if="conversationPicture" :src="conversationPicture" alt=""
