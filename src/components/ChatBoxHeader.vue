@@ -1,26 +1,25 @@
 <template>
-<header class="relative flex-[1] h-full w-full bg-blue-100 glow py-[10px] border-b border-gray-300">
-                <div class="grid grid-cols-12 gap-3">
-                    <div class="col-start-1 col-end-7 row-start-2 overflow-hidden">
-                        <div class="flex  items-center justify-start pl-[20px]">
-                            <div class="w-12 h-12 rounded-full">
-                                <div></div>
-                                <img :src="datauser?.participants[0].profilePicture" alt=""
-                                    class="object-cover h-12 w-12 rounded-full">
-                            </div>
-                            <div class="flex flex-col ml-4">
-                                <span class="">{{ props.datauser?.participants[0].username }}</span>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </header>
+    <header class="relative flex-[1] h-full w-full bg-gray-100 glow py-[10px] border-b border-gray-300">
+        <div class="grid grid-cols-12 gap-3">
+            <div class="col-start-1 col-end-7 row-start-2 overflow-hidden">
+                <Suspense @pending="pending" @fallback="fallback" @resolved="resolved">
+                    <template #default>
+                        <ProfileUserMessage :datauser="datauser" />
+                    </template>
+                    <template #fallback>
+                        <p>loading . . . .</p>
+                    </template>
+                </Suspense>
+            </div>
+        </div>
+    </header>
 </template>
 
 <script setup lang="ts">
-import { useConversationsStore } from '@/stores/conversations';
+import { useConversationsStore } from '@/stores/conversations'
 import type { Conversation } from '@/types/conversation'
+import ProfileUserMessage from './ProfileUserMessage.vue'
+import ProfileCardSkeleton from './ProfileCardSkleton.vue'
 interface Props {
     conversation_id: String
     datauser: Conversation
@@ -28,8 +27,18 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const pending = () => {
+    console.log("pending");
+}
+
+const fallback = () => {
+    console.log("fallback");
+}
+
+const resolved = () => {
+    console.log("resolved")
+}
+
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
