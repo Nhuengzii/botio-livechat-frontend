@@ -2,15 +2,14 @@
     <div class="flex-[2] bg-white shrink-1 rounded-3xl mx-[10] ">
         <div v-if="conversationId !== '-1'" class="flex flex-col h-full overflow-x-hidden">
 
-            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
+            <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" :isFetching="isFetching" />
 
             <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200"
                 id="containMessage" ref="containMessage">
                 <div class='grid grid-cols-12 gap-y-2'>
                     <template v-if="isFetching">
-                        <div class="">
-                            <LoadingIndicator />
-                        </div>
+                        <!-- <LoadingIndicator /> -->
+                        <SkletonBoxMessage/>
                     </template>
                     <template v-else>
                         <div v-for="(item, index) in messages" :key="item.conversationID" :class="{
@@ -45,7 +44,7 @@
                                 <ChatBubble />
                             </div>
                         </template>
-                    </template>
+                    </template> 
                 </div>
             </main>
             <ChatBoxInput />
@@ -66,6 +65,7 @@ import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
 import ChatBubble from './ChatBubble.vue';
 import LoadingIndicator from './LoadingIndicator.vue';
+import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import { storeToRefs } from 'pinia';
 
 
@@ -114,3 +114,7 @@ onUpdated(() => {
 
 
 </script>
+
+<style scoped>
+
+</style>

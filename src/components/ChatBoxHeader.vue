@@ -1,8 +1,8 @@
 <template>
-    <header class="relative flex-[1] h-full w-full bg-gray-100 glow py-[10px] border-b border-gray-300">
+    <header class="relative flex-[1] h-full w-full bg-gray-100 glow py-[10px] border-b border-gray-300 rounded-t-xl ">
         <div class="grid grid-cols-12 gap-3">
             <div class="col-start-1 col-end-7 row-start-2 overflow-hidden">
-                <Suspense @pending="pending" @fallback="fallback" @resolved="resolved">
+                <Suspense>
                     <template #default>
                         <ProfileUserMessage :datauser="datauser"/>
                     </template>
@@ -24,6 +24,7 @@ const conversationData = useConversationsStore()
 interface Props {
     conversation_id: String
     datauser: Conversation
+    isFetching: Boolean
 }
 
 const props = defineProps<Props>()
