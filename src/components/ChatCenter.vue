@@ -13,7 +13,7 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div v-for="(item, index) in messages" :key="index" :class="{
+                        <div v-for="(item, index) in messages" :key="item.conversationID" :class="{
                             'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',
                             'col-start-6 col-end-13 p-3 rounded-lg': item.source.sourceType === 'ADMIN'
                         }">
@@ -26,11 +26,17 @@
                                     <img :src="item.source.sourcePicture" alt=""
                                         class="object-cover h-12 w-12 rounded-full">
                                 </div>
-                                <div class="self-center" :class="{
-                                    'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl': item.source.sourceType === 'USER',
-                                    'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl': item.source.sourceType === 'ADMIN'
+                                <div v-if="item.message" class="self-center relative py-2 px-4 shadow rounded-xl" :class="{
+                                    'ml-3 text-sm bg-white ': item.source.sourceType === 'USER',
+                                    'mr-3 text-sm bg-indigo-100': item.source.sourceType === 'ADMIN'
                                 }">
                                     <div>{{ item.message }}</div>
+                                </div>
+                                <div v-else class="self-center relative shadow rounded-2xl" :class="{
+                                    'ml-3 text-sm bg-white ': item.source.sourceType === 'USER',
+                                    'mr-3 text-sm bg-indigo-100': item.source.sourceType === 'ADMIN'
+                                }">
+                                    <img :src="item.attachments[0].payload.src" alt="" class="rounded-2xl">
                                 </div>
                             </div>
                         </div>
