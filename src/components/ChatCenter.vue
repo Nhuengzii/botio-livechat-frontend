@@ -34,6 +34,11 @@
                                 </div>
                             </div>
                         </div>
+                        <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping">
+                            <div>
+                                <ChatBubble />
+                            </div>
+                        </template>
                     </template>
                 </div>
             </main>
@@ -53,14 +58,18 @@ import router from '@/router';
 import ChatBoxInput from './ChatBoxInput.vue';
 import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
+import ChatBubble from './ChatBubble.vue';
 import LoadingIndicator from './LoadingIndicator.vue';
+import { storeToRefs } from 'pinia';
 
 
 
 const conversationsStore = useConversationsStore();
+
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser: Conversation = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+const datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+const { conversationsRaw } = storeToRefs(conversationsStore)
 const isFetching = ref(true)
 
 const scrollToBottom = () => {

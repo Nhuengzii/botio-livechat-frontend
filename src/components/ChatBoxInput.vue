@@ -82,6 +82,18 @@ const showModal = ref(false)
 const conversationsStore = useConversationsStore();
 const newMessage = ref('');
 const route = useRoute()
+const conversationId = route.params.conversation_id as string;
+
+// watch newMessage
+watch(newMessage, (newVal, oldVal) => {
+    if (oldVal.length === 0 && newVal.length > 0) {
+        conversationsStore.setTypingStatus(conversationId, 'facebook', true)
+    }
+    else if (oldVal.length > 0 && newVal.length === 0) {
+        conversationsStore.setTypingStatus(conversationId, 'facebook', false)
+    }
+})
+
 async function sendMessage() {
     const currentConversation = conversationsStore.getConversationById(route.params.conversation_id as string, route.params.platform as string)
     try {

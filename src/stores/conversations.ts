@@ -72,11 +72,15 @@ export const useConversationsStore = defineStore("conversations", {
               profilePicture: participant.profilePic.src,
             }
           }),
-          messages: { "isAlreadyFetch": false, "messages": [] },
+          messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
           isRead: conversation.isRead,
         }
       });
       this.isLoading = false;
+    },
+    setTypingStatus(conversationID: string, platform: string, status: boolean) {
+      this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+      useWebsocketStore().broadcastTypingEvent(conversationID, platform, status);
     },
     async fetchMessages(conversationID: string, platform: string) {
       const conversation = this.conversationsRaw[platform][conversationID];
