@@ -72,7 +72,7 @@ export const useConversationsStore = defineStore("conversations", {
               profilePicture: participant.profilePic.src,
             }
           }),
-          messages: { "isAlreadyFetch": false, "messages": [] },
+          messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
           isRead: conversation.isRead,
         }
       });

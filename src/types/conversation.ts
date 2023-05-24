@@ -26,7 +26,7 @@ export type Conversation = {
   lastActivity: string,
   participants: Participant[],
   isRead: boolean,
-  messages: { "isAlreadyFetch": boolean, "messages": Message[] },
+  messages: { "isAlreadyFetch": boolean, "messages": Message[], "someoneTyping": boolean },
 }
 
 export type Attachment = {
