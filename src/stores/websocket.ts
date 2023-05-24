@@ -67,6 +67,10 @@ export const useWebsocketStore = defineStore('websocket', {
               console.log("Error adding message from websocket")
             }
             break;
+          case "typing_broadcast":
+            const typingData: { conversationID: string, platform: string, typing: boolean } = incommingEvent.message;
+            this.conversationStore.conversationsRaw[typingData.platform.toLowerCase()][typingData.conversationID].messages.someoneTyping = typingData.typing;
+            break;
           case "defalt":
             console.log("Incomming WebSocket Default");
         }
