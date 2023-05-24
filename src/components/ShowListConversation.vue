@@ -2,7 +2,7 @@
     <!--- conversation list-->
 
     <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
-        class="h-[80px] flex-col px-4 justify-center bg-green-400 mb-1 border-neutral-600 w-[25%] overflow-clip">
+        class="h-[80px] flex-col px-4 justify-center bg-green-400 mb-1 border-neutral-600 w-full overflow-clip">
             <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
                 class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
                 <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px]">
