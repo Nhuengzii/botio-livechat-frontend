@@ -43,12 +43,19 @@ export const useWebsocketStore = defineStore('websocket', {
             break;
           case "userMessage":
             let data: StandardMessage = JSON.parse(incommingEvent.message);
+            const currentConversation = this.conversationStore.getConversationById(data.conversationID, data.platform.toLowerCase());
+            if (currentConversation === undefined) {
+              console.log("Conversation not found in usermessage action");
+              return;
+            }
+            const conversationPicture = currentConversation.participants[0].profilePicture
             const newMessage: Message = {
               messageID: data.messageID,
               timeStamp: data.timestamp,
               source: {
                 sourceID: data.source.userID,
                 sourceType: data.source.type.toUpperCase() as "USER" | "ADMIN",
+                sourcePicture: conversationPicture,
               },
               message: data.message,
               conversationID: data.conversationID,
