@@ -8,7 +8,7 @@ const router = createRouter({
     {
       name: 'root',
       path: '/',
-      redirect: '/facebook/'
+      redirect: ''
     },
     {
       path: '/:platform',
@@ -28,11 +28,12 @@ const router = createRouter({
           component: ChatView,
           beforeEnter: (to, from) => {
             return true
-          }
+          },
         }
       ]
     },
   ]
+  
 })
 
 export default router

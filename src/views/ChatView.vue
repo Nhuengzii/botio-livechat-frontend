@@ -1,11 +1,6 @@
 <template>
-  <!-- container chat center -->
   <ChatCenter />
-  <!--End container chat center -->
-
-  <!--container chat right-->
   <ChatRight />
-  <!--End container chat right-->
 </template>
 
 <script setup lang="ts">

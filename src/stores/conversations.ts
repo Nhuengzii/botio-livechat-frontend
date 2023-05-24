@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import axios from 'axios'
 import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
+import { useWebsocketStore } from "./websocket";
 
 
 
@@ -28,10 +29,8 @@ export const useConversationsStore = defineStore("conversations", {
     }
   },
   actions: {
-    getConversationById(conversationId: string): Conversation {
-      const router = useRoute();
-      const currentPlatform = router.params.platform as string
-      const conversation: Conversation = this.conversationsRaw[currentPlatform][conversationId];
+    getConversationById(conversationId: string, platform: string): Conversation {
+      const conversation: Conversation = this.conversationsRaw[platform][conversationId];
       return conversation;
     },
     async fetchConversations(platform: string) {
@@ -73,10 +72,15 @@ export const useConversationsStore = defineStore("conversations", {
               profilePicture: participant.profilePic.src,
             }
           }),
-          messages: { "isAlreadyFetch": false, "messages": [] },
+          messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
+          isRead: conversation.isRead,
         }
       });
       this.isLoading = false;
+    },
+    setTypingStatus(conversationID: string, platform: string, status: boolean) {
+      this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+      useWebsocketStore().broadcastTypingEvent(conversationID, platform, status);
     },
     async fetchMessages(conversationID: string, platform: string) {
       const conversation = this.conversationsRaw[platform][conversationID];
@@ -110,6 +114,49 @@ export const useConversationsStore = defineStore("conversations", {
       });
       return conversation;
     },
+    async sendTextMessage(conversationID: string, senderID: string, message: string, platform: string) {
+      const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
+      if (botio_rest_api_id === undefined) {
+        console.error("VITE_BOTIO_REST_API_ID is not defined");
+        return;
+      }
+      const conversation = this.conversationsRaw[platform][conversationID];
+      if (!conversation) {
+        console.log("Cannot send Text message. Conversation not found");
+        return;
+      }
+      const mockMessageID: string = `MOCK_${Math.floor(Math.random() * 23432432432)}`
+      const newMessageIndex = conversation.messages.messages.length;
+      const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
+      const newMessage: Message = {
+        conversationID: conversationID,
+        messageID: mockMessageID,
+        timeStamp: new Date().getTime(),
+        source: {
+          sourceID: senderID,
+          sourceType: "ADMIN"
+        },
+        message: message,
+        attachments: [],
+      }
+      conversation.messages.messages.push(newMessage);
+      try {
+        const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
+        newMessage.messageID = data.message_id;
+        newMessage.timeStamp = data.timestamp;
+      } catch (error) {
+        console.error(error);
+        conversation.messages.messages.splice(newMessageIndex, 1);
+        return;
+      } finally {
+        conversation.messages.messages[newMessageIndex] = newMessage;
+        conversation.updatedAt = newMessage.timeStamp;
+        conversation.isRead = true;
+        conversation.lastActivity = "คุณ: " + newMessage.message;
+      }
+      const websocketStore = useWebsocketStore()
+      websocketStore.broadcastMessage(newMessage);
+    },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
       let conversation = this.conversationsRaw[platform][conversationID];
       if (!conversation) {
@@ -120,7 +167,9 @@ export const useConversationsStore = defineStore("conversations", {
           return;
         }
       };
-      conversation.messages.messages.push(message);
+      if (conversation.messages.isAlreadyFetch) {
+        conversation.messages.messages.push(message);
+      }
       conversation.updatedAt = message.timeStamp;
       conversation.lastActivity = message.message;
     }
