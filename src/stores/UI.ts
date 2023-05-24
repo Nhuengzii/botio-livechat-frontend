@@ -6,6 +6,7 @@ export const useUIStore = defineStore('ui', {
         is_expanded: false,
         is_activeButton: false,
         is_activeConversation: false,
+        is_read:false
     }),
     actions: {
         ToggleMenu() {
@@ -16,6 +17,7 @@ export const useUIStore = defineStore('ui', {
         },
         activeConversation() {
             this.is_activeConversation = !this.is_activeConversation
-        }
+        },
+        
     }
 })

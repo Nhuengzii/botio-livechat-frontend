@@ -4,29 +4,42 @@
 
             <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" />
 
-
-            <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200" id="containMessage" ref="containMessage" >
+            <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200"
+                id="containMessage" ref="containMessage">
                 <div class='grid grid-cols-12 gap-y-2'>
-                    <div  v-for="(item, index) in messages" :key="index" :class="{
-                        'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',
-                        'col-start-6 col-end-13 p-3 rounded-lg': item.source.sourceType === 'ADMIN'
-                    }">
-                        <div :class="{
-                            'flex flex-row': item.source.sourceType === 'USER',
-                            'flex items-center justify-start flex-row-reverse': item.source.sourceType === 'ADMIN'
+                    <template v-if="isFetching">
+                        <div class="">
+                            <LoadingIndicator />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div v-for="(item, index) in messages" :key="index" :class="{
+                            'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',
+                            'col-start-6 col-end-13 p-3 rounded-lg': item.source.sourceType === 'ADMIN'
                         }">
-                            <div v-if="item.source.sourceType === 'USER'"
-                                class='flex h-10 w-10 rounded-full bg-indigo-800 flex-shrink-0'>
-                                <img :src="item.source.sourcePicture" alt="" class="object-cover h-10 w-10 rounded-full">
-                            </div>
-                            <div class="self-center" :class="{
-                                'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl': item.source.sourceType === 'USER',
-                                'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl': item.source.sourceType === 'ADMIN'
+                            <div :class="{
+                                'flex flex-row': item.source.sourceType === 'USER',
+                                'flex items-center justify-start flex-row-reverse': item.source.sourceType === 'ADMIN'
                             }">
-                                <div>{{ item.message }}</div>
+                                <div v-if="item.source.sourceType === 'USER'"
+                                    class='flex h-12 w-12 rounded-full bg-indigo-800 flex-shrink-0'>
+                                    <img :src="item.source.sourcePicture" alt=""
+                                        class="object-cover h-12 w-12 rounded-full">
+                                </div>
+                                <div class="self-center" :class="{
+                                    'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl': item.source.sourceType === 'USER',
+                                    'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl': item.source.sourceType === 'ADMIN'
+                                }">
+                                    <div>{{ item.message }}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping">
+                            <div>
+                                <ChatBubble />
+                            </div>
+                        </template>
+                    </template>
                 </div>
             </main>
             <ChatBoxInput />
@@ -43,26 +56,36 @@ const messages = ref([] as Message[])
 import type { Message, Conversation } from '@/types/conversation'
 import router from '@/router';
 import ChatBoxInput from './ChatBoxInput.vue';
+import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
+import ChatBubble from './ChatBubble.vue';
+import LoadingIndicator from './LoadingIndicator.vue';
+import { storeToRefs } from 'pinia';
 
 
 
 const conversationsStore = useConversationsStore();
+
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser: Conversation = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+const datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+const { conversationsRaw } = storeToRefs(conversationsStore)
+const isFetching = ref(true)
 
 const scrollToBottom = () => {
     // Use document safely here
-    let objContain = document.getElementById("containMessage") as any//console.log(objContain)
+    let objContain = document.getElementById("containMessage") as any
+    console.log(objContain)
     objContain.scrollTop = objContain?.scrollHeight
-    
+
 }
 
 
 onMounted(async () => {
+    isFetching.value = true;
     let conversationID = route.params.conversation_id as string;
     let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+    isFetching.value = false;
     if (currentConversation == null) {
         router.replace({ path: `/${route.params.platform as string}/` })
         return
