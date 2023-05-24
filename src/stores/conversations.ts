@@ -78,6 +78,9 @@ export const useConversationsStore = defineStore("conversations", {
       });
       this.isLoading = false;
     },
+    setTypingStatus(conversationID: string, platform: string, status: boolean) {
+      this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+    },
     async fetchMessages(conversationID: string, platform: string) {
       const conversation = this.conversationsRaw[platform][conversationID];
       if (!conversation) {
