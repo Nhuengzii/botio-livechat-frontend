@@ -1,7 +1,6 @@
 <template>
 
     <!--- conversation list-->
-
     <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
         class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
             <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
@@ -27,7 +26,6 @@
                 </div>
             </router-link>
         </div>
-
     <!--- end conversation list-->
  
 </template>

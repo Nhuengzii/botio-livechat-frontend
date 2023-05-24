@@ -16,8 +16,8 @@
                             'flex items-center justify-start flex-row-reverse': item.source.sourceType === 'ADMIN'
                         }">
                             <div v-if="item.source.sourceType === 'USER'"
-                                class='flex h-12 w-12 rounded-full bg-indigo-800 flex-shrink-0'>
-                                <img :src="item.source.sourcePicture" alt="" class="object-cover h-12 w-12 rounded-full">
+                                class='flex h-10 w-10 rounded-full bg-indigo-800 flex-shrink-0'>
+                                <img :src="item.source.sourcePicture" alt="" class="object-cover h-10 w-10 rounded-full">
                             </div>
                             <div class="self-center" :class="{
                                 'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl': item.source.sourceType === 'USER',
@@ -43,7 +43,6 @@ const messages = ref([] as Message[])
 import type { Message, Conversation } from '@/types/conversation'
 import router from '@/router';
 import ChatBoxInput from './ChatBoxInput.vue';
-import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
 
 
@@ -55,8 +54,7 @@ const datauser: Conversation = conversationsStore.getConversationById(conversati
 
 const scrollToBottom = () => {
     // Use document safely here
-    let objContain = document.getElementById("containMessage") as any
-    console.log(objContain)
+    let objContain = document.getElementById("containMessage") as any//console.log(objContain)
     objContain.scrollTop = objContain?.scrollHeight
     
 }

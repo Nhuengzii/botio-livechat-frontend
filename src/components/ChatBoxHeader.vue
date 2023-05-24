@@ -4,7 +4,7 @@
             <div class="col-start-1 col-end-7 row-start-2 overflow-hidden">
                 <Suspense @pending="pending" @fallback="fallback" @resolved="resolved">
                     <template #default>
-                        <ProfileUserMessage :datauser="datauser" />
+                        <ProfileUserMessage :datauser="datauser"/>
                     </template>
                     <template #fallback>
                         <p>loading . . . .</p>
@@ -20,6 +20,7 @@ import { useConversationsStore } from '@/stores/conversations'
 import type { Conversation } from '@/types/conversation'
 import ProfileUserMessage from './ProfileUserMessage.vue'
 import ProfileCardSkeleton from './ProfileCardSkleton.vue'
+const conversationData = useConversationsStore()
 interface Props {
     conversation_id: String
     datauser: Conversation
