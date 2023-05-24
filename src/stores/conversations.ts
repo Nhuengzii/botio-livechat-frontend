@@ -163,7 +163,9 @@ export const useConversationsStore = defineStore("conversations", {
           return;
         }
       };
-      conversation.messages.messages.push(message);
+      if (conversation.messages.isAlreadyFetch) {
+        conversation.messages.messages.push(message);
+      }
       conversation.updatedAt = message.timeStamp;
       conversation.lastActivity = message.message;
     }
