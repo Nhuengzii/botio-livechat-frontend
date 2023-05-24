@@ -21,6 +21,7 @@ onUnmounted(() => {
   console.log('App unmounted!');
   websocketStore.disconnect();
 });
+
 </script>
 
 <template >
