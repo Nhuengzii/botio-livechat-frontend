@@ -1,9 +1,14 @@
 <template>
-
     <!--- conversation list-->
-
-    <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
-        class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
+    <div v-if="isFetching"
+        class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status">
+        <span
+            class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    </div>
+    <template v-else>
+        <div v-for="{ conversationID, conversationPicture, lastActivity, participants } in conversationsStore.conversations"
+            class="h-[80px] flex-col px-4 justify-center bg-gray-100     w-full  border-b-2  hover:bg-blue-100 ">
             <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
                 class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
                 <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
@@ -20,26 +25,29 @@
                             participants[0].username }}</span>
                     </div>
                     <div class="flex items-end justify-between whitespace-nowrap ">
-                        <span
-                            class="text-ellipsis whitespace-nowrap mt-1 truncate text-xs leading-5 text-gray-500 ">{{
-                                lastActivity }}</span>
+                        <span class="text-ellipsis whitespace-nowrap mt-1 truncate text-xs leading-5 text-gray-500 ">{{
+                            lastActivity }}</span>
                     </div>
                 </div>
             </router-link>
         </div>
+    </template>
 
     <!--- end conversation list-->
- 
 </template>
 
 <script setup lang="ts">
 import { useConversationsStore } from '@/stores/conversations';
-import { onBeforeMount } from 'vue';
+import { storeToRefs } from 'pinia';
+import { onBeforeMount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const conversationsStore = useConversationsStore();
+const isFetching = ref(true);
 const route = useRoute();
 onBeforeMount(async () => {
+    isFetching.value = true;
     await conversationsStore.fetchConversations(route.params.platform as string);
+    isFetching.value = false;
 })
 </script>
 
