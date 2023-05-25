@@ -1,8 +1,8 @@
 <template>
     <!--- conversation list-->
-    <template v-if="isFetching">
+    <template v-if="!isFetching">
         <div class="justify-center">
-            <SkletonBoxMessage />
+            <SklentonListConversation/>
         </div>
     </template>
     <template v-else>
@@ -43,9 +43,11 @@ import { storeToRefs } from 'pinia';
 import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
+import SklentonListConversation from './SklentonListConversation.vue';
 
 const conversationsStore = useConversationsStore();
 const isFetching = ref(true);
+const isGetAcivityTime = ref(true);
 const route = useRoute();
 
 interface LastActivities {
@@ -88,6 +90,7 @@ onMounted(() => {
 onBeforeMount(async () => {
     isFetching.value = true;
     await conversationsStore.fetchConversations(route.params.platform as string);
+    updateLastActivities();
     isFetching.value = false;
 })
 
