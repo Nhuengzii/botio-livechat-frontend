@@ -6,7 +6,7 @@
         </div>
     </template>
     <template v-else>
-        <div v-bind="virtualConversation.containerProps" style="750px">
+        <div v-bind="virtualConversation.containerProps" style="height: 750px;">
             <div v-bind="virtualConversation.wrapperProps">
                 <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in virtualConversation.list.value"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
