@@ -1,8 +1,8 @@
 <template>
     <!--- conversation list-->
-    <template v-if="!isFetching">
+    <template v-if="isFetching">
         <div class="justify-center">
-            <SklentonListConversation/>
+            <SklentonListConversation />
         </div>
     </template>
     <template v-else>
