@@ -37,7 +37,7 @@
                 </button>
             </router-link>
 
-            <router-link to="/facebook">
+            <router-link to="/livechat/facebook">
                 <button @click="{
                     show_Chat = true; show_Line = false; show_Instagram = false;
                     if (show_Chat) { show_Facebook = true; };

@@ -39,11 +39,12 @@
                 </button>
             </router-link>
 
-            <router-link to="/facebook">
+            <router-link to="/livechat/facebook">
                 <button @click="{
-                    show_Chat = true; show_Line = false; show_Instagram = false;
-                    if (show_Chat) { show_Facebook = true; };
-                }" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110 ">แชท
+                                    show_Chat = true; show_Line = false; show_Instagram = false;
+                                    if (show_Chat) { show_Facebook = true; };
+                                }"
+                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110 ">แชท
 
                 </button>
             </router-link>
@@ -72,7 +73,7 @@
         <div v-if="show_Chat" class="mt-2 h-[98%] bg-gray-300 rounded-2xl  items-center p-3   ">
 
             <div class="mt-4">
-                <router-link to="/facebook">
+                <router-link to="/livechat/facebook">
                     <button @click="{ show_Instagram = false; show_Line = false; show_Facebook = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
@@ -86,7 +87,7 @@
             </div>
 
             <div class="mt-4">
-                <router-link to="/ig">
+                <router-link to="/livechat/ig">
                     <button @click="{ show_Facebook = false; show_Line = false; show_Instagram = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
