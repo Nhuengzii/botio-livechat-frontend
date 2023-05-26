@@ -6,30 +6,35 @@
         </div>
     </template>
     <template v-else>
-        <div v-for="{ conversationID, conversationPicture, lastActivity, participants, updatedAt } in conversationsStore.conversations"
-            class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
-            <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
-                class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
-                <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
-                    <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
-                        <img v-if="conversationPicture" :src="conversationPicture" alt=""
-                            class="object-cover w-full h-full rounded-full ">
-                        <img v-else :src="participants[0].profilePicture" alt=""
-                            class="object-cover w-full h-full rounded-full ">
-                    </div>
+        <div v-bind="virtualConversation.containerProps" style="750px">
+            <div v-bind="virtualConversation.wrapperProps">
+                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in virtualConversation.list.value"
+                    class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
+                    <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
+                        class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
+                        <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
+                            <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
+                                <img v-if="conversationPicture" :src="conversationPicture" alt=""
+                                    class="object-cover w-full h-full rounded-full ">
+                                <img v-else :src="participants[0].profilePicture" alt=""
+                                    class="object-cover w-full h-full rounded-full ">
+                            </div>
+                        </div>
+                        <div class="grow-2 ">
+                            <div class="flex justify-between ">
+                                <span class="text-sm font-semibold leading-6 text-gray-900  whitespace-nowrap">{{
+                                    participants[0].username }}</span>
+                            </div>
+                            <div class="flex items-end justify-between whitespace-nowrap ">
+                                <span
+                                    class="text-ellipsis whitespace-nowrap mt-1 truncate text-sm leading-5 text-gray-500 ">{{
+                                        lastActivity }}</span>
+                            </div>
+                            <p>{{ lastActivities[conversationID] }}</p>
+                        </div>
+                    </router-link>
                 </div>
-                <div class="grow-2 ">
-                    <div class="flex justify-between ">
-                        <span class="text-sm font-semibold leading-6 text-gray-900  whitespace-nowrap">{{
-                            participants[0].username }}</span>
-                    </div>
-                    <div class="flex items-end justify-between whitespace-nowrap ">
-                        <span class="text-ellipsis whitespace-nowrap mt-1 truncate text-sm leading-5 text-gray-500 ">{{
-                            lastActivity }}</span>
-                    </div>
-                    <p>{{ lastActivities[conversationID] }}</p>
-                </div>
-            </router-link>
+            </div>
         </div>
     </template>
 
@@ -44,6 +49,8 @@ import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import SklentonListConversation from './SklentonListConversation.vue';
+import { useVirtualList } from "@vueuse/core"
+import { computed } from '@vue/reactivity';
 
 const conversationsStore = useConversationsStore();
 const isFetching = ref(true);
@@ -53,6 +60,11 @@ const route = useRoute();
 interface LastActivities {
     [id: string]: string;
 }
+
+const conversations = computed(() => conversationsStore.conversations);
+const virtualConversation = useVirtualList(conversations, {
+    itemHeight: 112.5
+})
 
 const lastActivities: Ref<LastActivities> = ref({});
 
