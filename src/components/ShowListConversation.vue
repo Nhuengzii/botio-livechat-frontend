@@ -6,9 +6,9 @@
         </div>
     </template>
     <template v-else>
-        <div v-bind="virtualConversation.containerProps" style="height: 750px;">
-            <div v-bind="virtualConversation.wrapperProps">
-                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in virtualConversation.list.value"
+        <div v-bind="containerProps" style="height: 750px;">
+            <div v-bind="wrapperProps">
+                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
@@ -62,7 +62,7 @@ interface LastActivities {
 }
 
 const conversations = computed(() => conversationsStore.conversations);
-const virtualConversation = useVirtualList(conversations, {
+const { list, containerProps, wrapperProps } = useVirtualList(conversations, {
     itemHeight: 112.5
 })
 
