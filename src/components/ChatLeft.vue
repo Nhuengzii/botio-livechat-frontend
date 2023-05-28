@@ -1,12 +1,11 @@
 <template>
-    <div v-if="route.params.platform === 'facebook'"
-        class="flex-1 bg-gray-100  rounded-[18px] mx-[10px] relative max-h-[100%]  overflow-hidden pb-[10px] ">
+    <div class="flex-1 bg-gray-100  rounded-[18px] mx-[10px] relative max-h-[100%]  overflow-hidden pb-[10px] ">
         <!-- Show all number converation -->
         <HeaderChatLeft />
         <!-- Search name box -->
         <div class=" flex  justify-around py-[1rem] ">
             <div v-if="status_seatch" class="">
-                <button type="button" @click="{status_seatch = false; message=''}"
+                <button type="button" @click="{ status_seatch = false; message = '' }"
                     class="text-white bg-blue-400 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center  ml-2  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -26,7 +25,7 @@
                 </div>
                 <input type="text" id="voice-search" @click="status_seatch = true"
                     class="ml-2 bg-gray-50  border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="ค้นหา... " v-model="message" >
+                    placeholder="ค้นหา... " v-model="message">
             </div>
         </div>
 
@@ -71,4 +70,5 @@ defineProps({
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
-}</style>
+}
+</style>
