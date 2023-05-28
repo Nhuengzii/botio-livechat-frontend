@@ -85,7 +85,7 @@
             </div>
 
             <div class="mt-4">
-                <router-link to="/ig">
+                <router-link to="/instagram">
                     <button @click="{ show_Facebook = false; show_Line = false; show_Instagram = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"

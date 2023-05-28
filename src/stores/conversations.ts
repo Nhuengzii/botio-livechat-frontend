@@ -12,7 +12,7 @@ export const useConversationsStore = defineStore("conversations", {
     conversationsRaw: {
       "facebook": {},
       "line": {},
-      "ig": {}
+      "instagram": {}
     } as Record<string, Record<string, Conversation>>,
     isLoading: false,
   }),

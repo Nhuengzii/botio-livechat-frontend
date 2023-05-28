@@ -41,9 +41,9 @@
 
             <router-link to="/livechat/facebook">
                 <button @click="{
-                                    show_Chat = true; show_Line = false; show_Instagram = false;
-                                    if (show_Chat) { show_Facebook = true; };
-                                }"
+                    show_Chat = true; show_Line = false; show_Instagram = false;
+                    if (show_Chat) { show_Facebook = true; };
+                }"
                     class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-1 motion-safe:hover:scale-110 ">แชท
 
                 </button>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="mt-4">
-                <router-link to="/livechat/ig">
+                <router-link to="/livechat/instagram">
                     <button @click="{ show_Facebook = false; show_Line = false; show_Instagram = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
