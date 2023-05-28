@@ -61,7 +61,7 @@ interface LastActivities {
     [id: string]: string;
 }
 
-const conversations = computed(() => conversationsStore.conversations);
+const conversations = computed(() => conversationsStore.conversations(route.params.platform as string));
 const { list, containerProps, wrapperProps } = useVirtualList(conversations, {
     itemHeight: 112.5
 })
@@ -72,7 +72,7 @@ const updateLastActivities = () => {
     const currentTime = Date.now();
     const updatedLastActivities: LastActivities = {};
 
-    for (const [index, items] of conversationsStore.conversations.entries()) {
+    for (const [index, items] of conversationsStore.conversations(route.params.platform as string).entries()) {
         const timeDifference = currentTime - items.updatedAt;
 
         const seconds = Math.floor(timeDifference / 1000);
