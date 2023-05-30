@@ -9,7 +9,7 @@ const router = createRouter({
     {
       name: 'root',
       path: '/',
-      redirect: '/livechat/facebook'
+      component: EmptyView
     },
 
     {

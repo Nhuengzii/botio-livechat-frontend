@@ -1,25 +1,25 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from 'axios'
-import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
+import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
+import { getFacebookConversation, getFacebookMessages, getLineConversation, getLineMessages } from "@/lib/req";
 
 
 
 export const useConversationsStore = defineStore("conversations", {
   state: () => ({
     conversationsRaw: {
-      "facebook": {},
-      "line": {},
-      "instagram": {}
-    } as Record<string, Record<string, Conversation>>,
-    isLoading: false,
+      "facebook": { isFetching: false, raw: {} },
+      "line": { isFetching: false, raw: {} },
+      "instagram": { isFetching: false, raw: {} }
+    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
   }),
   getters: {
     conversations: (state) => {
       return (platform: string) => {
-        const sortedConversations = Object.values(state.conversationsRaw[platform]).sort((a, b) => {
+        const sortedConversations = Object.values(state.conversationsRaw[platform].raw).sort((a, b) => {
           return b.updatedAt - a.updatedAt;
         })
         console.log("Sorted success");
@@ -29,54 +29,55 @@ export const useConversationsStore = defineStore("conversations", {
   },
   actions: {
     getConversationById(conversationId: string, platform: string): Conversation {
-      const conversation: Conversation = this.conversationsRaw[platform][conversationId];
+      const conversation: Conversation = this.conversationsRaw[platform].raw[conversationId];
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.isLoading) {
+      if (this.conversationsRaw[platform].isFetching) {
         return;
       }
-      this.isLoading = true;
+      this.conversationsRaw[platform].isFetching = true;
       console.log("fetching conversations of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string; if (botio_rest_api_id === undefined) {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
-        this.isLoading = false;
+        this.conversationsRaw[platform].isFetching = false;
         return;
       }
-      const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
-      const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
-      data.conversations.forEach(conversation => {
-        const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
-        if (equivalentConversation) {
-          if (equivalentConversation.updatedAt === conversation.updatedTime) {
-            return;
-          }
+
+      let conversations: Conversation[];
+      let getCoversationsEndpoint: string;
+      switch (platform) {
+        case "facebook":
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
+          conversations = await getFacebookConversation(getCoversationsEndpoint);
+          break
+        case "line":
+          console.log("Getting line conversations");
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
+          conversations = await getLineConversation(getCoversationsEndpoint);
+          break
+        default:
+          console.log("Platform not supported");
+          this.conversationsRaw[platform].isFetching = false;
+          return;
+      }
+      conversations.forEach(conversation => {
+        const equivalentConversation = this.conversationsRaw[platform].raw[conversation.conversationID];
+        if (!equivalentConversation) {
+          this.conversationsRaw[platform].raw[conversation.conversationID] = conversation;
+          return;
         }
-        console.log("new conversation for " + conversation.conversationID + " of " + platform + " ...");
-        this.conversationsRaw[platform][conversation.conversationID] = {
-          conversationID: conversation.conversationID,
-          conversationPicture: conversation.conversationPic.src,
-          updatedAt: conversation.updatedTime,
-          lastActivity: conversation.lastActivity,
-          participants: conversation.participants.map((participant) => {
-            return {
-              userID: participant.userID,
-              username: participant.username,
-              profilePicture: participant.profilePic.src,
-            }
-          }),
-          messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
-          isRead: conversation.isRead,
-        }
+        equivalentConversation.updatedAt = conversation.updatedAt;
+        equivalentConversation.lastActivity = conversation.lastActivity;
       });
-      this.isLoading = false;
+      this.conversationsRaw[platform].isFetching = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
-      this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+      this.conversationsRaw[platform].raw[conversationID].messages.someoneTyping = status;
       useWebsocketStore().broadcastTypingEvent(conversationID, platform, status);
     },
     async fetchMessages(conversationID: string, platform: string) {
-      const conversation = this.conversationsRaw[platform][conversationID];
+      const conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         return;
       };
@@ -87,20 +88,25 @@ export const useConversationsStore = defineStore("conversations", {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
-      const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
-      const { data } = await axios.get<{ messages: RESTMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
-      data.messages.forEach(element => {
-        const message: Message = {
-          conversationID: conversationID,
-          messageID: element.messageID,
-          timeStamp: element.timestamp,
-          source: {
-            sourceID: element.source.userID,
-            sourceType: element.source.type.toUpperCase() as "USER" | "ADMIN",
-            sourcePicture: conversation.participants.find(participant => participant.userID === element.source.userID)?.profilePicture,
-          },
-          message: element.message,
-          attachments: element.attachments
+      let getMessageBaseEndpoint: string
+      let receivedMessages: Message[];
+      switch (platform) {
+        case "facebook":
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
+          receivedMessages = await getFacebookMessages(getMessageBaseEndpoint, conversationID);
+          break
+        case "line":
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations/`;
+          receivedMessages = await getLineMessages(getMessageBaseEndpoint, conversationID);
+          break;
+        default:
+          console.log("Platform not supported");
+          return;
+      }
+      receivedMessages.forEach(message => {
+        if (message.source.sourceType === "USER") {
+          message.source.sourcePicture = conversation.participants[0].profilePicture;
+          message.source.sourceName = conversation.participants[0].username;
         }
         conversation.messages.messages.push(message);
         conversation.messages.isAlreadyFetch = true;
@@ -113,7 +119,7 @@ export const useConversationsStore = defineStore("conversations", {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
-      const conversation = this.conversationsRaw[platform][conversationID];
+      const conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         console.log("Cannot send Text message. Conversation not found");
         return;
@@ -151,10 +157,10 @@ export const useConversationsStore = defineStore("conversations", {
       websocketStore.broadcastMessage(newMessage);
     },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
-      let conversation = this.conversationsRaw[platform][conversationID];
+      let conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         await this.fetchConversations(platform);
-        conversation = this.conversationsRaw[platform][conversationID];
+        conversation = this.conversationsRaw[platform].raw[conversationID];
         if (!conversation) {
           console.error("conversation not found");
           return;

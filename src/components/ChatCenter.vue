@@ -38,11 +38,11 @@
                                 </div>
                             </div>
                         </div>
-                        <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping">
-                            <div>
-                                <ChatBubble />
-                            </div>
-                        </template>
+                        <!-- <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping"> -->
+                        <!--     <div> -->
+                        <!--         <ChatBubble /> -->
+                        <!--     </div> -->
+                        <!-- </template> -->
                     </template>
                 </div>
             </main>

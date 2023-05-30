@@ -30,13 +30,32 @@ export type Conversation = {
 }
 
 export type Attachment = {
-  type: "image" | "video" | "file",
+  type: "image" | "video" | "file" | "sticker",
   payload: {
     src: string,
   }
 }
 
-export type RESTConversation = {
+export type RESTLineConversation = {
+  ShopID: string,
+  PageID: string,
+  ConversationID: string,
+  ConversationPic: {
+    src: string,
+  }
+  UpdatedTime: number,
+  Participants: {
+    UserID: string,
+    Username: string,
+    ProfilePic: {
+      src: string,
+    }
+  }[],
+  LastActivity: string,
+  IsRead: boolean,
+}
+
+export type RESTFacebookConversation = {
   conversationID: string,
   conversationPic: {
     src: string,
@@ -53,7 +72,7 @@ export type RESTConversation = {
   isRead: boolean,
 }
 
-export type RESTMessage = {
+export type RESTFacebookMessage = {
   messageID: string,
   timestamp: number,
   source: {
@@ -68,6 +87,23 @@ export type RESTMessage = {
   readStatus: boolean,
   deliveryStatys: boolean,
   unsendStatus: boolean,
+}
+export type RESTLineMessage = {
+  shopID: string,
+  platform: string,
+  pageID: string,
+  conversationID: string,
+  messageID: string,
+  timestamp: number,
+  source: {
+    userID: string,
+    userType: "user" | "admin",
+  }
+  message: string,
+  attachments: Attachment[],
+  replyTo?: {
+    messageID: string,
+  },
 }
 
 export type StandardMessage = {

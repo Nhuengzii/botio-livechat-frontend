@@ -35,7 +35,7 @@ export const useLoadTestStore = defineStore("loadtest", {
               }
             ]
           }
-          conversationStore.conversationsRaw['facebook'][newConversationID] = newConversation;
+          conversationStore.conversationsRaw['facebook'].raw[newConversationID] = newConversation;
         }
       }, interval)
 

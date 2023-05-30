@@ -42,16 +42,16 @@ import ShowListConversation from './ShowListConversation.vue';
 import Showseatch from './ShowSeatch.vue';
 import HeaderChatLeft from './HeaderChatLeft.vue';
 const conversationsStore = useConversationsStore();
-import { ref } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 const status_seatch = ref(false);
 import { onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
-onBeforeMount(async () => {
-    await conversationsStore.fetchConversations(route.params.platform as string);
-
-})
 let message = ref("");
+watch(() => route.params.platform, async (newVal, oldVal) => {
+    await conversationsStore.fetchConversations(newVal as string);
+    console.log("YAT!")
+})
 defineProps({
     propA: String,
 })

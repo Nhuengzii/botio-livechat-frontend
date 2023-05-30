@@ -127,7 +127,7 @@ import { ref } from 'vue'
 const show_Line = ref(false)
 const show_Facebook = ref(false)
 const show_Instagram = ref(false)
-const show_Chat = ref(false)
+const show_Chat = ref(true)
 </script>
 <style>
 .outer,

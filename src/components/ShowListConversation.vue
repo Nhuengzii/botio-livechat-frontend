@@ -52,10 +52,14 @@ import SklentonListConversation from './SklentonListConversation.vue';
 import { useVirtualList } from "@vueuse/core"
 import { computed } from '@vue/reactivity';
 
-const conversationsStore = useConversationsStore();
-const isFetching = ref(true);
-const isGetAcivityTime = ref(true);
 const route = useRoute();
+const conversationsStore = useConversationsStore();
+const { conversationsRaw } = storeToRefs(conversationsStore);
+const isFetching = ref(true);
+watch(() => conversationsRaw.value[route.params.platform as string].isFetching, (newVal, oldVal) => {
+    isFetching.value = newVal;
+})
+const isGetAcivityTime = ref(true);
 
 interface LastActivities {
     [id: string]: string;
@@ -100,10 +104,8 @@ onMounted(() => {
 });
 
 onBeforeMount(async () => {
-    isFetching.value = true;
     await conversationsStore.fetchConversations(route.params.platform as string);
     updateLastActivities();
-    isFetching.value = false;
 })
 
 
