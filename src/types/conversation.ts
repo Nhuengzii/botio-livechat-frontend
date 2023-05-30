@@ -36,6 +36,25 @@ export type Attachment = {
   }
 }
 
+export type RESTLineConversation = {
+  ShopID: string,
+  PageID: string,
+  ConversationID: string,
+  ConversationPic: {
+    src: string,
+  }
+  UpdateTime: number,
+  Participants: {
+    UserID: string,
+    Username: string,
+    ProfilePic: {
+      src: string,
+    }
+  }[],
+  LastActivity: string,
+  IsRead: boolean,
+}
+
 export type RESTFacebookConversation = {
   conversationID: string,
   conversationPic: {
