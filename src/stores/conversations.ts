@@ -33,6 +33,9 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
+      if (this.isLoading) {
+        return;
+      }
       this.isLoading = true;
       console.log("fetching conversations of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string; if (botio_rest_api_id === undefined) {
