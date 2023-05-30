@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
-import { getFacebookConversation, getLineConversation } from "@/lib/req";
+import { getFacebookConversation, getFacebookMessages, getLineConversation } from "@/lib/req";
 
 
 
@@ -89,20 +89,21 @@ export const useConversationsStore = defineStore("conversations", {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
-      const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
-      const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
-      data.messages.forEach(element => {
-        const message: Message = {
-          conversationID: conversationID,
-          messageID: element.messageID,
-          timeStamp: element.timestamp,
-          source: {
-            sourceID: element.source.userID,
-            sourceType: element.source.type.toUpperCase() as "USER" | "ADMIN",
-            sourcePicture: conversation.participants.find(participant => participant.userID === element.source.userID)?.profilePicture,
-          },
-          message: element.message,
-          attachments: element.attachments
+      let getMessageBaseEndpoint: string
+      let receivedMessages: Message[];
+      switch (platform) {
+        case "facebook":
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
+          receivedMessages = await getFacebookMessages(getMessageBaseEndpoint, conversationID);
+          break
+        default:
+          console.log("Platform not supported");
+          return;
+      }
+      receivedMessages.forEach(message => {
+        if (message.source.sourceType === "USER") {
+          message.source.sourcePicture = conversation.participants[0].profilePicture;
+          message.source.sourceName = conversation.participants[0].username;
         }
         conversation.messages.messages.push(message);
         conversation.messages.isAlreadyFetch = true;
