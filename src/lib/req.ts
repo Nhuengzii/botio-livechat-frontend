@@ -30,7 +30,7 @@ export const getLineConversation = async (getConversationsEndpoint: string): Pro
     conversations[index] = {
       conversationID: conversation.ConversationID,
       conversationPicture: conversation.ConversationPic.src,
-      updatedAt: conversation.UpdateTime,
+      updatedAt: conversation.UpdatedTime,
       lastActivity: conversation.LastActivity,
       messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
       isRead: true,

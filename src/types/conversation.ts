@@ -43,7 +43,7 @@ export type RESTLineConversation = {
   ConversationPic: {
     src: string,
   }
-  UpdateTime: number,
+  UpdatedTime: number,
   Participants: {
     UserID: string,
     Username: string,
