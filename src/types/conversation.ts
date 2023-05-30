@@ -31,6 +31,7 @@ export type Conversation = {
 
 export type Attachment = {
   type: "image" | "video" | "file",
+  type: "image" | "video" | "file" | "sticker",
   payload: {
     src: string,
   }
