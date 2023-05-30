@@ -115,7 +115,7 @@
 
             </div>
             <div class="mt-4">
-                <router-link to="/livechat/central">
+                <router-link to="/livechat/centralized">
                     <button @click="{ show_Facebook = false; show_Line = true; show_Instagram = false; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bg-green-400">
