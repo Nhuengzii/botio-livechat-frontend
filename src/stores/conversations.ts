@@ -44,11 +44,6 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
-      if (getConversationsEndpoint === undefined) {
-        console.error("VITE_GET_CONVERSATIONS_ENDPOINT is not defined");
-        this.isLoading = false;
-        return;
-      }
       const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
       data.conversations.forEach(conversation => {
         const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
