@@ -46,8 +46,8 @@ export const getLineConversation = async (getConversationsEndpoint: string): Pro
   return conversations;
 }
 
-export const getFacebookMessages = async (getMessagesEndpoint: string, conversationID: string): Promise<Message[]> => {
-  const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessagesEndpoint);
+export const getFacebookMessages = async (getMessageBaseEndpoint: string, conversationID: string): Promise<Message[]> => {
+  const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessageBaseEndpoint + conversationID + "/messages");
   const messages = new Array<Message>(data.messages.length);
   data.messages.forEach((message, index) => {
     messages[index] = {
