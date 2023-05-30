@@ -114,6 +114,20 @@
                 </router-link>
 
             </div>
+            <div class="mt-4">
+                <router-link to="/livechat/central">
+                    <button @click="{ show_Facebook = false; show_Line = true; show_Instagram = false; }" type="button"
+                        data-te-ripple-init data-te-ripple-color="light"
+                        class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg bg-green-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-airplane-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849Z" />
+                        </svg>
+                    </button>
+                </router-link>
+
+            </div>
         </div>
     </Transition>
 </template>
@@ -127,6 +141,7 @@ import { ref } from 'vue'
 const show_Line = ref(false)
 const show_Facebook = ref(false)
 const show_Instagram = ref(false)
+const show_central = ref(false)
 const show_Chat = ref(true)
 </script>
 <style>
