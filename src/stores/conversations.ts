@@ -13,7 +13,8 @@ export const useConversationsStore = defineStore("conversations", {
     conversationsRaw: {
       "facebook": { isFetching: false, raw: {} },
       "line": { isFetching: false, raw: {} },
-      "instagram": { isFetching: false, raw: {} }
+      "instagram": { isFetching: false, raw: {} },
+      "centralized": { isFetching: false, raw: {} },
     } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
   }),
   getters: {
@@ -64,6 +65,10 @@ export const useConversationsStore = defineStore("conversations", {
           getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
           conversations = await getLineConversation(getCoversationsEndpoint);
           break
+        case "centralized":
+          console.log("Getting centalized conversations");
+          this.conversationsRaw[platform].isFetching = false;
+          return;
         default:
           console.log("Platform not supported");
           this.conversationsRaw[platform].isFetching = false;
