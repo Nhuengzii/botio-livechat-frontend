@@ -15,7 +15,6 @@ export const useConversationsStore = defineStore("conversations", {
       "line": { isFetching: false, raw: {} },
       "instagram": { isFetching: false, raw: {} }
     } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
-    isLoading: false,
   }),
   getters: {
     conversations: (state) => {
@@ -34,14 +33,14 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.isLoading) {
+      if (this.conversationsRaw[platform].isFetching) {
         return;
       }
-      this.isLoading = true;
+      this.conversationsRaw[platform].isFetching = true;
       console.log("fetching conversations of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string; if (botio_rest_api_id === undefined) {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
-        this.isLoading = false;
+        this.conversationsRaw[platform].isFetching = false;
         return;
       }
 
@@ -59,7 +58,7 @@ export const useConversationsStore = defineStore("conversations", {
           break
         default:
           console.log("Platform not supported");
-          this.isLoading = false;
+          this.conversationsRaw[platform].isFetching = false;
           return;
       }
       conversations.forEach(conversation => {
@@ -71,7 +70,7 @@ export const useConversationsStore = defineStore("conversations", {
         equivalentConversation.updatedAt = conversation.updatedAt;
         equivalentConversation.lastActivity = conversation.lastActivity;
       });
-      this.isLoading = false;
+      this.conversationsRaw[platform].isFetching = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
       this.conversationsRaw[platform].raw[conversationID].messages.someoneTyping = status;
