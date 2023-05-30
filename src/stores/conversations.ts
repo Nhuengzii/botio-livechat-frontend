@@ -11,16 +11,16 @@ import { getFacebookConversation, getFacebookMessages, getLineConversation, getL
 export const useConversationsStore = defineStore("conversations", {
   state: () => ({
     conversationsRaw: {
-      "facebook": {},
-      "line": {},
-      "instagram": {}
-    } as Record<string, Record<string, Conversation>>,
+      "facebook": { isFetching: false, raw: {} },
+      "line": { isFetching: false, raw: {} },
+      "instagram": { isFetching: false, raw: {} }
+    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
     isLoading: false,
   }),
   getters: {
     conversations: (state) => {
       return (platform: string) => {
-        const sortedConversations = Object.values(state.conversationsRaw[platform]).sort((a, b) => {
+        const sortedConversations = Object.values(state.conversationsRaw[platform].raw).sort((a, b) => {
           return b.updatedAt - a.updatedAt;
         })
         console.log("Sorted success");
@@ -30,7 +30,7 @@ export const useConversationsStore = defineStore("conversations", {
   },
   actions: {
     getConversationById(conversationId: string, platform: string): Conversation {
-      const conversation: Conversation = this.conversationsRaw[platform][conversationId];
+      const conversation: Conversation = this.conversationsRaw[platform].raw[conversationId];
       return conversation;
     },
     async fetchConversations(platform: string) {
@@ -63,9 +63,9 @@ export const useConversationsStore = defineStore("conversations", {
           return;
       }
       conversations.forEach(conversation => {
-        const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
+        const equivalentConversation = this.conversationsRaw[platform].raw[conversation.conversationID];
         if (!equivalentConversation) {
-          this.conversationsRaw[platform][conversation.conversationID] = conversation;
+          this.conversationsRaw[platform].raw[conversation.conversationID] = conversation;
           return;
         }
         equivalentConversation.updatedAt = conversation.updatedAt;
@@ -74,11 +74,11 @@ export const useConversationsStore = defineStore("conversations", {
       this.isLoading = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
-      this.conversationsRaw[platform][conversationID].messages.someoneTyping = status;
+      this.conversationsRaw[platform].raw[conversationID].messages.someoneTyping = status;
       useWebsocketStore().broadcastTypingEvent(conversationID, platform, status);
     },
     async fetchMessages(conversationID: string, platform: string) {
-      const conversation = this.conversationsRaw[platform][conversationID];
+      const conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         return;
       };
@@ -120,7 +120,7 @@ export const useConversationsStore = defineStore("conversations", {
         console.error("VITE_BOTIO_REST_API_ID is not defined");
         return;
       }
-      const conversation = this.conversationsRaw[platform][conversationID];
+      const conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         console.log("Cannot send Text message. Conversation not found");
         return;
@@ -158,10 +158,10 @@ export const useConversationsStore = defineStore("conversations", {
       websocketStore.broadcastMessage(newMessage);
     },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
-      let conversation = this.conversationsRaw[platform][conversationID];
+      let conversation = this.conversationsRaw[platform].raw[conversationID];
       if (!conversation) {
         await this.fetchConversations(platform);
-        conversation = this.conversationsRaw[platform][conversationID];
+        conversation = this.conversationsRaw[platform].raw[conversationID];
         if (!conversation) {
           console.error("conversation not found");
           return;
