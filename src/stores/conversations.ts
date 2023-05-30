@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
-import { getFacebookConversation } from "@/lib/req";
+import { getFacebookConversation, getLineConversation } from "@/lib/req";
 
 
 
@@ -44,11 +44,18 @@ export const useConversationsStore = defineStore("conversations", {
         this.isLoading = false;
         return;
       }
-      const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
+
       let conversations: Conversation[];
+      let getCoversationsEndpoint: string;
       switch (platform) {
         case "facebook":
-          conversations = await getFacebookConversation("1", "108362942229009", getConversationsEndpoint);
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
+          conversations = await getFacebookConversation(getCoversationsEndpoint);
+          break
+        case "line":
+          console.log("Getting line conversations");
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
+          conversations = await getLineConversation(getCoversationsEndpoint);
           break
         default:
           console.log("Platform not supported");
