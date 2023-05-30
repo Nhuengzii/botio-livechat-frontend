@@ -99,6 +99,7 @@ export const useConversationsStore = defineStore("conversations", {
         case "line":
           getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations/`;
           receivedMessages = await getLineMessages(getMessageBaseEndpoint, conversationID);
+          break;
         default:
           console.log("Platform not supported");
           return;
