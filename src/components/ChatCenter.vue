@@ -73,7 +73,13 @@ const conversationsStore = useConversationsStore();
 
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+let datauser: Conversation
+if (route.query.platform) {
+    datauser = conversationsStore.getConversationById(conversationId, route.query.platform as string)
+}
+else {
+    datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+}
 const { conversationsRaw } = storeToRefs(conversationsStore)
 const isFetching = ref(true)
 
