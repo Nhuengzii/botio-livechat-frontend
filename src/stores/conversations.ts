@@ -83,6 +83,7 @@ export const useConversationsStore = defineStore("conversations", {
         equivalentConversation.updatedAt = conversation.updatedAt;
         equivalentConversation.lastActivity = conversation.lastActivity;
       });
+      this.conversationsRaw[platform].fetchOnce = true;
       this.conversationsRaw[platform].isFetching = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
