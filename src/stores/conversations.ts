@@ -45,7 +45,16 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
-      const conversations = await getFacebookConversation("1", "108362942229009", getConversationsEndpoint);
+      let conversations: Conversation[];
+      switch (platform) {
+        case "facebook":
+          conversations = await getFacebookConversation("1", "108362942229009", getConversationsEndpoint);
+          break
+        default:
+          console.log("Platform not supported");
+          this.isLoading = false;
+          return;
+      }
       conversations.forEach(conversation => {
         const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
         if (!equivalentConversation) {
