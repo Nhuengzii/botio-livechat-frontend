@@ -89,7 +89,13 @@ const scrollToBottom = () => {
 onMounted(async () => {
     isFetching.value = true;
     let conversationID = route.params.conversation_id as string;
-    let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+    let currentConversation: Conversation | undefined
+    if (route.query.platform) {
+        currentConversation = await conversationsStore.fetchMessages(conversationID, route.query.platform as string)
+    }
+    else {
+        currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+    }
     isFetching.value = false;
     if (currentConversation == null) {
         router.replace({ path: `/livechat/${route.params.platform as string}/` })

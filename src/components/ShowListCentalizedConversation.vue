@@ -8,9 +8,10 @@
     <template v-else>
         <div v-bind="containerProps" style="height: 750px;">
             <div v-bind="wrapperProps">
-                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in list"
+                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt, platform } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
-                    <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
+                    <router-link
+                        :to="{ name: 'Conver', params: { conversation_id: conversationID }, query: { platform: platform } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
                         <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
                             <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
