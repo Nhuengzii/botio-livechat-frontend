@@ -57,7 +57,8 @@ const route = useRoute();
 const conversationsStore = useConversationsStore();
 const { conversationsRaw } = storeToRefs(conversationsStore);
 const isFetching = ref(false);
-watch(() => conversationsRaw.value[route.params.platform as string].isFetching, (newVal, oldVal) => {
+watch(() => conversationsRaw.value['centralized'].isFetching, (newVal, oldVal) => {
+    console.log("convRaw watching", newVal, "  ", oldVal);
     isFetching.value = newVal;
 })
 const isGetAcivityTime = ref(true);
@@ -105,7 +106,11 @@ onMounted(() => {
 });
 
 onBeforeMount(async () => {
+    conversationsRaw.value["centralized"].isFetching = true;
+    await conversationsStore.fetchConversations("facebook");
+    await conversationsStore.fetchConversations("line");
     await conversationsStore.fetchConversations(route.params.platform as string);
+    conversationsRaw.value["centralized"].isFetching = false;
     updateLastActivities();
 })
 
