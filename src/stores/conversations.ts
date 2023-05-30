@@ -25,7 +25,15 @@ export const useConversationsStore = defineStore("conversations", {
         console.log("Sorted success");
         return sortedConversations;
       };
+    }, centalizedConversations(): Conversation[] {
+      const facebookConversatinos = this.conversations("facebook")
+      const lineConversations = this.conversations("line")
+      const conversations: Conversation[] = [...facebookConversatinos, ...lineConversations];
+      return conversations.sort((a, b) => {
+        return b.updatedAt - a.updatedAt;
+      })
     }
+
   },
   actions: {
     getConversationById(conversationId: string, platform: string): Conversation {
