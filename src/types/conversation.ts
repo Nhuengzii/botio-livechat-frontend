@@ -22,6 +22,7 @@ export type Message = {
 export type Conversation = {
   conversationID: string,
   conversationPicture: string,
+  platform: string,
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],

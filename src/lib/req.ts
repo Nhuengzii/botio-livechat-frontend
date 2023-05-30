@@ -12,6 +12,7 @@ export const getFacebookConversation = async (getConversationsEndpoint: string):
       lastActivity: conversation.lastActivity,
       messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
       isRead: true,
+      platform: "facebook",
       participants: conversation.participants.map((participant) => {
         return {
           userID: participant.userID,
@@ -28,6 +29,7 @@ export const getLineConversation = async (getConversationsEndpoint: string): Pro
   const conversations = new Array<Conversation>(data.conversations.length);
   data.conversations.forEach((conversation, index) => {
     conversations[index] = {
+      platform: "line",
       conversationID: conversation.ConversationID,
       conversationPicture: conversation.ConversationPic.src,
       updatedAt: conversation.UpdatedTime,
