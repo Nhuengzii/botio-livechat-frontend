@@ -8,8 +8,7 @@
                 id="containMessage" ref="containMessage">
                 <div class='grid grid-cols-12 gap-y-2'>
                     <template v-if="isFetching">
-                        <!-- <LoadingIndicator /> -->
-                        <SkletonBoxMessage/>
+                        <SkletonBoxMessage />
                     </template>
                     <template v-else>
                         <div v-for="(item, index) in messages" :key="item.conversationID" :class="{
@@ -44,7 +43,7 @@
                                 <ChatBubble />
                             </div>
                         </template>
-                    </template> 
+                    </template>
                 </div>
             </main>
             <ChatBoxInput />
@@ -93,7 +92,7 @@ onMounted(async () => {
     let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
     isFetching.value = false;
     if (currentConversation == null) {
-        router.replace({ path: `/${route.params.platform as string}/` })
+        router.replace({ path: `/livechat/${route.params.platform as string}/` })
         return
     }
     messages.value = currentConversation.messages.messages
@@ -115,6 +114,4 @@ onUpdated(() => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

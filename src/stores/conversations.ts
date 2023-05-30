@@ -12,20 +12,19 @@ export const useConversationsStore = defineStore("conversations", {
     conversationsRaw: {
       "facebook": {},
       "line": {},
-      "ig": {}
+      "instagram": {}
     } as Record<string, Record<string, Conversation>>,
     isLoading: false,
   }),
   getters: {
-    conversations: (state): Conversation[] => {
-      // return sorted conversations by updatedAt
-      const router = useRoute();
-      const sortedConversations = Object.values(state.conversationsRaw[router.params.platform as string]).sort((a, b) => {
-        return b.updatedAt - a.updatedAt;
-      })
-      console.log("Sorted success");
-
-      return sortedConversations;
+    conversations: (state) => {
+      return (platform: string) => {
+        const sortedConversations = Object.values(state.conversationsRaw[platform]).sort((a, b) => {
+          return b.updatedAt - a.updatedAt;
+        })
+        console.log("Sorted success");
+        return sortedConversations;
+      };
     }
   },
   actions: {

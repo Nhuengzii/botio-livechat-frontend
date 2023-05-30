@@ -3,11 +3,9 @@
         duration-500 border-solid border-glass relative  mt-2  shadow-inner ">
         <div class=" overflow-hidden bg-gray-700    rounded-2xl items-center h-full w-full">
             <UserProfile />
-            <router-link to="/Start">
-                <button @click="{ show_Chat = false; }"
-                    class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4 motion-safe:hover:scale-110">เริ่มต้น
-                </button>
-            </router-link>
+            <button @click="loadTestStore.mockReceiveConversation(1000, 250, 10000)"
+                class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-1.5 px-4 rounded w-full mt-4 motion-safe:hover:scale-110">ConverBurst
+            </button>
 
             <router-link to="/Services">
                 <button @click="{ show_Chat = false; }"
@@ -73,7 +71,7 @@
         <div v-if="show_Chat" class="mt-2 h-[98%] bg-gray-300 rounded-2xl  items-center p-3   ">
 
             <div class="mt-4">
-                <router-link to="/livechat/facebook">
+                <router-link to="/facebook">
                     <button @click="{ show_Instagram = false; show_Line = false; show_Facebook = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
@@ -87,7 +85,7 @@
             </div>
 
             <div class="mt-4">
-                <router-link to="/livechat/instagram">
+                <router-link to="/instagram">
                     <button @click="{ show_Facebook = false; show_Line = false; show_Instagram = true; }" type="button"
                         data-te-ripple-init data-te-ripple-color="light"
                         class="mb-2 inline-block rounded-full p-3 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
@@ -109,7 +107,9 @@ import { RouterLink, RouterView } from 'vue-router'
 import { useUIStore } from '@/stores/UI';
 import UserProfile from './UserProfile.vue';
 import ChatLeft from './ChatLeft.vue'
+import { useLoadTestStore } from "@/stores/loadtest"
 import { ref } from 'vue'
+const loadTestStore = useLoadTestStore();
 const show_Line = ref(false)
 const show_Facebook = ref(false)
 const show_Instagram = ref(false)
