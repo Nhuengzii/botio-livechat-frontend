@@ -4,6 +4,7 @@ import axios from 'axios'
 import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
+import { getFacebookConversation } from "@/lib/req";
 
 
 
@@ -44,30 +45,15 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const getConversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
-      const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
-      data.conversations.forEach(conversation => {
+      const conversations = await getFacebookConversation("1", "108362942229009", getConversationsEndpoint);
+      conversations.forEach(conversation => {
         const equivalentConversation = this.conversationsRaw[platform][conversation.conversationID];
-        if (equivalentConversation) {
-          if (equivalentConversation.updatedAt === conversation.updatedTime) {
-            return;
-          }
+        if (!equivalentConversation) {
+          this.conversationsRaw[platform][conversation.conversationID] = conversation;
+          return;
         }
-        console.log("new conversation for " + conversation.conversationID + " of " + platform + " ...");
-        this.conversationsRaw[platform][conversation.conversationID] = {
-          conversationID: conversation.conversationID,
-          conversationPicture: conversation.conversationPic.src,
-          updatedAt: conversation.updatedTime,
-          lastActivity: conversation.lastActivity,
-          participants: conversation.participants.map((participant) => {
-            return {
-              userID: participant.userID,
-              username: participant.username,
-              profilePicture: participant.profilePic.src,
-            }
-          }),
-          messages: { "isAlreadyFetch": false, "messages": [], "someoneTyping": false },
-          isRead: conversation.isRead,
-        }
+        equivalentConversation.updatedAt = conversation.updatedAt;
+        equivalentConversation.lastActivity = conversation.lastActivity;
       });
       this.isLoading = false;
     },
