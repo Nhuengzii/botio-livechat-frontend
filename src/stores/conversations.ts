@@ -104,7 +104,6 @@ export const useConversationsStore = defineStore("conversations", {
           console.log("Platform not supported");
           return;
       }
-      const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessageBaseEndpoint + conversationID + "/messages");
       receivedMessages.forEach(message => {
         if (message.source.sourceType === "USER") {
           message.source.sourcePicture = conversation.participants[0].profilePicture;
