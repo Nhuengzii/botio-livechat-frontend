@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
-import { getFacebookConversation, getFacebookMessages, getLineConversation } from "@/lib/req";
+import { getFacebookConversation, getFacebookMessages, getLineConversation, getLineMessages } from "@/lib/req";
 
 
 
@@ -96,10 +96,14 @@ export const useConversationsStore = defineStore("conversations", {
           getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
           receivedMessages = await getFacebookMessages(getMessageBaseEndpoint, conversationID);
           break
+        case "line":
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations/`;
+          receivedMessages = await getLineMessages(getMessageBaseEndpoint, conversationID);
         default:
           console.log("Platform not supported");
           return;
       }
+      const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessageBaseEndpoint + conversationID + "/messages");
       receivedMessages.forEach(message => {
         if (message.source.sourceType === "USER") {
           message.source.sourcePicture = conversation.participants[0].profilePicture;

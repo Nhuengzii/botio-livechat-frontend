@@ -1,4 +1,4 @@
-import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage, RESTLineConversation } from "@/types/conversation";
+import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage, RESTLineConversation, RESTLineMessage } from "@/types/conversation";
 import axios from "axios";
 
 export const getFacebookConversation = async (getConversationsEndpoint: string): Promise<Conversation[]> => {
@@ -57,6 +57,25 @@ export const getFacebookMessages = async (getMessageBaseEndpoint: string, conver
       source: {
         sourceID: message.source.userID,
         sourceType: message.source.type.toUpperCase() as "USER" | "ADMIN",
+        sourcePicture: undefined,
+      },
+      message: message.message,
+      attachments: message.attachments
+    }
+  })
+  return messages;
+}
+export const getLineMessages = async (getMessageBaseEndpoint: string, conversationID: string): Promise<Message[]> => {
+  const { data } = await axios.get<{ messages: RESTLineMessage[] }>(getMessageBaseEndpoint + conversationID + "/messages");
+  const messages = new Array<Message>(data.messages.length);
+  data.messages.forEach((message, index) => {
+    messages[index] = {
+      conversationID: conversationID,
+      messageID: message.messageID,
+      timeStamp: message.timestamp,
+      source: {
+        sourceID: message.source.userID,
+        sourceType: message.source.userType.toUpperCase() as "USER" | "ADMIN",
         sourcePicture: undefined,
       },
       message: message.message,
