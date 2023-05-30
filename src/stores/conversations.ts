@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from 'axios'
-import type { Conversation, Message, RESTConversation, RESTMessage } from "@/types/conversation";
+import type { Conversation, Message, RESTFacebookConversation, RESTFacebookMessage } from "@/types/conversation";
 import { useRoute } from "vue-router";
 import { useWebsocketStore } from "./websocket";
 import { getFacebookConversation } from "@/lib/req";
@@ -74,7 +74,7 @@ export const useConversationsStore = defineStore("conversations", {
         return;
       }
       const getMessagesEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
-      const { data } = await axios.get<{ messages: RESTMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
+      const { data } = await axios.get<{ messages: RESTFacebookMessage[] }>(getMessagesEndpoint + conversationID + "/messages");
       data.messages.forEach(element => {
         const message: Message = {
           conversationID: conversationID,

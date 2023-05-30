@@ -1,8 +1,8 @@
-import type { Conversation, RESTConversation } from "@/types/conversation";
+import type { Conversation, RESTFacebookConversation } from "@/types/conversation";
 import axios from "axios";
 
 export const getFacebookConversation = async (shopID: string, pageID: string, getConversationsEndpoint: string): Promise<Conversation[]> => {
-  const { data } = await axios.get<{ conversations: RESTConversation[] }>(getConversationsEndpoint);
+  const { data } = await axios.get<{ conversations: RESTFacebookConversation[] }>(getConversationsEndpoint);
   const conversations = new Array<Conversation>(data.conversations.length);
   data.conversations.forEach((conversation, index) => {
     conversations[index] = {

@@ -36,7 +36,7 @@ export type Attachment = {
   }
 }
 
-export type RESTConversation = {
+export type RESTFacebookConversation = {
   conversationID: string,
   conversationPic: {
     src: string,
@@ -53,7 +53,7 @@ export type RESTConversation = {
   isRead: boolean,
 }
 
-export type RESTMessage = {
+export type RESTFacebookMessage = {
   messageID: string,
   timestamp: number,
   source: {
