@@ -11,11 +11,11 @@ import { getFacebookConversation, getFacebookMessages, getLineConversation, getL
 export const useConversationsStore = defineStore("conversations", {
   state: () => ({
     conversationsRaw: {
-      "facebook": { isFetching: false, raw: {} },
-      "line": { isFetching: false, raw: {} },
-      "instagram": { isFetching: false, raw: {} },
-      "centralized": { isFetching: false, raw: {} },
-    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
+      "facebook": { isFetching: false, raw: {}, fetchOnce: false },
+      "line": { isFetching: false, raw: {}, fetchOnce: false },
+      "instagram": { isFetching: false, raw: {}, fetchOnce: false },
+      "centralized": { isFetching: false, raw: {}, fetchOnce: false },
+    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation>, fetchOnce: boolean }>,
   }),
   getters: {
     conversations: (state) => {
@@ -42,7 +42,7 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.conversationsRaw[platform].isFetching) {
+      if (this.conversationsRaw[platform].isFetching || this.conversationsRaw[platform].fetchOnce) {
         return;
       }
       this.conversationsRaw[platform].isFetching = true;
@@ -83,6 +83,7 @@ export const useConversationsStore = defineStore("conversations", {
         equivalentConversation.updatedAt = conversation.updatedAt;
         equivalentConversation.lastActivity = conversation.lastActivity;
       });
+      this.conversationsRaw[platform].fetchOnce = true;
       this.conversationsRaw[platform].isFetching = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {

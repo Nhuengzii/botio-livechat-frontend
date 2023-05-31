@@ -10,7 +10,8 @@
             <div v-bind="wrapperProps" class="mb-[100px]">
                 <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt, platform } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
-                    <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
+                    <router-link
+                        :to="{ name: 'Conver', params: { conversation_id: conversationID }, query: { platform: platform } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
                         
                         <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] relative">
@@ -59,7 +60,8 @@ const route = useRoute();
 const conversationsStore = useConversationsStore();
 const { conversationsRaw } = storeToRefs(conversationsStore);
 const isFetching = ref(false);
-watch(() => conversationsRaw.value[route.params.platform as string].isFetching, (newVal, oldVal) => {
+watch(() => conversationsRaw.value['centralized'].isFetching, (newVal, oldVal) => {
+    console.log("convRaw watching", newVal, "  ", oldVal);
     isFetching.value = newVal;
 })
 const isGetAcivityTime = ref(true);
@@ -107,7 +109,11 @@ onMounted(() => {
 });
 
 onBeforeMount(async () => {
+    conversationsRaw.value["centralized"].isFetching = true;
+    await conversationsStore.fetchConversations("facebook");
+    await conversationsStore.fetchConversations("line");
     await conversationsStore.fetchConversations(route.params.platform as string);
+    conversationsRaw.value["centralized"].isFetching = false;
     updateLastActivities();
 })
 

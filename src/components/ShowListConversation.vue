@@ -57,6 +57,7 @@ const conversationsStore = useConversationsStore();
 const { conversationsRaw } = storeToRefs(conversationsStore);
 const isFetching = ref(true);
 watch(() => conversationsRaw.value[route.params.platform as string].isFetching, (newVal, oldVal) => {
+    console.log("convRaw watching", newVal, "  ", oldVal);
     isFetching.value = newVal;
 })
 const isGetAcivityTime = ref(true);
@@ -105,6 +106,7 @@ onMounted(() => {
 
 onBeforeMount(async () => {
     await conversationsStore.fetchConversations(route.params.platform as string);
+    isFetching.value = false;
     updateLastActivities();
 })
 
