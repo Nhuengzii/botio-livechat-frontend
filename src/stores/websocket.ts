@@ -84,12 +84,12 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
     },
-    broadcastMessage(message: Message) {
+    broadcastMessage(message: Message, platform: string) {
       if (!this.connection) {
         console.log("No connection");
         return;
       }
-      this.connection.send(JSON.stringify({ action: "broadcast", message: message }));
+      this.connection.send(JSON.stringify({ action: "broadcast", message: message, platform: platform }));
     },
     broadcastTypingEvent(conversationID: string, platform: string, typing: boolean) {
       if (!this.connection) {
