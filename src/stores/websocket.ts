@@ -34,11 +34,11 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = async (event) => {
-        const incommingEvent: { action: string, message: any } = JSON.parse(event.data);
+        const incommingEvent: { action: string, message: any, platform: string } = JSON.parse(event.data);
         switch (incommingEvent.action) {
           case "broadcast":
             const message: Message = incommingEvent.message;
-            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
+            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, incommingEvent.platform);
             return;
             break;
           case "userMessage":
