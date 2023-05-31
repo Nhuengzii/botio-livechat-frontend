@@ -123,3 +123,16 @@ export type FacebookStandardMessage = {
     messageID: string,
   }
 }
+export type LineStandardMessage = {
+  shopID: string,
+  platform: string,
+  conversationID: string,
+  messageID: string,
+  timestamp: number,
+  source: {
+    userID: string,
+    userType: "user" | "admin",
+  },
+  message: string,
+  attachments: Attachment[],
+}
