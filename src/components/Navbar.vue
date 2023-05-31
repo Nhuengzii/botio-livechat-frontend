@@ -137,7 +137,10 @@ import { RouterLink, RouterView } from 'vue-router'
 import { useUIStore } from '@/stores/UI';
 import UserProfile from './UserProfile.vue';
 import ChatLeft from './ChatLeft.vue'
+const { unreadConversations } = storeToRefs(useConversationsStore())
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useConversationsStore } from '@/stores/conversations';
 const show_Line = ref(false)
 const show_Facebook = ref(false)
 const show_Instagram = ref(false)
