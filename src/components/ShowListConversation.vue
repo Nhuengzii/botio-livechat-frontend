@@ -7,12 +7,13 @@
     </template>
     <template v-else>
         <div v-bind="containerProps" style="height: 750px;">
-            <div v-bind="wrapperProps">
-                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in list"
+            <div v-bind="wrapperProps" class="mb-[100px]">
+                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt, platform } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
                         <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
+                            
                             <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
                                 <img v-if="conversationPicture" :src="conversationPicture" alt=""
                                     class="object-cover w-full h-full rounded-full ">
@@ -21,6 +22,7 @@
                             </div>
                         </div>
                         <div class="grow-2 ">
+                            <p>{{ platform }}</p>
                             <div class="flex justify-between ">
                                 <span class="text-sm font-semibold leading-6 text-gray-900  whitespace-nowrap">{{
                                     participants[0].username }}</span>
@@ -49,7 +51,7 @@ import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import SklentonListConversation from './SklentonListConversation.vue';
-import { useVirtualList } from "@vueuse/core"
+import { timestamp, useVirtualList } from "@vueuse/core"
 import { computed } from '@vue/reactivity';
 
 const route = useRoute();
@@ -70,6 +72,29 @@ const conversations = computed(() => conversationsStore.conversations(route.para
 const { list, containerProps, wrapperProps } = useVirtualList(conversations, {
     itemHeight: 112.5
 })
+
+// const getLastActivity = (timestamp: number) => {
+//     const currentTime = Date.now();
+//     const timeDifference = currentTime - timestamp;
+//     const seconds = Math.floor(timeDifference / 1000);
+//     const minutes = Math.floor(seconds / 60);
+//     const hours = Math.floor(minutes / 60);
+//     const days = Math.floor(hours / 24);
+
+//     if (days > 0) {
+//         return `${days} days ago`;
+//     } else if (hours > 0) {
+//         return `${hours} hours ago`;
+//     } else if (minutes > 0) {
+//         return `${minutes} minutes ago`;
+//     } else {
+//         return `${seconds} seconds ago`;
+//     }
+// };
+
+// const lastActivities_2 = computed(() => {
+//     return conversationsStore.conversations
+// })
 
 const lastActivities: Ref<LastActivities> = ref({});
 
