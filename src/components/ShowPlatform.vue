@@ -1,6 +1,6 @@
 <template>
     <div v-if="(props.platform as string == 'facebook' as string)" class="flex">
-        <div class="flex p-1.5 rounded-full bg-blue-500 items-center justify-center absolute z-10 top-8 left-8">
+        <div class="flex p-1.5 rounded-full bg-blue-500 items-center justify-center absolute z-10 top-7 left-7">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-messenger text-white"
                 viewBox="0 0 16 16">
                 <path
@@ -9,7 +9,7 @@
         </div>
     </div>
     <div v-else-if="(props.platform as string == 'line' as string)">
-        <div class="flex p-1.5 rounded-full bg-green-400 items-center justify-center absolute z-10 top-8 left-8">
+        <div class="flex p-1.5 rounded-full bg-green-400 items-center justify-center absolute z-10 top-7 left-7">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-line text-white self-center justify-self-center"
                 viewBox="0 0 16 16">
                 <path
