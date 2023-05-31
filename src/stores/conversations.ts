@@ -33,6 +33,11 @@ export const useConversationsStore = defineStore("conversations", {
       return conversations.sort((a, b) => {
         return b.updatedAt - a.updatedAt;
       })
+    }, unreadConversations(): { facebook: number, line: number } {
+      return {
+        facebook: 1,
+        line: 2,
+      }
     }
 
   },
