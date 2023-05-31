@@ -10,6 +10,7 @@
                     <template v-if="isFetching">
                         <SkletonBoxMessage />
                     </template>
+                    
                     <template v-else>
                         <div v-for="(item, index) in messages" :key="item.conversationID" :class="{
                             'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',
@@ -57,13 +58,12 @@ import { useConversationsStore } from '@/stores/conversations';
 import { useRoute } from 'vue-router';
 import { nextTick, onBeforeUpdate, onMounted, onUpdated, ref, watch } from 'vue';
 const messages = ref([] as Message[])
-import type { Message, Conversation } from '@/types/conversation'
+import type { Conversation, Message } from '@/types/conversation'
 import router from '@/router';
 import ChatBoxInput from './ChatBoxInput.vue';
 import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
 import ChatBubble from './ChatBubble.vue';
-import LoadingIndicator from './LoadingIndicator.vue';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import { storeToRefs } from 'pinia';
 
@@ -86,7 +86,6 @@ const currentPlatform = ref('')
 const scrollToBottom = () => {
     // Use document safely here
     let objContain = document.getElementById("containMessage") as any
-    console.log(objContain)
     objContain.scrollTop = objContain?.scrollHeight
 
 }
