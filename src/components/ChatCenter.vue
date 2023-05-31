@@ -38,11 +38,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping"> -->
-                        <!--     <div> -->
-                        <!--         <ChatBubble /> -->
-                        <!--     </div> -->
-                        <!-- </template> -->
+                        <template v-if="conversationsRaw[currentPlatform].raw[conversationId].messages.someoneTyping">
+                            <div>
+                                <ChatBubble />
+                            </div>
+                        </template>
                     </template>
                 </div>
             </main>
@@ -70,7 +70,6 @@ import { storeToRefs } from 'pinia';
 
 
 const conversationsStore = useConversationsStore();
-
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
 let datauser: Conversation
@@ -82,6 +81,7 @@ else {
 }
 const { conversationsRaw } = storeToRefs(conversationsStore)
 const isFetching = ref(true)
+const currentPlatform = ref('')
 
 const scrollToBottom = () => {
     // Use document safely here
@@ -98,9 +98,11 @@ onMounted(async () => {
     let currentConversation: Conversation | undefined
     if (route.query.platform) {
         currentConversation = await conversationsStore.fetchMessages(conversationID, route.query.platform as string)
+        currentPlatform.value = route.query.platform as string
     }
     else {
         currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+        currentPlatform.value = route.params.platform as string
     }
     isFetching.value = false;
     if (currentConversation == null) {

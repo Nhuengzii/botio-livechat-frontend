@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useConversationsStore } from '@/stores/conversations';
 import { useRoute, } from 'vue-router';
 import Modal from './Modal.vue'
@@ -83,14 +83,23 @@ const conversationsStore = useConversationsStore();
 const newMessage = ref('');
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
+const platform = ref('')
 
 // watch newMessage
 watch(newMessage, (newVal, oldVal) => {
     if (oldVal.length === 0 && newVal.length > 0) {
-        conversationsStore.setTypingStatus(conversationId, 'facebook', true)
+        conversationsStore.setTypingStatus(conversationId, platform.value, true)
     }
     else if (oldVal.length > 0 && newVal.length === 0) {
-        conversationsStore.setTypingStatus(conversationId, 'facebook', false)
+        conversationsStore.setTypingStatus(conversationId, platform.value, false)
+    }
+})
+onMounted(() => {
+    if (route.query.platform) {
+        platform.value = route.query.platform as string
+    }
+    else {
+        platform.value = route.params.platform as string
     }
 })
 
