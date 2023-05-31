@@ -6,13 +6,15 @@
         </div>
     </template>
     <template v-else>
-        <div v-bind="containerProps" style="height: 750px;">
-            <div v-bind="wrapperProps">
-                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt } } in list"
+        <div v-bind="containerProps" class="h-[750px]">
+            <div v-bind="wrapperProps" class="mb-[100px]">
+                <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt, platform } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
                     <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
-                        <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
+                        
+                        <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] relative">
+                            <ShowPlatform :platform="platform"/>
                             <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
                                 <img v-if="conversationPicture" :src="conversationPicture" alt=""
                                     class="object-cover w-full h-full rounded-full ">
@@ -42,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import LoadingIndicator from '@/components/LoadingIndicator.vue';
+
 import { useConversationsStore } from '@/stores/conversations';
 import { storeToRefs } from 'pinia';
 import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
@@ -51,6 +53,7 @@ import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import SklentonListConversation from './SklentonListConversation.vue';
 import { useVirtualList } from "@vueuse/core"
 import { computed } from '@vue/reactivity';
+import ShowPlatform from './ShowPlatform.vue'
 
 const route = useRoute();
 const conversationsStore = useConversationsStore();
