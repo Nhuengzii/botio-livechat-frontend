@@ -138,37 +138,60 @@ export const useConversationsStore = defineStore("conversations", {
         console.log("Cannot send Text message. Conversation not found");
         return;
       }
+      let newMessage: Message;
       const mockMessageID: string = `MOCK_${Math.floor(Math.random() * 23432432432)}`
-      const newMessageIndex = conversation.messages.messages.length;
-      const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
-      const newMessage: Message = {
-        conversationID: conversationID,
-        messageID: mockMessageID,
-        timeStamp: new Date().getTime(),
-        source: {
-          sourceID: senderID,
-          sourceType: "ADMIN"
-        },
-        message: message,
-        attachments: [],
-      }
-      conversation.messages.messages.push(newMessage);
-      try {
-        const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
-        newMessage.messageID = data.message_id;
-        newMessage.timeStamp = data.timestamp;
-      } catch (error) {
-        console.error(error);
-        conversation.messages.messages.splice(newMessageIndex, 1);
-        return;
-      } finally {
-        conversation.messages.messages[newMessageIndex] = newMessage;
-        conversation.updatedAt = newMessage.timeStamp;
-        conversation.isRead = true;
-        conversation.lastActivity = "คุณ: " + newMessage.message;
+      let timeStamp = new Date().getTime()
+      switch (platform) {
+        case "facebook":
+          const newMessageIndex = conversation.messages.messages.length;
+          const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
+          newMessage = {
+            conversationID: conversationID,
+            messageID: mockMessageID,
+            timeStamp: timeStamp,
+            source: {
+              sourceID: senderID,
+              sourceType: "ADMIN"
+            },
+            message: message,
+            attachments: [],
+          }
+          conversation.messages.messages.push(newMessage);
+          try {
+            const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
+            newMessage.messageID = data.message_id;
+            newMessage.timeStamp = data.timestamp;
+          } catch (error) {
+            console.error(error);
+            conversation.messages.messages.splice(newMessageIndex, 1);
+            return;
+          } finally {
+            conversation.messages.messages[newMessageIndex] = newMessage;
+            conversation.updatedAt = newMessage.timeStamp;
+            conversation.isRead = true;
+            conversation.lastActivity = "คุณ: " + newMessage.message;
+          }
+          break;
+        case "line":
+          newMessage = {
+            conversationID: conversationID,
+            messageID: mockMessageID,
+            timeStamp: timeStamp,
+            source: {
+              sourceID: senderID,
+              sourceType: "ADMIN"
+            },
+            message: message,
+            attachments: [],
+          }
+          conversation.messages.messages.push(newMessage);
+          break;
+        default:
+          console.log("Platform not supported");
+          return;
       }
       const websocketStore = useWebsocketStore()
-      websocketStore.broadcastMessage(newMessage);
+      websocketStore.broadcastMessage(newMessage, platform);
     },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
       let conversation = this.conversationsRaw[platform].raw[conversationID];

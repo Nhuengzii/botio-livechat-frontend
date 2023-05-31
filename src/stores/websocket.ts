@@ -34,11 +34,11 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
       this.connection.onmessage = async (event) => {
-        const incommingEvent: { action: string, message: any } = JSON.parse(event.data);
+        const incommingEvent: { action: string, message: any, platform: string } = JSON.parse(event.data);
         switch (incommingEvent.action) {
           case "broadcast":
             const message: Message = incommingEvent.message;
-            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, "facebook");
+            this.conversationStore.addMessageFromWebsocket(message.conversationID, message, incommingEvent.platform);
             return;
             break;
           case "userMessage":
@@ -84,12 +84,12 @@ export const useWebsocketStore = defineStore('websocket', {
         this.connection = null
       }
     },
-    broadcastMessage(message: Message) {
+    broadcastMessage(message: Message, platform: string) {
       if (!this.connection) {
         console.log("No connection");
         return;
       }
-      this.connection.send(JSON.stringify({ action: "broadcast", message: message }));
+      this.connection.send(JSON.stringify({ action: "broadcast", message: message, platform: platform }));
     },
     broadcastTypingEvent(conversationID: string, platform: string, typing: boolean) {
       if (!this.connection) {
