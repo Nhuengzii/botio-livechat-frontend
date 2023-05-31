@@ -107,7 +107,7 @@ export type RESTLineMessage = {
   },
 }
 
-export type StandardMessage = {
+export type FacebookStandardMessage = {
   shopID: string,
   platform: string,
   conversationID: string,
