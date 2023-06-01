@@ -106,7 +106,10 @@ export const useConversationsStore = defineStore("conversations", {
       if (!conversation) {
         return;
       };
-      if (conversation.messages.isAlreadyFetch) return conversation;
+      if (conversation.messages.isAlreadyFetch) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        return conversation
+      }
       console.log("fetching messages of " + conversationID + "of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
       if (botio_rest_api_id === undefined) {
