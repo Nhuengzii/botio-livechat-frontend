@@ -47,7 +47,13 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.conversationsRaw[platform].isFetching || this.conversationsRaw[platform].fetchOnce) {
+      if (this.conversationsRaw[platform].isFetching) {
+        return;
+      }
+      if (this.conversationsRaw[platform].fetchOnce) {
+        this.conversationsRaw[platform].isFetching = true;
+        await new Promise(resolve => setTimeout(resolve, 300));
+        this.conversationsRaw[platform].isFetching = false;
         return;
       }
       this.conversationsRaw[platform].isFetching = true;
