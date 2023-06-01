@@ -47,7 +47,13 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.conversationsRaw[platform].isFetching || this.conversationsRaw[platform].fetchOnce) {
+      if (this.conversationsRaw[platform].isFetching) {
+        return;
+      }
+      if (this.conversationsRaw[platform].fetchOnce) {
+        this.conversationsRaw[platform].isFetching = true;
+        await new Promise(resolve => setTimeout(resolve, 300));
+        this.conversationsRaw[platform].isFetching = false;
         return;
       }
       this.conversationsRaw[platform].isFetching = true;
@@ -100,7 +106,10 @@ export const useConversationsStore = defineStore("conversations", {
       if (!conversation) {
         return;
       };
-      if (conversation.messages.isAlreadyFetch) return conversation;
+      if (conversation.messages.isAlreadyFetch) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        return conversation
+      }
       console.log("fetching messages of " + conversationID + "of " + platform + " ...");
       const botio_rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID as string;
       if (botio_rest_api_id === undefined) {
