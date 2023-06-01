@@ -10,6 +10,7 @@
                     <template v-if="isFetching">
                         <SkletonBoxMessage />
                     </template>
+                    
                     <template v-else>
                         <div v-for="(item, index) in messages" :key="item.conversationID" :class="{
                             'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',
@@ -38,11 +39,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <template v-if="conversationsRaw['facebook'][conversationId].messages.someoneTyping"> -->
-                        <!--     <div> -->
-                        <!--         <ChatBubble /> -->
-                        <!--     </div> -->
-                        <!-- </template> -->
+                        <template v-if="conversationsRaw[currentPlatform].raw[conversationId].messages.someoneTyping">
+                            <div>
+                                <ChatBubble />
+                            </div>
+                        </template>
                     </template>
                 </div>
             </main>
@@ -57,30 +58,34 @@ import { useConversationsStore } from '@/stores/conversations';
 import { useRoute } from 'vue-router';
 import { nextTick, onBeforeUpdate, onMounted, onUpdated, ref, watch } from 'vue';
 const messages = ref([] as Message[])
-import type { Message, Conversation } from '@/types/conversation'
+import type { Conversation, Message } from '@/types/conversation'
 import router from '@/router';
 import ChatBoxInput from './ChatBoxInput.vue';
 import ChatBoxMessage from './ChatBoxMessage.vue';
 import ChatBoxHeader from './ChatBoxHeader.vue';
 import ChatBubble from './ChatBubble.vue';
-import LoadingIndicator from './LoadingIndicator.vue';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import { storeToRefs } from 'pinia';
 
 
 
 const conversationsStore = useConversationsStore();
-
 const route = useRoute()
 const conversationId = route.params.conversation_id as string;
-const datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+let datauser: Conversation
+if (route.query.platform) {
+    datauser = conversationsStore.getConversationById(conversationId, route.query.platform as string)
+}
+else {
+    datauser = conversationsStore.getConversationById(conversationId, route.params.platform as string)
+}
 const { conversationsRaw } = storeToRefs(conversationsStore)
 const isFetching = ref(true)
+const currentPlatform = ref('')
 
 const scrollToBottom = () => {
     // Use document safely here
     let objContain = document.getElementById("containMessage") as any
-    console.log(objContain)
     objContain.scrollTop = objContain?.scrollHeight
 
 }
@@ -89,7 +94,15 @@ const scrollToBottom = () => {
 onMounted(async () => {
     isFetching.value = true;
     let conversationID = route.params.conversation_id as string;
-    let currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+    let currentConversation: Conversation | undefined
+    if (route.query.platform) {
+        currentConversation = await conversationsStore.fetchMessages(conversationID, route.query.platform as string)
+        currentPlatform.value = route.query.platform as string
+    }
+    else {
+        currentConversation = await conversationsStore.fetchMessages(conversationID, route.params.platform as string)
+        currentPlatform.value = route.params.platform as string
+    }
     isFetching.value = false;
     if (currentConversation == null) {
         router.replace({ path: `/livechat/${route.params.platform as string}/` })

@@ -11,10 +11,11 @@ import { getFacebookConversation, getFacebookMessages, getLineConversation, getL
 export const useConversationsStore = defineStore("conversations", {
   state: () => ({
     conversationsRaw: {
-      "facebook": { isFetching: false, raw: {} },
-      "line": { isFetching: false, raw: {} },
-      "instagram": { isFetching: false, raw: {} }
-    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation> }>,
+      "facebook": { isFetching: false, raw: {}, fetchOnce: false },
+      "line": { isFetching: false, raw: {}, fetchOnce: false },
+      "instagram": { isFetching: false, raw: {}, fetchOnce: false },
+      "centralized": { isFetching: false, raw: {}, fetchOnce: false },
+    } as Record<string, { isFetching: boolean, raw: Record<string, Conversation>, fetchOnce: boolean }>,
   }),
   getters: {
     conversations: (state) => {
@@ -25,7 +26,20 @@ export const useConversationsStore = defineStore("conversations", {
         console.log("Sorted success");
         return sortedConversations;
       };
+    }, centalizedConversations(): Conversation[] {
+      const facebookConversatinos = this.conversations("facebook")
+      const lineConversations = this.conversations("line")
+      const conversations: Conversation[] = [...facebookConversatinos, ...lineConversations];
+      return conversations.sort((a, b) => {
+        return b.updatedAt - a.updatedAt;
+      })
+    }, unreadConversations(): { facebook: number, line: number } {
+      return {
+        facebook: 1,
+        line: 2,
+      }
     }
+
   },
   actions: {
     getConversationById(conversationId: string, platform: string): Conversation {
@@ -33,7 +47,7 @@ export const useConversationsStore = defineStore("conversations", {
       return conversation;
     },
     async fetchConversations(platform: string) {
-      if (this.conversationsRaw[platform].isFetching) {
+      if (this.conversationsRaw[platform].isFetching || this.conversationsRaw[platform].fetchOnce) {
         return;
       }
       this.conversationsRaw[platform].isFetching = true;
@@ -56,6 +70,10 @@ export const useConversationsStore = defineStore("conversations", {
           getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
           conversations = await getLineConversation(getCoversationsEndpoint);
           break
+        case "centralized":
+          console.log("Getting centalized conversations");
+          this.conversationsRaw[platform].isFetching = false;
+          return;
         default:
           console.log("Platform not supported");
           this.conversationsRaw[platform].isFetching = false;
@@ -70,6 +88,7 @@ export const useConversationsStore = defineStore("conversations", {
         equivalentConversation.updatedAt = conversation.updatedAt;
         equivalentConversation.lastActivity = conversation.lastActivity;
       });
+      this.conversationsRaw[platform].fetchOnce = true;
       this.conversationsRaw[platform].isFetching = false;
     },
     setTypingStatus(conversationID: string, platform: string, status: boolean) {
@@ -124,37 +143,60 @@ export const useConversationsStore = defineStore("conversations", {
         console.log("Cannot send Text message. Conversation not found");
         return;
       }
+      let newMessage: Message;
       const mockMessageID: string = `MOCK_${Math.floor(Math.random() * 23432432432)}`
-      const newMessageIndex = conversation.messages.messages.length;
-      const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
-      const newMessage: Message = {
-        conversationID: conversationID,
-        messageID: mockMessageID,
-        timeStamp: new Date().getTime(),
-        source: {
-          sourceID: senderID,
-          sourceType: "ADMIN"
-        },
-        message: message,
-        attachments: [],
-      }
-      conversation.messages.messages.push(newMessage);
-      try {
-        const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
-        newMessage.messageID = data.message_id;
-        newMessage.timeStamp = data.timestamp;
-      } catch (error) {
-        console.error(error);
-        conversation.messages.messages.splice(newMessageIndex, 1);
-        return;
-      } finally {
-        conversation.messages.messages[newMessageIndex] = newMessage;
-        conversation.updatedAt = newMessage.timeStamp;
-        conversation.isRead = true;
-        conversation.lastActivity = "คุณ: " + newMessage.message;
+      let timeStamp = new Date().getTime()
+      switch (platform) {
+        case "facebook":
+          const newMessageIndex = conversation.messages.messages.length;
+          const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
+          newMessage = {
+            conversationID: conversationID,
+            messageID: mockMessageID,
+            timeStamp: timeStamp,
+            source: {
+              sourceID: senderID,
+              sourceType: "ADMIN"
+            },
+            message: message,
+            attachments: [],
+          }
+          conversation.messages.messages.push(newMessage);
+          try {
+            const { data } = await axios.post<{ message_id: string, recipient_id: string, timestamp: number }>(sendMessageEndpoint, { message: message },);
+            newMessage.messageID = data.message_id;
+            newMessage.timeStamp = data.timestamp;
+          } catch (error) {
+            console.error(error);
+            conversation.messages.messages.splice(newMessageIndex, 1);
+            return;
+          } finally {
+            conversation.messages.messages[newMessageIndex] = newMessage;
+            conversation.updatedAt = newMessage.timeStamp;
+            conversation.isRead = true;
+            conversation.lastActivity = "คุณ: " + newMessage.message;
+          }
+          break;
+        case "line":
+          newMessage = {
+            conversationID: conversationID,
+            messageID: mockMessageID,
+            timeStamp: timeStamp,
+            source: {
+              sourceID: senderID,
+              sourceType: "ADMIN"
+            },
+            message: message,
+            attachments: [],
+          }
+          conversation.messages.messages.push(newMessage);
+          break;
+        default:
+          console.log("Platform not supported");
+          return;
       }
       const websocketStore = useWebsocketStore()
-      websocketStore.broadcastMessage(newMessage);
+      websocketStore.broadcastMessage(newMessage, platform);
     },
     async addMessageFromWebsocket(conversationID: string, message: Message, platform: string) {
       let conversation = this.conversationsRaw[platform].raw[conversationID];

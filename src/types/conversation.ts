@@ -22,6 +22,7 @@ export type Message = {
 export type Conversation = {
   conversationID: string,
   conversationPicture: string,
+  platform: string,
   updatedAt: number,
   lastActivity: string,
   participants: Participant[],
@@ -106,7 +107,7 @@ export type RESTLineMessage = {
   },
 }
 
-export type StandardMessage = {
+export type FacebookStandardMessage = {
   shopID: string,
   platform: string,
   conversationID: string,
@@ -121,4 +122,17 @@ export type StandardMessage = {
   replyTo: {
     messageID: string,
   }
+}
+export type LineStandardMessage = {
+  shopID: string,
+  platform: string,
+  conversationID: string,
+  messageID: string,
+  timestamp: number,
+  source: {
+    userID: string,
+    userType: "user" | "admin",
+  },
+  message: string,
+  attachments: Attachment[],
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-3 items-center flex-col bg-gray-700 rounded-2xl ">
+    <div class="flex gap-3 items-center flex-col bg-gray-700 rounded-2xl pt-4 pb-2">
         <div class="w-[4rem] h-[4rem] bg-gray-700">
             <img src="https://graph.facebook.com/108362942229009/picture?type=normal" alt=""
                 class="w-full h-full rounded-full object-cover">

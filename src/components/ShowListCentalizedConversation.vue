@@ -10,10 +10,12 @@
             <div v-bind="wrapperProps" class="mb-[100px]">
                 <div v-for="{ data: { conversationID, conversationPicture, lastActivity, participants, updatedAt, platform } } in list"
                     class="flex-col px-4 justify-center bg-gray-100 w-full  border-b-2  hover:bg-blue-100">
-                    <router-link :to="{ name: 'Conver', params: { conversation_id: conversationID } }"
+                    <router-link
+                        :to="{ name: 'Conver', params: { conversation_id: conversationID }, query: { platform: platform } }"
                         class="flex px-[14px] pt-[20px] pb-[1.25rem] ">
-                        <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] ">
-                            
+                        
+                        <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px] relative">
+                            <ShowPlatform :platform="platform"/>
                             <div class=" w-[45px] h-[45px] bg-blue-200 rounded-full">
                                 <img v-if="conversationPicture" :src="conversationPicture" alt=""
                                     class="object-cover w-full h-full rounded-full ">
@@ -43,21 +45,22 @@
 </template>
 
 <script setup lang="ts">
-import LoadingIndicator from '@/components/LoadingIndicator.vue';
+
 import { useConversationsStore } from '@/stores/conversations';
 import { storeToRefs } from 'pinia';
 import { onBeforeMount, ref, watch, type Ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SkletonBoxMessage from './SkletonBoxMessage.vue';
 import SklentonListConversation from './SklentonListConversation.vue';
-import { timestamp, useVirtualList } from "@vueuse/core"
+import { useVirtualList } from "@vueuse/core"
 import { computed } from '@vue/reactivity';
+import ShowPlatform from './ShowPlatform.vue'
 
 const route = useRoute();
 const conversationsStore = useConversationsStore();
 const { conversationsRaw } = storeToRefs(conversationsStore);
-const isFetching = ref(true);
-watch(() => conversationsRaw.value[route.params.platform as string].isFetching, (newVal, oldVal) => {
+const isFetching = ref(false);
+watch(() => conversationsRaw.value['centralized'].isFetching, (newVal, oldVal) => {
     console.log("convRaw watching", newVal, "  ", oldVal);
     isFetching.value = newVal;
 })
@@ -67,33 +70,10 @@ interface LastActivities {
     [id: string]: string;
 }
 
-const conversations = computed(() => conversationsStore.conversations(route.params.platform as string));
+const conversations = computed(() => conversationsStore.centalizedConversations);
 const { list, containerProps, wrapperProps } = useVirtualList(conversations, {
     itemHeight: 112.5
 })
-
-// const getLastActivity = (timestamp: number) => {
-//     const currentTime = Date.now();
-//     const timeDifference = currentTime - timestamp;
-//     const seconds = Math.floor(timeDifference / 1000);
-//     const minutes = Math.floor(seconds / 60);
-//     const hours = Math.floor(minutes / 60);
-//     const days = Math.floor(hours / 24);
-
-//     if (days > 0) {
-//         return `${days} days ago`;
-//     } else if (hours > 0) {
-//         return `${hours} hours ago`;
-//     } else if (minutes > 0) {
-//         return `${minutes} minutes ago`;
-//     } else {
-//         return `${seconds} seconds ago`;
-//     }
-// };
-
-// const lastActivities_2 = computed(() => {
-//     return conversationsStore.conversations
-// })
 
 const lastActivities: Ref<LastActivities> = ref({});
 
@@ -129,8 +109,11 @@ onMounted(() => {
 });
 
 onBeforeMount(async () => {
+    conversationsRaw.value["centralized"].isFetching = true;
+    await conversationsStore.fetchConversations("facebook");
+    await conversationsStore.fetchConversations("line");
     await conversationsStore.fetchConversations(route.params.platform as string);
-    isFetching.value = false;
+    conversationsRaw.value["centralized"].isFetching = false;
     updateLastActivities();
 })
 

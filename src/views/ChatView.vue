@@ -1,6 +1,6 @@
 <template>
   <ChatCenter />
-  <ChatRight />
+  <!-- <ChatRight /> -->
 </template>
 
 <script setup lang="ts">

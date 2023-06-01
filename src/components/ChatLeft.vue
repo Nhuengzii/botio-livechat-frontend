@@ -31,7 +31,8 @@
 
         <!-- end search name box-->
 
-        <ShowListConversation v-if="!status_seatch" />
+        <ShowListConversation v-if="!status_seatch && route.params.platform !== 'centralized'" />
+        <ShowListCentalizedConversation v-else-if="!status_seatch && route.params.platform === 'centralized'" />
         <Showseatch v-if="status_seatch" :propA="message" />
     </div>
 </template>
@@ -41,6 +42,7 @@ import { useConversationsStore } from '@/stores/conversations';
 import ShowListConversation from './ShowListConversation.vue';
 import Showseatch from './ShowSeatch.vue';
 import HeaderChatLeft from './HeaderChatLeft.vue';
+import ShowListCentalizedConversation from './ShowListCentalizedConversation.vue';
 const conversationsStore = useConversationsStore();
 import { onMounted, ref, watch, watchEffect } from 'vue'
 const status_seatch = ref(false);

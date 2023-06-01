@@ -17,6 +17,7 @@ export const useLoadTestStore = defineStore("loadtest", {
         for (let i = 0; i < count; i++) {
           const newConversationID: string = "Mock_" + Math.floor(Math.random() * 10000000000).toString();
           const newConversation: Conversation = {
+            platform: "facebook",
             conversationID: newConversationID,
             updatedAt: new Date().getTime(),
             messages: {
