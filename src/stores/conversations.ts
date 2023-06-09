@@ -68,12 +68,12 @@ export const useConversationsStore = defineStore("conversations", {
       let getCoversationsEndpoint: string;
       switch (platform) {
         case "facebook":
-          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations`;
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev/shops/1/${platform}/108362942229009/conversations`;
           conversations = await getFacebookConversation(getCoversationsEndpoint);
           break
         case "line":
           console.log("Getting line conversations");
-          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
+          getCoversationsEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations`;
           conversations = await getLineConversation(getCoversationsEndpoint);
           break
         case "centralized":
@@ -120,11 +120,11 @@ export const useConversationsStore = defineStore("conversations", {
       let receivedMessages: Message[];
       switch (platform) {
         case "facebook":
-          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/`;
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev/shops/1/${platform}/108362942229009/conversations/`;
           receivedMessages = await getFacebookMessages(getMessageBaseEndpoint, conversationID);
           break
         case "line":
-          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations/`;
+          getMessageBaseEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev/shops/1/${platform}/U6972d1d58590afb114378eeab0b08d52/conversations/`;
           receivedMessages = await getLineMessages(getMessageBaseEndpoint, conversationID);
           break;
         default:
@@ -158,7 +158,7 @@ export const useConversationsStore = defineStore("conversations", {
       switch (platform) {
         case "facebook":
           const newMessageIndex = conversation.messages.messages.length;
-          const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/test/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
+          const sendMessageEndpoint = `https://${botio_rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev/shops/1/${platform}/108362942229009/conversations/${conversationID}/messages?psid=${senderID}`;
           newMessage = {
             conversationID: conversationID,
             messageID: mockMessageID,
