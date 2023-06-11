@@ -9,6 +9,12 @@ class BotioLivechat implements IBotioLivechat {
     this.botioRestApiUrl = botioRestApiUrl;
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
   }
+  getConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
+    return []
+  };
+  getMessages: (platform: string, conversationId: string) => Promise<Message[]> = async (platform: string, conversationId: string) => {
+    return [];
+  };
   fetchConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
     return []
   };
