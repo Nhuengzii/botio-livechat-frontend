@@ -25,3 +25,5 @@ class BotioLivechat implements IBotioLivechat {
     return null
   };
 }
+
+export { BotioLivechat }
