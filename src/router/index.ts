@@ -8,31 +8,31 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/Start'
+      redirect: '/start'
     },
     {
-      path: '/Start',
-      name: 'Start',
+      path: '/start',
+      name: 'start',
       component: () => Empty
     },
     {
-      path: '/Services',
-      name: 'Services',
+      path: '/ordermars',
+      name: 'ordermars',
       component: () => Empty
     },
     {
-      path: '/Stock',
-      name: 'Stock',
+      path: '/inventory',
+      name: 'inventory',
       component: () => Empty
     },
     {
-      path: '/Order',
-      name: 'Order',
+      path: '/orders',
+      name: 'orders',
       component: () => Empty
     },
     {
-      path: '/Modify',
-      name: 'Modify',
+      path: '/customize',
+      name: 'customize',
       component: () => Empty
     },
     {

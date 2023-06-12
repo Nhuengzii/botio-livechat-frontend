@@ -32,7 +32,7 @@
             </div>
             <!--Menu-->
             <div class="m-2 justify-center duration-300 " :class="isExpand ? 'mt-20' : 'mt-10 '">
-                <router-link to="/Start" class="relative  ">
+                <router-link to="/start" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('start') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'start' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'start' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
@@ -53,7 +53,7 @@
                             :class="{ 'text-white': active == 'start' as string }">เริ่มต้น</span>
                     </button>
                 </router-link>
-                <router-link to="/Services" class="relative  ">
+                <router-link to="/ordermars" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('service') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'service' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'service' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
@@ -74,7 +74,7 @@
                             :class="{ 'text-white': active == 'service' as string }">บริการ</span>
                     </button>
                 </router-link>
-                <router-link to="/Stock" class="relative  ">
+                <router-link to="/inventory" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('stock') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'stock' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'stock' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
@@ -95,7 +95,7 @@
                             :class="{ 'text-white': active == 'stock' as string }">คลังสินค้า</span>
                     </button>
                 </router-link>
-                <router-link to="/Order" class="relative  ">
+                <router-link to="/orders" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('order') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'order' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'order' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
@@ -116,7 +116,7 @@
                             :class="{ 'text-white': active == 'order' as string }">ออเดอร์</span>
                     </button>
                 </router-link>
-                <router-link to="/Modify" class="relative  ">
+                <router-link to="/customize" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('modify') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'modify' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'modify' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
@@ -137,7 +137,7 @@
                             :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
                     </button>
                 </router-link>
-                <router-link :to='{path: "/livechat", query: {platform: "centralized"}}' class="relative  ">
+                <router-link :to='{ path: "/livechat", query: { platform: "centralized" } }' class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('chat') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'chat' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'chat' as string }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
