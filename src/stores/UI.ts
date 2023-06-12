@@ -7,7 +7,6 @@ export const useUIStore = defineStore('ui', {
         is_activeButton: false,
         is_activeConversation: false,
         is_read: false,
-        currentFocusPlatform: 'facebook',
         availablesPlatforms: new Map<string, { unread: number }>([
             ['facebook', { unread: 33 }],
             ['instagram', { unread: 0 }],
@@ -25,9 +24,5 @@ export const useUIStore = defineStore('ui', {
         activeConversation() {
             this.is_activeConversation = !this.is_activeConversation
         },
-        switchPlatform(platform: string) {
-            this.currentFocusPlatform = platform
-        }
-
     }
 })
