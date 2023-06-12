@@ -9,17 +9,12 @@
 <script setup lang="ts">
 import type { Message } from '@/types/message';
 import type { Conversation } from '@/types/conversation';
-import type { PropType } from 'vue';
-defineProps({
-  message: {
-    type: Object as PropType<Message>,
-    required: true
-  },
-  conversation: {
-    type: Object as PropType<Conversation>,
-    required: true
+const { message, conversation } = defineProps<
+  {
+    message: Message
+    conversation: Conversation
   }
-})
+>()
 </script>
 
 <style scoped></style>
