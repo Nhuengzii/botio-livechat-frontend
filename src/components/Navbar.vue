@@ -1,8 +1,9 @@
 
 <template>
-    <div class="flex bg-[#EAEAEA] ">
-        <div :class="[isExpand ? 'w-20 bg-[#394867] duration-300' : 'w-52 bg-[#EAEAEA] duration-300']">
-            <!--Profile-->
+ 
+     <div class="flex bg-[#EAEAEA] h-full">
+        <div :class="[isExpand ? 'w-20 bg-[#394867] duration-300' : 'w-52 bg-[#EAEAEA] duration-300']"   >
+             <!--Profile-->
             <div :class="[isExpand ? '' : 'bg-white']" class="m-2 ">
                 <div v-show="!isExpand" class="flex p-3    duration-300">
                     <img class="rounded-full w-14 h-14 hover:scale-125 duration-300" src="../assets/profoetest.jpg" />
@@ -125,10 +126,24 @@
                             :style="{ color: active == 'modify' as string ? activeOpenColor : activecCloseColor }"
                             class="bi bi-flag-fill" viewBox="0 0 16 16">
                             <path
-                                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-                        </svg><svg v-show="isExpand" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            fill="currentColor"
-                            :style="{ color: active == 'modify' as string ? activecCloseColor : activeOpenColor }"
+ 
+                                    d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            </svg><svg v-show="isExpand" xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="currentColor"
+                            :style="{ color: active == 'modify' as string? activecCloseColor:activeOpenColor }" 
+                                class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            </svg>
+                            <span v-show="!isExpand"   class="pl-3 text-black font-bold" :class="{'text-white' : active == 'modify' as string }">ปรับแต่ง</span>
+                    </button>
+                </router-link>
+                <router-link to="/livechat" class="relative  ">
+                    <button @click="{ show_Chat = false ; updateActiveTap('chat') }" 
+                        :class="[isExpand? {'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : active == 'chat' as string }:{'bg-[#394867]  ml-2 hover:bg-[#394867]' : active == 'chat' as string }]"
+                        class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
+                            <svg v-show="!isExpand"  xmlns="http://www.w3.org/2000/svg"  width="24" height="24" fill="currentColor"
+                            :style="{ color: active == 'chat' as string? activeOpenColor:activecCloseColor }"  
+>>>>>>> Stashed changes
                             class="bi bi-flag-fill" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
