@@ -16,12 +16,22 @@ export const useLivechatStore = defineStore("livechat", {
     ]),
   }),
   getters: {
-    conversations: (state) => async (platform: string): Promise<Conversation[]> => {
+    conversations: (state) => (platform: string): Conversation[] => {
       const conversationsMap = state.conversationsRaw.get(platform);
       if (conversationsMap === undefined) {
         return [];
       }
-      return conversationsMap2SortedArray(conversationsMap);
+      let conversations = conversationsMap2SortedArray(conversationsMap);
+      if (conversations.length === 0) {
+        state.botioLivechat.fetchConversations(platform).then(
+          (conversations) => {
+            conversations.forEach((conversation) => {
+              conversationsMap.set(conversation.conversationID, conversation);
+            });
+          }
+        );
+      }
+      return conversations;
     },
   },
   actions: {

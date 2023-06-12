@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h1>THis is Thread block</h1>
+  <div class="bg-red-50">
     <h1>This me {{ conversation }}</h1>
   </div>
 </template>
