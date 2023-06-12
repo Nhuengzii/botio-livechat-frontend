@@ -58,6 +58,10 @@ function openChat(newChat: { conversation: Conversation, messages: Message[] }) 
     } as Tab]
     currentFocusChat.value = newChat.conversation.conversationID
   }
+  if (tabRef.value == null) {
+    console.log("ERRRRRR")
+    return
+  }
   tabRef.value.addTab({
     label: newChat.conversation.participants[0].username,
     key: newChat.conversation.conversationID,
