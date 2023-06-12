@@ -8,6 +8,7 @@
       <div v-for="(message, index) in currentChat?.messages" key="message.messageID">
         <MessageBlock :message="message" :conversation="currentChat!.conversation" />
       </div>
+      <MessageSender />
     </template>
   </div>
 </template>
@@ -21,6 +22,7 @@ import { ref, type Ref } from "vue";
 import Vue3TabsChrome, { type Tab } from "vue3-tabs-chrome"
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
+import MessageSender from "@/components/MessageSender.vue";
 const livechatStore = useLivechatStore()
 const { openChatEventBus } = storeToRefs(livechatStore)
 const tab = ref('')
