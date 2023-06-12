@@ -1,4 +1,5 @@
 type Conversation = {
+[x: string]: any
   shopID: string,
   pageID: string,
   conversationID: string,
