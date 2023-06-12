@@ -42,9 +42,13 @@ function handleRemoveTab(tab: Tab, index: number) {
   if (tab.key === currentFocusChat.value) {
     currentFocusChat.value = ""
   }
+  livechatStore.closeChat(tab.key)
 }
 
 function openChat(newChat: { conversation: Conversation, messages: Message[] }) {
+  if (livechatStore.getChat(newChat.conversation.conversationID)) {
+    return
+  }
   currentChat.value = newChat
   if (tabs.value.length === 0) {
     tabs.value = [{
