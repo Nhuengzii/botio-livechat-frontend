@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <header class="pt-2 pb-3 px-3">
     <h1>THIS is LiveChat view</h1>
-  </div>
-  <div>
+  </header>
+  <main class="flex h-[calc(100vh-48px)] bg-green-100">
     <ConversationsThread />
-  </div>
-  <div>
     <Chats />
-  </div>
+  </main>
+  
 </template>
 
 <script setup lang="ts">
