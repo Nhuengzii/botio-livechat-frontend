@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-sky-50 m-3">
     <h1>This is Message block</h1>
     <h1>This is me {{ message }}</h1>
     <h1>From {{ conversation }}</h1>
