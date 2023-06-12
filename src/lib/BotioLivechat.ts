@@ -14,7 +14,8 @@ class BotioLivechat implements IBotioLivechat {
     return []
   };
   getMessages: (platform: string, conversationId: string) => Promise<Message[]> = async (platform: string, conversationId: string) => {
-    return [];
+    const messages = await this.fetchMessages(platform, conversationId);
+    return messages;
   };
   fetchConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
     let conversations: Conversation[];

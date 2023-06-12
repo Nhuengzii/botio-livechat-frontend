@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 bg-gray-300">
     <div v-for="(conversation, index) in conversations('facebook')" key="conversation.conversationID" class="m-2">
-      <Thread :conversation="conversation" :index="index" />
+      <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)" />
     </div>
   </div>
 </template>
@@ -12,6 +12,12 @@ import Thread from '@/components/Thread.vue';
 import { storeToRefs } from 'pinia';
 const livechatStore = useLivechatStore();
 const { conversations } = storeToRefs(livechatStore);
+
+async function openChat(platform: string, conversationID: string) {
+  await livechatStore.openChat(platform, conversationID);
+}
+
+
 </script>
 
 <style scoped></style>
