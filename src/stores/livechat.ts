@@ -68,9 +68,9 @@ export const useLivechatStore = defineStore("livechat", {
         throw new Error("Invalid conversationID");
       }
     },
-    getChat(conversationID: string): { conversation: Conversation, messages: Message[] } {
+    getChat(conversationID: string): { conversation: Conversation, messages: Message[] } | undefined {
       try {
-        return this._chats.get(conversationID)!;
+        return this._chats.get(conversationID);
       } catch (error) {
         throw new Error("Invalid conversationID");
       }
