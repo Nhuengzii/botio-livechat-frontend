@@ -9,7 +9,7 @@ import { ChatStorage } from "@/lib/ChatStorage";
 
 export const useLivechatStore = defineStore("livechat", {
   state: () => ({
-    botioLivechat: new BotioLivechat("", ""),
+    botioLivechat: new BotioLivechat("https://y5gagaucrg.execute-api.ap-southeast-1.amazonaws.com/dev", ""),
     conversationsRaw: new Map<string, ConversationsMap>([
       ["facebook", new Map<string, Conversation>()],
       ["line", new Map<string, Conversation>()],
