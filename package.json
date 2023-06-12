@@ -10,6 +10,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@vueuse/core": "^10.1.2",
     "axios": "^1.4.0",
     "pinia": "^2.0.32",
