@@ -4,7 +4,9 @@ type Conversation = {
   conversationID: string,
   updatedTime: number,
   participants: Participant[],
-  conversationPic: string,
+  conversationPic: {
+    src: string
+  },
   lastActivity: string,
   isRead: boolean,
 }
@@ -12,7 +14,9 @@ type Conversation = {
 type Participant = {
   userID: string,
   username: string,
-  profilePic: string,
+  profilePic: {
+    src: string
+  },
 }
 
 export type { Conversation }
