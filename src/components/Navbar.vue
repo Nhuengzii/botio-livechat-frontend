@@ -1,6 +1,6 @@
 
 <template>
-    <div class="flex bg-[#EAEAEA] h-full">
+    <div class="flex bg-[#EAEAEA] h-full overflow-hidden">
         <div :class="[uistore.is_expanded ? 'w-20 bg-[#394867] duration-300' : 'w-52 bg-[#EAEAEA] duration-300']">
             <!--Profile-->
             <div :class="[uistore.is_expanded ? '' : 'bg-white']" class="m-2 ">
@@ -137,42 +137,30 @@
                             :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
                     </button>
                 </router-link>
-
                 <router-link :to='{ path: "/livechat", query: { platform: "centralized" } }' class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('chat') }"
-                        :class="[uistore.is_expanded ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'chat' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'chat' as string }]"
+                        :class="[uistore.is_expanded ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': route.name=='livechat' } : { 'bg-[#394867]  ml-2 hover:bg-[#394867] rounded-l' : route.name=='livechat' }]"
                         class="flex justify-center hover:bg-[#00ABB3] text-white w-full  py-3    ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'chat' as string ? activeOpenColor : activecCloseColor }"
+                            :style="{ color:  route.name=='livechat'? activeOpenColor : activecCloseColor }"
                             class="bi bi-flag-fill" viewBox="0 0 16 16">
                             <path
                                 d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'chat' as string ? activecCloseColor : activeOpenColor }"
+                            :style="{ color:  route.name=='livechat' ? activecCloseColor : activeOpenColor }"
                             class="bi bi-flag-fill" viewBox="0 0 16 16">
                             <path
                                 d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'chat' as string }">แชท</span>
+                            :class="{ 'text-white':  route.name=='livechat' }">แชท</span>
                     </button>
                 </router-link>
-
             </div>
-
-
-
-
-        </div>
-            
-            <LivechatNavBar v-show="route.name == 'livechat'"  />
-
-        
-
-
-
+        </div>    
+        <LivechatNavBar v-show="route.name == 'livechat'"  />
     </div>
 </template>
 
