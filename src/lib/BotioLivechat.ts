@@ -1,16 +1,13 @@
 import type IBotioLivechat from "@/types/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
-import { ChatStorage } from "@/lib/ChatStorage";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
   botioWebsocketApiUrl: string;
-  private _chatStorage: ChatStorage;
   constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string) {
     this.botioRestApiUrl = botioRestApiUrl;
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
-    this._chatStorage = new ChatStorage(100);
   }
   getConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
     return []
