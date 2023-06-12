@@ -8,11 +8,9 @@
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
 import type { PropType } from 'vue';
-defineProps({
-  conversation: {
-    type: Object as PropType<Conversation>,
-  }
-})
+const { conversation } = defineProps<{
+  conversation: Conversation
+}>()
 
 </script>
 
