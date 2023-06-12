@@ -1,6 +1,6 @@
 
 <template>
-    <div class="flex bg-[#EAEAEA] ">
+    <div class="flex bg-[#EAEAEA] h-full">
         <div :class="[isExpand ? 'w-20 bg-[#394867] duration-300' : 'w-52 bg-[#EAEAEA] duration-300']">
             <!--Profile-->
             <div :class="[isExpand ? '' : 'bg-white']" class="m-2 ">
@@ -137,6 +137,7 @@
                             :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
                     </button>
                 </router-link>
+
                 <router-link :to='{ path: "/livechat", query: { platform: "centralized" } }' class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('chat') }"
                         :class="[isExpand ? { 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]': active == 'chat' as string } : { 'bg-[#394867]  ml-2 hover:bg-[#394867]': active == 'chat' as string }]"
@@ -235,4 +236,5 @@ const updateActiveTap = (tab: string) => {
     opacity: 0.001;
 }
 </style>
+
 
