@@ -1,15 +1,30 @@
 <template>
-  <div class="flex-[2] bg-green-200 shrink-1 mx-2 overflow-x-hidden">
-    <vue3-tabs-chrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" />
-    <template v-if="currentFocusChat.length === 0">
-      <h1>There are no chat opened</h1>
-    </template>
-    <template v-else>
-      <div v-for="(message, index) in currentChat?.messages" key="message.messageID" class="flex flex-col overflow-x-hidden" id="containMessage">
-        <MessageBlock :message="message" :conversation="currentChat!.conversation" />
-      </div>
-      <MessageSender />
-    </template>
+  <div class="flex-[2] shrink-1 mx-3 background-d9">
+    <div class="flex flex-col w-full h-full">
+      <header class="background-d9 flex-[1] mx-3">
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" class="background-d9"/>
+      </header>
+
+      <template v-if="currentFocusChat.length === 0">
+        <h1>There are no chat opened</h1>
+      </template>
+
+      <template v-else>
+        <main class="flex-[10] flex-col overflow-x-hidden no-scrollbar bg-white mx-3">
+          <div v-for="(message, index) in currentChat?.messages" key="message.messageID"
+            class="">
+            <MessageBlock :message="message" :conversation="currentChat!.conversation" />
+          </div>
+        </main>
+
+        <MessageSender />
+      </template>
+    </div>
+    
+
+      
+
+    
   </div>
 </template>
 
@@ -18,7 +33,7 @@ import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import { storeToRefs } from "pinia";
-import { onUpdated, ref, type Ref } from "vue";
+import { onMounted, onUpdated, ref, type Ref, onBeforeMount } from "vue";
 import Vue3TabsChrome, { type Tab } from "vue3-tabs-chrome"
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
@@ -73,16 +88,28 @@ function openChat(newChat: { conversation: Conversation, messages: Message[] }) 
 openChatEventBus.value.on(openChat)
 
 
-const scrollToBottom = () => {
-    let objContain = document.getElementById("containMessage") as any
-    objContain.scrollTop = objContain?.scrollHeight
-}
+// const scrollToBottom = () => {
+//   let objContain = document.getElementById("containMessage") as any
+//   objContain.scrollTop = objContain?.scrollHeight
+// }
 
-onUpdated(() => {
-    scrollToBottom()
-})
+// onUpdated(() => {
+//     scrollToBottom()
+// })
+
+// onBeforeMount(() => {
+//   scrollToBottom()
+// })
 
 </script>
 
-<style scoped></style>
+<style scoped>
+  .background-d9 {
+    background-color: rgba(217,217,217,0.3);
+    
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+</style>
 
