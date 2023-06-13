@@ -14,6 +14,7 @@ export const useUIStore = defineStore('ui', {
             ['centralized', { unread: 35 }],
         ]),
         is_activeTemplateMessage : false,
+        is_typing : false,
     }),
     actions: {
         ToggleMenu() {
