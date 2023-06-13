@@ -1,8 +1,23 @@
 <template>
   <div class="flex-[2] shrink-1 mx-3 background-d9">
     <div class="flex flex-col w-full h-full">
-      <header class="background-d9 flex-[2] mx-3">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" class="background-d9"/>
+
+      <!-- header chats-->
+      <header class="bg-white flex-[2] mx-3 mb-4">
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab"/>
+        <div class="flex items-center py-5">
+
+          <!-- show name conversation-->
+          <div class="mx-3 object-cover h-12 w-12 rounded-full">
+            <img :src="currentChat?.conversation.conversationPic.src" class="rounded-full"/>
+          </div> 
+
+          <!-- show picture conversation -->
+          <div class="px-4">
+            <p class="">{{ currentChat?.conversation.participants[0].username }}</p>
+          </div>
+
+        </div>
       </header>
 
       <template v-if="currentFocusChat.length === 0">
@@ -10,13 +25,13 @@
       </template>
 
       <template v-else>
-        <main class="flex-[12] overflow-x-hidden no-scrollbar w-full h-full bg-white mx-3">
+        <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3">
           <div class="grid grid-cols-12 gap-y-2">
             <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
 
               <!-- user is send message-->
               <template v-if="message.source.userType === 'user'">
-                <div class="col-start-1 col-end-8 p-[12px] round-lg">
+                <div class="col-start-1 col-end-8 p-4 round-lg">
                   <MessageBlock :message="message" :conversation="currentChat!.conversation" :userType="message.source.userType"/>
                 </div>
               </template>
@@ -55,6 +70,7 @@ import Vue3TabsChrome, { type Tab } from "vue3-tabs-chrome"
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
+import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
 const livechatStore = useLivechatStore()
 const { openChatEventBus } = storeToRefs(livechatStore)
 const tab = ref('')
