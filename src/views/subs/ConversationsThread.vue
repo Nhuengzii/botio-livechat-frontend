@@ -1,7 +1,8 @@
 <template>
   <div class="flex-1 bg-gray-300">
     <div v-for="(conversation, index) in conversations('facebook')" key="conversation.conversationID" class="m-2">
-      <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)" />
+      <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)"
+        mode="normal" />
     </div>
   </div>
 </template>
