@@ -6,7 +6,13 @@ export const useUIStore = defineStore('ui', {
         is_expanded: false,
         is_activeButton: false,
         is_activeConversation: false,
-        is_read:false
+        is_read: false,
+        availablesPlatforms: new Map<string, { unread: number }>([
+            ['facebook', { unread: 33 }],
+            ['instagram', { unread: 0 }],
+            ['line', { unread: 2 }],
+            ['centralized', { unread: 35 }],
+        ]),
     }),
     actions: {
         ToggleMenu() {
@@ -18,6 +24,5 @@ export const useUIStore = defineStore('ui', {
         activeConversation() {
             this.is_activeConversation = !this.is_activeConversation
         },
-        
     }
 })
