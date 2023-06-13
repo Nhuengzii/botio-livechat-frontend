@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is Image Message</h1>
+    <img class="rounded-2xl" src="https://media.discordapp.net/attachments/1086248627862769706/1116381838697578608/k0cfi6g6qjwso0pe8kpxyz3ttzj8usjyrhqn2lzq.png?width=1352&height=676"/>
   </div>
 </template>
 
