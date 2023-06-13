@@ -1,10 +1,11 @@
 <template>
-  <div>
+   <div>
     <ThreadUtils :mode="conversationsThreadMode" />
     <div class="flex-1 bg-gray-300 max-w-[400px]">
       <div v-for="(conversation, index) in conversations('facebook')" key="conversation.conversationID" class="m-2">
         <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)"
           :mode="conversationsThreadMode" />
+ 
       </div>
     </div>
   </div>
