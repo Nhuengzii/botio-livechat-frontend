@@ -1,6 +1,7 @@
 <template>
   <div>
-    <img class="rounded-2xl" src="https://media.discordapp.net/attachments/1086248627862769706/1116381838697578608/k0cfi6g6qjwso0pe8kpxyz3ttzj8usjyrhqn2lzq.png?width=1352&height=676"/>
+    <!-- <h1 :src="message.attachments"></h1> -->
+    <img :src="message.attachments![0].payload.src" alt="">
   </div>
 </template>
 
