@@ -2,12 +2,12 @@
   <header class="pt-2 pb-3 px-3">
     <h1>THIS is LiveChat view</h1>
   </header>
-  <main class="flex h-[calc(100vh-50px)] bg-green-100">
+  <main class="flex h-[calc(100vh-50px)]">
     <ConversationsThread />
     <Chats />
 
     <!-- start customer view -->
-    <div class="flex flex-1 bg-gray-100"></div>
+    <div class="flex flex-1 mx-3"></div>
     <!--end customer view -->
 
   </main>
