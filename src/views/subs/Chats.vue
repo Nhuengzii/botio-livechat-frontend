@@ -1,7 +1,7 @@
 <template>
   <div class="flex-[2] shrink-1 mx-3 background-d9">
     <div class="flex flex-col w-full h-full">
-      <header class="background-d9 flex-[1] mx-3">
+      <header class="background-d9 flex-[2] mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" class="background-d9"/>
       </header>
 
@@ -10,10 +10,27 @@
       </template>
 
       <template v-else>
-        <main class="flex-[10] flex-col overflow-x-hidden no-scrollbar bg-white mx-3">
-          <div v-for="(message, index) in currentChat?.messages" key="message.messageID"
-            class="">
-            <MessageBlock :message="message" :conversation="currentChat!.conversation" />
+        <main class="flex-[12] overflow-x-hidden no-scrollbar w-full h-full bg-white mx-3">
+          <div class="grid grid-cols-12 gap-y-2">
+            <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
+
+              <!-- user is send message-->
+              <template v-if="message.source.userType === 'user'">
+                <div class="col-start-1 col-end-8 p-[12px] round-lg">
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :userType="message.source.userType"/>
+                </div>
+              </template>
+              
+
+              <!-- admin is send message-->
+              <template v-else >
+                <div class="col-start-6 col-end-13 p-3 rounded-lg">
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :userType="message.source.userType"/>
+                </div>
+              </template>
+              
+              
+            </template>
           </div>
         </main>
 
