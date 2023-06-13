@@ -1,19 +1,19 @@
 <template>
-  <div class="flex bg-red-50  py-4 px-3">
+  <div class="flex py-4 px-3" :class="[mode === 'normal'? 'bg-red-50':'']">
     <template v-if="mode === 'normal'">
-      <img :src=conversation.participants[0].profilePic.src class="h-14 w-14 rounded-full overflow-hidden">
+      <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">
       <div class="ml-3 overflow-hidden w-full">
-        <p class="text-sm font-bold text-slate-900 truncate">{{ conversation.participants[0].username }}</p>
+        <p class="text-sm font-bold text-slate-900 truncate ml-3">{{ conversation.participants[0].username }}</p>
         <div v-if="true" class="flex justify-between mt-1">
-          <div class="ptruncate">{{ conversation.lastActivity }}</div>
+          <div class="ptruncate ml-3">{{ conversation.lastActivity }}</div>
           <div class="pr-2 truncate">{{ updateTimeStatus }}</div>
         </div>
         <UserTag />
       </div>
     </template>
-    <template v-else-if="mode === 'collapse'">
-      <div>
-        <h1>Fuckyou</h1>
+    <template v-else-if="mode === 'collapse'" >
+      <div >
+        <img :src=conversation.participants[0].profilePic.src class="h-14 w-14 rounded-full object-cover	">
       </div>
     </template>
   </div>
@@ -55,13 +55,13 @@ const getLastActivity = (timestamp: number) => {
   const days = Math.floor(hours / 24);
 
   if (days > 0) {
-    return `${days} วันที่ผ่านมา`;
+    return `เมื่อ ${days} วันที่แล้ว`;
   } else if (hours > 0) {
-    return `${hours} ชั่วโมงที่ผ่านมา`;
+    return `เมื่อ ${hours} ชั่วโมงที่แล้ว`;
   } else if (minutes > 0) {
-    return `${minutes} minutes ago`;
+    return `เมื่อ ${minutes} นาทีที่แล้ว`;
   } else {
-    return `${seconds} วินาทีที่ผ่านมา`;
+    return `เมื่อ ${seconds} วินาทีที่แล้ว`;
   }
 };
 

@@ -26,7 +26,7 @@ const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
 const { conversations } = storeToRefs(livechatStore);
 const { conversationsThreadMode } = storeToRefs(uiStore)
-// conversationsThreadMode.value = 'collapse';
+//conversationsThreadMode.value = 'collapse';
 
 async function openChat(platform: string, conversationID: string) {
   await livechatStore.openChat(platform, conversationID);
