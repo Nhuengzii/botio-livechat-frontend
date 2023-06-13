@@ -8,16 +8,18 @@
     </div>
 
     <div class="self-center relative py-2 px-4 shadow rounded-xl ml-4 text-sm bg-white">
-      <h1>{{ message.message }}</h1>
+      <p class="break-words">{{ message.message }}</p>
     </div>
   </template>
+  <!-- end user send message -->
 
   <!-- admin send message-->
   <template v-else>
     <div class="self-center relative py-2 px-4 shadow rounded-xl mr-5 text-sm bg-message-admin text-white">
-      <h1>{{ message.message }}</h1>
+      <p class="break-words">{{ message.message }}</p>
     </div>
   </template>
+  <!-- end admin send message-->
   
   
 </template>
