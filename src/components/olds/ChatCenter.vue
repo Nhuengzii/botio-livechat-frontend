@@ -4,7 +4,7 @@
 
             <ChatBoxHeader :conversation_id="conversationId" :datauser="datauser" :isFetching="isFetching" />
 
-            <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200"
+            <main class="flex flex-col relative overflow-x-hidden w-full h-full bg-50 glow bg-gray-200"
                 id="containMessage" ref="containMessage">
                 <div class='grid grid-cols-12 gap-y-2'>
                     <template v-if="isFetching">
@@ -26,7 +26,7 @@
                                         class="object-cover h-12 w-12 rounded-full">
                                 </div>
                                 <div v-if="item.message" class="self-center relative py-2 px-4 shadow rounded-xl" :class="{
-                                    'ml-3 text-sm bg-white ': item.source.sourceType === 'USER',
+                                    'ml-3 text-sm bg-white': item.source.sourceType === 'USER',
                                     'mr-3 text-sm bg-indigo-100': item.source.sourceType === 'ADMIN'
                                 }">
                                     <div>{{ item.message }}</div>
