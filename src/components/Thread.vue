@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-4 px-3" :class="[mode === 'normal'? 'bg-red-50':'']">
+  <div class="flex py-4 px-3  w-50" :class="[mode === 'normal'? 'bg-red-50':'']">
     <template v-if="mode === 'normal'">
       <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">
       <div class="ml-3 overflow-hidden w-full">
