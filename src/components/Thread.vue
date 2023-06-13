@@ -1,14 +1,14 @@
 <template>
   <div class="flex bg-red-50  py-4 px-3">
-    <img :src=conversation.participants[0].profilePic.src class="h-14 w-14 rounded-full">
-    <div class="ml-3 overflow-hidden w-full">
+    <img :src=conversation.participants[0].profilePic.src class="h-14 w-14 rounded-full overflow-hidden">
+    <div v-if="true" class="ml-3 overflow-hidden w-full">
  
         <p class="text-sm font-bold text-slate-900 truncate">{{conversation.participants[0].username}}</p>
-        <div class="flex justify-between mt-1">
+        <div v-if="true" class="flex justify-between mt-1">
           <div class="ptruncate">{{conversation.lastActivity}}</div>
-          <div class="pr-2 truncate">{{updateTimeStatus}}</div>
+          <div  class="pr-2 truncate">{{updateTimeStatus}}</div>
         </div>
-        <UserTag/>
+        <UserTag />
      </div>
   </div>
 
