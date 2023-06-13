@@ -1,11 +1,11 @@
 <template>
-  <div class="flex-[2] bg-green-200">
+  <div class="flex-[2] bg-green-200 shrink-1 mx-2 overflow-x-hidden">
     <vue3-tabs-chrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" />
     <template v-if="currentFocusChat.length === 0">
       <h1>There are no chat opened</h1>
     </template>
     <template v-else>
-      <div v-for="(message, index) in currentChat?.messages" key="message.messageID">
+      <div v-for="(message, index) in currentChat?.messages" key="message.messageID" class="flex flex-col overflow-x-hidden" id="containMessage">
         <MessageBlock :message="message" :conversation="currentChat!.conversation" />
       </div>
       <MessageSender />
@@ -18,7 +18,7 @@ import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import { storeToRefs } from "pinia";
-import { ref, type Ref } from "vue";
+import { onUpdated, ref, type Ref } from "vue";
 import Vue3TabsChrome, { type Tab } from "vue3-tabs-chrome"
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
@@ -71,6 +71,17 @@ function openChat(newChat: { conversation: Conversation, messages: Message[] }) 
   } as Tab)
 }
 openChatEventBus.value.on(openChat)
+
+
+const scrollToBottom = () => {
+    let objContain = document.getElementById("containMessage") as any
+    objContain.scrollTop = objContain?.scrollHeight
+}
+
+onUpdated(() => {
+    scrollToBottom()
+})
+
 </script>
 
 <style scoped></style>
