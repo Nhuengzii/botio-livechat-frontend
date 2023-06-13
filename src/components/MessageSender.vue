@@ -1,11 +1,13 @@
 <template>
   <div class="flex flex-[1] background-d9 py-4 items-center">
-      <div class="flex-[1]"></div>
-
+    
+    <!-- space -->
+    <div class="flex-[1]"></div>
+    <!-- end space-->
 
       <div class="flex-[5] flex-col">
         <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-4">
-          <input type="text" placeholder="พิมพ์ข้อความ" class="inline-flex bg-stone-300"/>
+          <input type="text" placeholder="พิมพ์ข้อความ" class="inline-flex bg-stone-300 w-full ml-8"/>
 
           <div class="inline-flex">
             <div class="pl-10  text-gray-500">
@@ -22,13 +24,16 @@
         </div>
       </div>
 
-      
+      <!-- space -->
       <div class="flex-[1]"></div>
+      <!-- end space-->
+
   </div>
 </template>
 
 <script setup lang="ts">
-
+import { useUIStore } from '@/stores/UI';
+const uiStore = useUIStore()
 </script>
 
 <style scoped>
