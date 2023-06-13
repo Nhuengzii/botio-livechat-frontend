@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-row background-d9 py-4">
+  <div class="flex flex-[1] background-d9 py-4 items-center">
       <div class="flex-[1]"></div>
 
 
-      <div class="flex-[5] bg-red-100 flex-col">
+      <div class="flex-[5] flex-col">
         <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-4">
           <input type="text" placeholder="พิมพ์ข้อความ" class="inline-flex bg-stone-300"/>
 
