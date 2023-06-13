@@ -74,6 +74,22 @@ export const useLivechatStore = defineStore("livechat", {
       } catch (error) {
         throw new Error("Invalid conversationID");
       }
+    },
+    addNewMessage(message: Message): void {
+      const conversationsMap = this.conversationsRaw.get(message.platform);
+      if (conversationsMap === undefined) {
+        throw new Error("Invalid platform");
+      }
+      let conversation = conversationsMap.get(message.conversationID);
+      if (conversation === undefined) {
+        return;
+      }
+      conversation.updatedTime = message.timestamp
+      const currentChat = this.getChat(message.conversationID);
+      if (currentChat === undefined) {
+        return;
+      }
+      currentChat.messages.push(message);
     }
 
   }
