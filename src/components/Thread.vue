@@ -11,7 +11,7 @@
         <UserTag />
       </div>
     </template>
-    <template v-v-else-if="mode === 'collapse'">
+    <template v-else-if="mode === 'collapse'">
       <div>
         <h1>Fuckyou</h1>
       </div>
