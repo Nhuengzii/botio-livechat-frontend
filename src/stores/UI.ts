@@ -7,6 +7,7 @@ export const useUIStore = defineStore('ui', {
         is_activeButton: false,
         is_activeConversation: false,
         is_read: false,
+        conversationsThreadMode: "normal",
         availablesPlatforms: new Map<string, { unread: number }>([
             ['facebook', { unread: 33 }],
             ['instagram', { unread: 0 }],
