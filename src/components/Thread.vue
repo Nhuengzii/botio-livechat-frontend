@@ -4,8 +4,8 @@
     <div class="ml-3 overflow-hidden w-full">
  
         <p class="text-sm font-bold text-slate-900 truncate">{{conversation.participants[0].username}}</p>
-        <div class="flex justify-between ">
-          <div class="  truncate">{{conversation.lastActivity}}</div>
+        <div class="flex justify-between mt-1">
+          <div class="ptruncate">{{conversation.lastActivity}}</div>
           <div class="pr-2 truncate">{{updateTimeStatus}}</div>
         </div>
         <UserTag/>
@@ -49,13 +49,13 @@ const getLastActivity = (timestamp: number) => {
   const days = Math.floor(hours / 24);
 
   if (days > 0) {
-    return `${days} days ago`;
+    return `${days} วันที่ผ่านมา`;
   } else if (hours > 0) {
-    return `${hours} hours ago`;
+    return `${hours} ชั่วโมงที่ผ่านมา`;
   } else if (minutes > 0) {
     return `${minutes} minutes ago`;
   } else {
-    return `${seconds} seconds ago`;
+    return `${seconds} วินาทีที่ผ่านมา`;
   }
 };
 
