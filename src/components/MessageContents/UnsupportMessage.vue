@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is NormalText</h1>
+    <h1>THIS Message Type Are Unsupport ({{ message.attachments![0]?.attachmentType }})</h1>
   </div>
 </template>
 

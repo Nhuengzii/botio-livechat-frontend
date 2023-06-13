@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is NormalText</h1>
+    <h1>This is Image Message</h1>
   </div>
 </template>
 

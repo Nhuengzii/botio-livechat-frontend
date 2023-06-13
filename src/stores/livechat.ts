@@ -4,7 +4,7 @@ import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import type { ConversationsMap } from "@/lib/ConversationsMap";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
-import { ChatStorage } from "@/lib/ChatStorage";
+import { useEventBus } from "@vueuse/core";
 
 
 export const useLivechatStore = defineStore("livechat", {
@@ -14,6 +14,8 @@ export const useLivechatStore = defineStore("livechat", {
       ["facebook", new Map<string, Conversation>()],
       ["line", new Map<string, Conversation>()],
     ]),
+    openChatEventBus: useEventBus<{ conversation: Conversation, messages: Message[] }>('openChatEventBus'),
+    _chats: new Map<string, { conversation: Conversation, messages: Message[] }>(),
   }),
   getters: {
     conversations: (state) => (platform: string): Conversation[] => {
@@ -32,7 +34,7 @@ export const useLivechatStore = defineStore("livechat", {
         );
       }
       return conversations;
-    },
+    }
   },
   actions: {
     async getMessages(platform: string, conversationId: string): Promise<Message[]> {
@@ -45,6 +47,33 @@ export const useLivechatStore = defineStore("livechat", {
         throw new Error("Invalid conversationId");
       }
       return await this.botioLivechat.getMessages(platform, conversationId);
+    },
+    async openChat(platform: string, conversationId: string): Promise<void> {
+      const conversationsMap = this.conversationsRaw.get(platform);
+      if (conversationsMap === undefined) {
+        throw new Error("Invalid platform");
+      }
+      const conversation = conversationsMap.get(conversationId);
+      if (conversation === undefined) {
+        throw new Error("Invalid conversationId");
+      }
+      const messages = await this.botioLivechat.getMessages(platform, conversationId);
+      this.openChatEventBus.emit({ conversation, messages });
+      this._chats.set(conversationId, { conversation, messages });
+    },
+    closeChat(conversationID: string): void {
+      try {
+        this._chats.delete(conversationID);
+      } catch (error) {
+        throw new Error("Invalid conversationID");
+      }
+    },
+    getChat(conversationID: string): { conversation: Conversation, messages: Message[] } | undefined {
+      try {
+        return this._chats.get(conversationID);
+      } catch (error) {
+        throw new Error("Invalid conversationID");
+      }
     }
 
   }
