@@ -29,7 +29,7 @@
             </div>
           </button>
 
-          <button type="button" id="show-modal" @click="showModal = true">
+          <button type="button" id="show-modal" @click="uiStore.activeTemplateMessage">
             <div class="pl-4 mr-8  text-gray-500">
               <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
                 <path
@@ -37,25 +37,45 @@
               </svg>
             </div>
           </button>
+
+          <!-- show Modal Chat Message Template -->
           <Teleport to="body">
-            <!-- use the modal component, pass in the prop -->
-            <ModalTemplateChat :show="showModal">
+            <ModalTemplateChat :show="uiStore.is_activeTemplateMessage">
+              
+                                        <!--HEADER-->
               <template #header>
-                <div class=" flex bg-red-100 justify-between">
-                  <div class="bg-gray-200 py-3 px-4">
-                    <h3>Create template</h3>
-                  </div>
-                  <button @click="showModal = false" class="bg-gray-200">X</button>          
-                </div>
+                <template v-if="uiStore.is_createTemplateMessage">       <!-- Header Modal create chat template-->
+                  <HeaderCreateMessage/>
+                </template>
+          
+
+            
+                <template v-else-if="uiStore.is_editTemplateMessage">    <!-- Header Modal edit chat template-->
+                  <p>edit message</p>
+                </template>
+                
+
+                
+                <template v-else>                                        <!-- Header Modal chat template-->
+                  <HeaderTemplate/>
+                </template>
               </template>
+                                        <!--END HEADER-->
+
+                                        <!--BODY-->                                       
               <template #body>
-                <div class="justify-center">
-                  <h3>body</h3>
-                </div>
+                <template v-if="uiStore.is_createTemplateMessage">       <!-- Body Modal create chat template-->
+                  <BodyCreateMessage/>
+                </template>
+
+                <template v-else-if="uiStore.is_activeTemplateMessage">  <!-- Body Modal chat template-->
+                  <BodyTemplate/>
+                </template>
               </template>
+                                        <!--END BODY-->
               <template #footer>
-                <div class="justify-center">
-                  <h3>footer</h3>
+                <div>
+
                 </div>
               </template>
             </ModalTemplateChat>
@@ -71,16 +91,19 @@
 </template>
 
 <script setup lang="ts">
+
+import ModalTemplateChat from '@/components/ModalTemplateChats/ModalTemplateChat.vue'
+import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/HeaderTemplate.vue'
+import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
+import HeaderCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/HeaderCreateMessage.vue'
+import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/BodyCreateMessage.vue'
+
 import { useUIStore } from '@/stores/UI';
-import { onMounted, ref } from 'vue';
-import ModalTemplateChat from '@/components/ModalTemplateChat.vue'
 const uiStore = useUIStore()
-const showModal = ref(false)
+
 
 </script>
 
 <style scoped>
-.background-d9 {
-  background-color: rgba(217, 217, 217, 0.3);
-}
+
 </style>
