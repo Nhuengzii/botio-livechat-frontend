@@ -1,9 +1,9 @@
 <template >
   <template v-if="mode == 'normal' || mode == 'searching'">
-    <div class="bg-[#EAEAEA]  mx-2 min-w-[320px] duration-500" :class="[query ? 'h-32' : 'h-40']">
+    <div class="mx-6 bg-[#EAEAEA] min-w-[320px] duration-500" :class="[query ? 'h-32' : 'h-40']">
       <div class="bg-white h-36 my-4">
-        <div v-if="mode == 'normal'" class="flex pt-5 ml-5 justify-between">
-          <div class="flex">ข้อความทั้งหมด <div class=" px-2  bg-[#D9D9D9] rounded-full ml-3 font-bold text-base">+999
+        <div v-if="mode == 'normal'" class="flex pt-5 mx-8 justify-between">
+          <div class="flex">ข้อความทั้งหมด <div class=" px-2  bg-[#D9D9D9] rounded-full ml-3 font-bold text-base">999+
             </div>
           </div>
           <div class="flex bg-red-400">
