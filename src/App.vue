@@ -13,6 +13,7 @@ livechatStore.botioLivechat.websocketConnection.onmessage = (event) => {
     livechatStore.addReceivedMessage(data.data);
   }
 };
+
 </script>
 
 <template >

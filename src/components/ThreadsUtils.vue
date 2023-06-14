@@ -14,7 +14,8 @@
         </div>
         <div class=" flex  justify-around py-[1rem] px-2" :class="query ? '' : 'pl-5 '">
           <div v-if="query" :class="[query ? 'mt-1.5 ' : '']">
-            <button type="button" @click="{ query = false; uiStore.conversationsThreadMode = 'normal'; messageSaersh = '' }"
+            <button type="button"
+              @click="{ query = false; uiStore.conversationsThreadMode = 'normal'; messageSaersh = '' }"
               class="text-white   hover:bg-gray-100  p-2 rounded-full inline-flex items-center  ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 448 512">
                 <path
@@ -66,14 +67,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
+import { useLivechatStore } from '@/stores/livechat';
 const uiStore = useUIStore();
+const livechatStore = useLivechatStore()
 let messageSaersh = ref("");
 const query = ref(false);
 defineProps<{
   mode: string
 }>()
+
+watch(messageSaersh, (value) => {
+  console.log(value)
+  livechatStore.searchConversations('facebook', value)
+})
+
 </script>
  
 <style scoped></style>
