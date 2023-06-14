@@ -12,6 +12,7 @@ class BotioLivechat implements IBotioLivechat {
   currentChat: { conversation: Conversation, messages: Message[] } | null
   chats: Map<string, { conversation: Conversation, messages: Message[] }>;
   shopID: string
+  websocketConnection: WebSocket
   constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string) {
     this.shopID = shopID;
     this.botioRestApiUrl = botioRestApiUrl;
@@ -22,23 +23,15 @@ class BotioLivechat implements IBotioLivechat {
       ["line", new Map<string, Conversation>()],
     ])
     this.currentChat = null
-  }
-
-
-  async addReceivedMessage(message: Message): Promise<void> {
-    let conversation = this.getConversation(message.platform, message.pageID, message.conversationID)
-    if (conversation === null) {
-      console.log('let me fetcging');
-
-      conversation = await this.fetchConversation(message.platform, message.pageID, message.conversationID)
-      if (conversation === null) {
-        throw new Error("Error fetching conversation")
-      }
+    this.websocketConnection = new WebSocket(`${this.botioWebsocketApiUrl}?shopID=${this.shopID}`)
+    this.websocketConnection.onopen = () => {
+      console.log('websocket connected');
     }
-    conversation.updatedTime = message.timestamp
-    conversation.lastActivity = message.timestamp.toString()
-    // TODO
+    this.websocketConnection.onclose = () => {
+      console.log('websocket disconnected');
+    }
   }
+
   fetchConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null> = async (platform: string, pageID: string, conversationId: string) => {
     let conversation: Conversation | null = null;
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}`;
@@ -122,3 +115,4 @@ class BotioLivechat implements IBotioLivechat {
 }
 
 export { BotioLivechat }
+

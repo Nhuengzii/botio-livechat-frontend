@@ -78,9 +78,33 @@ export const useLivechatStore = defineStore("livechat", {
         }
       }
       conversation.updatedTime = message.timestamp
-      conversation.lastActivity = message.timestamp.toString()
+      conversation.lastActivity = messageToActivity(message)
       this.updateConversation(conversation)
     }
   }
 });
+function messageToActivity(message: Message): string {
+  if (message.message.length > 0) {
+    if (message.source.userType === "user") {
+      return message.message;
+    } else if (message.source.userType === "admin") {
+      return "คุณ: " + message.message;
+    } else {
+      return `WTF ${message.source.userType} พิมพ์ข้อความ`
+    }
+  } else if (message.attachments.length > 0) {
+    if (message.attachments[0].attachmentType === "image") {
+      if (message.source.userType === "user") {
+        return "ส่งรูปภาพ";
+      } else if (message.source.userType === "admin") {
+        return "คุณส่งรูปภาพ";
+      } else {
+        return `WTF ${message.source.userType} ส่งรูปภาพ`
+      }
+    }
+  } else {
+    return "WTF";
+  }
+  return "wwwwwwwwwwwwwwwwwwwwwwwww"
+}
 

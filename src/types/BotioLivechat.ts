@@ -12,7 +12,6 @@ interface IBotioLivechat {
   getMessages: (platform: string, pageID: string, conversationId: string) => Promise<Message[]>
   getMessage: (platform: string, conversationId: string, messageId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, text: string) => Promise<Message | null>
-  addReceivedMessage(message: Message): Promise<void>
 }
 
 export default IBotioLivechat;
