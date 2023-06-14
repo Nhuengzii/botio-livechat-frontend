@@ -1,23 +1,17 @@
 <template>
-  <div class="flex flex-wrap ">
-    <div class="w-4/5  ">
-      <div class="flex flex-wrap text-gray-700 text-start   py-2  ">
-        <div v-for="(tag, index) in visibleTagLists">
-          <div class="flex p-2 m-1 bg-[#D9D9D9] rounded">
-            <div class="w-3 h-3 bg-red-500 rounded-full mt-0.5"></div>
-            <div class="text-xs px-2 truncate">
-              {{ tag }}
-            </div>
+  <div class="flex flex-wrap min-h-[32px] ">
+        <div class="flex m-1 px-1 bg-[#D9D9D9] rounded " v-for="(tag, index) in visibleTagLists">
+          <div class=" w-3 h-3 bg-red-500 rounded-full pr-3 mt-1.5 object-cover">
           </div>
+          <div class="text-xs px-1.5 py-1 truncate max-w-[60px]">
+              {{ tag }}
+          </div>  
         </div>
-        <div v-if="taglists.length > 2" class="flex p-2 m-1 bg-[#00ABB3] rounded">
-          <div class="text-xs px-2 truncate">
+        <div v-if="taglists.length > 2" class="m-1 pt-1 max-w-[100px] bg-[#00ABB3] rounded">
+          <div class="text-xs px-1.5 truncate text-white" >
             + {{ taglists.length - 2 }} เพิ่มเติม
           </div>
         </div>
-      </div>
-    </div>
-
   </div>
 </template>
 
@@ -25,7 +19,7 @@
 
 
 const taglists = [
-  "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname"
+  "tagnamesefffsfaawdwdwdad", "t", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname", "tagname"
 ]
 
 

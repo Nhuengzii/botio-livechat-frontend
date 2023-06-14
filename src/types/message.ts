@@ -4,7 +4,7 @@ type Message = {
   pageID: string,
   conversationID: string,
   messageID: string,
-  timestamp: string,
+  timestamp: number,
   source: Source,
   message: string,
   attachments?: Attachment[],
