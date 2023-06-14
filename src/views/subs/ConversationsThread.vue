@@ -1,10 +1,10 @@
 <template>
   <template v-if="conversationsThreadMode == 'normal'">
+    <div>{{ isLoading }}</div>
     <div class="flex-1 bg-gray-300 max-w-[400px]">
       <div v-for="(conversation, index) in conversations($route.query.platform as string)"
         key="conversation.conversationID" class="mx-2">
-        <Thread :conversation="conversation" :index="index"
-          @click="openChat($route.query.platform as string, conversation.conversationID)" mode="normal" />
+        <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" mode="normal" />
         <hr>
       </div>
     </div>
@@ -13,8 +13,7 @@
     <div>
       <div v-for="(conversation, index) in conversations('$route.query.platform as string')"
         key="conversation.conversationID" class="m-2">
-        <Thread :conversation="conversation" :index="index"
-          @click="openChat($route.query.platform as string, conversation.conversationID)" mode="collapse" />
+        <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" mode="normal" />
       </div>
     </div>
   </template>
@@ -25,15 +24,27 @@ import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
 import Thread from '@/components/Thread.vue';
 import { storeToRefs } from 'pinia';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
-const { conversations } = storeToRefs(livechatStore);
+const { botioLivechat, conversations } = storeToRefs(livechatStore);
 const { conversationsThreadMode } = storeToRefs(uiStore)
+const isLoading = ref(false);
+const route = useRoute()
 //conversationsThreadMode.value = 'collapse';
 
-async function openChat(platform: string, conversationID: string) {
-  await livechatStore.openChat(platform, conversationID);
-}
+watch(route, async () => {
+  isLoading.value = true;
+  await botioLivechat.value.fetchConversations(route.query.platform as string, livechatStore.pageIDs.get(route.query.platform as string)!)
+  isLoading.value = false;
+});
+
+onMounted(async () => {
+  isLoading.value = true;
+  await botioLivechat.value.fetchConversations(route.query.platform as string, livechatStore.pageIDs.get(route.query.platform as string)!)
+  isLoading.value = false;
+});
 
 
 </script>
