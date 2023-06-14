@@ -75,6 +75,10 @@ receivedMessageEventBus.value.on(incomingMessage)
 
 function incomingMessage(message: Message) {
   if (currentChat.value?.conversation.conversationID === message.conversationID) {
+    const cloneConversation = { ...currentChat.value!.conversation }
+    cloneConversation.isRead = true
+    cloneConversation.updatedTime = message.timestamp
+    livechatStore.updateConversation(cloneConversation)
     currentChat.value!.messages.push(message)
   }
 }
