@@ -1,7 +1,7 @@
 <template>
   <!-- <button @click="burstConversation">ASSS</button> -->
   <div :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
-    'flex-1 max-w-[400px] bg-gray-300' : 'bg-white duration-300 pt-6 w-[100px]']">
+    'flex-1 max-w-[400px] bg-d9-30' : 'bg-white duration-300 pt-6 w-[100px]']">
     <ThreadUtils :mode="conversationsThreadMode" />
     <template v-if="isLoading">
       <div class="flex-1 bg-gray-300 max-w-[400px] max-h-[700px]">
@@ -130,5 +130,9 @@ function burstConversation() {
 <style scoped>
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.bg-d9-30{
+  background-color: rgba(217, 217, 217, 0.3);
 }
 </style>
