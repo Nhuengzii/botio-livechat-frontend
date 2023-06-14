@@ -1,5 +1,6 @@
 <template>
- 
+  <div class="flex-1 bg-gray-300 max-w-[400px]">
+  <ThreadUtils :mode="conversationsThreadMode" />
   <template v-if="conversationsThreadMode == 'normal'">
     <div class="flex-1 bg-gray-300 max-w-[400px]">
       <div v-for="(conversation, index) in conversations($route.query.platform as string)"
@@ -7,6 +8,7 @@
         <Thread :conversation="conversation" :index="index"
           @click="openChat($route.query.platform as string, conversation.conversationID)" mode="normal" />
         <hr>
+ 
       </div>
     </div>
   </template>
@@ -19,6 +21,7 @@
        </div>
     </div>
   </template>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +34,7 @@ const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
 const { conversations } = storeToRefs(livechatStore);
 const { conversationsThreadMode } = storeToRefs(uiStore)
-// conversationsThreadMode.value = 'searching'
+//conversationsThreadMode.value = 'searching'
 async function openChat(platform: string, conversationID: string) {
   await livechatStore.openChat(platform, conversationID);
 }
@@ -39,4 +42,6 @@ async function openChat(platform: string, conversationID: string) {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

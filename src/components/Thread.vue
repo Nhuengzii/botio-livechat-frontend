@@ -1,5 +1,4 @@
 <template>
- 
   <div class="flex py-4 px-3  w-50 " :class="[mode === 'normal' ? 'bg-white' : '']">
      <template v-if="mode === 'normal'">
       <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">

@@ -1,4 +1,4 @@
-<template>
+ <template>
   <header class="pt-2 pb-3 px-3">
     <h1>THIS is LiveChat view</h1>
   </header>
@@ -21,3 +21,4 @@ import Chats from './subs/Chats.vue';
 </script>
 
 <style scoped></style>
+ 
