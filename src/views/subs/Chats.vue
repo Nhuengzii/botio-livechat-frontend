@@ -66,10 +66,18 @@ import MessageSender from "@/components/MessageSender.vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
 import { onBeforeRouteUpdate } from "vue-router";
 const livechatStore = useLivechatStore()
-const { openChatEventBus, botioLivechat, currentChat } = storeToRefs(livechatStore)
+const { openChatEventBus, botioLivechat, currentChat, receivedMessageEventBus } = storeToRefs(livechatStore)
 const tab = ref('')
 const currentFocusChat = ref("")
 const isLoading = ref(false)
+
+receivedMessageEventBus.value.on(incomingMessage)
+
+function incomingMessage(message: Message) {
+  if (currentChat.value?.conversation.conversationID === message.conversationID) {
+    currentChat.value!.messages.push(message)
+  }
+}
 
 function openChat(conversation: Conversation) {
   isLoading.value = true
