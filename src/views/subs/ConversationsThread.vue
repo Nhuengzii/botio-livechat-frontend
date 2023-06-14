@@ -1,21 +1,38 @@
 <template>
-  <template v-if="conversationsThreadMode == 'normal'">
-    <div>{{ isLoading }}</div>
-    <div class="flex-1 bg-gray-300 max-w-[400px]">
-      <div v-for="(conversation, index) in conversations($route.query.platform as string)"
-        key="conversation.conversationID" class="mx-2">
-        <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" mode="normal" />
-        <hr>
-      </div>
+  <template v-if="isLoading">
+    <div>
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
+      <ThreadSkeleton />
     </div>
   </template>
-  <template v-else-if="conversationsThreadMode == 'collapse'">
-    <div>
-      <div v-for="(conversation, index) in conversations('$route.query.platform as string')"
-        key="conversation.conversationID" class="m-2">
-        <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" mode="normal" />
+  <template v-else>
+    <template v-if="conversationsThreadMode == 'normal'">
+      <div class="flex-1 bg-gray-300 max-w-[400px]">
+        <div v-for="(conversation, index) in conversations($route.query.platform as string)"
+          key="conversation.conversationID" class="mx-2">
+          <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)"
+            mode="normal" />
+          <hr>
+        </div>
       </div>
-    </div>
+    </template>
+    <template v-else-if="conversationsThreadMode == 'collapse'">
+      <div>
+        <div v-for="(conversation, index) in conversations('$route.query.platform as string')"
+          key="conversation.conversationID" class="m-2">
+          <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)"
+            mode="normal" />
+        </div>
+      </div>
+    </template>
   </template>
 </template>
 
@@ -23,6 +40,7 @@
 import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
 import Thread from '@/components/Thread.vue';
+import ThreadSkeleton from '@/components/ThreadSkeleton.vue'
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
