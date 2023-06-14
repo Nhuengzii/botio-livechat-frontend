@@ -34,29 +34,29 @@
             <div class="m-2 justify-center duration-700 " :class="uistore.is_expanded ? 'mt-20' : 'mt-10 '">
                 <router-link to="/start" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('start') }"
-                        :class="[uistore.is_expanded ?  ((route.name=='start') ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((route.name=='start') ?'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]"  
+                        :class="[uistore.is_expanded ? ((route.name == 'start') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'start') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start   text-white w-full  py-3    duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: (route.name=='start' ?  activeOpentextColor:OpentextColor) }"
+                            :style="{ color: (route.name == 'start' ? activeOpentextColor : OpentextColor) }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color:  (route.name=='start' ? ClosetextColor : ClosetextColor)  }"
+                            :style="{ color: (route.name == 'start' ? ClosetextColor : ClosetextColor) }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
-                            
+
                             <path
                                 d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': route.name=='start' }">เริ่มต้น</span>
+                            :class="{ 'text-white': route.name == 'start' }">เริ่มต้น</span>
                     </button>
                 </router-link>
                 <router-link to="/ordermars" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('service') }"
-                        :class="[uistore.is_expanded ? ((active == 'service' as string) ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((active == 'service' as string) ?'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]" 
+                        :class="[uistore.is_expanded ? ((active == 'service' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'service' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
@@ -66,7 +66,7 @@
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'service' as string ? ClosetextColor : ClosetextColor}"
+                            :style="{ color: active == 'service' as string ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
@@ -77,7 +77,7 @@
                 </router-link>
                 <router-link to="/inventory" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('stock') }"
-                        :class="[uistore.is_expanded ? ((active == 'stock' as string) ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((active == 'stock' as string) ?'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]" 
+                        :class="[uistore.is_expanded ? ((active == 'stock' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'stock' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
@@ -98,7 +98,7 @@
                 </router-link>
                 <router-link to="/orders" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('order') }"
-                        :class="[uistore.is_expanded ? ((active == 'order' as string) ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((active == 'order' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]" 
+                        :class="[uistore.is_expanded ? ((active == 'order' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'order' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
@@ -119,7 +119,7 @@
                 </router-link>
                 <router-link to="/customize" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('modify') }"
-                        :class="[uistore.is_expanded ? ((active == 'modify' as string) ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((active == 'modify' as string) ?'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]" 
+                        :class="[uistore.is_expanded ? ((active == 'modify' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'modify' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
@@ -138,30 +138,30 @@
                             :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
                     </button>
                 </router-link>
-                <router-link :to='{ path: "/livechat", query: { platform: "centralized" } }' class="relative   ">
+                <router-link :to='{ path: "/livechat", query: { platform: "facebook" } }' class="relative   ">
                     <button @click="{ show_Chat = false; updateActiveTap('chat') }"
-                        :class="[uistore.is_expanded ? ((route.name=='livechat') ?'bg-gray-200 ml-2 hover:bg-[#EAEAEA]':'hover:bg-[#00ABB3]')  :((route.name=='livechat') ?'bg-[#394867] ml-2 hover:bg-[#394867]':'hover:bg-white') ]" 
+                        :class="[uistore.is_expanded ? ((route.name == 'livechat') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'livechat') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color:  route.name=='livechat'? activeOpentextColor : OpentextColor }"
+                            :style="{ color: route.name == 'livechat' ? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color:  route.name=='livechat' ? ClosetextColor : ClosetextColor }"
+                            :style="{ color: route.name == 'livechat' ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white':  route.name=='livechat' }">แชท</span>
+                            :class="{ 'text-white': route.name == 'livechat' }">แชท</span>
                     </button>
                 </router-link>
             </div>
-        </div>    
-        <LivechatNavBar v-show="route.name == 'livechat'"  />
+        </div>
+        <LivechatNavBar v-show="route.name == 'livechat'" />
     </div>
 </template>
 
@@ -169,10 +169,10 @@
 import { RouterLink } from 'vue-router'
 import { useRoute } from 'vue-router';
 import LivechatNavBar from '@/components/LivechatNavBar.vue';
-import {  ref } from 'vue'
+import { ref } from 'vue'
 import { useUIStore } from '@/stores/UI';
 
-const uistore=useUIStore();
+const uistore = useUIStore();
 const route = useRoute();
 const OpentextColor = ref('#3C4048')
 const ClosetextColor = ref('#9BA4B5')
@@ -183,8 +183,8 @@ const active = ref("home")
 const updateActiveTap = (tab: string) => {
     active.value = tab;
 }
- 
-    
+
+
 
 </script>
  

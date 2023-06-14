@@ -7,7 +7,7 @@ type Message = {
   timestamp: number,
   source: Source,
   message: string,
-  attachments?: Attachment[],
+  attachments: Attachment[],
   replyTo?: RepliedMessage,
 }
 

@@ -18,94 +18,93 @@ if (websocket_api_id === undefined) {
 export const useLivechatStore = defineStore("livechat", {
   state: () => ({
     botioLivechat: new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`, `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`, "1"),
-    conversationsRaw: new Map<string, ConversationsMap>([
-      ["facebook", new Map<string, Conversation>()],
-      ["line", new Map<string, Conversation>()],
-    ]),
     pageIDs: new Map<string, string>([
       ["facebook", "108362942229009"],
       ["line", "U6972d1d58590afb114378eeab0b08d52"],
     ]),
-    openChatEventBus: useEventBus<{ conversation: Conversation, messages: Message[] }>('openChatEventBus'),
-    _chats: new Map<string, { conversation: Conversation, messages: Message[] }>(),
+    openChatEventBus: useEventBus<Conversation>('openChatEventBus'),
+    conversationRaw: new Map<string, ConversationsMap>([
+      ["facebook", new Map<string, Conversation>()],
+      ["line", new Map<string, Conversation>()],
+    ]),
+    currentChat: null as { conversation: Conversation, messages: Message[] } | null,
+    conversationTimestamp: new Date().getTime()
   }),
   getters: {
     conversations: (state) => (platform: string): Conversation[] => {
-      const conversationsMap = state.conversationsRaw.get(platform);
+      const conversationsMap = state.conversationRaw.get(platform);
+      console.log(`force update conversations ${platform} ${state.conversationTimestamp}`);
       if (conversationsMap === undefined) {
-        return [];
+        throw new Error("conversationsMap is undefined");
       }
-      let conversations = conversationsMap2SortedArray(conversationsMap);
-      if (conversations.length === 0) {
-        state.botioLivechat.fetchConversations(platform, state.pageIDs.get(platform)!).then(
-          (conversations) => {
-            conversations.forEach((conversation) => {
-              conversationsMap.set(conversation.conversationID, conversation);
-            });
-          }
-        );
-      }
-      return conversations;
+      return conversationsMap2SortedArray(conversationsMap);
     }
   },
   actions: {
-    async getMessages(platform: string, conversationId: string): Promise<Message[]> {
-      const conversationsMap = this.conversationsRaw.get(platform);
-      console.log(platform);
+    openChat(conversation: Conversation) {
+      if (this.currentChat) {
+        this.currentChat.conversation = conversation;
+        this.currentChat.messages = [];
+      }
+      else {
+        this.currentChat = { conversation: conversation, messages: [] };
+      }
+      this.openChatEventBus.emit(conversation);
+    },
+    async fetchConversations(platform: string): Promise<void> {
+      const conversations = await this.botioLivechat.fetchConversations(platform, this.pageIDs.get(platform)!);
+      if (conversations === null) {
+        throw new Error("Error fetching conversations");
+      }
+      const conversationsMap = this.conversationRaw.get(platform);
       if (conversationsMap === undefined) {
-        throw new Error("Invalid platform");
+        throw new Error("conversationsMap is undefined");
       }
-      const conversation = conversationsMap.get(conversationId);
-      if (conversation === undefined) {
-        throw new Error("Invalid conversationId");
-      }
-      return await this.botioLivechat.getMessages(platform, this.pageIDs.get(platform)!, conversationId);
+      conversations.forEach((conversation) => {
+        conversationsMap.set(conversation.conversationID, conversation);
+      });
+    }, updateConversation(conversation: Conversation) {
+      this.conversationTimestamp = new Date().getTime()
+      this.conversationRaw.get(conversation.platform)?.set(conversation.conversationID, conversation);
     },
-    async openChat(platform: string, conversationId: string): Promise<void> {
-      const conversationsMap = this.conversationsRaw.get(platform);
-      console.log(platform);
-      if (conversationsMap === undefined) {
-        throw new Error("Invalid platform");
-      }
-      const conversation = conversationsMap.get(conversationId);
-      if (conversation === undefined) {
-        throw new Error("Invalid conversationId");
-      }
-      const messages = await this.botioLivechat.getMessages(platform, this.pageIDs.get(platform)!, conversationId);
-      this.openChatEventBus.emit({ conversation, messages });
-      this._chats.set(conversationId, { conversation, messages });
-    },
-    closeChat(conversationID: string): void {
-      try {
-        this._chats.delete(conversationID);
-      } catch (error) {
-        throw new Error("Invalid conversationID");
-      }
-    },
-    getChat(conversationID: string): { conversation: Conversation, messages: Message[] } | undefined {
-      try {
-        return this._chats.get(conversationID);
-      } catch (error) {
-        throw new Error("Invalid conversationID");
-      }
-    },
-    addNewMessage(message: Message): void {
-      const conversationsMap = this.conversationsRaw.get(message.platform);
-      if (conversationsMap === undefined) {
-        throw new Error("Invalid platform");
-      }
-      let conversation = conversationsMap.get(message.conversationID);
-      if (conversation === undefined) {
-        return;
+    async addReceivedMessage(message: Message): Promise<void> {
+      let conversation = this.botioLivechat.getConversation(message.platform, message.pageID, message.conversationID)
+      if (conversation === null) {
+        console.log('let me fetcging');
+
+        conversation = await this.botioLivechat.fetchConversation(message.platform, message.pageID, message.conversationID)
+        if (conversation === null) {
+          throw new Error("Error fetching conversation")
+        }
       }
       conversation.updatedTime = message.timestamp
-      const currentChat = this.getChat(message.conversationID);
-      if (currentChat === undefined) {
-        return;
-      }
-      currentChat.messages.push(message);
+      conversation.lastActivity = messageToActivity(message)
+      this.updateConversation(conversation)
     }
-
   }
 });
+function messageToActivity(message: Message): string {
+  if (message.message.length > 0) {
+    if (message.source.userType === "user") {
+      return message.message;
+    } else if (message.source.userType === "admin") {
+      return "คุณ: " + message.message;
+    } else {
+      return `WTF ${message.source.userType} พิมพ์ข้อความ`
+    }
+  } else if (message.attachments.length > 0) {
+    if (message.attachments[0].attachmentType === "image") {
+      if (message.source.userType === "user") {
+        return "ส่งรูปภาพ";
+      } else if (message.source.userType === "admin") {
+        return "คุณส่งรูปภาพ";
+      } else {
+        return `WTF ${message.source.userType} ส่งรูปภาพ`
+      }
+    }
+  } else {
+    return "WTF";
+  }
+  return "wwwwwwwwwwwwwwwwwwwwwwwww"
+}
 
