@@ -79,7 +79,10 @@ if (message.message.length > 0) {
   messageType.value = 'Unsupport'
 } else if (message.attachments[0].attachmentType == 'image') {
   messageType.value = 'ImageMessage'
-} else if (message.attachments[0].attachmentType) {
+} else if (message.attachments[0].attachmentType == 'sticker') {
+  messageType.value = 'ImageMessage'
+}
+else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
 }
 </script>
