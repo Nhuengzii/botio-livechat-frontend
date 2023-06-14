@@ -1,5 +1,5 @@
 <template>
-    <Transition name="modal">
+    <Transition name="modal2">
         <div v-if="show" class="modal-mask">
             <div class="modal-container">
                 <div class="modal-header">

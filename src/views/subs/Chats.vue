@@ -4,7 +4,7 @@
 
       <!-- header chats-->
       <header class="bg-white flex-[2] mx-3 mb-4">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab"/>
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" class="background-d9"/>
         <div class="flex items-center py-5">
 
           <!-- show name conversation-->
