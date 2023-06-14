@@ -6,10 +6,18 @@ import type { ConversationsMap } from "@/lib/ConversationsMap";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 
+const rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID;
+if (rest_api_id === undefined) {
+  throw new Error("VITE_REST_API_ID is undefined");
+}
+const websocket_api_id = import.meta.env.VITE_BOTIO_WEBSOCKET_API_ID;
+if (websocket_api_id === undefined) {
+  throw new Error("VITE_WEBSOCKET_API_ID is undefined");
+}
 
 export const useLivechatStore = defineStore("livechat", {
   state: () => ({
-    botioLivechat: new BotioLivechat("https://tw2rxhrb3h.execute-api.ap-southeast-1.amazonaws.com/dev", ""),
+    botioLivechat: new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`, `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`),
     conversationsRaw: new Map<string, ConversationsMap>([
       ["facebook", new Map<string, Conversation>()],
       ["line", new Map<string, Conversation>()],
