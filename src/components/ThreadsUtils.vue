@@ -26,7 +26,13 @@
                 <input type="text" id="voice-search" @click="{ query = true; uiStore.conversationsThreadMode='searching';}" :class="query? '':' rounded-full'" 
                     class="ml-2 bg-[#D9D9D9]  border border-gray-300 text-gray-900  focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     :placeholder="query? 'ค้นหา':' ค้นหาจากชื่อ หรือ แท็ก'" v-model="messageSaersh">
+                  <button @click="{alert('55555')}" v-if="query"  class="flex absolute  rounded-full z-100 inset-y-0 left-0  items-center pl-3 pointer-events-none ml-2" >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </button>
               </div>
+              
         </div>
       </div>
     </div>
@@ -48,5 +54,7 @@ defineProps<{
 }>()
 </script>
  
-<style scoped></style>
-conversationsThreadMode
+<style scoped>
+
+</style>
+ 
