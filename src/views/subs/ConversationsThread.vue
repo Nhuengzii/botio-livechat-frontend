@@ -1,14 +1,15 @@
 <template>
-  <h1>{{ conversationsThreadMode }}</h1>
+  <!-- <button @click="burstConversation">ASSS</button> -->
   <div :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
     'flex-1 max-w-[400px] bg-gray-300' : 'bg-white duration-300 pt-6 w-[100px]']">
     <ThreadUtils :mode="conversationsThreadMode" />
-    <div class="flex-1 bg-gray-300 max-w-[400px]">
-      <div v-for="(conversation, index) in conversations($route.query.platform as string)"
-        key="conversation.conversationID" class="mx-2">
-        <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)"
-          :mode="conversationsThreadMode" />
-        <hr>
+    <div v-bind="containerProps" class="flex-1 bg-gray-300 max-w-[400px] max-h-[700px]">
+      <div v-bind="wrapperProps">
+        <div v-for="({ data }, index) in list" :key="data.conversationID" class="mx-2">
+          <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"
+            :mode="conversationsThreadMode" />
+          <hr>
+        </div>
       </div>
     </div>
 
@@ -69,13 +70,24 @@ import ThreadSkeleton from '@/components/ThreadSkeleton.vue'
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useVirtualList } from '@vueuse/core';
+import { computed } from '@vue/reactivity';
 const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
 const { botioLivechat, conversations } = storeToRefs(livechatStore);
 const { conversationsThreadMode } = storeToRefs(uiStore)
 const isLoading = ref(false);
 const route = useRoute()
-//conversationsThreadMode.value = 'collapse';
+const conversationsForVirtualList = computed(() => {
+  const currentPlatform = route.query.platform as string;
+  return conversations.value(currentPlatform)
+})
+const { list, containerProps, wrapperProps } = useVirtualList(
+  conversationsForVirtualList,
+  {
+    itemHeight: 122.5
+  }
+)
 
 watch(route, async () => {
   isLoading.value = true;
@@ -88,6 +100,21 @@ onMounted(async () => {
   await livechatStore.fetchConversations(route.query.platform as string)
   isLoading.value = false;
 });
+
+function burstConversation() {
+  const currentPlatform = route.query.platform as string;
+  const conversation = conversations.value(currentPlatform)[0];
+  const conversationMap = livechatStore.conversationRaw.get(currentPlatform)!
+  for (let i = 0; i < 100; i++) {
+    const newConversation = {
+      ...conversation
+    }
+    const randomAvatarUrl = `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/200/300`
+    newConversation.participants[0].profilePic.src = randomAvatarUrl;
+    newConversation.conversationID = Math.random().toString(36).substring(7);
+    conversationMap.set(newConversation.conversationID, newConversation)
+  }
+}
 
 
 </script>
