@@ -8,6 +8,7 @@ class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
   botioWebsocketApiUrl: string;
   conversationRaw: Map<string, ConversationsMap>;
+  currentChat: { conversation: Conversation, messages: Message[] } | null
   chats: Map<string, { conversation: Conversation, messages: Message[] }>;
   shopID: string
   constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string) {
@@ -19,6 +20,24 @@ class BotioLivechat implements IBotioLivechat {
       ["facebook", new Map<string, Conversation>()],
       ["line", new Map<string, Conversation>()],
     ])
+    this.currentChat = null
+  }
+  async addReceivedMessage(message: Message): Promise<void> {
+    let conversation = this.getConversation(message.platform, message.pageID, message.conversationID)
+    if (conversation === null) {
+      conversation = await this.fetchConversation(message.platform, message.pageID, message.conversationID)
+      if (conversation === null) {
+        throw new Error("Error fetching conversation")
+      }
+    }
+    conversation.updatedTime = message.timestamp
+    conversation.lastActivity = message.timestamp.toString()
+    const chat = this.chats.get(message.conversationID)
+    if (chat === undefined) {
+      return
+    }
+    console.log('push')
+    chat.messages.push(message)
   }
   fetchConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null> = async (platform: string, pageID: string, conversationId: string) => {
     let conversation: Conversation | null = null;
@@ -83,8 +102,16 @@ class BotioLivechat implements IBotioLivechat {
     }
     return messages
   };
-  getConversation: (platform: string, conversationId: string) => Promise<Conversation | null> = async (platform: string, conversationId: string) => {
-    return null
+  getConversation: (platform: string, pageID: string, conversationId: string) => Conversation | null = (platform: string, pageID: string, conversationId: string) => {
+    const conversationMap = this.conversationRaw.get(platform);
+    if (conversationMap === undefined) {
+      throw new Error("Invalid platform");
+    }
+    const conversation = conversationMap.get(conversationId);
+    if (conversation === undefined) {
+      return null;
+    }
+    return conversation;
   };
   getMessage: (platform: string, conversationId: string, messageId: string) => Promise<Message | null> = async (platform: string, conversationId: string, messageId: string) => {
     return null

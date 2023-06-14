@@ -28,10 +28,19 @@ export const useLivechatStore = defineStore("livechat", {
     conversations: (state) => (platform: string): Conversation[] => {
       const conversations = state.botioLivechat.getConversations(platform);
       return conversations;
+    }, currentChat: (state) => {
+      return state.botioLivechat.currentChat
     }
   },
   actions: {
     openChat(conversation: Conversation) {
+      if (this.botioLivechat.currentChat !== null) {
+        this.botioLivechat.currentChat.conversation = conversation
+        this.botioLivechat.currentChat.messages = []
+      }
+      else {
+        this.botioLivechat.currentChat = { conversation, messages: [] }
+      }
       this.openChatEventBus.emit(conversation);
     }
   }

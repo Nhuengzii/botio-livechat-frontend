@@ -9,12 +9,12 @@
 
           <!-- show name conversation-->
           <div class="mx-3 object-cover h-12 w-12 rounded-full">
-            <img :src="currentChat?.conversation.conversationPic.src" class="rounded-full" />
+            <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
           </div>
 
           <!-- show picture conversation -->
           <div class="px-4">
-            <p class="">{{ currentChat?.conversation.participants[0].username }}</p>
+            <p class="">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p>
           </div>
 
         </div>
@@ -66,36 +66,17 @@ import MessageSender from "@/components/MessageSender.vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
 import { onBeforeRouteUpdate } from "vue-router";
 const livechatStore = useLivechatStore()
-const { openChatEventBus, botioLivechat } = storeToRefs(livechatStore)
+const { openChatEventBus, botioLivechat, currentChat } = storeToRefs(livechatStore)
 const tab = ref('')
 const currentFocusChat = ref("")
-const currentChat = ref<{ conversation: Conversation, messages: Message[] }>()
 const isLoading = ref(false)
 
 function openChat(conversation: Conversation) {
   isLoading.value = true
-  if (currentChat.value === undefined) {
-    currentChat.value = {
-      conversation: conversation,
-      messages: []
-    }
-  }
-  else {
-    currentChat.value.conversation = conversation
-  }
-  botioLivechat.value.fetchMessages(conversation.platform, conversation.pageID, conversation.conversationID).then(
-    (messages) => {
-      if (currentChat.value !== undefined) {
-        currentChat.value.messages = messages
-      } else {
-        currentChat.value = {
-          conversation: conversation,
-          messages: messages
-        }
-      }
-      isLoading.value = false
-    }
-  )
+  botioLivechat.value.fetchMessages(conversation.platform, conversation.pageID, conversation.conversationID).then((messages) => {
+    currentChat.value!.messages = messages
+    isLoading.value = false
+  })
 }
 openChatEventBus.value.on(openChat)
 

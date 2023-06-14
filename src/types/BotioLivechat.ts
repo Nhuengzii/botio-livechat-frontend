@@ -8,10 +8,11 @@ interface IBotioLivechat {
   fetchConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null>
   fetchMessages: (platform: string, pageID: string, conversationId: string) => Promise<Message[]>
   getConversations: (platform: string) => Conversation[]
-  getConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null>
+  getConversation: (platform: string, pageID: string, conversationId: string) => Conversation | null
   getMessages: (platform: string, pageID: string, conversationId: string) => Promise<Message[]>
   getMessage: (platform: string, conversationId: string, messageId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, text: string) => Promise<Message | null>
+  addReceivedMessage(message: Message): Promise<void>
 }
 
 export default IBotioLivechat;
