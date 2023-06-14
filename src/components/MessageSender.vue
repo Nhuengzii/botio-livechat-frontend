@@ -49,14 +49,20 @@
 </template>
 
 <script setup lang="ts">
+import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
+import type { Conversation } from '@/types/conversation';
+import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue'
+
 
 /// use value from store ///
 
 const uiStore = useUIStore()
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
+const livechatStore = useLivechatStore()
+const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 
 ///////////////////////////
@@ -66,6 +72,8 @@ const sendMessage = () => {
   if (newMessage.value.trim() !== '') {
     // Handle sending the message here
     console.log('Sending message:', newMessage.value);
+    let a = currentChat.value?.conversation!
+    livechatStore.sendMessage(a.platform, a.pageID, a.conversationID, a.participants[0].userID, newMessage.value)
 
     newMessage.value = ''; // Reset the input field after sending the message
     uiStore.is_typing = false;
