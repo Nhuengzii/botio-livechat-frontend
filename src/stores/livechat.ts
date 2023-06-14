@@ -23,6 +23,7 @@ export const useLivechatStore = defineStore("livechat", {
       ["line", "U6972d1d58590afb114378eeab0b08d52"],
     ]),
     openChatEventBus: useEventBus<Conversation>('openChatEventBus'),
+    receivedMessageEventBus: useEventBus<Message>('receivedMessageEventBus'),
     conversationRaw: new Map<string, ConversationsMap>([
       ["facebook", new Map<string, Conversation>()],
       ["line", new Map<string, Conversation>()],
@@ -83,6 +84,22 @@ export const useLivechatStore = defineStore("livechat", {
       this.updateConversation(conversation)
     }, async sendMessage(platform: string, pageID: string, conversationID: string, psid: string, text: string) {
       await this.botioLivechat.sendTextMessage(platform, conversationID, pageID, psid, text)
+      const newMessage: Message = {
+        platform: platform,
+        pageID: pageID,
+        shopID: this.botioLivechat.shopID,
+        conversationID: conversationID,
+        timestamp: new Date().getTime(),
+        source: {
+          userType: "admin",
+          userID: "1",
+        },
+        messageID: new Date().getTime().toString(),
+        message: text,
+        attachments: [],
+        replyTo: undefined,
+      }
+      this.receivedMessageEventBus.emit(newMessage)
     },
     async searchConversations(platform: string, query: string): Promise<Conversation[]> {
       const res = this.conversations(platform).filter((conversation) => {
