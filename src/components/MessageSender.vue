@@ -2,7 +2,13 @@
   <div class="flex flex-[1]  py-4 items-center bg-white mx-3">
 
     <!-- space -->
-    <div class="flex-[1]"></div>
+    <div class="flex-[1]">
+      <button>
+        <div class="pl-4 mr-8 text-gray-500">
+          <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
+        </div>
+      </button>
+    </div>
     <!-- end space-->
 
     <div class="flex-[6] flex-col">
@@ -13,27 +19,29 @@
 
         <div class="inline-flex">
           <button>
-            <div class="pl-2">
+            <div class="pl-2 mr-4">
               <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
             </div>
           </button>
-          <div class="pl-4  text-gray-500">
-            <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
-          </div>
-          <div class="pl-4 mr-8  text-gray-500">
-            <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
-          </div>
         </div>
       </div>
     </div>
 
     <!-- space -->
     <div class="pl-3 flex-[1]">
-      <button v-show="showSendMessageButton" @click="sendMessage" class="flex">
+      <button @click="sendMessage" class="flex">
+        <template v-if="showSendMessageButton">
           <div class="flex rounded-full bg-[#394867]">
             <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
           </div>
-        </button>
+        </template>
+        <template v-else>
+          <div class="pl-2  text-gray-500">
+            <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
+          </div>
+        </template>
+
+      </button>
     </div>
     <!-- end space-->
 
