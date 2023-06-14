@@ -109,8 +109,19 @@ class BotioLivechat implements IBotioLivechat {
   getMessage: (platform: string, conversationId: string, messageId: string) => Promise<Message | null> = async (platform: string, conversationId: string, messageId: string) => {
     return null
   };
-  sendTextMessage: (platform: string, conversationId: string, text: string) => Promise<Message | null> = async (platform: string, conversationId: string, text: string) => {
-    return null
+  sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message | null> = async (platform: string, conversationId: string, pageID: string, psid: string, text: string) => {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages?psid=${psid}`;
+    console.log(`getting`)
+    console.log(url);
+
+    const body: { message: string } = { message: text }
+    try {
+      const response = await axios.post(url, body);
+      return response.data.message;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error sending message");
+    }
   };
 }
 

@@ -28,7 +28,8 @@ export const useLivechatStore = defineStore("livechat", {
       ["line", new Map<string, Conversation>()],
     ]),
     currentChat: null as { conversation: Conversation, messages: Message[] } | null,
-    conversationTimestamp: new Date().getTime()
+    conversationTimestamp: new Date().getTime(),
+    searchResult: [] as Conversation[]
   }),
   getters: {
     conversations: (state) => (platform: string): Conversation[] => {
@@ -80,6 +81,15 @@ export const useLivechatStore = defineStore("livechat", {
       conversation.updatedTime = message.timestamp
       conversation.lastActivity = messageToActivity(message)
       this.updateConversation(conversation)
+    }, async sendMessage(platform: string, pageID: string, conversationID: string, psid: string, text: string) {
+      await this.botioLivechat.sendTextMessage(platform, conversationID, pageID, psid, text)
+    },
+    async searchConversations(platform: string, query: string): Promise<Conversation[]> {
+      const res = this.conversations(platform).filter((conversation) => {
+        conversation.participants[0].username.toLowerCase().includes(query.toLowerCase())
+      })
+      this.searchResult = res
+      return res;
     }
   }
 });
