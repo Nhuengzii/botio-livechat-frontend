@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div :class="[is_expanded ? 'bg-[#EAEAEA] duration-300' : 'bg-[#394867] duration-300']" class="h-full">
       <div class="px-4 py-4  " v-for="platform in  availablesPlatforms.keys() ">
         <PlatformIcon :platform=platform :isFocus="platform == $route.query.platform"

@@ -3,9 +3,10 @@
     <div class="mt-5 ">
       <div class="static ">
         <div class="w-14 h-14 rounded-full bottom-1.5 left-0 "
-          :class="[uiStore.is_expanded ?  (isFocus? 'bg-[#394867] ':'bg-[#394867] opacity-0   ') : (isFocus? 'bg-[#00ABB3] ':'bg-[#00ABB3] opacity-0')]">
+          :class="[uiStore.is_expanded ? (isFocus ? 'bg-[#394867] ' : 'bg-[#394867] opacity-0   ') : (isFocus ? 'bg-[#00ABB3] ' : 'bg-[#00ABB3] opacity-0')]">
         </div>
-        <div class="absolute bottom-0 left-0 duration-300 " :class="[isFocus ? 'bottom-2 left-2' : 'opacity-50 hover:opacity-100 hover:scale-105']" > 
+        <div class="absolute bottom-0 left-0 duration-300 "
+          :class="[isFocus ? 'bottom-2 left-2' : 'opacity-50 hover:opacity-100 hover:scale-105']">
           <div class="static ">
             <button @click="statusapp = !statusapp" class=" rounded-full " style="background-color: white">
               <svg v-if="platform == 'instagram'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 m-4"
@@ -17,7 +18,7 @@
                 style="color:   #2F58CD;" fill="currentColor" viewBox="0 0 512 512">
                 <path
                   d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z" />
-              </svg>  
+              </svg>
               <svg v-else-if="platform == 'line'" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 m-3.5 "
                 style="color:   #38E54D;" fill="currentColor" viewBox="0 0 512 512">
                 <path
@@ -40,7 +41,8 @@
                   fill="#2F58CD" />
               </svg>
             </button>
-            <div v-show="unread != 0" class="flex justify-center absolute bottom-0 left-10 w-5 h-5  bg-[#FC2947] rounded-full">
+            <div v-show="unread != 0"
+              class="flex justify-center absolute bottom-0 left-10 w-5 h-5  bg-[#FC2947] rounded-full">
               <p class="text-sm text-white">{{ unread }}</p>
             </div>
           </div>
@@ -57,7 +59,7 @@ import { ref } from 'vue';
 import { useUIStore } from '@/stores/UI';
 const uiStore = useUIStore();
 const statusapp = ref(false)
- 
+
 
 
 const { platform, isFocus, unread } = defineProps<{
