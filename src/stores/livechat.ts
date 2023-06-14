@@ -23,25 +23,63 @@ export const useLivechatStore = defineStore("livechat", {
       ["line", "U6972d1d58590afb114378eeab0b08d52"],
     ]),
     openChatEventBus: useEventBus<Conversation>('openChatEventBus'),
+    conversationRaw: new Map<string, ConversationsMap>([
+      ["facebook", new Map<string, Conversation>()],
+      ["line", new Map<string, Conversation>()],
+    ]),
+    currentChat: null as { conversation: Conversation, messages: Message[] } | null,
+    conversationTimestamp: new Date().getTime()
   }),
   getters: {
     conversations: (state) => (platform: string): Conversation[] => {
-      const conversations = state.botioLivechat.getConversations(platform);
-      return conversations;
-    }, currentChat: (state) => {
-      return state.botioLivechat.currentChat
+      const conversationsMap = state.conversationRaw.get(platform);
+      console.log(`force update conversations ${platform} ${state.conversationTimestamp}`);
+      if (conversationsMap === undefined) {
+        throw new Error("conversationsMap is undefined");
+      }
+      return conversationsMap2SortedArray(conversationsMap);
     }
   },
   actions: {
     openChat(conversation: Conversation) {
-      if (this.botioLivechat.currentChat !== null) {
-        this.botioLivechat.currentChat.conversation = conversation
-        this.botioLivechat.currentChat.messages = []
+      if (this.currentChat) {
+        this.currentChat.conversation = conversation;
+        this.currentChat.messages = [];
       }
       else {
-        this.botioLivechat.currentChat = { conversation, messages: [] }
+        this.currentChat = { conversation: conversation, messages: [] };
       }
       this.openChatEventBus.emit(conversation);
+    },
+    async fetchConversations(platform: string): Promise<void> {
+      const conversations = await this.botioLivechat.fetchConversations(platform, this.pageIDs.get(platform)!);
+      if (conversations === null) {
+        throw new Error("Error fetching conversations");
+      }
+      const conversationsMap = this.conversationRaw.get(platform);
+      if (conversationsMap === undefined) {
+        throw new Error("conversationsMap is undefined");
+      }
+      conversations.forEach((conversation) => {
+        conversationsMap.set(conversation.conversationID, conversation);
+      });
+    }, updateConversation(conversation: Conversation) {
+      this.conversationTimestamp = new Date().getTime()
+      this.conversationRaw.get(conversation.platform)?.set(conversation.conversationID, conversation);
+    },
+    async addReceivedMessage(message: Message): Promise<void> {
+      let conversation = this.botioLivechat.getConversation(message.platform, message.pageID, message.conversationID)
+      if (conversation === null) {
+        console.log('let me fetcging');
+
+        conversation = await this.botioLivechat.fetchConversation(message.platform, message.pageID, message.conversationID)
+        if (conversation === null) {
+          throw new Error("Error fetching conversation")
+        }
+      }
+      conversation.updatedTime = message.timestamp
+      conversation.lastActivity = message.timestamp.toString()
+      this.updateConversation(conversation)
     }
   }
 });

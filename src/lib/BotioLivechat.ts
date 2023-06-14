@@ -1,3 +1,4 @@
+import type { useLivechatStore } from "@/stores/livechat";
 import type IBotioLivechat from "@/types/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
@@ -22,9 +23,13 @@ class BotioLivechat implements IBotioLivechat {
     ])
     this.currentChat = null
   }
+
+
   async addReceivedMessage(message: Message): Promise<void> {
     let conversation = this.getConversation(message.platform, message.pageID, message.conversationID)
     if (conversation === null) {
+      console.log('let me fetcging');
+
       conversation = await this.fetchConversation(message.platform, message.pageID, message.conversationID)
       if (conversation === null) {
         throw new Error("Error fetching conversation")
@@ -32,12 +37,7 @@ class BotioLivechat implements IBotioLivechat {
     }
     conversation.updatedTime = message.timestamp
     conversation.lastActivity = message.timestamp.toString()
-    const chat = this.chats.get(message.conversationID)
-    if (chat === undefined) {
-      return
-    }
-    console.log('push')
-    chat.messages.push(message)
+    // TODO
   }
   fetchConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null> = async (platform: string, pageID: string, conversationId: string) => {
     let conversation: Conversation | null = null;

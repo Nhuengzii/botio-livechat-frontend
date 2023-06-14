@@ -54,13 +54,13 @@ const route = useRoute()
 
 watch(route, async () => {
   isLoading.value = true;
-  await botioLivechat.value.fetchConversations(route.query.platform as string, livechatStore.pageIDs.get(route.query.platform as string)!)
+  await livechatStore.fetchConversations(route.query.platform as string)
   isLoading.value = false;
 });
 
 onMounted(async () => {
   isLoading.value = true;
-  await botioLivechat.value.fetchConversations(route.query.platform as string, livechatStore.pageIDs.get(route.query.platform as string)!)
+  await livechatStore.fetchConversations(route.query.platform as string)
   isLoading.value = false;
 });
 
