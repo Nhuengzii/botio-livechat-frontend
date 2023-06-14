@@ -13,7 +13,6 @@
         <div v-for="({ data }, index) in list" :key="data.conversationID" class="mx-2">
           <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"
             :show-platform="data.platform === 'centralized'" :mode="conversationsThreadMode" />
-          <hr>
         </div>
       </div>
     </div>
@@ -124,4 +123,8 @@ function burstConversation() {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>
