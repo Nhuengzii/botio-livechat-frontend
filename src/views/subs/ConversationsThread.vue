@@ -12,7 +12,7 @@
       <div v-bind="wrapperProps">
         <div v-for="({ data }, index) in list" :key="data.conversationID" class="mx-2">
           <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"
-            :mode="conversationsThreadMode" />
+            :show-platform="data.platform === 'centralized'" :mode="conversationsThreadMode" />
           <hr>
         </div>
       </div>

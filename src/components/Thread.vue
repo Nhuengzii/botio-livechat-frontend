@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-4 px-3 " :class="[(mode === 'normal'|| mode === 'searching') ? 'bg-white min-w-[320px]' : '']">
+  <div class="flex py-4 px-3 " :class="[(mode === 'normal' || mode === 'searching') ? 'bg-white min-w-[320px]' : '']">
     <template v-if="mode === 'normal'">
       <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">
       <div class="ml-3 overflow-hidden w-full ">
@@ -10,7 +10,7 @@
             conversation.lastActivity }}</div>
           <div class="truncate pr-3 text-sm  " :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">{{
             updateTimeStatus }}</div>
-         </div>
+        </div>
         <UserTag />
       </div>
     </template>
@@ -25,7 +25,7 @@
         <p class=" font-bold  truncate ml-3 text-base" :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">
           {{ conversation.participants[0].username }}</p>
         <div v-if="true" class="flex justify-between mt-1 mb-2">
-         </div>
+        </div>
         <UserTag />
       </div>
     </template>
@@ -39,6 +39,7 @@ import UserTag from '@/components/UserTag.vue'
 const { conversation, mode } = defineProps<{
   conversation: Conversation
   mode: string
+  showPlatform: boolean
 }>()
 
 const updateTimeStatus = ref('')
