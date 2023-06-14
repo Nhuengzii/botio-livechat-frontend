@@ -6,38 +6,38 @@ import axios from "axios";
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
   botioWebsocketApiUrl: string;
-  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string) {
+  shopID: string
+  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string) {
+    this.shopID = shopID;
     this.botioRestApiUrl = botioRestApiUrl;
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
   }
   getConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
     return []
   };
-  getMessages: (platform: string, conversationId: string) => Promise<Message[]> = async (platform: string, conversationId: string) => {
-    const messages = await this.fetchMessages(platform, conversationId);
+  getMessages: (platform: string, pageID: string, conversationId: string) => Promise<Message[]> = async (platform: string, pageID: string, conversationId: string) => {
+    const messages = await this.fetchMessages(platform, pageID, conversationId);
     return messages;
   };
-  fetchConversations: (platform: string) => Promise<Conversation[]> = async (platform: string) => {
+  fetchConversations: (platform: string, pageID: string) => Promise<Conversation[]> = async (platform: string, pageID: string) => {
     let conversations: Conversation[];
-    const pageID: string = "108362942229009";
-    const shopID: string = "1";
-    const url: string = `${this.botioRestApiUrl}/shops/${shopID}/${platform}/${pageID}/conversations`;
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations`;
+
     try {
-      const response = await axios.get<Conversation[]>(url);
-      conversations = response.data;
+      const response = await axios.get<{ conversations: Conversation[] }>(url);
+      conversations = response.data.conversations;
     } catch (error) {
       throw new Error("Error fetching conversations");
     }
     return conversations
   };
-  fetchMessages: (platform: string, conversationId: string) => Promise<Message[]> = async (platform: string, conversationId: string) => {
+  fetchMessages: (platform: string, pageID: string, conversationId: string) => Promise<Message[]> = async (platform: string, pageID: string, conversationId: string) => {
     let messages: Message[];
-    const pageID: string = "108362942229009";
-    const shopID: string = "1";
-    const url: string = `${this.botioRestApiUrl}/shops/${shopID}/${platform}/${pageID}/conversations/${conversationId}/messages`;
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages`;
+
     try {
-      const response = await axios.get<Message[]>(url);
-      messages = response.data;
+      const response = await axios.get<{ messages: Message[] }>(url);
+      messages = response.data.messages;
       messages.map((message) => {
         message.platform = message.platform.toLowerCase();
         return message;

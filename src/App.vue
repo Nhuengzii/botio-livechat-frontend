@@ -4,11 +4,11 @@ import Navbar from './components/Navbar.vue';
 </script>
 
 <template >
-  <div class="flex w-screen h-screen bg-blue-400">
+  <div class="flex w-screen h-screen">
     <aside class="flex-row">
       <Navbar />
     </aside>
-    <main class="flex flex-col grow bg-red-100">
+    <main class="flex flex-col grow">
       <RouterView />
     </main>
   </div>

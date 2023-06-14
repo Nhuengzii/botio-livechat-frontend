@@ -14,6 +14,8 @@ export const useUIStore = defineStore('ui', {
             ['line', { unread: 2 }],
             ['centralized', { unread: 35 }],
         ]),
+        is_activeTemplateMessage : false,
+        is_typing : false,
     }),
     actions: {
         ToggleMenu() {
@@ -25,5 +27,8 @@ export const useUIStore = defineStore('ui', {
         activeConversation() {
             this.is_activeConversation = !this.is_activeConversation
         },
+        activeTemplateMessage() {
+            this.is_activeTemplateMessage = !this.is_activeTemplateMessage
+        }
     }
 })
