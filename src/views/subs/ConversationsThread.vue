@@ -1,18 +1,20 @@
 <template>
   <template v-if="conversationsThreadMode == 'normal'">
     <div class="flex-1 bg-gray-300 max-w-[400px]">
-      <div v-for="(conversation, index) in conversations('facebook')" key="conversation.conversationID" class="mx-2">
-        <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)"
-          mode="normal" />
+      <div v-for="(conversation, index) in conversations($route.query.platform as string)"
+        key="conversation.conversationID" class="mx-2">
+        <Thread :conversation="conversation" :index="index"
+          @click="openChat($route.query.platform as string, conversation.conversationID)" mode="normal" />
         <hr>
       </div>
     </div>
   </template>
   <template v-else-if="conversationsThreadMode == 'collapse'">
     <div>
-      <div v-for="(conversation, index) in conversations('facebook')" key="conversation.conversationID" class="m-2">
-        <Thread :conversation="conversation" :index="index" @click="openChat('facebook', conversation.conversationID)"
-          mode="collapse" />
+      <div v-for="(conversation, index) in conversations('$route.query.platform as string')"
+        key="conversation.conversationID" class="m-2">
+        <Thread :conversation="conversation" :index="index"
+          @click="openChat($route.query.platform as string, conversation.conversationID)" mode="collapse" />
       </div>
     </div>
   </template>
