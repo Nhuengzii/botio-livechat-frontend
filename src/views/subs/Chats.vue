@@ -5,7 +5,6 @@
 
       <!-- header chats-->
       <header class="bg-white flex-[2] mx-3 mb-4">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tab" @click="handleClick" @remove="handleRemoveTab" />
         <div class="flex items-center py-5">
 
           <!-- show name conversation-->
@@ -22,24 +21,21 @@
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3">
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" v-if="!isLoading">
         <div class="grid grid-cols-12 gap-y-2">
           <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
 
             <!-- user is send message-->
             <template v-if="message.source.userType === 'user'">
               <div class="col-start-1 col-end-8 p-4 round-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :userType="message.source.userType" />
+                <MessageBlock :message="message" :conversation="currentChat!.conversation" />
               </div>
             </template>
-
 
             <!-- admin is send message-->
             <template v-else>
               <div class="col-start-6 col-end-13 p-3 rounded-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :userType="message.source.userType" />
+                <MessageBlock :message="message" :conversation="currentChat!.conversation" />
               </div>
             </template>
 
@@ -64,29 +60,17 @@ import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import { storeToRefs } from "pinia";
 import { onMounted, onUpdated, ref, type Ref, onBeforeMount } from "vue";
-import Vue3TabsChrome, { type Tab } from "vue3-tabs-chrome"
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
+import { onBeforeRouteUpdate } from "vue-router";
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat } = storeToRefs(livechatStore)
 const tab = ref('')
 const currentFocusChat = ref("")
 const currentChat = ref<{ conversation: Conversation, messages: Message[] }>()
-const tabs = ref([
-] as Tab[])
-const tabRef = ref()
-const setTabRef = (el: HTMLElement) => {
-  tabRef.value = el
-}
 const isLoading = ref(false)
-
-function handleClick(event: Event, tab: Tab, index: number) {
-}
-
-function handleRemoveTab(tab: Tab, index: number) {
-}
 
 function openChat(conversation: Conversation) {
   isLoading.value = true
@@ -101,13 +85,24 @@ function openChat(conversation: Conversation) {
   }
   botioLivechat.value.fetchMessages(conversation.platform, conversation.pageID, conversation.conversationID).then(
     (messages) => {
-      currentChat.value!.messages = messages
+      if (currentChat.value !== undefined) {
+        currentChat.value.messages = messages
+      } else {
+        currentChat.value = {
+          conversation: conversation,
+          messages: messages
+        }
+      }
       isLoading.value = false
     }
   )
 }
 openChatEventBus.value.on(openChat)
 
+onBeforeRouteUpdate((to, from, next) => {
+  console.log("before route update")
+  next()
+})
 
 // const scrollToBottom = () => {
 //   let objContain = document.getElementById("containMessage") as any
