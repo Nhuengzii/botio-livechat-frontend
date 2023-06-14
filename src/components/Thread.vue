@@ -1,13 +1,13 @@
 <template>
-  <div class="flex py-4 px-3  w-50 " :class="[mode === 'normal' ? 'bg-white' : '']">
+  <div class="flex py-4 px-3  min-w-[320px] " :class="[mode === 'normal' ? 'bg-white' : '']">
      <template v-if="mode === 'normal'">
       <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">
-      <div class="ml-3 overflow-hidden w-full">
+      <div class="ml-3 overflow-hidden w-full ">
         <p class=" font-bold  truncate ml-3 text-base" :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">
           {{ conversation.participants[0].username }}</p>
         <div v-if="true" class="flex justify-between mt-1 mb-2">
  
-          <div class="truncate ml-3 max-w-[100px]" :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">{{
+          <div class="truncate ml-3 max-w-[100px] " :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">{{
             conversation.lastActivity }}</div>
           <div class="truncate pr-3 text-sm  " :class="conversation.isRead ? 'text-[#B2B2B2]' : 'text-slate-900'">{{
             updateTimeStatus }}</div>

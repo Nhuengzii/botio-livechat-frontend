@@ -30,13 +30,5 @@ export const useUIStore = defineStore('ui', {
         activeTemplateMessage() {
             this.is_activeTemplateMessage = !this.is_activeTemplateMessage
         },
-        activeSaerch() {
-            this.conversationsThreadMode = 'searching'
-                
-            
-        },
-        outSaerch(){
-            this.conversationsThreadMode = 'normal'
-        }
     }
 })
