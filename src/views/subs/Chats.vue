@@ -1,6 +1,6 @@
 <template>
   <div class="flex-[2] shrink-1 mx-3 background-d9">
-    <div class="flex flex-col w-full h-full">
+    <div class="flex flex-col w-full h-full ">
       <h1>{{ isLoading }}</h1>
 
       <!-- header chats-->
@@ -21,7 +21,7 @@
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" v-if="!isLoading">
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage" ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-2">
           <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
 
@@ -59,7 +59,7 @@ import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import { storeToRefs } from "pinia";
-import { onMounted, onUpdated, ref, type Ref, onBeforeMount } from "vue";
+import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick } from "vue";
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
@@ -70,6 +70,7 @@ const { openChatEventBus, botioLivechat, currentChat, receivedMessageEventBus } 
 const tab = ref('')
 const currentFocusChat = ref("")
 const isLoading = ref(false)
+const conversationRef = ref<HTMLElement | null>(null);
 
 receivedMessageEventBus.value.on(incomingMessage)
 
@@ -97,18 +98,27 @@ onBeforeRouteUpdate((to, from, next) => {
   next()
 })
 
-// const scrollToBottom = () => {
-//   let objContain = document.getElementById("containMessage") as any
-//   objContain.scrollTop = objContain?.scrollHeight
-// }
 
-// onUpdated(() => {
-//     scrollToBottom()
-// })
 
-// onBeforeMount(() => {
-//   scrollToBottom()
-// })
+const scrollToLastMessage = () => {
+  nextTick(() => {
+    nextTick(() => {
+      const conversationContainer = conversationRef.value;
+      if (conversationContainer) {
+        conversationContainer.scrollTop = conversationContainer.scrollHeight;
+      }
+    });
+  });
+};
+
+onMounted(() => {
+  scrollToLastMessage();
+});
+
+onUpdated(() => {
+  scrollToLastMessage();
+  
+});
 
 </script>
 
