@@ -73,12 +73,39 @@ const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 
 receivedMessageEventBus.value.on(incomingMessage)
+function messageToActivity(message: Message): string {
+  if (message.message.length > 0) {
+    if (message.source.userType === "user") {
+      return message.message;
+    } else if (message.source.userType === "admin") {
+      return "คุณ: " + message.message;
+    } else {
+      return `WTF ${message.source.userType} พิมพ์ข้อความ`
+    }
+  } else if (message.attachments.length > 0) {
+    if (message.attachments[0].attachmentType === "image") {
+      if (message.source.userType === "user") {
+        return "ส่งรูปภาพ";
+      } else if (message.source.userType === "admin") {
+        return "คุณส่งรูปภาพ";
+      } else {
+        return `WTF ${message.source.userType} ส่งรูปภาพ`
+      }
+    }
+  } else {
+    return "WTF";
+  }
+  return "wwwwwwwwwwwwwwwwwwwwwwwww"
+}
+
 
 function incomingMessage(message: Message) {
   if (currentChat.value?.conversation.conversationID === message.conversationID) {
     const cloneConversation = { ...currentChat.value!.conversation }
-    cloneConversation.isRead = true
+    console.log(`incoming message ${message.messageID}`)
+    cloneConversation.isRead = false
     cloneConversation.updatedTime = message.timestamp
+    cloneConversation.lastActivity = messageToActivity(message)
     livechatStore.updateConversation(cloneConversation)
     currentChat.value!.messages.push(message)
   }
@@ -90,6 +117,9 @@ function openChat(conversation: Conversation) {
     currentChat.value!.messages = messages
     isLoading.value = false
   })
+  const updateConversation = { ...conversation }
+  updateConversation.isRead = true
+  livechatStore.updateConversation(updateConversation)
 }
 openChatEventBus.value.on(openChat)
 

@@ -81,6 +81,15 @@ export const useLivechatStore = defineStore("livechat", {
       }
       conversation.updatedTime = message.timestamp
       conversation.lastActivity = messageToActivity(message)
+      if (this.currentChat) {
+        if (this.currentChat.conversation.conversationID === conversation.conversationID) {
+          conversation.isRead = true
+        } else {
+          conversation.isRead = false
+        }
+      } else {
+        conversation.isRead = false
+      }
       this.updateConversation(conversation)
     }, async sendMessage(platform: string, pageID: string, conversationID: string, psid: string, text: string) {
       await this.botioLivechat.sendTextMessage(platform, conversationID, pageID, psid, text)
