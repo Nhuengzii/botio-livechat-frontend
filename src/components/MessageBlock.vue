@@ -4,16 +4,16 @@
 
     <!-- user send Text -->
     <template v-if="messageType == 'NormalText'">
-        <div class="flex flex-row">
-          <NormalText :message="message" :conversation="conversation" />
-        </div>
+      <div class="flex flex-row">
+        <NormalText :message="message" :conversation="conversation" />
+      </div>
     </template>
     <!-- end-->
 
     <!-- user send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
       <div class="flex flex-row">
-        <ImageProfileConversation :conversation="conversation" class="mr-5"/>
+        <ImageProfileConversation :conversation="conversation" class="mr-5" />
         <ImageMessage :message="message" :conversation="conversation" />
       </div>
     </template>
@@ -31,12 +31,12 @@
 
   <!-- ADMIN -->
   <template v-else>
-    
+
     <!-- admin send Text -->
     <template v-if="messageType == 'NormalText'">
-        <div class="flex items-center justify-start flex-row-reverse">
-          <NormalText :message="message" :conversation="conversation" />
-        </div>
+      <div class="flex items-center justify-start flex-row-reverse">
+        <NormalText :message="message" :conversation="conversation" />
+      </div>
     </template>
     <!-- end-->
 
@@ -56,7 +56,6 @@
     </template>
     <!-- end-->
   </template>
-    
 </template>
 
 <script setup lang="ts">
@@ -76,13 +75,12 @@ const { message, conversation } = defineProps<
 const messageType = ref('')
 if (message.message.length > 0) {
   messageType.value = 'NormalText'
-  console.log("if :::")
-} else if (message.attachments![0]?.attachmentType) {
-  messageType.value = 'ImageMessage'
-  console.log("else if ::")
-} else {
+} else if (message.attachments.length == 0) {
   messageType.value = 'Unsupport'
-  console.log("else ::")
+} else if (message.attachments[0].attachmentType == 'image') {
+  messageType.value = 'ImageMessage'
+} else if (message.attachments[0].attachmentType) {
+  messageType.value = 'Unsupport'
 }
 </script>
 
