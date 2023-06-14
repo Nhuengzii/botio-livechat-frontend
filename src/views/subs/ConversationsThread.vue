@@ -1,17 +1,17 @@
 <template>
   <!-- <button @click="burstConversation">ASSS</button> -->
-  <div :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
+  <div class="mt-3" :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
     'flex-1 max-w-[400px] bg-d9-30' : 'bg-white duration-300 pt-6 w-[100px]']">
     <ThreadUtils :mode="conversationsThreadMode" />
     <template v-if="isLoading">
-      <div class="flex-1 bg-gray-300 max-w-[400px] max-h-[700px]">
+      <div class="flex-1 max-w-[400px] max-h-[700px] ">
         <div class="flex flex-col items-center justify-center h-full">
           <ThreadSkeleton :num-skeletons="6" />
         </div>
       </div>
     </template>
     <template v-else>
-      <div v-bind="containerProps" class="flex-1 bg-gray-300 max-w-[400px] max-h-[700px]">
+      <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] mx-4">
         <div v-bind="wrapperProps">
           <div v-for="({ data }, index) in list" :key="data.conversationID" class="mx-2">
             <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"

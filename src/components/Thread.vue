@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-4 px-3 " :class="[(mode === 'normal' || mode === 'searching') ? 'bg-white min-w-[320px]' : '']">
+  <div class="flex py-4 px-3" :class="[(mode === 'normal' || mode === 'searching') ? 'bg-white min-w-[320px]' : '']">
     <template v-if="mode === 'normal'">
       <img :src=conversation.participants[0].profilePic.src class="h-16 w-16 rounded-full object-cover	">
       <div class="ml-3 overflow-hidden w-full ">
