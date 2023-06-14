@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import UserTag from '@/components/UserTag.vue'
 const { conversation, mode } = defineProps<{
   conversation: Conversation
@@ -50,6 +50,10 @@ onMounted(() => {
   _timer = setInterval(() => {
     updateTimeStatus.value = getLastActivity(conversation.updatedTime)
   }, 10000)
+})
+
+onUpdated(() => {
+  updateTimeStatus.value = getLastActivity(conversation.updatedTime)
 })
 
 onUnmounted(() => {
