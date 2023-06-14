@@ -28,10 +28,10 @@
     </div>
 
     <!-- space -->
-    <div class="flex-[1]">
-      <button v-show="showSendMessageButton" @click="sendMessage">
-          <div class="pl-4   text-gray-500">
-            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #394867;" />
+    <div class="pl-3 flex-[1]">
+      <button v-show="showSendMessageButton" @click="sendMessage" class="flex">
+          <div class="flex rounded-full bg-[#394867]">
+            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
           </div>
         </button>
     </div>
