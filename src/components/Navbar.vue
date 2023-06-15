@@ -28,10 +28,10 @@
                                 </template>
                                 <template #body>
                                     <main class="flex flex-warp w-[60vw] h-full bg-stone-100 py-4">
-                                        <button>
+                                        <button @click="livechatStore.changePage('108362942229009', '1')">
                                             <div class="bg-orange-300 w-20 h-20 rounded-full mx-5"></div>
                                         </button>
-                                        <button>
+                                        <button @click="livechatStore.changePage('119465831164812', '2')">
                                             <div class="bg-orange-100 w-20 h-20 rounded-full mx-6"></div>
                                         </button>
                                         <button>
@@ -207,8 +207,10 @@ import LivechatNavBar from '@/components/LivechatNavBar.vue';
 import { ref } from 'vue'
 import { useUIStore } from '@/stores/UI';
 import ModalChagePage from './ChangePages/ModalChagePage.vue';
+import { useLivechatStore } from '@/stores/livechat';
 
 const uistore = useUIStore();
+const livechatStore = useLivechatStore();
 const route = useRoute();
 const OpentextColor = ref('#3C4048')
 const ClosetextColor = ref('#9BA4B5')
