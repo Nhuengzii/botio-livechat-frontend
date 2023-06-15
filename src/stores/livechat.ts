@@ -139,6 +139,9 @@ export const useLivechatStore = defineStore("livechat", {
       this.botioLivechat.shopID = shopID
       this.fetchConversations("facebook")
       this.fetchConversations("line")
+      this.conversationRaw.get("facebook")?.clear()
+      this.conversationRaw.get("line")?.clear()
+      console.log("change page", pageID, shopID);
       this.conversationTimestamp = new Date().getTime()
     }
   }
