@@ -18,7 +18,7 @@ import {
     faImage,
     faCommentDots,
     faPaperPlane
-
+    
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
