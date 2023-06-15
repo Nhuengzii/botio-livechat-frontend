@@ -88,7 +88,7 @@ const isLoading = ref(false);
 const route = useRoute()
 const conversationsForVirtualList = computed(() => {
   const currentPlatform = route.query.platform as string;
-  return conversations.value(currentPlatform)
+  return conversations.value(currentPlatform, conversationsThreadMode.value === 'searching')
 })
 const { list, containerProps, wrapperProps } = useVirtualList(
   conversationsForVirtualList,
@@ -132,7 +132,7 @@ function burstConversation() {
   display: none;
 }
 
-.bg-d9-30{
+.bg-d9-30 {
   background-color: rgba(217, 217, 217, 0.3);
 }
 </style>

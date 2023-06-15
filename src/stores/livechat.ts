@@ -33,11 +33,14 @@ export const useLivechatStore = defineStore("livechat", {
     searchResult: [] as Conversation[]
   }),
   getters: {
-    conversations: (state) => (platform: string): Conversation[] => {
+    conversations: (state) => (platform: string, searchMode: boolean = false): Conversation[] => {
       const conversationsMap = state.conversationRaw.get(platform);
       console.log(`force update conversations ${platform} ${state.conversationTimestamp}`);
       if (conversationsMap === undefined) {
         throw new Error("conversationsMap is undefined");
+      }
+      if (searchMode) {
+        return state.searchResult
       }
       return conversationsMap2SortedArray(conversationsMap);
     }
@@ -112,9 +115,13 @@ export const useLivechatStore = defineStore("livechat", {
     },
     async searchConversations(platform: string, query: string): Promise<Conversation[]> {
       const res = this.conversations(platform).filter((conversation) => {
-        conversation.participants[0].username.toLowerCase().includes(query.toLowerCase())
+        if (conversation.participants[0].username.toLowerCase().includes(query.toLowerCase())) {
+          return true
+        } else {
+          return false
+        }
       })
-      this.searchResult = res
+      this.searchResult = res; 
       return res;
     }
   }
