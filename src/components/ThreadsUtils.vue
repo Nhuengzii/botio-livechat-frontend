@@ -6,9 +6,11 @@
           <div class="flex">ข้อความทั้งหมด <div class=" px-2  bg-[#D9D9D9] rounded-full ml-3 font-bold text-base">999+
             </div>
           </div>
-          <div class="flex bg-red-400">
+          <div class="flex ">
             <button @click="uiStore.conversationsThreadMode = 'collapse'">
-              555
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
+                <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+              </svg>
             </button>
           </div>
         </div>
@@ -47,7 +49,7 @@
     <div>
       <div>
         <button @click="uiStore.conversationsThreadMode = 'normal'" class="p-5 ml-6 mb-1 ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 320 512">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
             <path
               d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
           </svg>
@@ -70,20 +72,26 @@
 import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
 import { useLivechatStore } from '@/stores/livechat';
+import { useRoute } from 'vue-router';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
 let messageSaersh = ref("");
 const query = ref(false);
+const route = useRoute()
 defineProps<{
   mode: string
 }>()
 
 watch(messageSaersh, (value) => {
   console.log(value)
-  livechatStore.searchConversations('facebook', value)
+  const currentPlatform = route.query.platform as string
+  livechatStore.searchConversations(currentPlatform, value).then((res) => {
+    console.log(`searching of platform ${currentPlatform} is done with result ${res.length}`)
+  })
 })
 
 </script>
  
 <style scoped></style>
+ 
  

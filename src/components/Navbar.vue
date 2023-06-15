@@ -56,86 +56,86 @@
                 </router-link>
                 <router-link to="/ordermars" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('service') }"
-                        :class="[uistore.is_expanded ? ((active == 'service' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'service' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'ordermars') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name =='ordermars') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'service' as string ? activeOpentextColor : OpentextColor }"
+                            :style="{ color: (route.name == 'ordermars' )? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'service' as string ? ClosetextColor : ClosetextColor }"
+                            :style="{ color: (route.name == 'ordermars')? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'service' as string }">บริการ</span>
+                            :class="{ 'text-white': route.name == 'ordermars'}">บริการ</span>
                     </button>
                 </router-link>
                 <router-link to="/inventory" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('stock') }"
-                        :class="[uistore.is_expanded ? ((active == 'stock' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'stock' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'inventory') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'inventory') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'stock' as string ? activeOpentextColor : OpentextColor }"
+                            :style="{ color: (route.name == 'inventory')? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383L5.93 1.757zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'stock' as string ? ClosetextColor : ClosetextColor }"
+                            :style="{ color:(route.name == 'inventory')? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383L5.93 1.757zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'stock' as string }">คลังสินค้า</span>
+                            :class="{ 'text-white':(route.name == 'inventory')}">คลังสินค้า</span>
                     </button>
                 </router-link>
                 <router-link to="/orders" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('order') }"
-                        :class="[uistore.is_expanded ? ((active == 'order' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'order' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'orders') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'orders') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'order' as string ? activeOpentextColor : OpentextColor }"
+                            :style="{ color: (route.name == 'orders') ? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                 d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'order' as string ? ClosetextColor : ClosetextColor }"
+                            :style="{ color: (route.name == 'orders') ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                 d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'order' as string }">ออเดอร์</span>
+                            :class="{ 'text-white': (route.name == 'orders')}">ออเดอร์</span>
                     </button>
                 </router-link>
                 <router-link to="/customize" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('modify') }"
-                        :class="[uistore.is_expanded ? ((active == 'modify' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'modify' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'customize') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'customize') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'modify' as string ? activeOpentextColor : OpentextColor }"
+                            :style="{ color: route.name == 'customize'? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'modify' as string ? ClosetextColor : ClosetextColor }"
+                            :style="{ color: route.name == 'customize' ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
+                            :class="{ 'text-white': route.name == 'customize' }">ปรับแต่ง</span>
                     </button>
                 </router-link>
                 <router-link :to='{ path: "/livechat", query: { platform: "facebook" } }' class="relative   ">
@@ -161,7 +161,7 @@
                 </router-link>
             </div>
         </div>
-        <LivechatNavBar v-show="route.name == 'livechat'" />
+        <LivechatNavBar v-if="route.name == 'livechat'" />
     </div>
 </template>
 

@@ -3,13 +3,16 @@
   <div class="mt-3 ml-3" :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
     'flex-1 max-w-[400px] bg-d9-30' : 'bg-white duration-300 pt-6 w-[100px]']">
     <ThreadUtils :mode="conversationsThreadMode" />
-    <template v-if="isLoading">
+    <template v-if="(conversationsThreadMode == 'normal' 
+    || conversationsThreadMode == 'searching')
+    && isLoading">
       <div class="flex-1 max-w-[400px] max-h-[700px] ">
-        <div class="flex flex-col items-center justify-center h-full">
-          <ThreadSkeleton :num-skeletons="6" />
-        </div>
+          <div class="flex flex-col items-center justify-center h-full">
+            <ThreadSkeleton :num-skeletons="6" />
+          </div>
       </div>
     </template>
+    
     <template v-else>
       <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] mx-4">
         <div v-bind="wrapperProps">
@@ -88,7 +91,7 @@ const isLoading = ref(false);
 const route = useRoute()
 const conversationsForVirtualList = computed(() => {
   const currentPlatform = route.query.platform as string;
-  return conversations.value(currentPlatform)
+  return conversations.value(currentPlatform, conversationsThreadMode.value === 'searching')
 })
 const { list, containerProps, wrapperProps } = useVirtualList(
   conversationsForVirtualList,
@@ -132,7 +135,7 @@ function burstConversation() {
   display: none;
 }
 
-.bg-d9-30{
+.bg-d9-30 {
   background-color: rgba(217, 217, 217, 0.3);
 }
 </style>
