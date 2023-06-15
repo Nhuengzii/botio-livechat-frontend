@@ -1,6 +1,6 @@
 <template >
   <template v-if="mode == 'normal' || mode == 'searching'">
-    <div class="mx-6 bg-[#EAEAEA] min-w-[320px] duration-500" :class="[query ? 'h-32' : 'h-40']">
+    <div class="mx-6 bg-[#EAEAEA] min-w-[320px] duration-500" :class="[querying ? 'h-32' : 'h-40']">
       <div class="bg-white h-36 my-4">
         <div v-if="mode == 'normal'" class="flex pt-5 mx-8 justify-between">
           <div class="flex">ข้อความทั้งหมด <div class=" px-2  bg-[#D9D9D9] rounded-full ml-3 font-bold text-base">999+
@@ -14,10 +14,10 @@
             </button>
           </div>
         </div>
-        <div class=" flex  justify-around py-[1rem] px-2" :class="query ? '' : 'pl-5 '">
-          <div v-if="query" :class="[query ? 'mt-1.5 ' : '']">
+        <div class=" flex  justify-around py-[1rem] px-2" :class="querying ? '' : 'pl-5 '">
+          <div v-if="querying" :class="[querying ? 'mt-1.5 ' : '']">
             <button type="button"
-              @click="{ query = false; uiStore.conversationsThreadMode = 'normal'; messageSaersh = '' }"
+              @click="{ querying = false; uiStore.conversationsThreadMode = 'normal'; query = '' }"
               class="text-white   hover:bg-gray-100  p-2 rounded-full inline-flex items-center  ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 448 512">
                 <path
@@ -26,8 +26,8 @@
               <span class="sr-only">Icon description</span>
             </button>
           </div>
-          <div class="relative w-full mr-4 duration-500" :class="[query ? 'mt-2' : 'mt-2']">
-            <div v-if="!query"
+          <div class="relative w-full mr-4 duration-500" :class="[querying ? 'mt-2' : 'mt-2']">
+            <div v-if="!querying"
               class="flex absolute  rounded-full z-10 inset-y-0 left-0 items-center pl-3 pointer-events-none ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
@@ -35,10 +35,10 @@
                   d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
             </div>
-            <input type="text" @click="{ query = true; uiStore.conversationsThreadMode = 'searching'; }"
-              :class="query ? '' : ' rounded-full'"
+            <input type="text" @click="{ querying = true; uiStore.conversationsThreadMode = 'searching'; }"
+              :class="querying ? '' : ' rounded-full'"
               class="ml-2 bg-[#D9D9D9]  border border-gray-300 text-gray-900  outline-none   block w-full pl-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              :placeholder="query ? 'ค้นหา' : ' ค้นหาจากชื่อ หรือ แท็ก'" v-model="messageSaersh">
+              :placeholder="querying ? 'ค้นหา' : ' ค้นหาจากชื่อ หรือ แท็ก'" v-model="query">
 
           </div>
         </div>
@@ -75,14 +75,14 @@ import { useLivechatStore } from '@/stores/livechat';
 import { useRoute } from 'vue-router';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
-let messageSaersh = ref("");
-const query = ref(false);
+const query = ref("");
+const querying = ref(false);
 const route = useRoute()
 defineProps<{
   mode: string
 }>()
 
-watch(messageSaersh, (value) => {
+watch(query, (value) => {
   console.log(value)
   const currentPlatform = route.query.platform as string
   livechatStore.searchConversations(currentPlatform, value).then((res) => {

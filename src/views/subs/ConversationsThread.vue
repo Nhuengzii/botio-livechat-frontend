@@ -23,6 +23,11 @@
       </div>
     </template>
 
+
+
+
+
+    
     <!-- <template v-if="conversationsThreadMode == 'searching'"> -->
     <!--   <div class="bg-white max-w-[400px] mx-2 pl-8 py-3 text-[#B2B2B2] text-lg font-bold">แท็ก</div> -->
     <!--   <div class="flex flex-wrap bg-white min-h-[32px] mx-2 pl-6 pr-2 "> -->
