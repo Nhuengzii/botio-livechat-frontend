@@ -9,8 +9,43 @@
                     <div class="  ml-2">
                         <button
                             class=" items-center px-3 py-1  duration-300  rounded-md  bg-[#394867] text-white  hover:scale-105">NamePage</button>
-                        <button
+                        <button @click="uistore.activeChagePage"
                             class="items-center px-3 py-1  duration-300  rounded-md bg-[#00ABB3] mt-2 hover:scale-105">change</button>
+
+                        <!-- teleport to window change page -->
+                        <Teleport to="body">
+                            <!-- use the modal component, pass in the prop -->
+                            <ModalChagePage :show="uistore.is_chagePage">
+                                <template #header>
+                                    <div class="flex justify-between items-center w-[60vw]">
+                                        <p class="py-4 px-3 bg-gray-200 text-xl">เลือกเพจที่ต้องการใช้งาน</p>
+                                        <div class="flex w-30 h-30 rounded-full">
+                                            <button @click="uistore.activeChagePage"
+                                                class="bg-gray-200 text-xl py-2 px-4">X</button>
+                                        </div>
+
+                                    </div>
+                                </template>
+                                <template #body>
+                                    <main class="flex flex-warp w-[60vw] h-full bg-stone-100 py-4">
+                                        <button>
+                                            <div class="bg-orange-300 w-20 h-20 rounded-full mx-5"></div>
+                                        </button>
+                                        <button>
+                                            <div class="bg-orange-100 w-20 h-20 rounded-full mx-6"></div>
+                                        </button>
+                                        <button>
+                                            <div class="bg-orange-200 w-20 h-20 rounded-full mx-6"></div>
+                                        </button>
+                                        <button>
+                                            <div class="bg-orange-300 w-20 h-20 rounded-full mx-6"></div>
+                                        </button>
+                                    </main>
+                                </template>
+                            </ModalChagePage>
+                        </Teleport>
+                        <!-- end teleport to window change page -->
+
                     </div>
                 </div>
                 <div :class="[uistore.is_expanded ? 'justify-center' : 'justify-end py-2 mx-2 ']" class=" flex  ">
@@ -56,23 +91,23 @@
                 </router-link>
                 <router-link to="/ordermars" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('service') }"
-                        :class="[uistore.is_expanded ? ((route.name == 'ordermars') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name =='ordermars') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'ordermars') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'ordermars') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: (route.name == 'ordermars' )? activeOpentextColor : OpentextColor }"
+                            :style="{ color: (route.name == 'ordermars') ? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: (route.name == 'ordermars')? ClosetextColor : ClosetextColor }"
+                            :style="{ color: (route.name == 'ordermars') ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': route.name == 'ordermars'}">บริการ</span>
+                            :class="{ 'text-white': route.name == 'ordermars' }">บริการ</span>
                     </button>
                 </router-link>
                 <router-link to="/inventory" class="relative  ">
@@ -81,19 +116,19 @@
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3   duration-500 ">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: (route.name == 'inventory')? activeOpentextColor : OpentextColor }"
+                            :style="{ color: (route.name == 'inventory') ? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383L5.93 1.757zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color:(route.name == 'inventory')? ClosetextColor : ClosetextColor }"
+                            :style="{ color: (route.name == 'inventory') ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383L5.93 1.757zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0v-2zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white':(route.name == 'inventory')}">คลังสินค้า</span>
+                            :class="{ 'text-white': (route.name == 'inventory') }">คลังสินค้า</span>
                     </button>
                 </router-link>
                 <router-link to="/orders" class="relative  ">
@@ -114,7 +149,7 @@
                                 d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': (route.name == 'orders')}">ออเดอร์</span>
+                            :class="{ 'text-white': (route.name == 'orders') }">ออเดอร์</span>
                     </button>
                 </router-link>
                 <router-link to="/customize" class="relative  ">
@@ -123,7 +158,7 @@
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: route.name == 'customize'? activeOpentextColor : OpentextColor }"
+                            :style="{ color: route.name == 'customize' ? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
@@ -171,6 +206,7 @@ import { useRoute } from 'vue-router';
 import LivechatNavBar from '@/components/LivechatNavBar.vue';
 import { ref } from 'vue'
 import { useUIStore } from '@/stores/UI';
+import ModalChagePage from './ChangePages/ModalChagePage.vue';
 
 const uistore = useUIStore();
 const route = useRoute();
