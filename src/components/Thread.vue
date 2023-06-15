@@ -31,7 +31,7 @@
       </div>
     </template>
     <template v-else-if="mode === 'collapse'">
-      <div >
+      <div>
         <div class="static">
         <div class="h-14"><img :src=conversation.participants[0].profilePic.src class="h-14 w-14 rounded-full object-cover	">
         </div>

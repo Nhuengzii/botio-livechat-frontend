@@ -13,11 +13,11 @@
       </div>
     </template>
     <template v-else>
-      <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] " :class="[conversationsThreadMode == 'collapse'? 'ml-3.5':'mx-4']">
+      <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] " :class="[conversationsThreadMode == 'collapse'? 'ml-3.5 no-scrollbar':'mx-4 ']">
         <div v-bind="wrapperProps">
-          <div v-for="({ data }, index) in list" :key="data.conversationID" :class="[conversationsThreadMode == 'collapse'? '':'mx-2']">
+          <div v-for="({ data }, index) in list" :key="data.conversationID" :class="[conversationsThreadMode == 'collapse'? '':'mx-2']" >
             <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"
-              :show-platform="data.platform === 'centralized'" :mode="conversationsThreadMode" />
+            :show-platform="$route.query.platform == 'centralized'" :mode="conversationsThreadMode"  />
           </div>
         </div>
       </div>
@@ -141,5 +141,10 @@ function burstConversation() {
 
 .bg-d9-30 {
   background-color: rgba(217, 217, 217, 0.3);
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 </style>
