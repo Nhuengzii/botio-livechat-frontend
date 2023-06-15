@@ -133,6 +133,13 @@ export const useLivechatStore = defineStore("livechat", {
       const queryConversations = await this.botioLivechat.searchConversations(platform, this.pageIDs.get(platform)!, query);
       this.searchResult = queryConversations;
       return queryConversations;
+    },
+    async changePage(pageID: string, shopID: string) {
+      this.pageIDs.set("facebook", pageID)
+      this.botioLivechat.shopID = shopID
+      this.fetchConversations("facebook")
+      this.fetchConversations("line")
+      this.conversationTimestamp = new Date().getTime()
     }
   }
 });
