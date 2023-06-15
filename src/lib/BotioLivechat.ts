@@ -123,6 +123,15 @@ class BotioLivechat implements IBotioLivechat {
       throw new Error("Error sending message");
     }
   };
+  searchConversations: (platform: string, pageID: string, query: string) => Promise<Conversation[]> = async (platform: string, pageID: string, query: string) => {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/`;
+
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_message: query }) } })
+    console.log(`search result`);
+    console.log(res);
+    console.log(res.data.conversations)
+    return res.data.conversations
+  }
 }
 
 export { BotioLivechat }

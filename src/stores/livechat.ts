@@ -19,6 +19,9 @@ export const useLivechatStore = defineStore("livechat", {
   state: () => ({
     botioLivechat: new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`, `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`, "1"),
     pageIDs: new Map<string, string>([
+      // ["facebook", "119465831164812"],
+      // ["facebook", "119465831164812"],
+      // ["facebook", "105303268433507"],
       ["facebook", "108362942229009"],
       ["line", "U6972d1d58590afb114378eeab0b08d52"],
     ]),
@@ -37,6 +40,9 @@ export const useLivechatStore = defineStore("livechat", {
       const conversationsMap = state.conversationRaw.get(platform);
       console.log(`force update conversations ${platform} ${state.conversationTimestamp}`);
       if (conversationsMap === undefined) {
+        if (platform === "centralized" || platform === "instagram") {
+          return []
+        }
         throw new Error("conversationsMap is undefined");
       }
       if (searchMode) {
@@ -57,6 +63,9 @@ export const useLivechatStore = defineStore("livechat", {
       this.openChatEventBus.emit(conversation);
     },
     async fetchConversations(platform: string): Promise<void> {
+      if (platform === "instagram" || platform === "centralized") {
+        return
+      }
       const conversations = await this.botioLivechat.fetchConversations(platform, this.pageIDs.get(platform)!);
       if (conversations === null) {
         throw new Error("Error fetching conversations");
@@ -114,15 +123,9 @@ export const useLivechatStore = defineStore("livechat", {
       this.receivedMessageEventBus.emit(newMessage)
     },
     async searchConversations(platform: string, query: string): Promise<Conversation[]> {
-      const res = this.conversations(platform).filter((conversation) => {
-        if (conversation.participants[0].username.toLowerCase().includes(query.toLowerCase())) {
-          return true
-        } else {
-          return false
-        }
-      })
-      this.searchResult = res; 
-      return res;
+      const queryConversations = await this.botioLivechat.searchConversations(platform, this.pageIDs.get(platform)!, query);
+      this.searchResult = queryConversations;
+      return queryConversations;
     }
   }
 });
