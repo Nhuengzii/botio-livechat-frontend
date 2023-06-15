@@ -70,20 +70,26 @@
 import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
 import { useLivechatStore } from '@/stores/livechat';
+import { useRoute } from 'vue-router';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
 let messageSaersh = ref("");
 const query = ref(false);
+const route = useRoute()
 defineProps<{
   mode: string
 }>()
 
 watch(messageSaersh, (value) => {
   console.log(value)
-  livechatStore.searchConversations('facebook', value)
+  const currentPlatform = route.query.platform as string
+  livechatStore.searchConversations(currentPlatform, value).then((res) => {
+    console.log(`searching of platform ${currentPlatform} is done with result ${res.length}`)
+  })
 })
 
 </script>
  
 <style scoped></style>
+ 
  
