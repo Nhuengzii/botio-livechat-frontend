@@ -119,23 +119,23 @@
                 </router-link>
                 <router-link to="/customize" class="relative  ">
                     <button @click="{ show_Chat = false; updateActiveTap('modify') }"
-                        :class="[uistore.is_expanded ? ((active == 'modify' as string) ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((active == 'modify' as string) ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
+                        :class="[uistore.is_expanded ? ((route.name == 'customize') ? 'bg-gray-200 ml-2 hover:bg-[#EAEAEA]' : 'hover:bg-[#00ABB3]') : ((route.name == 'customize') ? 'bg-[#394867] ml-2 hover:bg-[#394867]' : 'hover:bg-white')]"
                         class="flex justify-start hover:bg-[#00ABB3] text-white w-full  py-3  duration-500">
                         <svg v-show="!uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'modify' as string ? activeOpentextColor : OpentextColor }"
+                            :style="{ color: route.name == 'customize'? activeOpentextColor : OpentextColor }"
                             class="bi bi-flag-fill ml-10" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                         </svg><svg v-show="uistore.is_expanded" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor"
-                            :style="{ color: active == 'modify' as string ? ClosetextColor : ClosetextColor }"
+                            :style="{ color: route.name == 'customize' ? ClosetextColor : ClosetextColor }"
                             class="bi bi-flag-fill ml-5" viewBox="0 0 16 16">
                             <path
                                 d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                         </svg>
                         <span v-show="!uistore.is_expanded" class="pl-3 text-black font-bold"
-                            :class="{ 'text-white': active == 'modify' as string }">ปรับแต่ง</span>
+                            :class="{ 'text-white': route.name == 'customize' }">ปรับแต่ง</span>
                     </button>
                 </router-link>
                 <router-link :to='{ path: "/livechat", query: { platform: "facebook" } }' class="relative   ">
@@ -161,7 +161,7 @@
                 </router-link>
             </div>
         </div>
-        <LivechatNavBar v-show="route.name == 'livechat'" />
+        <LivechatNavBar v-if="route.name == 'livechat'" />
     </div>
 </template>
 

@@ -36,6 +36,7 @@
 import type { Conversation } from '@/types/conversation';
 import { onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import UserTag from '@/components/UserTag.vue'
+
 const { conversation, mode } = defineProps<{
   conversation: Conversation
   mode: string
