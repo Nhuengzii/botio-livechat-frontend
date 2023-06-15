@@ -16,6 +16,7 @@ export const useUIStore = defineStore('ui', {
         ]),
         is_activeTemplateMessage : false,
         is_typing : false,
+        is_chagePage : false,
     }),
     actions: {
         ToggleMenu() {
@@ -30,5 +31,8 @@ export const useUIStore = defineStore('ui', {
         activeTemplateMessage() {
             this.is_activeTemplateMessage = !this.is_activeTemplateMessage
         },
+        activeChagePage() {
+            this.is_chagePage = !this.is_chagePage
+        }
     }
 })

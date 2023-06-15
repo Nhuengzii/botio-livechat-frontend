@@ -80,7 +80,7 @@ const getLastActivity = (timestamp: number) => {
   } else if (minutes > 0) {
     return `เมื่อ ${minutes} นาทีที่แล้ว`;
   } else {
-    return `เมื่อ ${seconds} วินาทีที่แล้ว`;
+    return `เมื่อไม่กี่วินาทีที่แล้ว`;
   }
 };
 
