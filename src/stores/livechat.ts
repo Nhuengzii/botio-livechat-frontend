@@ -40,7 +40,9 @@ export const useLivechatStore = defineStore("livechat", {
       const conversationsMap = state.conversationRaw.get(platform);
       console.log(`force update conversations ${platform} ${state.conversationTimestamp}`);
       if (conversationsMap === undefined) {
-        if (platform === "centralized" || platform === "instagram") {
+        if (platform === "centralized") {
+          return conversationsMap2SortedArray(state.conversationRaw.get("facebook")!).concat(conversationsMap2SortedArray(state.conversationRaw.get("line")!)).sort((a, b) => b.updatedTime - a.updatedTime)
+        } else {
           return []
         }
         throw new Error("conversationsMap is undefined");
@@ -63,7 +65,12 @@ export const useLivechatStore = defineStore("livechat", {
       this.openChatEventBus.emit(conversation);
     },
     async fetchConversations(platform: string): Promise<void> {
-      if (platform === "instagram" || platform === "centralized") {
+      if (platform === "instagram") {
+        return
+      }
+      if (platform === 'centralized') {
+        await this.fetchConversations("facebook")
+        await this.fetchConversations("line")
         return
       }
       const conversations = await this.botioLivechat.fetchConversations(platform, this.pageIDs.get(platform)!);
