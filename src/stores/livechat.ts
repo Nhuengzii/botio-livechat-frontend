@@ -79,7 +79,7 @@ export const useLivechatStore = defineStore("livechat", {
           throw new Error("Error fetching conversation")
         }
       }
-      conversation.updatedTime = message.timestamp
+      conversation.updatedTime = new Date().getTime()
       conversation.lastActivity = messageToActivity(message)
       if (this.currentChat) {
         if (this.currentChat.conversation.conversationID === conversation.conversationID) {
