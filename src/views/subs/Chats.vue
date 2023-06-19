@@ -80,12 +80,6 @@ function openChat(conversation: Conversation) {
 }
 openChatEventBus.value.on(openChat)
 
-onBeforeRouteUpdate((to, from, next) => {
-  console.log("before route update")
-  next()
-})
-
-
 
 const scrollToLastMessage = () => {
   nextTick(() => {
