@@ -107,3 +107,4 @@ class BotioLivechat implements IBotioLivechat {
   }
 }
 
+export { BotioLivechat };
