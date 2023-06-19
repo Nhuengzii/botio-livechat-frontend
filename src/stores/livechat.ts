@@ -31,6 +31,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   ]));
 
   const currentChat = ref(null as Chat | null);
+  const openChatEventBus = ref(useEventBus<Conversation>('openChatEventBus'));
 
 
   // Getter
@@ -70,9 +71,10 @@ export const useLivechatStore = defineStore("livechat", () => {
       currentChat.value.conversation = conversation;
       currentChat.value.messages = [];
     }
+    openChatEventBus.value.emit(conversation);
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus }
 })
 
 

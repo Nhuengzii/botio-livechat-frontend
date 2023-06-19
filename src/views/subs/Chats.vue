@@ -1,7 +1,6 @@
 <template>
   <div class="flex-[2] shrink-1 mx-3 background-d9">
     <div class="flex flex-col w-full h-full ">
-      <h1>{{ isLoading }}</h1>
 
       <!-- header chats-->
       <header class="bg-white flex-[2] mx-3 mb-4">
@@ -21,7 +20,8 @@
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage" ref="conversationRef">
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage"
+        ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-2">
           <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
 
@@ -66,60 +66,17 @@ import MessageSender from "@/components/MessageSender.vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
 import { onBeforeRouteUpdate } from "vue-router";
 const livechatStore = useLivechatStore()
-const { openChatEventBus, botioLivechat, currentChat, receivedMessageEventBus } = storeToRefs(livechatStore)
+const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const tab = ref('')
 const currentFocusChat = ref("")
 const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 
-receivedMessageEventBus.value.on(incomingMessage)
-function messageToActivity(message: Message): string {
-  if (message.message.length > 0) {
-    if (message.source.userType === "user") {
-      return message.message;
-    } else if (message.source.userType === "admin") {
-      return "คุณ: " + message.message;
-    } else {
-      return `WTF ${message.source.userType} พิมพ์ข้อความ`
-    }
-  } else if (message.attachments.length > 0) {
-    if (message.attachments[0].attachmentType === "image") {
-      if (message.source.userType === "user") {
-        return "ส่งรูปภาพ";
-      } else if (message.source.userType === "admin") {
-        return "คุณส่งรูปภาพ";
-      } else {
-        return `WTF ${message.source.userType} ส่งรูปภาพ`
-      }
-    }
-  } else {
-    return "WTF";
-  }
-  return "wwwwwwwwwwwwwwwwwwwwwwwww"
-}
-
-
-function incomingMessage(message: Message) {
-  if (currentChat.value?.conversation.conversationID === message.conversationID) {
-    const cloneConversation = { ...currentChat.value!.conversation }
-    console.log(`incoming message ${message.messageID}`)
-    cloneConversation.isRead = false
-    cloneConversation.updatedTime = message.timestamp
-    cloneConversation.lastActivity = messageToActivity(message)
-    livechatStore.updateConversation(cloneConversation)
-    currentChat.value!.messages.push(message)
-  }
-}
-
 function openChat(conversation: Conversation) {
   isLoading.value = true
-  botioLivechat.value.fetchMessages(conversation.platform, conversation.pageID, conversation.conversationID).then((messages) => {
-    currentChat.value!.messages = messages
-    isLoading.value = false
+  livechatStore.fetchMessages(conversation.platform, conversation).then(() => {
+    console.log("fetch message success")
   })
-  const updateConversation = { ...conversation }
-  updateConversation.isRead = true
-  livechatStore.updateConversation(updateConversation)
 }
 openChatEventBus.value.on(openChat)
 
@@ -147,8 +104,8 @@ onMounted(() => {
 
 onUpdated(() => {
   scrollToLastMessage();
-  
-});
+})
+
 
 </script>
 
