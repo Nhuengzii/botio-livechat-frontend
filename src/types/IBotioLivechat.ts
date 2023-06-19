@@ -4,6 +4,7 @@ import type { Message } from "./message"
 interface IBotioLivechat {
   botioRestApiUrl: string
   botioWebsocketApiUrl: string
+  shopID: string
   listConversation: (platform: string, pageID: string) => Promise<Conversation[]>
   getConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null>
   listMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message[]>
