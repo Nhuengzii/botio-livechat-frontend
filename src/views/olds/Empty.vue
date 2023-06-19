@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>THIS is Empty View</h1>
+    <h1>Empty</h1>
   </div>
 </template>
 

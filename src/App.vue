@@ -1,43 +1,31 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router';
 import Navbar from './components/Navbar.vue';
-import { useWebsocketStore } from './stores/websocket';
-const websocketStore = useWebsocketStore();
-import { useRoute } from 'vue-router';
-const route = useRoute();
-const platform = route.params.platform as string
-onMounted(() => {
-  console.log('App mounted!');
-  const disableAutoConnect = import.meta.env.VITE_DISABLE_WEBSOCKET_AUTO_CONNECT;
-  if (disableAutoConnect === undefined) {
-    console.log('VITE_DISABLE_WEBSOCKET_AUTO_CONNECT is undefined')
-  }
-  websocketStore.disableAutoConnect = disableAutoConnect == "true";
-  websocketStore.connect();
-});
+import { useLivechatStore } from './stores/livechat';
+import type { Message } from './types/message';
 
-onUnmounted(() => {
-  console.log('App unmounted!');
-  websocketStore.disconnect();
-});
+const livechatStore = useLivechatStore();
+livechatStore.botioLivechat.websocketConnection.onmessage = (event) => {
+  console.log(event)
+  console.log(JSON.stringify(event, null, 2))
+  const data: { action: string, data: Message } = JSON.parse(event.data);
+  console.log(data)
+  if (data.action === 'relay') {
+    livechatStore.addReceivedMessage(data.data);
+  }
+};
 
 </script>
 
 <template >
-  <!-- Navbar -->
-  <div class="flex w-screen h-screen  reset">
-    <Navbar />
+  <div class="flex w-screen h-screen">
+    <aside class="flex-row">
+      <Navbar />
+    </aside>
     <main class="flex flex-col grow">
-      <RouterView :key="platform"/>
+      <RouterView />
     </main>
   </div>
 </template>
 
-<style scoped>
-.reset {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-</style>
+<style scoped></style>

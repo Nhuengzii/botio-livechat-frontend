@@ -1,5 +1,5 @@
 <template>
-    <main class="flex flex-col relative overflow-x-hidden w-[full] h-full bg-50 glow bg-gray-200">
+    <main class="flex flex-col relative overflow-x-hidden w-full h-full bg-50 glow bg-gray-200">
         <div class='grid grid-cols-12 gap-y-2'>
             <div v-for="(item, index) in message" :key="index" :class="{
                 'col-start-1 col-end-8 p-[12px] round-lg': item.source.sourceType === 'USER',

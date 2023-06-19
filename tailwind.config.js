@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       flexGrow: {
-        2: '2'
+        2: '2',
       }
     },
   },

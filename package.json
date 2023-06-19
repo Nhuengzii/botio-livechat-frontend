@@ -10,11 +10,15 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
     "@vueuse/core": "^10.1.2",
     "axios": "^1.4.0",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-tabs-chrome": "^0.3.2"
   },
   "devDependencies": {
     "@types/node": "^18.14.2",

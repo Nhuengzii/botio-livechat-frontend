@@ -1,77 +1,46 @@
 import { createRouter, createWebHistory, } from 'vue-router'
-import LivechatView from '../views/LivechatView.vue'
-import ChatView from '../views/ChatView.vue'
-import EmptyView from '../views/Empty.vue'
+import Livechat from '../views/Livechat.vue'
+import Empty from '../views/Empty.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: 'root',
       path: '/',
-      component: EmptyView
-    },
-
-    {
-      path: '/Start',
-      component: EmptyView,
+      name: 'root',
+      redirect: '/start'
     },
     {
-      path: '/Services',
-      component: EmptyView,
+      path: '/start',
+      name: 'start',
+      component: () => Empty
     },
     {
-      path: '/Order',
-      component: EmptyView,
+      path: '/ordermars',
+      name: 'ordermars',
+      component: () => Empty
     },
     {
-      path: '/Customer',
-      component: EmptyView,
+      path: '/inventory',
+      name: 'inventory',
+      component: () => Empty
     },
     {
-      path: '/Modify',
-      component: EmptyView,
+      path: '/orders',
+      name: 'orders',
+      component: () => Empty
     },
     {
-      path: '/Setting',
-      component: EmptyView,
+      path: '/customize',
+      name: 'customize',
+      component: () => Empty
     },
     {
-      path: '/Help',
-      component: EmptyView,
-    },
-    {
-      path: '/Stock',
-      component: EmptyView,
-    },
-    {
-      path: '/Logout',
-      component: EmptyView,
-    },
-    {
-      path: '/livechat/:platform',
-      name: 'LivechatView',
-      component: LivechatView,
-      children: [
-        {
-          path: '',
-          redirect(to) {
-            return `/livechat/${to.params.platform}/-1`
-          },
-          name: 'Conversations',
-        },
-        {
-          path: ':conversation_id/',
-          name: 'Conver',
-          component: ChatView,
-          beforeEnter: (to, from) => {
-            return true
-          },
-        }
-      ]
+      path: '/livechat',
+      name: 'livechat',
+      component: () => Livechat
     },
   ]
-
 })
 
 export default router

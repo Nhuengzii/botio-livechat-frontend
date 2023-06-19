@@ -6,7 +6,17 @@ export const useUIStore = defineStore('ui', {
         is_expanded: false,
         is_activeButton: false,
         is_activeConversation: false,
-        is_read:false
+        is_read: false,
+        conversationsThreadMode: "normal",
+        availablesPlatforms: new Map<string, { unread: number }>([
+            ['facebook', { unread: 33 }],
+            ['instagram', { unread: 0 }],
+            ['line', { unread: 2 }],
+            ['centralized', { unread: 35 }],
+        ]),
+        is_activeTemplateMessage : false,
+        is_typing : false,
+        is_chagePage : false,
     }),
     actions: {
         ToggleMenu() {
@@ -18,6 +28,11 @@ export const useUIStore = defineStore('ui', {
         activeConversation() {
             this.is_activeConversation = !this.is_activeConversation
         },
-        
+        activeTemplateMessage() {
+            this.is_activeTemplateMessage = !this.is_activeTemplateMessage
+        },
+        activeChagePage() {
+            this.is_chagePage = !this.is_chagePage
+        }
     }
 })
