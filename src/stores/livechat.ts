@@ -38,6 +38,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   // Getter
   const conversations = computed(() => (platform: string, searchMode: boolean = false): Conversation[] => {
     const conversationsMap = conversationRaw.value.get(platform);
+    console.log('update conversation rerender');
     if (!conversationsMap) {
       throw new Error("conversationsMap is undefined");
     }
@@ -57,6 +58,22 @@ export const useLivechatStore = defineStore("livechat", () => {
     })
   }
 
+  async function _receiveMessage(message: Message) {
+    const conversationsMap = conversationRaw.value.get(message.platform);
+    if (!conversationsMap) {
+      throw new Error("conversationsMap is undefined");
+    }
+    let conversation = conversationsMap.get(message.conversationID);
+    if (!conversation) {
+      conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
+    }
+    conversation.lastActivity = messageToActivity(message);
+    conversation.updatedTime = message.timestamp
+    if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
+      currentChat.value.messages.push(message);
+      markAsReadEventBus.value.emit(conversation);
+    }
+  }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
     const messages = await botioLivechat.value.listMessage(platform, "108362942229009", conversation.conversationID);
@@ -80,3 +97,27 @@ export const useLivechatStore = defineStore("livechat", () => {
   return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus }
 })
 
+function messageToActivity(message: Message): string {
+  if (message.message.length > 0) {
+    if (message.source.userType === "user") {
+      return message.message;
+    } else if (message.source.userType === "admin") {
+      return "คุณ: " + message.message;
+    } else {
+      return `WTF ${message.source.userType} พิมพ์ข้อความ`
+    }
+  } else if (message.attachments.length > 0) {
+    if (message.attachments[0].attachmentType === "image") {
+      if (message.source.userType === "user") {
+        return "ส่งรูปภาพ";
+      } else if (message.source.userType === "admin") {
+        return "คุณส่งรูปภาพ";
+      } else {
+        return `WTF ${message.source.userType} ส่งรูปภาพ`
+      }
+    }
+  } else {
+    return "WTF";
+  }
+  return "wwwwwwwwwwwwwwwwwwwwwwwww"
+}
