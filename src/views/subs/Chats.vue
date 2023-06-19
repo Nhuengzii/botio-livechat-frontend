@@ -46,11 +46,6 @@
 
       <MessageSender />
     </div>
-
-
-
-
-
   </div>
 </template>
 
