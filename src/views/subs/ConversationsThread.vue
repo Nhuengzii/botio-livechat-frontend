@@ -2,7 +2,6 @@
   <!-- <button @click="burstConversation">ASSS</button> -->
   <div class="mt-3 ml-3" :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
     'flex-1 max-w-[400px] bg-d9-30' : 'bg-white duration-300 pt-6 w-[100px]']">
-    <ThreadUtils :mode="conversationsThreadMode" />
     <template v-if="(conversationsThreadMode == 'normal'
       || conversationsThreadMode == 'searching')
       && isLoading">
@@ -18,7 +17,8 @@
         <div v-bind="wrapperProps">
           <div v-for="({ data }, index) in list" :key="data.conversationID"
             :class="[conversationsThreadMode == 'collapse' ? '' : 'mx-2']">
-            <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data.platform, data.conversationID)"
+            <Thread :conversation="data" :index="index"
+              @click="livechatStore.openChat(data.platform, data.conversationID)"
               :show-platform="$route.query.platform == 'centralized'" :mode="conversationsThreadMode" />
           </div>
         </div>
