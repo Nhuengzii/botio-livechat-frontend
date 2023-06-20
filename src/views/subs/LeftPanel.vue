@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#D9D9D94c]">
+  <div class="bg-[#D9D9D94c] w-100">
     <div class="px-5">
       <ShopDisplay />
     </div>
