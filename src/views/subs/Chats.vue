@@ -32,12 +32,11 @@
                 <div class="col-start-6 col-end-8 py-4">
                   <div class="flex flex-row">{{ getFormattedDate(message.timestamp) }}</div>
                 </div>
-
               </template>
 
               <div class="col-start-1 col-end-8 p-2 round-lg">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :is-same-time="isUserMessageOfSameTime(index)" />
+                  :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
             </template>
 
@@ -45,10 +44,9 @@
             <template v-else>
               <div class="col-start-6 col-end-13 p-3 rounded-lg">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :is-same-time="isUserMessageOfSameTime(index)" />
+                  :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
             </template>
-
 
           </template>
         </div>
@@ -154,26 +152,30 @@ const isNewDay = (index: number) => {
   return previousDay !== currentDay;
 };
 
-const isUserMessageOfSameTime = (index: number): boolean => {
+const shouldShowProfilePicture = (index: number): boolean => {
   if (index === 0) return true;
 
   const previousMessage = currentChat.value?.messages[index - 1];
   const currentMessage = currentChat.value?.messages[index];
 
-  if (!previousMessage || !currentMessage) return false; // Add null check
-  return previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user' && previousMessage.timestamp === currentMessage.timestamp;
+  if (!previousMessage || !currentMessage) return true; // Add null check
+
+  const previousTime = new Date(previousMessage.timestamp).getTime();
+  const currentTime = new Date(currentMessage.timestamp).getTime();
+
+  const timeDiff = currentTime - previousTime;
+  const minuteInMs = 60 * 1000;
+
+  return (
+    (previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user') || // Different user
+    timeDiff > minuteInMs // Time interval greater than 1 minute
+  );
 };
 
 const getFormattedDate = (timestamp: number): string => {
-  const currentDate = new Date();
-  const messageDate = new Date(timestamp);
-
-  if (currentDate.toDateString() === messageDate.toDateString()) {
-    return 'Today';
-  } else {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-    return messageDate.toLocaleDateString(undefined, options);
-  }
+  const date = new Date(timestamp);
+  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+  return date.toLocaleDateString(undefined, options);
 };
 
 

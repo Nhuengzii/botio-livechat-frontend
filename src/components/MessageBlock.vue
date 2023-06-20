@@ -5,8 +5,13 @@
     <!-- user send Text -->
     <template v-if="messageType == 'NormalText'">
       <div class="flex flex-row">
-        <NormalText :message="message" :conversation="conversation" />
 
+        <template v-if="isShowProfile">
+          <ImageProfileConversation :conversation="conversation" class="mr-5" />  
+        </template>
+
+        <NormalText :message="message" :conversation="conversation" />
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
     <!-- end-->
@@ -14,7 +19,11 @@
     <!-- user send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
       <div class="flex flex-row">
-        <ImageProfileConversation :conversation="conversation" class="mr-5" />
+
+        <template v-if="isShowProfile">
+          <ImageProfileConversation :conversation="conversation" class="mr-5" />  
+        </template>
+        
         <ImageMessage :message="message" :conversation="conversation" />
       </div>
     </template>
@@ -71,7 +80,7 @@ const { message, conversation } = defineProps<
   {
     message: Message
     conversation: Conversation
-    isSameTime: boolean
+    isShowProfile: boolean
   }
 >()
 const messageType = ref('')
