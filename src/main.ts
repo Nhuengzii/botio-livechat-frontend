@@ -22,7 +22,8 @@ import {
     faFaceSmile,
     faImage,
     faCommentDots,
-    faPaperPlane
+    faPaperPlane,
+    faCirclePlus
     
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -31,6 +32,7 @@ library.add(faFaceSmile)
 library.add(faImage)
 library.add(faCommentDots)
 library.add(faPaperPlane)
+library.add(faCirclePlus)
 
 
 
