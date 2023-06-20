@@ -7,14 +7,14 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />  
+          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />
         </template>
         <template v-else>
-          <NotshowImageProfile/>
+          <NotshowImageProfile />
         </template>
 
         <NormalText :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -24,12 +24,12 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile"/>  
+          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />
         </template>
         <template v-else>
-          <NotshowImageProfile/>
+          <NotshowImageProfile />
         </template>
-        
+
         <ImageMessage :message="message" :conversation="conversation" />
       </div>
     </template>
@@ -64,6 +64,12 @@
     </template>
     <!-- end-->
 
+    <template v-else-if="messageType == 'FacebookTemplateGeneric'">
+      <div>
+        <FacebookTemplateGeneric :message="message" />
+      </div>
+    </template>
+
     <!-- admin send template or unsupportMessage -->
     <template v-else>
       <div>
@@ -82,6 +88,7 @@ import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
 import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
+import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
 import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
 const { message, conversation } = defineProps<
   {
@@ -99,12 +106,14 @@ if (message.message.length > 0) {
   messageType.value = 'ImageMessage'
 } else if (message.attachments[0].attachmentType == 'sticker') {
   messageType.value = 'ImageMessage'
+} else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
+  messageType.value = 'FacebookTemplateGeneric'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
 }
 
-const formatTimestamp = (timestamp:number) => {
+const formatTimestamp = (timestamp: number) => {
   const date = new Date(timestamp);
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -114,3 +123,4 @@ const formatTimestamp = (timestamp:number) => {
 </script>
 
 <style scoped></style>
+
