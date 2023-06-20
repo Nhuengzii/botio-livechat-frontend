@@ -16,24 +16,16 @@
 
             <!-- create chat template -->
             <button @click="uiStore.activeCreateTemplateMessage"
-                class="flex flex-[1] basis-auto bg-ea py-2 px-3 mx-2 justify-center items-center rounded-2xl">
-                <div class="flex items-center bg-blue-dark-light rounded-xl px-2">
-                    <div class="flex w-10 h-10 rounded-full bg-blue-dark justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
-                            stroke="currentColor" class="w-6 h-6 color-dark-green">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                        </svg>
-                    </div>
+                class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
+                    <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl"/>
                     <div class="rounded-2xl px-2 py-1">
                         <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความ</p>
                     </div>
-
-                </div>
             </button>
             <!-- end create chat template -->
 
             <!-- space -->
-            <div class="flex-[4]"></div>
+            <div class="flex-[5]"></div>
             <!-- space -->
         </div>
         <!-- end search & create chat template-->
