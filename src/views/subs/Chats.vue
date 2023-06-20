@@ -1,4 +1,5 @@
 <template>
+  <h1>{{ tabs.length }}</h1>
   <div class="flex-[2] shrink-1 background-d9">
     <div class="flex flex-col w-full h-full ">
       <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" />
@@ -113,10 +114,11 @@ const handleClose = (tab: Tab, key: string, index: number) => {
 }
 
 watch(tabKey, (newTab, oldTab) => {
-  if (newTab === null) {
+  if (tabs.length === 0) {
+    livechatStore.currentChat = null;
     return;
   }
-  if (oldTab === null) {
+  if (newTab === null) {
     return;
   }
   const [platform, conversationID] = newTab.split("-");
