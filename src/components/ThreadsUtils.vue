@@ -9,15 +9,15 @@
           <div class="flex ">
             <button @click="uiStore.conversationsThreadMode = 'collapse'">
               <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
-                <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                <path
+                  d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
               </svg>
             </button>
           </div>
         </div>
         <div class=" flex  justify-around py-[1rem] px-2" :class="querying ? '' : 'pl-5 '">
           <div v-if="querying" :class="[querying ? 'mt-1.5 ' : '']">
-            <button type="button"
-              @click="{ querying = false; uiStore.conversationsThreadMode = 'normal'; query = '' }"
+            <button type="button" @click="{ querying = false; uiStore.conversationsThreadMode = 'normal'; query = '' }"
               class="text-white   hover:bg-gray-100  p-2 rounded-full inline-flex items-center  ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 448 512">
                 <path
@@ -85,9 +85,9 @@ defineProps<{
 watch(query, (value) => {
   console.log(value)
   const currentPlatform = route.query.platform as string
-  livechatStore.searchConversations(currentPlatform, value).then((res) => {
-    console.log(`searching of platform ${currentPlatform} is done with result ${res.length}`)
-  })
+  // livechatStore.searchConversations(currentPlatform, value).then((res) => {
+  // console.log(`searching of platform ${currentPlatform} is done with result ${res.length}`)
+  // })
 })
 
 </script>

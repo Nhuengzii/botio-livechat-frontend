@@ -1,7 +1,10 @@
 <template>
-  <div class="bg-[#D9D9D9]">
-    <ShopDisplay />
+  <div class="bg-[#D9D9D94c]">
+    <div class="px-5">
+      <ShopDisplay />
+    </div>
     <PlatformSelector />
+    <ThreadsUtils mode="nomal" />
     <ConversationThred />
   </div>
 </template>
