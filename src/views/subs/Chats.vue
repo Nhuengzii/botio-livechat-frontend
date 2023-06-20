@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-[2] shrink-1 mx-3 background-d9">
+  <div class="flex-[2] shrink-1 background-d9">
     <div class="flex flex-col w-full h-full ">
       <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" />
       <!-- header chats-->
