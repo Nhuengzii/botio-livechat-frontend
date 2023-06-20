@@ -7,7 +7,7 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />
+          <ImageProfileConversation :conversation="conversation" class="mr-1" :is-show-pic="isShowProfile" />  
         </template>
         <template v-else>
           <NotshowImageProfile />
@@ -24,13 +24,14 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />
+          <ImageProfileConversation :conversation="conversation" class="mr-4" :is-show-pic="isShowProfile"/>  
         </template>
         <template v-else>
           <NotshowImageProfile />
         </template>
 
         <ImageMessage :message="message" :conversation="conversation" />
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
     <!-- end-->
@@ -39,6 +40,7 @@
     <template v-else>
       <div>
         <UnsupportMessage :message="message" :conversation="conversation" />
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
     <!-- end-->
@@ -52,14 +54,17 @@
     <template v-if="messageType == 'NormalText'">
       <div class="flex items-center justify-start flex-row-reverse">
         <NormalText :message="message" :conversation="conversation" />
+        <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
+      
     </template>
     <!-- end-->
 
     <!-- admin send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
-      <div>
+      <div class="flex flex-row-reverse">
         <ImageMessage :message="message" :conversation="conversation" />
+        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
     <!-- end-->
@@ -74,6 +79,7 @@
     <template v-else>
       <div>
         <UnsupportMessage :message="message" :conversation="conversation" />
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
     <!-- end-->

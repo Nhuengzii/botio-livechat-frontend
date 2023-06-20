@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <h1 :src="message.attachments"></h1> -->
     <img :src="imageUrl" alt="" class="self-center relative shadow rounded-2xl" @error="error">
   </div>
 </template>
