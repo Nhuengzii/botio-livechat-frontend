@@ -40,6 +40,8 @@ const formatTimestamp = (timestamp:number) => {
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 }
+
+
 </script>
 
 <style scoped>

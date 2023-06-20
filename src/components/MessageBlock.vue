@@ -6,6 +6,7 @@
     <template v-if="messageType == 'NormalText'">
       <div class="flex flex-row">
         <NormalText :message="message" :conversation="conversation" />
+
       </div>
     </template>
     <!-- end-->
@@ -70,6 +71,7 @@ const { message, conversation } = defineProps<
   {
     message: Message
     conversation: Conversation
+    isSameTime: boolean
   }
 >()
 const messageType = ref('')

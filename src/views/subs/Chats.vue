@@ -23,19 +23,27 @@
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage" ref="conversationRef">
         <div class="grid grid-cols-12">
-          <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
-
-            <!-- user is send message-->
+          <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
+            
+            <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
+
+              <template v-if="isNewDay(index)">
+                <div class="col-start-6 col-end-8 py-4">
+                  <div class="flex flex-row">{{ getFormattedDate(message.timestamp) }}</div>
+                </div>
+                
+              </template>
+
               <div class="col-start-1 col-end-8 p-2 round-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation" />
+                <MessageBlock :message="message" :conversation="currentChat!.conversation" :is-same-time="isUserMessageOfSameTime(index)" />
               </div>
             </template>
 
-            <!-- admin is send message-->
+            <!-- Render the message content from admin -->
             <template v-else>
               <div class="col-start-6 col-end-13 p-3 rounded-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation" />
+                <MessageBlock :message="message" :conversation="currentChat!.conversation" :is-same-time="isUserMessageOfSameTime(index)"/>
               </div>
             </template>
 
@@ -128,6 +136,43 @@ onBeforeRouteUpdate((to, from, next) => {
   next()
 })
 
+const isNewDay = (index:number) => {
+  if (index === 0) return true;
+
+  const previousMessage = currentChat.value?.messages[index-1]
+  const currentMessage = currentChat.value?.messages[index]
+
+  if (!previousMessage || !currentMessage) return true;
+
+  const previousDay = new Date(previousMessage.timestamp).getUTCDate();
+  const currentDay = new Date(currentMessage.timestamp).getUTCDate();
+  
+
+  return previousDay !== currentDay;
+};
+
+const isUserMessageOfSameTime = (index: number): boolean => {
+  if (index === 0) return true;
+
+  const previousMessage = currentChat.value?.messages[index - 1];
+  const currentMessage = currentChat.value?.messages[index];
+
+  if (!previousMessage || !currentMessage) return false; // Add null check
+
+  return previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user' && previousMessage.timestamp === currentMessage.timestamp;
+};
+
+const getFormattedDate = (timestamp: number): string => {
+  const currentDate = new Date();
+  const messageDate = new Date(timestamp);
+
+  if (currentDate.toDateString() === messageDate.toDateString()) {
+    return 'Today';
+  } else {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    return messageDate.toLocaleDateString(undefined, options);
+  }
+};
 
 
 const scrollToLastMessage = () => {
