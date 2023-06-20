@@ -31,7 +31,8 @@ import {
 
 import {
     faFacebook,
-    faLine
+    faLine,
+    faInstagram
 } from '@fortawesome/free-brands-svg-icons'
 
 /* add icons to the library */
@@ -46,6 +47,7 @@ library.add(faPen)
 library.add(faTrashCan)
 library.add(faChevronDown)
 
+library.add(faInstagram)
 
 
 

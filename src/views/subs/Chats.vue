@@ -20,10 +20,11 @@
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage" ref="conversationRef">
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage"
+        ref="conversationRef">
         <div class="grid grid-cols-12">
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
-            
+
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
 
@@ -31,18 +32,20 @@
                 <div class="col-start-6 col-end-8 py-4">
                   <div class="flex flex-row">{{ getFormattedDate(message.timestamp) }}</div>
                 </div>
-                
+
               </template>
 
               <div class="col-start-1 col-end-8 p-2 round-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation" :is-same-time="isUserMessageOfSameTime(index)" />
+                <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                  :is-same-time="isUserMessageOfSameTime(index)" />
               </div>
             </template>
 
             <!-- Render the message content from admin -->
             <template v-else>
               <div class="col-start-6 col-end-13 p-3 rounded-lg">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation" :is-same-time="isUserMessageOfSameTime(index)"/>
+                <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                  :is-same-time="isUserMessageOfSameTime(index)" />
               </div>
             </template>
 
@@ -93,6 +96,10 @@ const handleAdd = (conversation: Conversation) => {
       return;
     }
   }
+  if (tabRef.value === null) {
+    console.log('undefined tabRef')
+    return;
+  }
   tabRef.value.addTab({
     label: conversation.participants[0].username,
     key: key,
@@ -106,10 +113,11 @@ const handleClose = (tab: Tab, key: string, index: number) => {
 }
 
 watch(tabKey, (newTab, oldTab) => {
-  if (newTab === null) {
+  if (tabs.length === 0) {
+    livechatStore.currentChat = null;
     return;
   }
-  if (oldTab === null) {
+  if (newTab === null) {
     return;
   }
   const [platform, conversationID] = newTab.split("-");
@@ -131,17 +139,17 @@ onBeforeRouteUpdate((to, from, next) => {
   next()
 })
 
-const isNewDay = (index:number) => {
+const isNewDay = (index: number) => {
   if (index === 0) return true;
 
-  const previousMessage = currentChat.value?.messages[index-1]
+  const previousMessage = currentChat.value?.messages[index - 1]
   const currentMessage = currentChat.value?.messages[index]
 
   if (!previousMessage || !currentMessage) return true;
 
   const previousDay = new Date(previousMessage.timestamp).getUTCDate();
   const currentDay = new Date(currentMessage.timestamp).getUTCDate();
-  
+
 
   return previousDay !== currentDay;
 };
