@@ -153,7 +153,6 @@ const isUserMessageOfSameTime = (index: number): boolean => {
   const currentMessage = currentChat.value?.messages[index];
 
   if (!previousMessage || !currentMessage) return false; // Add null check
-
   return previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user' && previousMessage.timestamp === currentMessage.timestamp;
 };
 

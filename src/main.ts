@@ -22,14 +22,11 @@ import {
     faFaceSmile,
     faImage,
     faCommentDots,
-<<<<<<< HEAD
     faPaperPlane,
-    faCirclePlus
-    
-=======
-    faPaperPlane
-
->>>>>>> ebe3b4c2a9b7ff37aab2a31d4aa4b2a6c5de8e28
+    faCirclePlus,
+    faPen,
+    faTrashCan,
+    faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -42,12 +39,13 @@ library.add(faFaceSmile)
 library.add(faImage)
 library.add(faCommentDots)
 library.add(faPaperPlane)
-<<<<<<< HEAD
 library.add(faCirclePlus)
-=======
 library.add(faFacebook)
 library.add(faLine)
->>>>>>> ebe3b4c2a9b7ff37aab2a31d4aa4b2a6c5de8e28
+library.add(faPen)
+library.add(faTrashCan)
+library.add(faChevronDown)
+
 
 
 
