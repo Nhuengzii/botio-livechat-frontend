@@ -22,12 +22,12 @@
 
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage" ref="conversationRef">
-        <div class="grid grid-cols-12 gap-y-2">
+        <div class="grid grid-cols-12">
           <template v-for="(message, index) in currentChat?.messages" key="message.messageID">
 
             <!-- user is send message-->
             <template v-if="message.source.userType === 'user'">
-              <div class="col-start-1 col-end-8 p-4 round-lg">
+              <div class="col-start-1 col-end-8 p-2 round-lg">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation" />
               </div>
             </template>

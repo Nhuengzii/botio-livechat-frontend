@@ -8,16 +8,18 @@
     </div>
 
     <div class="self-center relative py-2 px-4 shadow rounded-xl ml-4 text-sm bg-white">
-      <p class="break-words">{{ message.message }}</p>
+      <p class="">{{ message.message }}</p>
     </div>
+    <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(conversation.updatedTime )}}</p>
   </template>
   <!-- end user send message -->
 
   <!-- admin send message-->
   <template v-else>
     <div class="self-center relative py-2 px-4 shadow rounded-xl mr-5 text-sm bg-message-admin text-white">
-      <p class="break-words">{{ message.message }}</p>
+      <p class="">{{ message.message }}</p>
     </div>
+    <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(conversation.updatedTime )}}</p>
   </template>
   <!-- end admin send message-->
   
@@ -31,6 +33,13 @@ defineProps<{
   message: Message
   conversation: Conversation
 }>()
+
+const formatTimestamp = (timestamp:number) => {
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
 </script>
 
 <style scoped>
