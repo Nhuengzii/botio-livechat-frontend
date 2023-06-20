@@ -58,7 +58,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     })
   }
 
-  async function _receiveMessage(message: Message) {
+  async function receiveMessage(message: Message) {
     const conversationsMap = conversationRaw.value.get(message.platform);
     if (!conversationsMap) {
       throw new Error("conversationsMap is undefined");
@@ -94,7 +94,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     markAsReadEventBus.value.emit(conversation);
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage }
 })
 
 function messageToActivity(message: Message): string {
