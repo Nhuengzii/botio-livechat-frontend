@@ -15,7 +15,6 @@ const { message, conversation } = defineProps<{
 }>()
 const imageUrl = ref(message.attachments[0].payload.src)
 function error() {
-  console.log('error')
   imageUrl.value = 'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'
 }
 </script>
