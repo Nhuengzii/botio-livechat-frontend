@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/start'
+      redirect: '/livechat?platform=facebook'
     },
     {
       path: '/start',
