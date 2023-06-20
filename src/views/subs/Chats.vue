@@ -53,7 +53,7 @@
 import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
 import { storeToRefs } from "pinia";
-import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineComponent, reactive, watch } from "vue";
+import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineComponent, reactive, watch, } from "vue";
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
