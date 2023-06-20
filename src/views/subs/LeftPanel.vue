@@ -4,7 +4,7 @@
       <ShopDisplay />
     </div>
     <PlatformSelector />
-    <ThreadsUtils mode="nomal" />
+    <ThreadsUtils mode="normal" />
     <ConversationThred />
   </div>
 </template>
