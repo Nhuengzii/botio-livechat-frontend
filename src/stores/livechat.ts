@@ -83,6 +83,10 @@ export const useLivechatStore = defineStore("livechat", () => {
     currentChat.value.messages.push(...messages);
   }
 
+  async function sendTextMessage(conversation: Conversation, message: string) {
+    const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
+  }
+
   function openChat(conversation: Conversation) {
     if (!currentChat.value) {
       currentChat.value = { conversation: conversation, messages: [], isFetching: false };
@@ -94,7 +98,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     markAsReadEventBus.value.emit(conversation);
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage }
 })
 
 function messageToActivity(message: Message): string {
