@@ -18,14 +18,21 @@ import {
     faImage,
     faCommentDots,
     faPaperPlane
-    
+
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+    faFacebook,
+    faLine
+} from '@fortawesome/free-brands-svg-icons'
 
 /* add icons to the library */
 library.add(faFaceSmile)
 library.add(faImage)
 library.add(faCommentDots)
 library.add(faPaperPlane)
+library.add(faFacebook)
+library.add(faLine)
 
 
 
