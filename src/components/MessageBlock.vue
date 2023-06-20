@@ -70,8 +70,9 @@
     <!-- end-->
 
     <template v-else-if="messageType == 'FacebookTemplateGeneric'">
-      <div>
+      <div class="flex flex-row-reverse">
         <FacebookTemplateGeneric :message="message" />
+        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
       </div>
     </template>
 
