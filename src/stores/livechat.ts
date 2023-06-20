@@ -79,7 +79,6 @@ export const useLivechatStore = defineStore("livechat", () => {
       const lastIndex = currentChat.value.messages.length - 1;
       if (currentChat.value.messages[lastIndex].messageID.startsWith('temp-')) {
         currentChat.value.messages.pop();
-        return;
       }
       currentChat.value.messages.push(message);
       conversation.isRead = true;
