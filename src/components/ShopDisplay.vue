@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-lg flex justify-between items-center bg-white py-4">
+  <div class="rounded-3xl flex justify-between items-center bg-white py-4">
     <img
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTccLkwQM4NOYfjcpSP566OJEdPR2e20hHksbSugOD4w0QoShSbmTAPYiGFjCqTi5f64zg&usqp=CAU"
       class="object-cover rounded-full w-14 h-14 ml-5 my-2" alt="">
