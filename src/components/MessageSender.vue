@@ -23,24 +23,61 @@
               <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
             </div>
           </button>
+
+          <!-- show Modal Chat Message Template -->
+          <Teleport to="body">
+            <ModalTemplateChat :show="uiStore.is_activeTemplateMessage">
+
+              <!--HEADER-->
+              <template #header>
+                <template v-if="uiStore.is_createTemplateMessage"> <!-- Header Modal create chat template-->
+                  <HeaderCreateMessage />
+                </template>
+
+                <template v-else-if="uiStore.is_editTemplateMessage"> <!-- Header Modal edit chat template-->
+                  <p>edit message</p>
+                </template>
+
+                <template v-else> <!-- Header Modal chat template-->
+                  <HeaderTemplate />
+                </template>
+              </template>
+              <!--END HEADER-->
+
+              <!--BODY-->
+              <template #body>
+                <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
+                  <BodyCreateMessage />
+                </template>
+
+                <template v-else-if="uiStore.is_activeTemplateMessage"> <!-- Body Modal chat template-->
+                  <BodyTemplate />
+                </template>
+              </template>
+              
+              <!--END BODY-->
+              <template #footer>
+                <div>
+
+                </div>
+              </template>
+            </ModalTemplateChat>
+          </Teleport>
         </div>
       </div>
     </div>
 
     <!-- space -->
     <div class="pl-3 flex-[1]">
-      <button @click="sendMessage" class="flex">
-        <template v-if="showSendMessageButton">
-          <div class="flex rounded-full bg-[#394867]">
-            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
-          </div>
-        </template>
-        <template v-else>
-          <div class="pl-2  text-gray-500">
-            <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
-          </div>
-        </template>
-
+      <button @click="sendMessage" v-if="showSendMessageButton" class="flex">
+        <div class="flex rounded-full bg-[#394867]">
+          <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
+        </div>
+      </button>
+      <button v-else type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
+        <div class="pl-2 text-gray-500">
+          <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
+        </div>
       </button>
     </div>
     <!-- end space-->
@@ -50,6 +87,13 @@
 
 <script setup lang="ts">
 import { useLivechatStore } from '@/stores/livechat';
+
+import ModalTemplateChat from '@/components/ModalTemplateChats/ModalTemplateChat.vue'
+import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/HeaderTemplate.vue'
+import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
+import HeaderCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/HeaderCreateMessage.vue'
+import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/BodyCreateMessage.vue'
+
 import { useUIStore } from '@/stores/UI';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
@@ -117,9 +161,4 @@ watch(newMessage, () => {
 
 </script>
 
-<style scoped>
-.background-d9 {
-  background-color: rgba(217, 217, 217, 0.3);
-
-}
-</style>
+<style scoped></style>

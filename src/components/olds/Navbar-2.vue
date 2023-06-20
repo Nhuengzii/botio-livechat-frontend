@@ -15,7 +15,7 @@
                         <!-- teleport to window change page -->
                         <Teleport to="body">
                             <!-- use the modal component, pass in the prop -->
-                            <ModalChagePage :show="uistore.is_chagePage">
+                            <ModalChagePage :show="uistore.is_changePage">
                                 <template #header>
                                     <div class="flex justify-between items-center w-[60vw]">
                                         <p class="py-4 px-3 bg-gray-200 text-xl">เลือกเพจที่ต้องการใช้งาน</p>

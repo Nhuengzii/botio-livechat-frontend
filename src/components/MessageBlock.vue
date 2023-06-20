@@ -6,6 +6,7 @@
     <template v-if="messageType == 'NormalText'">
       <div class="flex flex-row">
         <NormalText :message="message" :conversation="conversation" />
+
       </div>
     </template>
     <!-- end-->
@@ -64,12 +65,13 @@ import type { Conversation } from '@/types/conversation';
 import NormalText from './MessageContents/NormalText.vue';
 import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
 const { message, conversation } = defineProps<
   {
     message: Message
     conversation: Conversation
+    isSameTime: boolean
   }
 >()
 const messageType = ref('')
@@ -85,6 +87,14 @@ if (message.message.length > 0) {
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
 }
+
+const formatTimestamp = (timestamp:number) => {
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
 </script>
 
 <style scoped></style>
