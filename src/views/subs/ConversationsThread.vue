@@ -24,57 +24,6 @@
         </div>
       </div>
     </template>
-
-
-
-
-
-
-    <!-- <template v-if="conversationsThreadMode == 'searching'"> -->
-    <!--   <div class="bg-white max-w-[400px] mx-2 pl-8 py-3 text-[#B2B2B2] text-lg font-bold">แท็ก</div> -->
-    <!--   <div class="flex flex-wrap bg-white min-h-[32px] mx-2 pl-6 pr-2 "> -->
-    <!--     <div class="flex mx-1 my-2 px-1 bg-[#D9D9D9] rounded " v-for="(tag, index) in ['yay']"> -->
-    <!--       <div class=" w-4 h-4 bg-red-500 rounded-full pr-3 mt-2 object-cover"> -->
-    <!--       </div> -->
-    <!--       <div class="text-sw px-1.5 py-1 truncate max-w-[90px]"> -->
-    <!--         {{ tag }} -->
-    <!--       </div> -->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!--   <div class="bg-white max-w-[400px] mx-2 pl-8 py-3 text-[#B2B2B2] text-lg font-bold">ชื่อการสนทา</div> -->
-    <!--   <div class="flex-1 bg-gray-300 max-w-[400px]"> -->
-    <!--     <div v-for="(conversation, index) in conversations($route.query.platform as string)" -->
-    <!--       key="conversation.conversationID" class="mx-2"> -->
-    <!--       <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" -->
-    <!--         mode="searching" /> -->
-    <!--       <hr> -->
-    <!---->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!-- </template> -->
-    <!---->
-    <!-- <template v-else-if="conversationsThreadMode == 'searching'"> -->
-    <!--   <div class="bg-white max-w-[400px] mx-2 pl-2 py-3">แท็ก</div> -->
-    <!--   <div class="flex flex-wrap bg-white min-h-[32px] mx-2 pl-3 pr-2 "> -->
-    <!--     <div class="flex mx-1 my-2 px-1 bg-[#D9D9D9] rounded " v-for="(tag, index) in ['yay', 'atf']"> -->
-    <!--       <div class=" w-4 h-4 bg-red-500 rounded-full pr-3 mt-2 object-cover"> -->
-    <!--       </div> -->
-    <!--       <div class="text-sw px-1.5 py-1 truncate max-w-[90px]"> -->
-    <!--         {{ tag }} -->
-    <!--       </div> -->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!--   <div class="bg-white max-w-[400px] mx-2 pl-2 py-3">ชื่อการสนทา</div> -->
-    <!--   <div class="flex-1 bg-gray-300 max-w-[400px]"> -->
-    <!--     <div v-for="(conversation, index) in conversations($route.query.platform as string)" -->
-    <!--       key="conversation.conversationID" class="mx-2"> -->
-    <!--       <Thread :conversation="conversation" :index="index" @click="livechatStore.openChat(conversation)" -->
-    <!--         mode="searching" /> -->
-    <!--       <hr> -->
-    <!---->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!-- </template> -->
   </div>
 </template>
 
