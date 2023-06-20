@@ -7,7 +7,10 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" />  
+          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile" />  
+        </template>
+        <template v-else>
+          <NotshowImageProfile/>
         </template>
 
         <NormalText :message="message" :conversation="conversation" />
@@ -21,7 +24,10 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-5" />  
+          <ImageProfileConversation :conversation="conversation" class="mr-5" :is-show-pic="isShowProfile"/>  
+        </template>
+        <template v-else>
+          <NotshowImageProfile/>
         </template>
         
         <ImageMessage :message="message" :conversation="conversation" />
@@ -76,6 +82,7 @@ import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
 import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
+import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
 const { message, conversation } = defineProps<
   {
     message: Message
