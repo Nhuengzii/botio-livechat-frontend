@@ -18,6 +18,11 @@ if (websocket_api_id === undefined) {
   throw new Error("VITE_WEBSOCKET_API_ID is undefined");
 }
 
+const pageIDMap = new Map<string, string>([
+  ["facebook", "108362942229009"],
+  ["line", "U6972d1d58590afb114378eeab0b08d52"],
+]);
+
 
 export const useLivechatStore = defineStore("livechat", () => {
 
@@ -51,7 +56,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     if (!conversationsMap) {
       throw new Error("conversationsMap is undefined");
     }
-    const conversations = await botioLivechat.value.listConversation(platform, "108362942229009");
+    const conversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string);
 
     conversations.forEach((conversation) => {
       conversationsMap.set(conversation.conversationID, conversation);
@@ -76,7 +81,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
-    const messages = await botioLivechat.value.listMessage(platform, "108362942229009", conversation.conversationID);
+    const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID);
     if (!currentChat.value) {
       throw new Error("currentChat is undefined");
     }
