@@ -92,18 +92,35 @@ export const useLivechatStore = defineStore("livechat", () => {
     const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
   }
 
-  function openChat(conversation: Conversation) {
+  function openChat(platform: string, conversationID: string) {
+    const conversationsMap = conversationRaw.value.get(platform);
+    if (!conversationsMap) {
+      throw new Error("conversationsMap is undefined");
+    }
+    const conversation = conversationsMap.get(conversationID);
+    if (!conversation) {
+      throw new Error("conversation is undefined");
+    }
+
     if (!currentChat.value) {
       currentChat.value = { conversation: conversation, messages: [], isFetching: false };
     } else {
+      if (currentChat.value.conversation.conversationID === conversationID) {
+        return;
+      }
       currentChat.value.conversation = conversation;
       currentChat.value.messages = [];
     }
     openChatEventBus.value.emit(conversation);
     markAsReadEventBus.value.emit(conversation);
   }
+  function closeChat(conversationID: string) {
+    if (currentChat.value?.conversation.conversationID === conversationID) {
+      currentChat.value = null;
+    }
+  }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat }
 })
 
 function messageToActivity(message: Message): string {

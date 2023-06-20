@@ -1,7 +1,7 @@
 <template>
   <div class="flex-[2] shrink-1 mx-3 background-d9">
     <div class="flex flex-col w-full h-full ">
-
+      <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" />
       <!-- header chats-->
       <header class="bg-white flex-[2] mx-3 mb-4">
         <div class="flex items-center py-5">
@@ -52,23 +52,66 @@
 <script setup lang="ts">
 import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
-import type { Message } from "@/types/message";
 import { storeToRefs } from "pinia";
-import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick } from "vue";
+import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineComponent, reactive, watch } from "vue";
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
-import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue";
-import { onBeforeRouteUpdate } from "vue-router";
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
-const tab = ref('')
-const currentFocusChat = ref("")
 const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 
+// tabs-chrome
+import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
+import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
+defineComponent({
+  components: {
+    Vue3TabsChrome
+  }
+})
+const tabRef: Ref = ref()
+const tabKey = ref(null as null | string)
+const tabs: Array<Tab> = reactive<Array<Tab>>([
+])
+const setTabRef = (el: HTMLElement) => {
+  tabRef.value = el
+}
+const handleAdd = (conversation: Conversation) => {
+  const key = `${conversation.platform}-${conversation.conversationID}`;
+  for (const tab of tabs) {
+    if (tab.key === key) {
+      tabKey.value = key
+      return;
+    }
+  }
+  tabRef.value.addTab({
+    label: conversation.participants[0].username,
+    key: key,
+    favico: conversation.participants[0].profilePic.src,
+  })
+  tabKey.value = key
+}
+
+const handleClose = (tab: Tab, key: string, index: number) => {
+  livechatStore.closeChat(key)
+}
+
+watch(tabKey, (newTab, oldTab) => {
+  if (newTab === null) {
+    return;
+  }
+  if (oldTab === null) {
+    return;
+  }
+  const [platform, conversationID] = newTab.split("-");
+  livechatStore.openChat(platform, conversationID);
+})
+
+
 function openChat(conversation: Conversation) {
   isLoading.value = true
+  handleAdd(conversation)
   livechatStore.fetchMessages(conversation.platform, conversation).then(() => {
     console.log("fetch message success")
   })
