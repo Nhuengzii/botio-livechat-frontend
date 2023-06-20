@@ -1,5 +1,7 @@
 <template>
-    <div class="flex h-12 w-12 rounded-full bg-inherit flex-shrink-0"></div>
+    <div class="flex  w-10 rounded-full bg-inherit flex-shrink-0 mr-4">
+        
+    </div>
 </template>
 
 <script setup lang="ts">
