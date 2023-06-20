@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-evenly">
-    <PlatformIcon platform="facebook" :is-focus="false" :unread="3" />
-    <PlatformIcon platform="instagram" :is-focus="false" :unread="3" />
-    <PlatformIcon platform="line" :is-focus="false" :unread="7" />
+    <PlatformIcon platform="facebook" :is-focus="$route.query.platform == 'facebook'" :unread="3" />
+    <PlatformIcon platform="instagram" :is-focus="$route.query.platform == 'instagram'" :unread="3" />
+    <PlatformIcon platform="line" :is-focus="$route.query.platform == 'line'" :unread="7" />
   </div>
 </template>
 

@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-[#D9D9D94c] w-100">
+  <div class="bg-[#D9D9D94c] w-96">
     <div class="px-5">
       <ShopDisplay />
     </div>
     <PlatformSelector />
-    <ThreadsUtils mode="nomal" />
+    <ThreadsUtils mode="normal" />
     <ConversationThred />
   </div>
 </template>

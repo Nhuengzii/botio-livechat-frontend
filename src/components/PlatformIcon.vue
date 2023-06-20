@@ -8,6 +8,7 @@
           size="xl" />
       </div>
     </div>
+    <div class="px-4 py-1 mt-2" :class="isFocus ? 'bg-[#27374D]' : 'bg-[#ffffff00]'"></div>
     <!-- <div class="mt-5 "> -->
     <!--   <div class="static "> -->
     <!--     <div class="w-14 h-14 rounded-full bottom-1.5 left-0 " -->
