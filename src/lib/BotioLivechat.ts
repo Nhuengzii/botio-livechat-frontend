@@ -80,7 +80,7 @@ class BotioLivechat implements IBotioLivechat {
         platform: platform,
         conversationID: conversationId,
         messageID: response.data.message_id,
-        timestamp: response.data.timestamp,
+        timestamp: response.data.timestamp ?? Date.now(),
         message: text,
         source: {
           userID: psid,
