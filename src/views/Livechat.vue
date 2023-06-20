@@ -1,19 +1,18 @@
- <template>
- 
-  <main class="flex h-[calc(100vh-50px)]">
-    <ConversationsThread />
-    <Chats />
+<template>
+ <main class="flex h-[calc(100vh-50px)]">
+  <LeftPanel />
+  <Chats />
 
-    <!-- start customer view -->
-    <div class="flex flex-1 mx-3"></div>
-    <!--end customer view -->
+  <!-- start customer view -->
+  <div class="flex flex-1 mx-3"></div>
+  <!--end customer view -->
 
-  </main>
-  
+ </main>
 </template>
 
 <script setup lang="ts">
 import ConversationsThread from './subs/ConversationsThread.vue';
+import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
 
 </script>
