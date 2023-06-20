@@ -3,21 +3,23 @@
   <div class="mt-3 ml-3" :class="[(conversationsThreadMode == 'normal' || conversationsThreadMode == 'searching') ?
     'flex-1 max-w-[400px] bg-d9-30' : 'bg-white duration-300 pt-6 w-[100px]']">
     <ThreadUtils :mode="conversationsThreadMode" />
-    <template v-if="(conversationsThreadMode == 'normal' 
-    || conversationsThreadMode == 'searching')
-    && isLoading">
+    <template v-if="(conversationsThreadMode == 'normal'
+      || conversationsThreadMode == 'searching')
+      && isLoading">
       <div class="flex-1 max-w-[400px] max-h-[700px] ">
-          <div class="flex flex-col items-center justify-center h-full">
-            <ThreadSkeleton :num-skeletons="6" />
-          </div>
+        <div class="flex flex-col items-center justify-center h-full">
+          <ThreadSkeleton :num-skeletons="6" />
+        </div>
       </div>
     </template>
     <template v-else>
-      <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] " :class="[conversationsThreadMode == 'collapse'? 'ml-3.5 no-scrollbar':'mx-4 ']">
+      <div v-bind="containerProps" class="flex-1 max-w-[400px] max-h-[700px] "
+        :class="[conversationsThreadMode == 'collapse' ? 'ml-3.5 no-scrollbar' : 'mx-4 ']">
         <div v-bind="wrapperProps">
-          <div v-for="({ data }, index) in list" :key="data.conversationID" :class="[conversationsThreadMode == 'collapse'? '':'mx-2']" >
-            <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data)"
-            :show-platform="$route.query.platform == 'centralized'" :mode="conversationsThreadMode"  />
+          <div v-for="({ data }, index) in list" :key="data.conversationID"
+            :class="[conversationsThreadMode == 'collapse' ? '' : 'mx-2']">
+            <Thread :conversation="data" :index="index" @click="livechatStore.openChat(data.platform, data.conversationID)"
+              :show-platform="$route.query.platform == 'centralized'" :mode="conversationsThreadMode" />
           </div>
         </div>
       </div>
@@ -27,7 +29,7 @@
 
 
 
-    
+
     <!-- <template v-if="conversationsThreadMode == 'searching'"> -->
     <!--   <div class="bg-white max-w-[400px] mx-2 pl-8 py-3 text-[#B2B2B2] text-lg font-bold">แท็ก</div> -->
     <!--   <div class="flex flex-wrap bg-white min-h-[32px] mx-2 pl-6 pr-2 "> -->
@@ -145,6 +147,6 @@ function burstConversation() {
 
 
 .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 </style>

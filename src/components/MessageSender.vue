@@ -73,7 +73,7 @@ const sendMessage = () => {
     // Handle sending the message here
     console.log('Sending message:', newMessage.value);
     let a = currentChat.value?.conversation!
-    livechatStore.sendMessage(a.platform, a.pageID, a.conversationID, a.participants[0].userID, newMessage.value)
+    livechatStore.sendTextMessage(currentChat.value!.conversation, newMessage.value)
 
     newMessage.value = ''; // Reset the input field after sending the message
     uiStore.is_typing = false;
