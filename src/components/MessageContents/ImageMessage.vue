@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <h1 :src="message.attachments"></h1> -->
-    <img :src="message.attachments![0].payload.src" alt="" class="self-center relative shadow rounded-2xl">
+    <img :src="message.attachments[0].payload.src" alt="" class="self-center relative shadow rounded-2xl">
   </div>
 </template>
 

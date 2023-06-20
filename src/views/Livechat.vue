@@ -1,7 +1,5 @@
-<template>
-  <header class="pt-2 pb-3 px-3">
-    <h1>THIS is LiveChat view</h1>
-  </header>
+ <template>
+ 
   <main class="flex h-[calc(100vh-50px)]">
     <ConversationsThread />
     <Chats />
@@ -21,3 +19,4 @@ import Chats from './subs/Chats.vue';
 </script>
 
 <style scoped></style>
+ 
