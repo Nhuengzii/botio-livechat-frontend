@@ -4,8 +4,12 @@ import { useLivechatStore } from './stores/livechat';
 import type { Message } from './types/message';
 const livechatStore = useLivechatStore()
 livechatStore.botioLivechat.websocketClient!.onmessage = (event) => {
-  const data: { action: string, data: any } = JSON.parse(event.data)
+  const data: { action: string, data: any, message: any } = JSON.parse(event.data)
+  console.log(data)
   switch (data.action) {
+    case "broadcast":
+      livechatStore.receiveMessage(data.message)
+      break;
     case "relay":
       const message: Message = data.data
       livechatStore.receiveMessage(message)

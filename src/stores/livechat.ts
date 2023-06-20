@@ -76,6 +76,11 @@ export const useLivechatStore = defineStore("livechat", () => {
     conversation.updatedTime = message.timestamp
     conversation.isRead = false;
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
+      const lastIndex = currentChat.value.messages.length - 1;
+      if (currentChat.value.messages[lastIndex].messageID.startsWith('temp-')) {
+        currentChat.value.messages.pop();
+        return;
+      }
       currentChat.value.messages.push(message);
       conversation.isRead = true;
       markAsReadEventBus.value.emit(conversation);
@@ -91,7 +96,29 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function sendTextMessage(conversation: Conversation, message: string) {
+    if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
+      const tempMessage: Message = {
+        shopID: conversation.shopID,
+        platform: conversation.platform,
+        pageID: conversation.pageID,
+        conversationID: conversation.conversationID,
+        messageID: `temp-${Date.now()}`,
+        timestamp: Date.now(),
+        source: {
+          userType: "admin",
+          userID: "ADMIN",
+        },
+        message: message,
+        attachments: []
+      }
+      currentChat.value.messages.push(tempMessage)
+    }
     const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
+    if (newMessage.platform === 'facebook') {
+      return;
+    }
+    receiveMessage(newMessage);
+    botioLivechat.value.broadcastMessage(newMessage.platform, newMessage.pageID, newMessage);
   }
 
   function openChat(platform: string, conversationID: string) {
