@@ -174,9 +174,11 @@ const shouldShowProfilePicture = (index: number): boolean => {
 
 const getFormattedDate = (timestamp: number): string => {
   const date = new Date(timestamp);
-  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-  return date.toLocaleDateString(undefined, options);
+  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
+  return date.toLocaleDateString('th-TH', options);
 };
+
+
 
 
 const scrollToLastMessage = () => {
