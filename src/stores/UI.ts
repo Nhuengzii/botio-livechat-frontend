@@ -16,7 +16,9 @@ export const useUIStore = defineStore('ui', {
         ]),
         is_activeTemplateMessage : false,
         is_typing : false,
-        is_chagePage : false,
+        is_createTemplateMessage : false,
+        is_editTemplateMessage : false,
+        is_changePage : false
     }),
     actions: {
         ToggleMenu() {
@@ -32,7 +34,24 @@ export const useUIStore = defineStore('ui', {
             this.is_activeTemplateMessage = !this.is_activeTemplateMessage
         },
         activeChagePage() {
-            this.is_chagePage = !this.is_chagePage
-        }
+            this.is_changePage = !this.is_changePage
+            this.is_editTemplateMessage = false
+            this.is_createTemplateMessage = false
+        },
+        activeCreateTemplateMessage() {
+            this.is_createTemplateMessage = !this.is_createTemplateMessage
+            this.is_editTemplateMessage = false
+
+        },
+        activeEditTemplateMessage() {
+            this.is_editTemplateMessage = !this.is_editTemplateMessage
+            this.is_createTemplateMessage = false
+        },
+
+        closeTemplateMessage() {
+            this.is_editTemplateMessage = false
+            this.is_createTemplateMessage = false
+            this.is_activeTemplateMessage = false
+        },
     }
 })

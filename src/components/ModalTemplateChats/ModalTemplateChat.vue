@@ -1,19 +1,26 @@
 <template>
-    <Transition name="modal2">
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
+    <Transition name="modal">
+        <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask">
+            <div class="flex flex-col modal-container">
+
+                <div class="flex mb-4" :class="{'justify-between' : uiStore.activeCreateTemplateMessage, 'justify-end' : !uiStore.activeCreateTemplateMessage }">
+                    <template v-if="uiStore.is_createTemplateMessage">
+                        <button class="bg-gray-200 px-5 py-3 rounded-full" @click="uiStore.activeCreateTemplateMessage">back</button>
+                    </template>
+                    <button @click="uiStore.closeTemplateMessage" class="bg-gray-200 px-5 py-3 rounded-full">X</button>
+                </div>
+                
+                <div class="modal-header flex-[1] justify-between bg-white">
                     <slot name="header">default header</slot>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body  flex-[5] overflow-x-hidden no-scrollbar">
                     <slot name="body">default body</slot>
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-footer bg-white flex-[1]">
                     <slot name="footer">
-                        default footer
-                        <button class="modal-default-button" @click="$emit('close')">OK</button>
+                        
                     </slot>
                 </div>
             </div>
@@ -22,9 +29,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-    show: Boolean
-})
+
+import { useUIStore } from '@/stores/UI';
+const uiStore = useUIStore()
+
 </script>
 
 <style scoped>
@@ -41,13 +49,15 @@ const props = defineProps({
 }
 
 .modal-container {
-    width: 300px;
+    width: 70vw;
+    height: 95vh;
     margin: auto;
     padding: 20px 30px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
+    border-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-header h3 {
@@ -61,17 +71,10 @@ const props = defineProps({
 
 .modal-default-button {
     position: relative;
-    left: 100px;
+    left: 70vw;
+    top: 0;
 }
 
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter-from {
     opacity: 0;
@@ -85,6 +88,9 @@ const props = defineProps({
 .modal-leave-to .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
 </style>

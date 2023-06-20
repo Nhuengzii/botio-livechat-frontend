@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import Navbar from './components/Navbar.vue';
 import { useLivechatStore } from './stores/livechat';
 import type { Message } from './types/message';
 const livechatStore = useLivechatStore()
