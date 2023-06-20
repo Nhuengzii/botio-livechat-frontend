@@ -21,6 +21,7 @@ if (websocket_api_id === undefined) {
 const pageIDMap = new Map<string, string>([
   ["facebook", "108362942229009"],
   ["line", "U6972d1d58590afb114378eeab0b08d52"],
+  ["instagram", "17841460321068782"]
 ]);
 
 
@@ -33,6 +34,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   const conversationRaw = ref(new Map<string, ConversationsMap>([
     ["facebook", new Map<string, Conversation>()],
     ["line", new Map<string, Conversation>()],
+    ["instagram", new Map<string, Conversation>()]
   ]));
 
   const currentChat = ref(null as Chat | null);
