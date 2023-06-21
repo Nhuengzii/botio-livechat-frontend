@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-[1]  py-4 items-center bg-white mx-3">
+  <div class="flex flex-[1]  py-1 items-center bg-white mx-3">
 
     <!-- space -->
     <div class="flex-[1]">
@@ -12,7 +12,7 @@
     <!-- end space-->
 
     <div class="flex-[6] flex-col">
-      <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-4">
+      <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-2">
 
         <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
           @input="handleTyping" class="inline-flex bg-stone-300 w-full h-4 ml-8 break-words outline-none" />
