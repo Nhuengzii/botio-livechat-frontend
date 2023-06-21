@@ -1,7 +1,6 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-[#eeeeee]"
     @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }">
-    <h1> yay {{ conversation.unread }}</h1>
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="false"
       :update-time-status="updateTimeStatus" />
   </div>
