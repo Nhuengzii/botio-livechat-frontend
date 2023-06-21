@@ -7,8 +7,8 @@
       <img :src="conversation.participants[0].profilePic.src" alt="" class="object-cover h-12 w-12 rounded-full">
     </div> -->
 
-    <div class="self-center  py-2 px-3 shadow rounded-xl ml-3 text-sm bg-white break-all overflow-hidden">
-      <p class="truncate">{{ message.message }}</p>
+    <div class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-base bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
+      {{ message.message }}
     </div>
     
   </template>
@@ -16,8 +16,8 @@
 
   <!-- admin send message-->
   <template v-else>
-    <div class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-sm bg-[#30A2FF] text-white overflow-hidden">
-      <p class="truncate">{{ message.message }}</p>
+    <div class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-base bg-[#30A2FF] break-all text-white overflow-hidden">
+      {{ message.message }}
     </div>
     
   </template>
