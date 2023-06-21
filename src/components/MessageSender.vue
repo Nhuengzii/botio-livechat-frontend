@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-[1]  py-1 items-center bg-white mx-3">
+  <div class="flex flex-[1]  py-4 items-center bg-gray-200 mx-3">
 
     <!-- space -->
     <div class="flex-[1]">
       <button>
-        <div class="pl-4 mr-8 text-gray-500">
+        <div class="pl-4 ml-8 mr-2 text-gray-500">
           <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
         </div>
       </button>
@@ -70,7 +70,7 @@
     <!-- space -->
     <div class="pl-3 flex-[1]">
       <button @click="sendMessage" v-if="showSendMessageButton" class="flex">
-        <div class="flex rounded-full bg-[#394867]">
+        <div class="flex rounded-full bg-white">
           <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
         </div>
       </button>

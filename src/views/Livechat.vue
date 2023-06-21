@@ -1,12 +1,14 @@
 <template>
- <main class="flex h-[calc(100vh-50px)]">
-  <LeftPanel />
-  <Chats />
-  <!-- start customer view -->
-  <div class="flex flex-1 mx-3"></div>
-  <!--end customer view -->
 
- </main>
+    <main class="flex h-[calc(100vh-24px)]">
+        <LeftPanel />
+        <Chats />
+
+        <!-- start customer view -->
+        <div class="flex flex-1 mx-3"></div>
+        <!--end customer view -->
+
+    </main>
 </template>
 
 <script setup lang="ts">

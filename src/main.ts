@@ -27,6 +27,7 @@ import {
     faPen,
     faTrashCan,
     faChevronDown,
+    faCircleInfo,
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -48,6 +49,7 @@ library.add(faPen)
 library.add(faTrashCan)
 library.add(faChevronDown)
 library.add(faInstagram)
+library.add(faCircleInfo)
 library.add(faMagnifyingGlass)
 
 
