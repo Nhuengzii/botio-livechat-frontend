@@ -1,12 +1,12 @@
 <template>
-  <div class="flex-[2] shrink-1 background-d9">
+  <div class="flex-[2] shrink-1 bg-while">
     <div class="flex flex-col w-full h-full ">
       <div class="mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" />
       </div>
       
       <!-- header chats-->
-      <header class="bg-white flex-[2] mx-3 mb-4">
+      <header class="bg-[#EEEEEE] flex-[2] mx-3 mb-4">
         <div class="flex items-center py-5">
 
           <!-- show name conversation-->
