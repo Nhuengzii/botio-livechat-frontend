@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <img :src="imageUrl" alt="" class="self-center relative shadow rounded-2xl" @error="error">
+  <div class="">
+    <img :src="imageUrl" alt="" class="object-cover shadow rounded-2xl" @error="error">
   </div>
 </template>
 

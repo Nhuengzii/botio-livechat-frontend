@@ -22,20 +22,20 @@
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage"
         ref="conversationRef">
-        <div class="grid grid-cols-12">
+        <div class="grid grid-cols-12 gap-y-0.5">
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
-
+            <template v-if="isNewDay(index)">
+              <div class="col-start-5 col-end-8 py-8">
+                <div class="flex flex-row justify-center">{{ getFormattedDate(message.timestamp) }}</div>
+              </div>
+            </template>
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
-              <template v-if="isNewDay(index)">
-                <div class="col-start-6 col-end-8 py-8">
-                  <div class="flex flex-row">{{ getFormattedDate(message.timestamp) }}</div>
-                </div>
-              </template>
+              
 
 
-              <div class="col-start-1 col-end-8 pl-3 round-lg"
-                :class="{ 'py-1': shouldShowProfilePicture, 'py-0.5': !shouldShowProfilePicture }">
+              <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full"
+                :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
@@ -44,7 +44,7 @@
             <!-- Render the message content from admin -->
             <template v-else>
               <div class="col-start-6 col-end-13 pr-3 rounded-lg"
-                :class="{ 'py-1': shouldShowProfilePicture, 'py-0.5': !shouldShowProfilePicture }">
+                :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
@@ -140,19 +140,37 @@ onBeforeRouteUpdate((to, from, next) => {
   next()
 })
 
-const isNewDay = (index: number) => {
-  if (index === 0) return true;
+const isNewDay = (index: number): boolean => {
+  if (index === 0) {
+    return true;
+  }
 
-  const previousMessage = currentChat.value?.messages[index - 1]
-  const currentMessage = currentChat.value?.messages[index]
+  const previousMessage = currentChat.value?.messages[index - 1];
+  const currentMessage = currentChat.value?.messages[index];
 
-  if (!previousMessage || !currentMessage) return true;
+  if (!previousMessage || !currentMessage) {
+    return true;
+  }
 
-  const previousDay = new Date(previousMessage.timestamp).getUTCDate();
-  const currentDay = new Date(currentMessage.timestamp).getUTCDate();
+  const thailandOffset = 7; // Thailand timezone offset in hours
 
+  const previousDate = new Date(previousMessage.timestamp);
+  previousDate.setHours(previousDate.getHours() + thailandOffset);
+  const previousFormattedDate = previousDate.toLocaleDateString('th-TH', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
 
-  return previousDay !== currentDay;
+  const currentDate = new Date(currentMessage.timestamp);
+  currentDate.setHours(currentDate.getHours() + thailandOffset);
+  const currentFormattedDate = currentDate.toLocaleDateString('th-TH', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
+
+  return previousFormattedDate !== currentFormattedDate;
 };
 
 const shouldShowProfilePicture = (index: number): boolean => {
@@ -176,9 +194,24 @@ const shouldShowProfilePicture = (index: number): boolean => {
 };
 
 const getFormattedDate = (timestamp: number): string => {
-  const date = new Date(timestamp);
-  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
-  return date.toLocaleDateString('th-TH', options);
+  const currentDate = new Date();
+  const messageDate = new Date(timestamp);
+
+  if (
+    currentDate.getDate() === messageDate.getDate() &&
+    currentDate.getMonth() === messageDate.getMonth() &&
+    currentDate.getFullYear() === messageDate.getFullYear()
+  ) {
+    return 'วันนี้';
+  } else {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      timeZone: 'Asia/Bangkok',
+    };
+    return messageDate.toLocaleDateString('th-TH', options);
+  }
 };
 
 
