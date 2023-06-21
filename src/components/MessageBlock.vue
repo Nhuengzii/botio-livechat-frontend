@@ -93,6 +93,11 @@
         <LineTemplateConfirm :message="message" />
       </div>
     </template>
+    <template v-else-if="messageType == 'LineTemplateCarousel'">
+      <div>
+        <LineTemplateCarousel :message="message" />
+      </div>
+    </template>
 
     <!-- admin send template or unsupportMessage -->
     <template v-else>
@@ -117,6 +122,7 @@ import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
 import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
 import LineTemplateConfirm from './MessageContents/LineTemplatConfirm.vue';
+import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
 import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
 const { message, conversation } = defineProps<
   {
@@ -142,6 +148,8 @@ if (message.message.length > 0) {
   messageType.value = 'LineTemplateImageCarousel'
 } else if (message.attachments[0].attachmentType == 'line-template-confirm') {
   messageType.value = 'LineTemplatConfirm'
+} else if (message.attachments[0].attachmentType == 'line-template-carousel') {
+  messageType.value = 'LineTemplateCarousel'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
