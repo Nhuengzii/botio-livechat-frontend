@@ -11,4 +11,6 @@ import PlatformIcon from '@/components/PlatformIcon.vue'
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

@@ -4,7 +4,7 @@
       <div class="mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" />
       </div>
-      
+
       <!-- header chats-->
       <header class="bg-[#EEEEEE] flex-[2] mx-3 ">
         <div class="flex items-center py-5 justify-start">
@@ -39,7 +39,7 @@
             </template>
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
-              
+
 
 
               <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full"
@@ -82,7 +82,7 @@ const conversationRef = ref<HTMLElement | null>(null);
 
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
-import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
+import '@/assets/vue3-tabs-chrome.css'
 import { onBeforeRouteUpdate } from "vue-router";
 defineComponent({
   components: {

@@ -27,7 +27,8 @@ import {
     faPen,
     faTrashCan,
     faChevronDown,
-    faCircleInfo
+    faCircleInfo,
+    faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -49,7 +50,7 @@ library.add(faTrashCan)
 library.add(faChevronDown)
 library.add(faInstagram)
 library.add(faCircleInfo)
-
+library.add(faMagnifyingGlass)
 
 
 const app = createApp(App)
