@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-[#D9D9D94c] w-96">
-    <div class="px-5">
+  <div class="bg-[#D9D9D94c] min-w-[320px] max-w-[350px]">
+    <div class="px-2">
       <ShopDisplay />
     </div>
-    <PlatformSelector />
-    <ThreadsUtils mode="normal" />
-    <ConversationThred />
+    <PlatformSelector class="px-2"/>
+    <ThreadsUtils mode="normal" class="mx-2"/>
+    <ConversationThred class="px-2 no-scrollbar" />
   </div>
 </template>
 
@@ -16,4 +16,16 @@ import PlatformSelector from '@/components/PlatformSelector.vue';
 import ThreadsUtils from '@/components/ThreadsUtils.vue';
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+</style>
