@@ -17,13 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useUIStore } from '@/stores/UI';
-const uiStore = useUIStore();
-const statusapp = ref(false)
-
-
-
 const { platform, isFocus, unread } = defineProps<{
   platform: string,
   isFocus: boolean,
