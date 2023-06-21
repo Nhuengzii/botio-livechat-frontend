@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import type { Message } from '@/types/message';
 const { message } = defineProps<{
   message: Message
