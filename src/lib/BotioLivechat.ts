@@ -107,6 +107,11 @@ class BotioLivechat implements IBotioLivechat {
     }
   }
 
+  async searchConversationByName(platform: string, pageID: string, name: string) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations`;
+    return [] as Conversation[]
+  }
+
   broadcastMessage(platform: string, pageID: string, message: Message) {
     if (!this.websocketClient) {
       throw new Error("websocket not connected")

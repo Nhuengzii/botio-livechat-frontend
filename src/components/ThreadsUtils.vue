@@ -33,6 +33,9 @@
         <h1>แชทข้อความ</h1>
         <h1>ชื่อสนทนา</h1>
       </div>
+      <div v-for="conversation in searchResult" :key="conversation.conversationID">
+        <Thread :conversation="conversation" :show-platform="true" mode="searching" />
+      </div>
     </div>
   </template>
 </template>
@@ -42,14 +45,28 @@ import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
 import { useLivechatStore } from '@/stores/livechat';
 import { useRoute } from 'vue-router';
+import Thread from './Thread.vue';
+import type { Conversation } from '@/types/conversation';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
+const searchResult = ref([] as Conversation[])
 const query = ref("");
 const route = useRoute()
 defineProps<{
   mode: string
 }>()
 const querying = ref(false)
+
+watch(query, (value) => {
+  if (value.length > 0) {
+    querying.value = true
+    livechatStore.searchConversationByName('facebook', query.value).then((result) => {
+      searchResult.value = result
+    })
+  } else {
+    querying.value = false
+  }
+})
 
 </script>
  
