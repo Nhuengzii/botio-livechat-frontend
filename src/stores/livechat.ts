@@ -76,14 +76,14 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
-    conversation.isRead = false;
+    conversation.unRead++;
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
       const lastIndex = currentChat.value.messages.length - 1;
       if (currentChat.value.messages[lastIndex].messageID.startsWith('temp-')) {
         currentChat.value.messages.pop();
       }
       currentChat.value.messages.push(message);
-      conversation.isRead = true;
+      conversation.unRead = 0;
       markAsReadEventBus.value.emit(conversation.conversationID);
     }
   }

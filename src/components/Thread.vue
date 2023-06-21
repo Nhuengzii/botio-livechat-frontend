@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-[#eeeeee]"
-    @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.isRead = true; }">
+    @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unRead = 0; }">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="false"
       :update-time-status="updateTimeStatus" />
   </div>
@@ -23,7 +23,7 @@ const { conversation, mode } = defineProps<{
 const livechatStore = useLivechatStore()
 livechatStore.markAsReadEventBus.on((readedConversationID) => {
   if (conversation.conversationID === readedConversationID) {
-    conversation.isRead = true
+    conversation.unRead = 0;
   }
 })
 
