@@ -14,6 +14,7 @@ interface IBotioLivechat {
   sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message | null>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
+  searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
 }
 
 export default IBotioLivechat;

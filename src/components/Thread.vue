@@ -3,6 +3,8 @@
     @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="false"
       :update-time-status="updateTimeStatus" />
+    <ThreadSearched v-if="mode === 'searching'" :conversation="conversation" :show-platform="false"
+      :update-time-status="updateTimeStatus" />
   </div>
 </template>
 
@@ -11,6 +13,7 @@ import type { Conversation } from '@/types/conversation';
 import { onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import UserTag from '@/components/UserTag.vue'
 import ThreadNormal from '@/components/ThreadVariants/ThreadNormal.vue'
+import ThreadSearched from './ThreadVariants/ThreadSearched.vue';
 import { useLivechatStore } from '@/stores/livechat';
 
 const { conversation, mode } = defineProps<{
