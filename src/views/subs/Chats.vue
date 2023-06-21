@@ -61,8 +61,11 @@
           </template>
         </div>
       </main>
-
-      <MessageSender />
+      
+      <template v-if="currentChat?.conversation.participants[0].username">
+        <MessageSender />
+      </template>
+      
     </div>
   </div>
 </template>
