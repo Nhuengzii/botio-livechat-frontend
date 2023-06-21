@@ -8,7 +8,7 @@
         <h1 class="font-bold">{{ template.elements[0].title }}</h1>
         <h2>{{ template.elements[0].subtitle }}</h2>
       </div>
-      <div class="flex justify-center bg-white mx-3 my-3 py-1 rounded-xl">
+      <div class="flex justify-center bg-white mx-3 my-3 py-1 rounded-xl hover:bg-gray-100">
         <a :href="template.elements[0].buttons[0].url" target="_blank" class="">{{
           template.elements[0].buttons[0].title }}</a>
       </div>
