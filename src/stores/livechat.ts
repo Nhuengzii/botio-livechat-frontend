@@ -73,6 +73,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     let conversation = conversationsMap.get(message.conversationID);
     if (!conversation) {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
+      conversationsMap.set(conversation.conversationID, conversation);
     }
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
