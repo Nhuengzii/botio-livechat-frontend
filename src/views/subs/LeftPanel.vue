@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="bg-[#D9D9D94c] min-w-[320px] max-w-[350px]">
     <template v-if="conversationsThreadMode == 'normal'">
       <div class="pl-2">
@@ -14,7 +14,7 @@
       </div>
     </template>
   </div>
-</template>
+ </template>
 
 <script setup lang="ts">
 import ConversationThred from './ConversationsThread.vue';

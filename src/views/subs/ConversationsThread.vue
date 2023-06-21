@@ -1,8 +1,10 @@
 <template>
-  <div v-bind="containerProps" class="bg-[#eeeeee]">
-    <div v-bind="wrapperProps">
+  <div v-bind="containerProps" class="bg-red-500">
+    <div v-bind="wrapperProps"  >
       <div v-for="({ data }, index) in list" :key="data.conversationID">
-        <Thread :conversation="data" :show-platform="$route.query.platform == 'centralized'"
+        
+        <Thread :conversation="data" 
+          :show-platform="$route.query.platform == 'centralized'"
           :mode="conversationsThreadMode" />
       </div>
     </div>
