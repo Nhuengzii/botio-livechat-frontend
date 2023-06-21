@@ -9,16 +9,16 @@ export const useUIStore = defineStore('ui', {
         is_read: false,
         conversationsThreadMode: "normal",
         availablesPlatforms: new Map<string, { unread: number }>([
-            ['facebook', { unread: 33 }],
+            ['facebook', { unread: 0 }],
             ['instagram', { unread: 0 }],
-            ['line', { unread: 2 }],
-            ['centralized', { unread: 35 }],
+            ['line', { unread: 0 }],
+            ['all', { unread: 0 }],
         ]),
-        is_activeTemplateMessage : false,
-        is_typing : false,
-        is_createTemplateMessage : false,
-        is_editTemplateMessage : false,
-        is_changePage : false
+        is_activeTemplateMessage: false,
+        is_typing: false,
+        is_createTemplateMessage: false,
+        is_editTemplateMessage: false,
+        is_changePage: false
     }),
     actions: {
         ToggleMenu() {

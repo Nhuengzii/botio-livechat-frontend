@@ -3,7 +3,7 @@
 
     <!-- space -->
     <div class="flex-[1]">
-      <button>
+      <button @click="openImageDialog">
         <div class="pl-4 ml-8 mr-2 text-gray-500">
           <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
         </div>
@@ -14,9 +14,15 @@
     <div class="flex-[6] flex-col">
       <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-2">
 
-        <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
-          @input="handleTyping" class="inline-flex bg-stone-300 w-full h-4 ml-8 break-words outline-none" />
-
+        <textarea 
+          type="text" 
+          placeholder="พิมพ์ข้อความ" 
+          v-model="newMessage" 
+          @keydown.enter="sendMessageOnEnter"
+          @input="handleTyping"
+          :rows="calculateTextareaRows"
+          class="inline-flex bg-stone-300 w-full h-auto ml-8 break-words outline-none resize-none max-h-64 overflow-auto"/>
+          
         <div class="inline-flex">
           <button>
             <div class="pl-2 mr-4">
@@ -54,7 +60,7 @@
                   <BodyTemplate />
                 </template>
               </template>
-              
+
               <!--END BODY-->
               <template #footer>
                 <div>
@@ -97,7 +103,8 @@ import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemp
 import { useUIStore } from '@/stores/UI';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue'
+import { ref, watch, type Ref, computed } from 'vue'
+
 
 
 /// use value from store ///
@@ -108,8 +115,62 @@ const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
+const isTyping = ref(false)
 
 ///////////////////////////
+const image: Ref<string | null> = ref(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const openFilePicker = () => {
+  fileInputRef.value?.click();
+}
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      image.value = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+
+const calculateTextareaRows = computed(() => {
+  const lineHeight = 20; // Adjust this value based on your font size and line height
+  const maxRows = 5; // Set the maximum number of rows you want to show before enabling scrolling
+  const numRows = Math.min(Math.ceil(newMessage.value.length / 50), maxRows); // Adjust the division value to control the number of characters per row
+  const calculatedRows = numRows > 1 ? numRows : 2; // Ensure a minimum of 2 rows to display when there's no text or very little text
+
+  return calculatedRows;
+});
+
+const selectedImage = ref<string | null>(null);
+
+const openImageDialog = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (event) => displaySelectedImage(event, selectedImage);
+    input.click();
+};
+
+const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            selectedImage.value = reader.result as string;
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        selectedImage.value = null;
+    }
+};
 
 /// move to store
 const sendMessage = () => {
@@ -130,7 +191,13 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
 
-    sendMessage(); // Call the sendMessage function to send the message
+    if (selectedImage.value) {
+      // Send the message and image
+      sendTextMessageWithImage();
+    } else {
+      // Send only the message
+      sendMessage();
+    } // Call the sendMessage function to send the message
   }
 };
 ////////////////////////////
@@ -144,14 +211,35 @@ const handleTyping = () => {
     typingTimeout = setTimeout(() => {
       // Handle typing finished logic here
       showSendMessageButton.value = true;
+      isTyping.value = true;
     }, 100); // Set the typing timeout duration according to your needs
   } else {
     // If the message is empty, hide the send message button
     showSendMessageButton.value = false;
+    isTyping.value = false;
   }
 };
-////////////////////////////
 
+
+
+
+
+
+////////////////////////////
+const sendTextMessageWithImage = () => {
+  if (newMessage.value.trim() !== '') {
+    // Handle sending the message and image here
+    console.log('Sending message:', newMessage.value);
+    console.log('Sending image:', selectedImage.value);
+
+    // Implement your logic to send the message and image to the server
+    // You can access the message and selectedImage data using the `newMessage.value` and `selectedImage.value` variables
+
+    newMessage.value = ''; // Reset the input field after sending the message
+    selectedImage.value = null; // Reset the selected image
+    uiStore.is_typing = false;
+  }
+};
 
 
 watch(newMessage, () => {
@@ -161,4 +249,25 @@ watch(newMessage, () => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+  .resize-none {
+    resize: none;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  textarea::-webkit-scrollbar {
+  width: 0.5em; /* Adjust the width as needed */
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+</style>
