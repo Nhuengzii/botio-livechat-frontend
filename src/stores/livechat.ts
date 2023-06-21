@@ -84,7 +84,7 @@ export const useLivechatStore = defineStore("livechat", () => {
       }
       currentChat.value.messages.push(message);
       conversation.isRead = true;
-      markAsReadEventBus.value.emit(conversation);
+      markAsReadEventBus.value.emit(conversation.conversationID);
     }
   }
 
