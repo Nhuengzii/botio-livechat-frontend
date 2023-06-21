@@ -7,7 +7,7 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-1" :is-show-pic="isShowProfile" />  
+          <ImageProfileConversation :conversation="conversation" class="mr-1" :is-show-pic="isShowProfile" />
         </template>
         <template v-else>
           <NotshowImageProfile />
@@ -24,14 +24,14 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-4" :is-show-pic="isShowProfile"/>  
+          <ImageProfileConversation :conversation="conversation" class="mr-4" :is-show-pic="isShowProfile" />
         </template>
         <template v-else>
           <NotshowImageProfile />
         </template>
 
         <ImageMessage :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -40,7 +40,7 @@
     <template v-else>
       <div>
         <UnsupportMessage :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -54,9 +54,9 @@
     <template v-if="messageType == 'NormalText'">
       <div class="flex items-center justify-start flex-row-reverse">
         <NormalText :message="message" :conversation="conversation" />
-        <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
-      
+
     </template>
     <!-- end-->
 
@@ -64,7 +64,7 @@
     <template v-else-if="messageType == 'ImageMessage'">
       <div class="flex flex-row-reverse">
         <ImageMessage :message="message" :conversation="conversation" />
-        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -72,7 +72,7 @@
     <template v-else-if="messageType == 'FacebookTemplateGeneric'">
       <div class="flex flex-row-reverse">
         <FacebookTemplateGeneric :message="message" />
-        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pr-4 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
 
@@ -82,11 +82,17 @@
       </div>
     </template>
 
+    <template v-else-if="messageType == 'LineTemplateImageCarousel'">
+      <div>
+        <LineTemplateImageCarousel :message="message" />
+      </div>
+    </template>
+
     <!-- admin send template or unsupportMessage -->
     <template v-else>
       <div>
         <UnsupportMessage :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{  formatTimestamp(message.timestamp)}}</p>
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -100,6 +106,7 @@ import NormalText from './MessageContents/NormalText.vue';
 import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
 import LineTemplatButtons from './MessageContents/LineTemplatButtons.vue';
+import LineTemplateImageCarousel from './MessageContents/LineTemplateImageCarousel.vue';
 import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
 import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
@@ -124,6 +131,8 @@ if (message.message.length > 0) {
   messageType.value = 'FacebookTemplateGeneric'
 } else if (message.attachments[0].attachmentType == 'line-template-buttons') {
   messageType.value = 'LineTemplatButtons'
+} else if (message.attachments[0].attachmentType == 'line-template-image-carousel') {
+  messageType.value = 'LineTemplateImageCarousel'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
