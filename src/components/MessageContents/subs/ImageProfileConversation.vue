@@ -9,7 +9,6 @@ import type { Message } from "@/types/message";
 import type { Conversation } from "@/types/conversation";
 defineProps<{
     conversation: Conversation
-    isShowPic: boolean
 }>()
 </script>
 

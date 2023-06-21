@@ -20,17 +20,7 @@
 
     <!-- user send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
-      <div class="flex flex-row">
-
-        <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation"  :is-show-pic="isShowProfile"/>  
-        </template>
-        <template v-else>
-          <NotshowImageProfile />
-        </template>
-
-        <ImageMessage :message="message" :conversation="conversation" />
-      </div>
+        <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
     </template>
     <!-- end-->
 
@@ -59,7 +49,7 @@
     <!-- admin send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
       <div class="flex flex-row-reverse">
-        <ImageMessage :message="message" :conversation="conversation" />
+        <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
       </div>
     </template>
     <!-- end-->

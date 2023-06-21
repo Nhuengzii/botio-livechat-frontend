@@ -1,10 +1,17 @@
 <template>
+  <div flex flex-col>
+    <ImageProfileConversation :conversation="conversation" />
+    <div class="grid gap-1"
+      :class="{ 'grid-cols-3': amountImage >= 3, 'grid-cols-2': amountImage == 2 || amountImage == 4 }">
+      <template v-for="(item, index) in message.attachments">
+        <div class="h-80">
+          <img :src="message.attachments[index].payload.src" alt="" class="absolute inset-0 object-cover w-full h-full" />
+        </div>
+      </template>
 
-  <div v-for="(item ,index) in message.attachments">
-    <!-- <img :src="imageUrl" alt="" class="object-cover shadow rounded-2xl" @error="error"> -->
-    <img :src="message.attachments[index].payload.src" alt="" class="object-cover">
+      <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+    </div>
   </div>
-  <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
 </template>
 
 <script setup lang="ts">
@@ -14,8 +21,10 @@ import { ref } from "vue";
 const { message, conversation } = defineProps<{
   message: Message
   conversation: Conversation
+  isShowProfile: boolean
 }>()
 const imageUrl = ref(message.attachments[0].payload.src)
+const amountImage = ref(message.attachments.length)
 
 function error() {
   imageUrl.value = 'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'
