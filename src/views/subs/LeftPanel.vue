@@ -10,7 +10,7 @@
     </template>
     <template v-else>
       <div>
-        <ConversationSearcher />
+        <ThreadsUtils mode="searching" />
       </div>
     </template>
   </div>
@@ -21,7 +21,6 @@ import ConversationThred from './ConversationsThread.vue';
 import ShopDisplay from '@/components/ShopDisplay.vue';
 import PlatformSelector from '@/components/PlatformSelector.vue';
 import ThreadsUtils from '@/components/ThreadsUtils.vue';
-import ConversationSearcher from './ConversationSearcher.vue';
 import { useUIStore } from '@/stores/UI';
 import { storeToRefs } from 'pinia';
 const uiStore = useUIStore();
