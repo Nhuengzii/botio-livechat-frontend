@@ -110,6 +110,7 @@ export const useLivechatStore = defineStore("livechat", () => {
           userID: "ADMIN",
         },
         message: message,
+        isDeleted: false,
         attachments: []
       }
       currentChat.value.messages.push(tempMessage)

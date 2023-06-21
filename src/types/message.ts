@@ -9,6 +9,7 @@ type Message = {
   message: string,
   attachments: Attachment[],
   replyTo?: RepliedMessage,
+  isDeleted: boolean,
 }
 
 type Attachment = {

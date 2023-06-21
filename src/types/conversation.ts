@@ -9,6 +9,7 @@ type Conversation = {
     src: string
   },
   lastActivity: string,
+  unRead: number,
   isRead: boolean,
 }
 

@@ -86,6 +86,7 @@ class BotioLivechat implements IBotioLivechat {
           userID: psid,
           userType: "admin",
         },
+        isDeleted: false,
         attachments: [],
       }
       return message
