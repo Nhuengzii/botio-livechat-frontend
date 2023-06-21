@@ -14,10 +14,15 @@
     <div class="flex-[6] flex-col">
       <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-2">
 
-        <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
-          @input="handleTyping" class="inline-flex bg-stone-300 w-full h-4 ml-8 break-words outline-none" />
+        <textarea 
+          type="text" 
+          placeholder="พิมพ์ข้อความ" 
+          v-model="newMessage" 
+          @keydown.enter="sendMessageOnEnter"
+          @input="handleTyping"
+          :rows="calculateTextareaRows"
+          class="inline-flex bg-stone-300 w-full h-auto ml-8 break-words outline-none resize-none max-h-64 overflow-auto"/>
           
-        
         <div class="inline-flex">
           <button>
             <div class="pl-2 mr-4">
@@ -98,7 +103,7 @@ import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemp
 import { useUIStore } from '@/stores/UI';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch, type Ref, computed } from 'vue'
 
 
 
@@ -110,6 +115,7 @@ const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
+const isTyping = ref(false)
 
 ///////////////////////////
 const image: Ref<string | null> = ref(null);
@@ -129,6 +135,16 @@ const handleFileChange = (event: Event) => {
     reader.readAsDataURL(file);
   }
 };
+
+
+const calculateTextareaRows = computed(() => {
+  const lineHeight = 20; // Adjust this value based on your font size and line height
+  const maxRows = 5; // Set the maximum number of rows you want to show before enabling scrolling
+  const numRows = Math.min(Math.ceil(newMessage.value.length / 50), maxRows); // Adjust the division value to control the number of characters per row
+  const calculatedRows = numRows > 1 ? numRows : 2; // Ensure a minimum of 2 rows to display when there's no text or very little text
+
+  return calculatedRows;
+});
 
 const selectedImage = ref<string | null>(null);
 
@@ -195,12 +211,18 @@ const handleTyping = () => {
     typingTimeout = setTimeout(() => {
       // Handle typing finished logic here
       showSendMessageButton.value = true;
+      isTyping.value = true;
     }, 100); // Set the typing timeout duration according to your needs
   } else {
     // If the message is empty, hide the send message button
     showSendMessageButton.value = false;
+    isTyping.value = false;
   }
 };
+
+
+
+
 
 
 ////////////////////////////
@@ -228,5 +250,24 @@ watch(newMessage, () => {
 </script>
 
 <style scoped>
+  .resize-none {
+    resize: none;
+  }
 
+  .hidden {
+    display: none;
+  }
+
+  textarea::-webkit-scrollbar {
+  width: 0.5em; /* Adjust the width as needed */
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+}
 </style>
