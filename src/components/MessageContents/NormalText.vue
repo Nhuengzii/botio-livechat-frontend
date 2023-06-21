@@ -7,7 +7,7 @@
       <img :src="conversation.participants[0].profilePic.src" alt="" class="object-cover h-12 w-12 rounded-full">
     </div> -->
 
-    <div class="self-center relative py-2 px-4 shadow rounded-xl ml-4 text-sm bg-white">
+    <div class="self-center relative py-2 px-3 shadow rounded-xl ml-3 text-sm bg-white">
       <p class="">{{ message.message }}</p>
     </div>
     
@@ -16,7 +16,7 @@
 
   <!-- admin send message-->
   <template v-else>
-    <div class="self-center relative py-2 px-4 shadow rounded-xl mr-5 text-sm bg-message-admin text-white">
+    <div class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-sm bg-message-admin text-white">
       <p class="">{{ message.message }}</p>
     </div>
     

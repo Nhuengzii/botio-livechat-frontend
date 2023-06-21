@@ -24,17 +24,17 @@
         ref="conversationRef">
         <div class="grid grid-cols-12">
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
-
+              
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
-
               <template v-if="isNewDay(index)">
-                <div class="col-start-6 col-end-8 py-4">
+                <div class="col-start-6 col-end-8 py-8">
                   <div class="flex flex-row">{{ getFormattedDate(message.timestamp) }}</div>
                 </div>
               </template>
+          
 
-              <div class="col-start-1 col-end-8 p-2 round-lg">
+              <div class="col-start-1 col-end-8 pl-3 round-lg" :class="{'py-1' : shouldShowProfilePicture, 'py-0.5' : !shouldShowProfilePicture}">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
@@ -42,7 +42,7 @@
 
             <!-- Render the message content from admin -->
             <template v-else>
-              <div class="col-start-6 col-end-13 p-3 rounded-lg">
+              <div class="col-start-6 col-end-13 pr-3 rounded-lg" :class="{'py-1' : shouldShowProfilePicture, 'py-0.5' : !shouldShowProfilePicture}">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
               </div>
