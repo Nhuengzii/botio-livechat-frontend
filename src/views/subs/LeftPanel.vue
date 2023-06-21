@@ -1,11 +1,11 @@
 <template>
   <div class="bg-[#D9D9D94c] min-w-[320px] max-w-[350px]">
-    <div class="px-2">
+    <div class="pl-2">
       <ShopDisplay />
     </div>
-    <PlatformSelector class="px-2"/>
-    <ThreadsUtils mode="normal" class="mx-2"/>
-    <ConversationThred class="px-2 no-scrollbar" />
+    <PlatformSelector class="pl-2"/>
+    <ThreadsUtils mode="normal" class="ml-2"/>
+    <ConversationThred class="pl-2 no-scrollbar" />
   </div>
 </template>
 
