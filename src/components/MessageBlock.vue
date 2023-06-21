@@ -98,6 +98,11 @@
         <LineTemplateCarousel :message="message" />
       </div>
     </template>
+    <template v-else-if="messageType == 'InstagramTemplateGeneric'">
+      <div>
+        <InstagramTemplateGeneric :message="message" />
+      </div>
+    </template>
 
     <!-- admin send template or unsupportMessage -->
     <template v-else>
@@ -123,6 +128,7 @@ import ImageProfileConversation from './MessageContents/subs/ImageProfileConvers
 import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
 import LineTemplateConfirm from './MessageContents/LineTemplatConfirm.vue';
 import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
+import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric.vue';
 import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
 const { message, conversation } = defineProps<
   {
@@ -150,6 +156,8 @@ if (message.message.length > 0) {
   messageType.value = 'LineTemplatConfirm'
 } else if (message.attachments[0].attachmentType == 'line-template-carousel') {
   messageType.value = 'LineTemplateCarousel'
+} else if (message.attachments[0].attachmentType == 'instagram-template-generic') {
+  messageType.value = 'InstagramTemplateGeneric'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
