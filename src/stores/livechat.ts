@@ -115,7 +115,7 @@ export const useLivechatStore = defineStore("livechat", () => {
       currentChat.value.messages.push(tempMessage)
     }
     const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
-    if (newMessage.platform === 'facebook') {
+    if (newMessage.platform !== 'line') {
       return;
     }
     receiveMessage(newMessage);
