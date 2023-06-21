@@ -30,7 +30,6 @@ const { message } = defineProps<{
 }>()
 const template: LineTemplateImageCarousel = JSON.parse(message.attachments[0].payload.src)
 const { payload } = template;
-console.log(JSON.stringify(template, null, 2))
 </script>
 
 <style scoped></style>
