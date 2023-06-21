@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ message.attachments }}</h1>
+    <!-- <h1>{{ message.attachments }}</h1> -->
   </div>
 </template>
 
@@ -10,7 +10,7 @@ const { message } = defineProps<{
   message: Message
 }>()
 const template = JSON.parse(message.attachments[0].payload.src)
-console.log(JSON.stringify(template, null, 2))
+// console.log(JSON.stringify(template, null, 2))
 
 </script>
 
