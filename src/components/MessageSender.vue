@@ -3,7 +3,7 @@
 
     <!-- space -->
     <div class="flex-[1]">
-      <button>
+      <button @click="openImageDialog">
         <div class="pl-4 ml-8 mr-2 text-gray-500">
           <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
         </div>
@@ -16,7 +16,8 @@
 
         <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
           @input="handleTyping" class="inline-flex bg-stone-300 w-full h-4 ml-8 break-words outline-none" />
-
+          
+        
         <div class="inline-flex">
           <button>
             <div class="pl-2 mr-4">
@@ -54,7 +55,7 @@
                   <BodyTemplate />
                 </template>
               </template>
-              
+
               <!--END BODY-->
               <template #footer>
                 <div>
@@ -97,7 +98,8 @@ import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemp
 import { useUIStore } from '@/stores/UI';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
+
 
 
 /// use value from store ///
@@ -110,6 +112,49 @@ const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 
 ///////////////////////////
+const image: Ref<string | null> = ref(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const openFilePicker = () => {
+  fileInputRef.value?.click();
+}
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      image.value = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const selectedImage = ref<string | null>(null);
+
+const openImageDialog = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (event) => displaySelectedImage(event, selectedImage);
+    input.click();
+};
+
+const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            selectedImage.value = reader.result as string;
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        selectedImage.value = null;
+    }
+};
 
 /// move to store
 const sendMessage = () => {
@@ -130,7 +175,13 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
 
-    sendMessage(); // Call the sendMessage function to send the message
+    if (selectedImage.value) {
+      // Send the message and image
+      sendTextMessageWithImage();
+    } else {
+      // Send only the message
+      sendMessage();
+    } // Call the sendMessage function to send the message
   }
 };
 ////////////////////////////
@@ -150,8 +201,23 @@ const handleTyping = () => {
     showSendMessageButton.value = false;
   }
 };
-////////////////////////////
 
+
+////////////////////////////
+const sendTextMessageWithImage = () => {
+  if (newMessage.value.trim() !== '') {
+    // Handle sending the message and image here
+    console.log('Sending message:', newMessage.value);
+    console.log('Sending image:', selectedImage.value);
+
+    // Implement your logic to send the message and image to the server
+    // You can access the message and selectedImage data using the `newMessage.value` and `selectedImage.value` variables
+
+    newMessage.value = ''; // Reset the input field after sending the message
+    selectedImage.value = null; // Reset the selected image
+    uiStore.is_typing = false;
+  }
+};
 
 
 watch(newMessage, () => {
@@ -161,4 +227,6 @@ watch(newMessage, () => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
