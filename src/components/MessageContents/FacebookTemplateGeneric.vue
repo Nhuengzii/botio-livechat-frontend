@@ -16,6 +16,7 @@
       </div>
     </div>
   </div>
+  <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +42,12 @@ type Template = {
   "template": string,
 }
 const template: Template = JSON.parse(message.attachments[0].payload.src)
+const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
 </script>
 
 <style scoped></style>
