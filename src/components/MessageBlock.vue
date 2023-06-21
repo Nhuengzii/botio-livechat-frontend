@@ -70,6 +70,12 @@
       </div>
     </template>
 
+    <template v-else-if="messageType == 'LineTemplatButtons'">
+      <div>
+        <LineTemplatButtons :message="message" />
+      </div>
+    </template>
+
     <!-- admin send template or unsupportMessage -->
     <template v-else>
       <div>
@@ -86,6 +92,7 @@ import type { Conversation } from '@/types/conversation';
 import NormalText from './MessageContents/NormalText.vue';
 import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
+import LineTemplatButtons from './MessageContents/LineTemplatButtons.vue';
 import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
 import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
@@ -108,6 +115,8 @@ if (message.message.length > 0) {
   messageType.value = 'ImageMessage'
 } else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'FacebookTemplateGeneric'
+} else if (message.attachments[0].attachmentType == 'line-template-buttons') {
+  messageType.value = 'LineTemplatButtons'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
