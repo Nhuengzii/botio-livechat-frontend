@@ -7,7 +7,7 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-1" :is-show-pic="isShowProfile" />
+          <ImageProfileConversation :conversation="conversation"  :is-show-pic="isShowProfile" />  
         </template>
         <template v-else>
           <NotshowImageProfile />
@@ -24,7 +24,7 @@
       <div class="flex flex-row">
 
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation" class="mr-4" :is-show-pic="isShowProfile" />
+          <ImageProfileConversation :conversation="conversation"  :is-show-pic="isShowProfile"/>  
         </template>
         <template v-else>
           <NotshowImageProfile />
@@ -38,7 +38,7 @@
 
     <!-- user send template or unsupportMessage -->
     <template v-else>
-      <div>
+      <div class="flex flex-row">
         <UnsupportMessage :message="message" :conversation="conversation" />
         <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
