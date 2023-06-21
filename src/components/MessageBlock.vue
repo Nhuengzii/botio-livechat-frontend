@@ -14,7 +14,6 @@
         </template>
 
         <NormalText :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->
@@ -31,7 +30,6 @@
         </template>
 
         <ImageMessage :message="message" :conversation="conversation" />
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
       </div>
     </template>
     <!-- end-->

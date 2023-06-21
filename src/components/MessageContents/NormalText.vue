@@ -10,6 +10,7 @@
     <div class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-base bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
       {{ message.message }}
     </div>
+    <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     
   </template>
   <!-- end user send message -->
@@ -19,6 +20,7 @@
     <div class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-base bg-[#30A2FF] break-all text-white overflow-hidden">
       {{ message.message }}
     </div>
+    <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     
   </template>
   
