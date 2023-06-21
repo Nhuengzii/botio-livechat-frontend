@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import type { PageInformation } from '@/types/pageInformation'
 
 export const useUIStore = defineStore('ui', {
     state: () => ({
@@ -8,11 +9,11 @@ export const useUIStore = defineStore('ui', {
         is_activeConversation: false,
         is_read: false,
         conversationsThreadMode: "normal",
-        availablesPlatforms: new Map<string, { unread: number }>([
-            ['facebook', { unread: 0 }],
-            ['instagram', { unread: 0 }],
-            ['line', { unread: 0 }],
-            ['all', { unread: 0 }],
+        availablesPlatforms: new Map<string, PageInformation>([
+            ['facebook', { unreadConversations: 0, allConversations: 0 }],
+            ['instagram', { unreadConversations: 0, allConversations: 0 }],
+            ['line', { unreadConversations: 0, allConversations: 0 }],
+            ['all', { unreadConversations: 0, allConversations: 0 }],
         ]),
         is_activeTemplateMessage: false,
         is_typing: false,

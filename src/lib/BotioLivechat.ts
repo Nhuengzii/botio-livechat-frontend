@@ -4,6 +4,7 @@ import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
+import type { PageInformation } from "@/types/pageInformation";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -23,6 +24,16 @@ class BotioLivechat implements IBotioLivechat {
     }
     this.websocketClient.onerror = (error) => {
       console.log(`websocket error: ${error}`);
+    }
+  }
+  async getPageInformation(platform: string, pageID: string) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}`;
+    try {
+      const response = await axios.get(url);
+      const information: PageInformation = response.data;
+      return information;
+    } catch (error) {
+      throw new Error("Error fetching platform information");
     }
   }
 

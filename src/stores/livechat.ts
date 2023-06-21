@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
+import type { PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
@@ -63,6 +64,15 @@ export const useLivechatStore = defineStore("livechat", () => {
     conversations.forEach((conversation) => {
       conversationsMap.set(conversation.conversationID, conversation);
     })
+  }
+
+  async function getPageInformation(platform: string): Promise<PageInformation> {
+    const pageID = pageIDMap.get(platform);
+    if (!pageID) {
+      throw new Error("pageID is undefined");
+    }
+    const platformInformation = await botioLivechat.value.getPageInformation(platform, pageID);
+    return platformInformation;
   }
 
   async function receiveMessage(message: Message) {
@@ -151,7 +161,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation }
 })
 
 function messageToActivity(message: Message): string {

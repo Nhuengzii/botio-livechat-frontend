@@ -1,5 +1,6 @@
 import type { Conversation } from "./conversation"
 import type { Message } from "./message"
+import type { PageInformation } from "./pageInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
@@ -12,6 +13,7 @@ interface IBotioLivechat {
   getMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message | null>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
+  getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
 }
 
 export default IBotioLivechat;
