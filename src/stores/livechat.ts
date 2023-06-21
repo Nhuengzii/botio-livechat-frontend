@@ -39,7 +39,7 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   const currentChat = ref(null as Chat | null);
   const openChatEventBus = ref(useEventBus<Conversation>('openChatEventBus'));
-  const markAsReadEventBus = ref(useEventBus<Conversation>('markAsReadEventBus'));
+  const markAsReadEventBus = ref(useEventBus<string>('markAsReadEventBus'));
 
 
   // Getter
@@ -142,7 +142,6 @@ export const useLivechatStore = defineStore("livechat", () => {
       currentChat.value.messages = [];
     }
     openChatEventBus.value.emit(conversation);
-    markAsReadEventBus.value.emit(conversation);
   }
   function closeChat(conversationID: string) {
     if (currentChat.value?.conversation.conversationID === conversationID) {
