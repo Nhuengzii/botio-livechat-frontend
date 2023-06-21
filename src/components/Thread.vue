@@ -4,7 +4,6 @@
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="false"
       :update-time-status="updateTimeStatus" />
   </div>
-  <hr />
 </template>
 
 <script setup lang="ts">
