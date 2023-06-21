@@ -20,7 +20,7 @@ livechatStore.botioLivechat.websocketClient!.onmessage = (event) => {
 
 <template >
   <div class="flex w-screen h-screen">
-    <main class="flex flex-col grow mt-2 mb-2">
+    <main class="flex flex-col grow mt-2">
       <RouterView />
     </main>
   </div>

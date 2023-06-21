@@ -1,5 +1,5 @@
 <template>
-    <main class="flex h-[calc(100vh-50px)]">
+    <main class="flex h-[calc(100vh-24px)]">
         <LeftPanel />
         <Chats />
 

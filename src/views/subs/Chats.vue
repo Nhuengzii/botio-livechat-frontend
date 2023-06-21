@@ -6,7 +6,7 @@
       </div>
       
       <!-- header chats-->
-      <header class="bg-[#EEEEEE] flex-[2] mx-3 mb-4">
+      <header class="bg-[#EEEEEE] flex-[2] mx-3 ">
         <div class="flex items-center py-5 justify-start">
 
           <!-- show name conversation-->
