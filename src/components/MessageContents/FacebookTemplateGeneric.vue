@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="rounded-t-3xl h-64 overflow-hidden">
+    <div class="rounded-t-3xl max-h overflow-hidden">
       <img :src="template.elements[0].image_url" class="object-contain rounded-t-3xl" alt="">
     </div>
     <div class="rounded-b-3xl bg-gray-200 pb-2 pt-1">
