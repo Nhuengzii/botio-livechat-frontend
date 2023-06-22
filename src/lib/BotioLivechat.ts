@@ -63,11 +63,16 @@ class BotioLivechat implements IBotioLivechat {
   async getConversation(platform: string, pageID: string, conversationId: string) {
     let conversation: Conversation | null = null;
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}`;
-    try {
-      const response = await axios.get<{ conversation: Conversation }>(url);
-      conversation = response.data.conversation;
-    } catch (error) {
-      throw new Error("Error fetching conversation");
+    for (let i = 0; i < 3; i++) {
+      try {
+        const response = await axios.get<{ conversation: Conversation }>(url);
+        conversation = response.data.conversation;
+      } catch (error) {
+        console.log(`failed get conversation ${conversationId} from ${platform} ${pageID} ${i} times`)
+        if (i === 2) {
+          throw new Error("Error fetching conversation");
+        }
+      }
     }
     return conversation;
   }
