@@ -26,30 +26,6 @@
     </Carousel>
   </div>
   <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-
-
-  <!-- <Carousel :items-to-show="2.5" :wrap-around="false" class="mb-4">
-    <Slide v-for="element in template.elements">
-      <div class="carousel__item mx-2">
-        <div class="rounded-t-3xl  h-64 overflow-hidden">
-        <img :src="element.image_url" class="object-contain rounded-t-3xl" alt="">
-      </div>
-      <div class="rounded-b-3xl bg-gray-200 pb-2 pt-1">
-        <div class="ml-3">
-          <h1 class="font-bold">{{ element.title }}</h1>
-          <h2>{{ element.subtitle }}</h2>
-        </div>
-        <div class="flex justify-center bg-white mx-3 my-3 py-1 rounded-xl hover:bg-gray-100"
-          v-for="button in element.buttons">
-          <a :href="button.url" target="_blank" class="">{{ button.title }}</a>
-        </div>
-      </div>
-      </div>
-    </Slide>
-    <template #addons>
-      <Navigation/>
-    </template>
-  </Carousel> -->
 </template>
 
 <script setup lang="ts">
