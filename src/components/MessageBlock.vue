@@ -53,7 +53,7 @@
     </template>
 
     <template v-else-if="messageType == 'LineTemplatButtons'">
-      <div>
+      <div class="flex items-center justify-end mr-4">
         <LineTemplatButtons :message="message" />
       </div>
     </template>
@@ -65,9 +65,9 @@
     </template>
 
     <template v-else-if="messageType == 'LineTemplatConfirm'">
-      <div>
+      
         <LineTemplateConfirm :message="message" />
-      </div>
+      
     </template>
     <template v-else-if="messageType == 'LineTemplateCarousel'">
       <div>
