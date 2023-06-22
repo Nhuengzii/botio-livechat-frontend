@@ -5,9 +5,8 @@
     <!-- user send Text -->
     <template v-if="messageType == 'NormalText'">
       <div class="flex flex-row">
-
         <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation"  :is-show-pic="isShowProfile" />  
+          <ImageProfileConversation :conversation="conversation"/>  
         </template>
         <template v-else>
           <NotshowImageProfile />
