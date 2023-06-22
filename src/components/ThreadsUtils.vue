@@ -60,26 +60,28 @@ const livechatStore = useLivechatStore()
 const searchResult = ref([] as Conversation[])
 const searchMode = ref('by-name')
 const query = ref("");
-const route = useRoute()
-defineProps<{
+const { platform, mode } = defineProps<{
   mode: string,
   platform: string,
 }>()
 const querying = ref(false)
 
-watch(query, (value) => {
-  if (value.length > 0) {
-    if (searchMode.value === 'by-name') {
-      livechatStore.searchConversationByName('facebook', query.value).then((result) => {
+watch([query, searchMode], ([newQuery, newSearchMode], [prevQuery, prevSearchMode]) => {
+  if (newQuery.length > 0) {
+    if (newSearchMode === 'by-name') {
+      console.log('by-name')
+      livechatStore.searchConversationByName(platform, query.value).then((result) => {
         searchResult.value = result
       })
-    } else if (searchMode.value === 'by-message') {
-      livechatStore.searchConversationByMessage('facebook', query.value).then((result) => {
+    } else if (newSearchMode === 'by-message') {
+      console.log('by-message')
+      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
         searchResult.value = result
       })
     }
   } else {
     querying.value = false
+    searchResult.value = []
   }
 })
 
