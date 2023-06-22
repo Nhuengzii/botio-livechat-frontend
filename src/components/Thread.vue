@@ -11,8 +11,7 @@
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-import { onMounted, onUnmounted, onUpdated, ref } from 'vue';
-import UserTag from '@/components/UserTag.vue'
+import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import ThreadNormal from '@/components/ThreadVariants/ThreadNormal.vue'
 import ThreadSearched from './ThreadVariants/ThreadSearched.vue';
 import { useLivechatStore } from '@/stores/livechat';
@@ -32,45 +31,31 @@ livechatStore.markAsReadEventBus.on((readedConversationID) => {
   }
 })
 
-const updateTimeStatus = ref('')
-let _timer: number | null = null;
-
-onMounted(() => {
-  updateTimeStatus.value = getLastActivity(conversation.updatedTime)
-  _timer = setInterval(() => {
-    updateTimeStatus.value = getLastActivity(conversation.updatedTime)
-  }, 10000)
+const updateTimeStatus = computed(() => {
+  return getLastActivity(conversation.updatedTime)
 })
-
-onUpdated(() => {
-  updateTimeStatus.value = getLastActivity(conversation.updatedTime)
-})
-
-onUnmounted(() => {
-  if (_timer) {
-    clearInterval(_timer)
-  }
-})
-
-
 
 const getLastActivity = (timestamp: number) => {
-  const currentTime = Date.now();
-  const timeDifference = currentTime - timestamp;
-  const seconds = Math.floor(timeDifference / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
+  // const currentTime = Date.now();
+  // const timeDifference = currentTime - timestamp;
+  // const seconds = Math.floor(timeDifference / 1000);
+  // const minutes = Math.floor(seconds / 60);
+  // const hours = Math.floor(minutes / 60);
+  // const days = Math.floor(hours / 24);
 
-  if (days > 0) {
-    return `เมื่อ ${days} วันที่แล้ว`;
-  } else if (hours > 0) {
-    return `เมื่อ ${hours} ชั่วโมงที่แล้ว`;
-  } else if (minutes > 0) {
-    return `เมื่อ ${minutes} นาทีที่แล้ว`;
-  } else {
-    return `เมื่อไม่กี่วินาทีที่แล้ว`;
-  }
+  //  if (days > 0) {
+  //    return `เมื่อ ${days} วันที่แล้ว`;
+  //  } else if (hours > 0) {
+  //    return `เมื่อ ${hours} ชั่วโมงที่แล้ว`;
+  //  } else if (minutes > 0) {
+  //    return `เมื่อ ${minutes} นาทีที่แล้ว`;
+  //  } else {
+  //    return `เมื่อไม่กี่วินาทีที่แล้ว`;
+  //  }
+  const date = new Date(timestamp);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  return `${hours}:${minutes}`;
 };
 
 </script>
