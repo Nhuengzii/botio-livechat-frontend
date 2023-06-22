@@ -47,7 +47,10 @@
     <!-- end-->
 
     <template v-else-if="messageType == 'FacebookTemplateGeneric'">
+      <div class="flex items-center justify-end mr-4">
         <FacebookTemplateGeneric :message="message" />
+      </div>
+        
     </template>
 
     <template v-else-if="messageType == 'LineTemplatButtons'">
@@ -63,17 +66,18 @@
     </template>
 
     <template v-else-if="messageType == 'LineTemplatConfirm'">
-      
+      <div class="flex items-center justify-end mr-4">
         <LineTemplateConfirm :message="message" />
-      
-    </template>
-    <template v-else-if="messageType == 'LineTemplateCarousel'">
-      <div>
-        <LineTemplateCarousel :message="message" />
       </div>
     </template>
+    <template v-else-if="messageType == 'LineTemplateCarousel'">
+      <div class="flex items-center justify-end mr-4">
+        <LineTemplateCarousel :message="message" />
+      </div>
+      
+    </template>
     <template v-else-if="messageType == 'InstagramTemplateGeneric'">
-      <div>
+      <div class="flex items-center justify-end mr-4">
         <InstagramTemplateGeneric :message="message" />
       </div>
     </template>
