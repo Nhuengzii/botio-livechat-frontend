@@ -117,6 +117,10 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
   }
 
+  async function markAsRead(platform: string, conversationID: string) {
+    await botioLivechat.value.markAsRead(platform, pageIDMap.get(platform) as string, conversationID);
+  }
+
   async function fetchMessages(platform: string, conversation: Conversation) {
     const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID);
     const uiStore = useUIStore()
@@ -191,7 +195,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     return covnersation;
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage, markAsRead }
 })
 
 function messageToActivity(message: Message): string {

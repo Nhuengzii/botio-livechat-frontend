@@ -27,6 +27,7 @@ const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 livechatStore.markAsReadEventBus.on((readedConversationID) => {
   if (conversation.conversationID === readedConversationID) {
+    livechatStore.markAsRead(conversation.platform, conversation.conversationID);
     conversation.unread = 0;
   }
 })

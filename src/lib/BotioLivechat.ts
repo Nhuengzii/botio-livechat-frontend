@@ -137,6 +137,14 @@ class BotioLivechat implements IBotioLivechat {
     }
     this.websocketClient.send(JSON.stringify(body))
   }
+  async markAsRead(platform: string, pageID: string, conversationID: string) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}`;
+    const body = {
+      unread: 0,
+    }
+    const { data } = await axios.patch(url, body);
+    console.log(`patch seccess ${data}`)
+  }
 }
 
 export { BotioLivechat };
