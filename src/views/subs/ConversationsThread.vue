@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="containerProps" class="bg-red-500">
+  <div v-bind="containerProps" >
     <div v-bind="wrapperProps"  >
       <div v-for="({ data }, index) in list" :key="data.conversationID">
         <Thread :conversation="data" 
