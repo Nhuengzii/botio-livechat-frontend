@@ -1,5 +1,7 @@
 <template>
   <div class="flex justify-evenly">
+    <PlatformIcon platform="all" :is-focus="$route.query.platform == 'all'"
+      :unread="availablesPlatforms.get('all')!.unreadConversations" />
     <PlatformIcon platform="facebook" :is-focus="$route.query.platform == 'facebook'"
       :unread="availablesPlatforms.get('facebook')!.unreadConversations" />
     <PlatformIcon platform="instagram" :is-focus="$route.query.platform == 'instagram'"
