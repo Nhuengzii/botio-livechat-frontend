@@ -1,16 +1,3 @@
-<!-- <template>
-  <div class="bg-gray-200 pt-2 rounded-lg flex flex-col border-b items-center justify-center">
-    <div class="border-black border-b pb-2">
-      <h1>{{ payload.text }}</h1>
-    </div>
-    <hr class="bg-red-300">
-    <div class="flex">
-      <div v-for="action in payload.actions" class="p-3 hover:bg-gray-100" :key="action.label">
-        <a :href="action.uri" class="text-blue-500" target="_blank">{{ action.label }}</a>
-      </div>
-    </div>
-  </div>
-</template> -->
 
 <template>
   <div class="flex items-center justify-end mr-4">
