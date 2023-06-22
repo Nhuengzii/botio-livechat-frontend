@@ -168,7 +168,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     return covnersation;
   }
   async function searchConversationByMessage(platform: string, message: string) {
-    const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.get(platform) as string, message);
+    const covnersation = await botioLivechat.value.searchConversationByMessage(platform, pageIDMap.get(platform) as string, message);
     return covnersation;
   }
 

@@ -12,7 +12,7 @@
 
     <!-- user send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
-        <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+      <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
     </template>
     <!-- end-->
 
@@ -32,7 +32,7 @@
     <!-- admin send Text -->
     <template v-if="messageType == 'NormalText'">
       <div class="flex items-center justify-start flex-row-reverse">
-        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile"/>
+        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
       </div>
 
     </template>
@@ -51,6 +51,10 @@
         <FacebookTemplateGeneric :message="message" />
       </div>
         
+    </template>
+
+    <template v-else-if="messageType == 'FacebookTemplateButton'">
+      <FacebookTemplateButton :message="message" />
     </template>
 
     <template v-else-if="messageType == 'LineTemplatButtons'">
@@ -112,6 +116,7 @@ import LineTemplateConfirm from './MessageContents/LineTemplatConfirm.vue';
 import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
 import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric.vue';
 import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct.vue';
+import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue';
 
 const { message, conversation } = defineProps<
   {
@@ -121,7 +126,7 @@ const { message, conversation } = defineProps<
   }
 >()
 const messageType = ref('')
-if (message.message.length > 0) {
+if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'NormalText'
 } else if (message.attachments.length == 0) {
   messageType.value = 'Unsupport'
@@ -143,6 +148,8 @@ if (message.message.length > 0) {
   messageType.value = 'InstagramTemplateGeneric'
 } else if (message.attachments[0].attachmentType == 'instagram-template-product') {
   messageType.value = 'InstagramTemplateProduct'
+} else if (message.attachments[0].attachmentType == 'facebook-template-button') {
+  messageType.value = 'FacebookTemplateButton'
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
