@@ -10,21 +10,30 @@ class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
   botioWebsocketApiUrl: string;
   shopID: string;
-  websocketClient: WebSocket | null;
-  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string) {
+  websocketClient: WebSocket | null = null;
+  _startTimestamp: number = 0;
+  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string, onmessageCallbacks: (data: MessageEvent<string>) => void) {
     this.botioRestApiUrl = botioRestApiUrl;
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
-    this.shopID = shopID
+    this.shopID = shopID;
+    this.connect(onmessageCallbacks);
+  }
+  connect(onmessageCallback: (event: MessageEvent<any>) => void) {
     this.websocketClient = new WebSocket(`${this.botioWebsocketApiUrl}?shopID=${this.shopID}`)
-    this.websocketClient.onopen = () => {
-      console.log('websocket connected');
-    }
-    this.websocketClient.onclose = () => {
-      console.log('websocket disconnected');
-    }
     this.websocketClient.onerror = (error) => {
       console.log(`websocket error: ${error}`);
     }
+    this.websocketClient.onopen = () => {
+      this._startTimestamp = Date.now()
+      console.log('websocket connected');
+    }
+    this.websocketClient.onclose = () => {
+      alert("websocket disconnected with duration: " + `${(Date.now() - this._startTimestamp) / 1000} seconds`)
+      console.log('websocket disconnected');
+      // reconnect
+      this.connect(onmessageCallback);
+    }
+    this.websocketClient.onmessage = onmessageCallback;
   }
   async getPageInformation(platform: string, pageID: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}`;
