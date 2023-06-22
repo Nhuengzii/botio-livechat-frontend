@@ -1,11 +1,13 @@
 <template>
+  <div >
   <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
-  <div v-bind="containerProps" v-show="!isLoading">
+  <div v-bind="containerProps" v-show="!isLoading" >
     <div v-bind="wrapperProps">
       <div v-for="({ data }, index) in list" :key="data.conversationID">
         <Thread :conversation="data" :show-platform="$route.query.platform == 'all'" :mode="conversationsThreadMode" />
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -32,7 +34,7 @@ const conversationsForVirtualList = computed(() => {
 const { list, containerProps, wrapperProps } = useVirtualList(
   conversationsForVirtualList,
   {
-    itemHeight: 122.5
+    itemHeight: 88
   }
 )
 

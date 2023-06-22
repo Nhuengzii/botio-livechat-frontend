@@ -6,10 +6,11 @@
           <ShopDisplay />
         </div>
         <PlatformSelector class="pt-4  mx-2" />
-
         <ThreadsUtils mode="normal" class="mx-2" :platform="$route.query.platform as string" />
-        <ConversationThred class="px-2 no-scrollbar" />
-      </template>
+        <div class="h-[calc(100vh-370px)] overflow-y-auto no-scrollbar"> 
+          <ConversationThred class="px-2 no-scrollbar" />  
+        </div>
+    </template>
       <template v-else>
         <div>
           <ThreadsUtils mode="searching" :platform="$route.query.platform as string" />
