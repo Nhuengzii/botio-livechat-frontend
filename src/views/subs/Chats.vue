@@ -1,6 +1,6 @@
 <template>
   <div class="flex-[2] shrink-1 bg-while">
-    <div class="flex flex-col w-full h-full ">
+    <div class="flex flex-col w-full h-full">
       <div class="flex mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" :class="{'w-[85%]' : tabs.length > 0, 'w-[100%]' : tabs.length == 0}" />
         <template v-if="tabs.length > 0">
@@ -35,7 +35,7 @@
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mx-3" id="containMessage"
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-indigo-50  mx-3" id="containMessage"
         ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-0.5">
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
