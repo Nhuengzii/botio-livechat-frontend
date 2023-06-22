@@ -132,7 +132,7 @@
 }
 
 .vue3-tabs-chrome .tabs-favico {
-	height: 16px;
+	height: 20px;
 	margin-left: 3%;
 	display: flex;
 	align-items: center;
@@ -141,7 +141,7 @@
 
 .vue3-tabs-chrome .tabs-favico img {
 	height: 100%;
-	border-radius: 50%;
+	border-radius: 100%;
 }
 
 .vue3-tabs-chrome .tabs-label {

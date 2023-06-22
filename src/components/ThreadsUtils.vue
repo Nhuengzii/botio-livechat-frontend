@@ -29,9 +29,10 @@
         </div>
       </div>
       <div class="flex justify-between">
-        <h1>ทั้งหมด</h1>
-        <h1>แชทข้อความ</h1>
-        <h1>ชื่อสนทนา</h1>
+        <button class="hover:bg-gray-300" :class="searchMode == 'by-message' ? 'bg-gray-300' : ''"
+          @click="() => { searchMode = 'by-message' }">แชทข้อความ</button>
+        <button class="hover:bg-gray-300" :class="searchMode == 'by-name' ? 'bg-gray-300' : ''"
+          @click="() => { searchMode = 'by-name' }">ชื่อสนทนา</button>
       </div>
       <div v-for="conversation in searchResult" :key="conversation.conversationID">
         <Thread :conversation="conversation" :show-platform="true" mode="searching" />
@@ -50,6 +51,7 @@ import type { Conversation } from '@/types/conversation';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
 const searchResult = ref([] as Conversation[])
+const searchMode = ref('by-name')
 const query = ref("");
 const route = useRoute()
 defineProps<{
@@ -60,9 +62,15 @@ const querying = ref(false)
 watch(query, (value) => {
   if (value.length > 0) {
     querying.value = true
-    livechatStore.searchConversationByName('facebook', query.value).then((result) => {
-      searchResult.value = result
-    })
+    if (searchMode.value === 'by-name') {
+      livechatStore.searchConversationByName('facebook', query.value).then((result) => {
+        searchResult.value = result
+      })
+    } else if (searchMode.value === 'by-message') {
+      livechatStore.searchConversationByMessage('facebook', query.value).then((result) => {
+        searchResult.value = result
+      })
+    }
   } else {
     querying.value = false
   }

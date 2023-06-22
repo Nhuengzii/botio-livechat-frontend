@@ -6,6 +6,7 @@ import type { PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
+import { useUIStore } from "./UI";
 
 type ConversationsMap = Map<string, Conversation>;
 type Chat = { conversation: Conversation, messages: Message[], isFetching: boolean };
@@ -77,6 +78,7 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   async function receiveMessage(message: Message) {
     const conversationsMap = conversationRaw.value.get(message.platform);
+    const uiStore = useUIStore()
     if (!conversationsMap) {
       throw new Error("conversationsMap is undefined");
     }
@@ -85,6 +87,9 @@ export const useLivechatStore = defineStore("livechat", () => {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
       conversationsMap.set(conversation.conversationID, conversation);
     }
+    botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
+      uiStore.availablesPlatforms.set(message.platform, pageInformation);
+    })
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
     conversation.unread++;
@@ -101,6 +106,10 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   async function fetchMessages(platform: string, conversation: Conversation) {
     const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID);
+    const uiStore = useUIStore()
+    botioLivechat.value.getPageInformation(platform, conversation.pageID).then((pageInformation) => {
+      uiStore.availablesPlatforms.set(platform, pageInformation);
+    })
     if (!currentChat.value) {
       throw new Error("currentChat is undefined");
     }
@@ -164,8 +173,12 @@ export const useLivechatStore = defineStore("livechat", () => {
     const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.get(platform) as string, name);
     return covnersation;
   }
+  async function searchConversationByMessage(platform: string, message: string) {
+    const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.get(platform) as string, message);
+    return covnersation;
+  }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage }
 })
 
 function messageToActivity(message: Message): string {
