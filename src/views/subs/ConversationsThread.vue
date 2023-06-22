@@ -3,8 +3,7 @@
   <div v-bind="containerProps" v-show="!isLoading">
     <div v-bind="wrapperProps">
       <div v-for="({ data }, index) in list" :key="data.conversationID">
-        <Thread :conversation="data" :show-platform="$route.query.platform == 'centralized'"
-          :mode="conversationsThreadMode" />
+        <Thread :conversation="data" :show-platform="$route.query.platform == 'all'" :mode="conversationsThreadMode" />
       </div>
     </div>
   </div>
