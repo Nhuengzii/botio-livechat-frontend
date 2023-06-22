@@ -6,8 +6,9 @@
           
           <img :src="column.imageUrl" class="object-cover rounded-lg">
           <a :href="column.action.uri"
-            class="absolute bg-[#000] bottom-1 rounded-full w-8 h-8 text-white text-center opacity-60" target="_blank">
-            {{ column.action.label }}
+            class="absolute flex items-center justify-center bg-[#000] bottom-4 left-[calc(50%-16px)] rounded-full w-8 h-8 text-white text-center opacity-60" target="_blank">
+            <p class="">{{ column.action.label }}</p>
+            
           </a>
           
         </div>
