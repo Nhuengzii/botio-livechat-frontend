@@ -46,11 +46,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   const botioLivechat = ref(new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
     `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
     "1", _onmessageCallbacks));
-  const conversationRaw = ref(new Map<string, ConversationsMap>([
-    ["facebook", new Map<string, Conversation>()],
-    ["line", new Map<string, Conversation>()],
-    ["instagram", new Map<string, Conversation>()]
-  ]));
+  const conversationRaw = ref<ConversationsMap>(new Map<string, Conversation>());
 
   const currentChat = ref(null as Chat | null);
   const openChatEventBus = ref(useEventBus<Conversation>('openChatEventBus'));
@@ -59,24 +55,14 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   // Getter
   const conversations = computed(() => (platform: string, searchMode: boolean = false): Conversation[] => {
-    const conversationsMap = conversationRaw.value.get(platform);
-    console.log('update conversation rerender');
-    if (!conversationsMap) {
-      throw new Error("conversationsMap is undefined");
-    }
-    return conversationsMap2SortedArray(conversationsMap);
+    return conversationsMap2SortedArray(conversationRaw.value, platform);
   })
 
   // Action
   async function fetchConversations(platform: string): Promise<void> {
-    const conversationsMap = conversationRaw.value.get(platform);
-    if (!conversationsMap) {
-      throw new Error("conversationsMap is undefined");
-    }
     const conversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string);
-
     conversations.forEach((conversation) => {
-      conversationsMap.set(conversation.conversationID, conversation);
+      conversationRaw.value.set(conversation.conversationID, conversation);
     })
   }
 
@@ -90,15 +76,11 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function receiveMessage(message: Message) {
-    const conversationsMap = conversationRaw.value.get(message.platform);
     const uiStore = useUIStore()
-    if (!conversationsMap) {
-      throw new Error("conversationsMap is undefined");
-    }
-    let conversation = conversationsMap.get(message.conversationID);
+    let conversation = conversationRaw.value.get(message.conversationID);
     if (!conversation) {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
-      conversationsMap.set(conversation.conversationID, conversation);
+      conversationRaw.value.set(conversation.conversationID, conversation);
     }
     botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
       uiStore.availablesPlatforms.set(message.platform, pageInformation);
@@ -161,15 +143,10 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   function openChat(platform: string, conversationID: string) {
-    const conversationsMap = conversationRaw.value.get(platform);
-    if (!conversationsMap) {
-      throw new Error("conversationsMap is undefined");
-    }
-    const conversation = conversationsMap.get(conversationID);
+    const conversation = conversationRaw.value.get(conversationID);
     if (!conversation) {
       throw new Error("conversation is undefined");
     }
-
     if (!currentChat.value) {
       currentChat.value = { conversation: conversation, messages: [], isFetching: false };
     } else {
