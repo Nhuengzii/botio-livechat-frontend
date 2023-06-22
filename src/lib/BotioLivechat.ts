@@ -108,8 +108,9 @@ class BotioLivechat implements IBotioLivechat {
   }
 
   async searchConversationByName(platform: string, pageID: string, name: string) {
-    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations`;
-    return [] as Conversation[]
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/`;
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })
+    return res.data.conversations
   }
 
   broadcastMessage(platform: string, pageID: string, message: Message) {
