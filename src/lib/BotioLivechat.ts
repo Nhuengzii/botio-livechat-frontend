@@ -49,7 +49,8 @@ class BotioLivechat implements IBotioLivechat {
   async listConversation(platform: string, pageID: string) {
 
     let conversations: Conversation[];
-    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations`;
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform !== 'all' ? `/${pageID}/conversations` : '/conversations');
+    console.log(url)
     try {
       const response = await axios.get<{ conversations: Conversation[] }>(url);
       conversations = response.data.conversations;
