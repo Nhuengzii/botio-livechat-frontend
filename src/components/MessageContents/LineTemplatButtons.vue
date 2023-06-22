@@ -1,9 +1,10 @@
 <template>
-  <div class="mb-4 mt-2 w-80">
-    <div class="rounded-t-lg h-56 overflow-hidden object-cover">
-      <img :src="payload.thumbnailImageUrl" class="object-contain rounded-t-3xl" alt="">
+  <div class="mb-4 mt-2 w-80 border-2 rounded-2xl">
+ 
+    <div class="rounded-t-2xl h-56 overflow-hidden object-cover">
+      <img :src="payload.thumbnailImageUrl" class="object-contain" alt="">
     </div>
-    <div class="rounded-b-lg bg-white pb-2 pt-1">
+    <div class="rounded-b-2xl bg-white pb-2 pt-1">
       <div class="ml-3 mb-3">
         <h1 class="font-bold break-all px-4">{{ payload.title }}</h1>
         <p class="break-all px-4">{{ payload.text }}</p>
