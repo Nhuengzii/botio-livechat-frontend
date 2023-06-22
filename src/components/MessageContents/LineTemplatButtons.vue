@@ -3,13 +3,13 @@
     <div class="rounded-t-lg h-56 overflow-hidden object-cover">
       <img :src="payload.thumbnailImageUrl" class="object-contain rounded-t-3xl" alt="">
     </div>
-    <div class="rounded-b-lg bg-gray-100 pb-2 pt-1">
+    <div class="rounded-b-lg bg-white pb-2 pt-1">
       <div class="ml-3 mb-3">
         <h1 class="font-bold">{{ payload.title }}</h1>
         <p>{{ payload.text }}</p>
       </div>
       <hr>
-      <div class="flex justify-center my-1 py-3 hover:bg-gray-200" v-for="button in payload.actions">
+      <div class="flex justify-center mb-2 py-4 hover:bg-gray-50" v-for="button in payload.actions">
         <a :href="button.uri" target="_blank" class="text-blue-500">{{ button.label }}</a>
       </div>
     </div>
