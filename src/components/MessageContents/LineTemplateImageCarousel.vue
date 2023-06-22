@@ -1,14 +1,25 @@
 <template>
-  <div class="flex">
-    <div v-for="column in payload.columns" class="m-4">
-      <div class="relative">
-        <img :src="column.imageUrl" class="object-cover rounded-lg">
-        <a :href="column.action.uri" class="absolute inset-x-0 bottom-1 bg-black rounded-3xl text-white text-center"
-          target="_blank">{{
-            column.action.label }}</a>
+  <Carousel :items-to-show="2.5" :wrap-around="false" class="mb-4">
+    <Slide v-for="(column, index) in payload.columns" :key="index">
+      <div class="carousel__item mx-2">
+        <div class="relative">
+          
+          <img :src="column.imageUrl" class="object-cover rounded-lg">
+          <a :href="column.action.uri"
+            class="absolute bg-[#000] bottom-1 rounded-full w-8 h-8 text-white text-center opacity-60" target="_blank">
+            {{ column.action.label }}
+          </a>
+          
+        </div>
+
       </div>
-    </div>
-  </div>
+    </Slide>
+
+
+    <template #addons>
+      <Navigation/>
+    </template>
+  </Carousel>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +41,23 @@ const { message } = defineProps<{
 }>()
 const template: LineTemplateImageCarousel = JSON.parse(message.attachments[0].payload.src)
 const { payload } = template;
+import 'vue3-carousel/dist/carousel.css'
+import { Carousel, Navigation, Slide } from 'vue3-carousel'
 </script>
 
-<style scoped></style>
+<style scoped>
+.carousel-line {
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  margin-top: 0.5rem;
+}
+
+.prev-button {
+  margin-right: 0.5rem;
+}
+
+.next-button {
+  margin-left: 0.5rem;
+}
+</style>
