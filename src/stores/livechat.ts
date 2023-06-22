@@ -29,10 +29,23 @@ const pageIDMap = new Map<string, string>([
 
 export const useLivechatStore = defineStore("livechat", () => {
 
+  function _onmessageCallbacks(event: MessageEvent<any>) {
+    const data: { action: string, message: any } = JSON.parse(event.data)
+    console.log(data)
+    switch (data.action) {
+      case "broadcast":
+      case "relay":
+        const message: Message = data.message
+        receiveMessage(message)
+        break;
+      default:
+        alert("unknown action")
+    }
+  }
   // State
   const botioLivechat = ref(new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
     `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
-    "1"));
+    "1", _onmessageCallbacks));
   const conversationRaw = ref(new Map<string, ConversationsMap>([
     ["facebook", new Map<string, Conversation>()],
     ["line", new Map<string, Conversation>()],
@@ -102,6 +115,10 @@ export const useLivechatStore = defineStore("livechat", () => {
       conversation.unread = 0;
       markAsReadEventBus.value.emit(conversation.conversationID);
     }
+  }
+
+  async function markAsRead(platform: string, conversationID: string) {
+    await botioLivechat.value.markAsRead(platform, pageIDMap.get(platform) as string, conversationID);
   }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
@@ -178,7 +195,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     return covnersation;
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage, markAsRead }
 })
 
 function messageToActivity(message: Message): string {

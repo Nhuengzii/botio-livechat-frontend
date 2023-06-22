@@ -7,19 +7,6 @@ import type { Message } from './types/message';
 const livechatStore = useLivechatStore()
 const uiStore = useUIStore();
 import type { PageInformation } from '@/types/pageInformation'
-livechatStore.botioLivechat.websocketClient!.onmessage = (event) => {
-  const data: { action: string, message: any } = JSON.parse(event.data)
-  console.log(data)
-  switch (data.action) {
-    case "broadcast":
-    case "relay":
-      const message: Message = data.message
-      livechatStore.receiveMessage(message)
-      break;
-    default:
-      alert("unknown action")
-  }
-}
 onMounted(async () => {
   for (const platform of ["facebook", "line", "instagram"]) {
     const information: PageInformation = await livechatStore.getPageInformation(platform)
