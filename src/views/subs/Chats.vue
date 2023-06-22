@@ -2,10 +2,10 @@
   <div class="flex-[2] shrink-1 bg-while">
     <div class="flex flex-col w-full h-full">
       <div class="flex mx-3">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" :class="{'w-[85%]' : tabs.length > 0, 'w-[100%]' : tabs.length == 0}" />
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]" :class="{'w-[calc(100%-176px)]' : tabs.length > 0, 'w-[100%]' : tabs.length == 0}" />
         <template v-if="tabs.length > 0">
-          <button @click="clearTab" class="bg-[#D9D9D9] w-[15%] flex flex-row justify-center items-center">
-            <h1>ปิดแท็บทั้งหมด</h1>
+          <button @click="clearTab" class="bg-gray-50 hover:bg-gray-200 w-44 flex flex-row justify-center items-center">
+            <h1 class="pr-2 font-semibold">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
         </template>
@@ -38,8 +38,10 @@
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-indigo-50  mx-3" id="containMessage"
         ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-0.5">
+          
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
             <template v-if="isNewDay(index)">
+              
               <div class="col-start-5 col-end-8 py-8">
                 <div class="flex flex-row justify-center">{{ getFormattedDate(message.timestamp) }}</div>
               </div>
