@@ -16,7 +16,8 @@
   </div>
   
   </div>
-</template>
+</template>background
+
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
