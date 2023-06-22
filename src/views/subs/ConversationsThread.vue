@@ -1,10 +1,9 @@
 <template>
-  <div v-bind="containerProps" >
-    <div v-bind="wrapperProps"  >
+  <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
+  <div v-bind="containerProps" v-show="!isLoading">
+    <div v-bind="wrapperProps">
       <div v-for="({ data }, index) in list" :key="data.conversationID">
-        <Thread :conversation="data" 
-          :show-platform="$route.query.platform == 'centralized'"
-          :mode="conversationsThreadMode" />
+        <Thread :conversation="data" :show-platform="$route.query.platform == 'all'" :mode="conversationsThreadMode" />
       </div>
     </div>
   </div>
@@ -19,6 +18,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVirtualList } from '@vueuse/core';
 import { computed } from '@vue/reactivity';
+import ThreadSkeleton from '@/components/ThreadSkeleton.vue';
 const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
 const { conversations } = storeToRefs(livechatStore);
