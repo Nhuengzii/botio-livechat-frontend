@@ -1,6 +1,7 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-[#eeeeee]"
-    @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }">
+    @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }"
+    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-[#eaeaea]' : ''">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="false"
       :update-time-status="updateTimeStatus" />
     <ThreadSearched v-if="mode === 'searching'" :conversation="conversation" :show-platform="false"
@@ -15,6 +16,7 @@ import UserTag from '@/components/UserTag.vue'
 import ThreadNormal from '@/components/ThreadVariants/ThreadNormal.vue'
 import ThreadSearched from './ThreadVariants/ThreadSearched.vue';
 import { useLivechatStore } from '@/stores/livechat';
+import { storeToRefs } from 'pinia';
 
 const { conversation, mode } = defineProps<{
   conversation: Conversation
@@ -23,6 +25,7 @@ const { conversation, mode } = defineProps<{
 }>()
 
 const livechatStore = useLivechatStore()
+const { currentChat } = storeToRefs(livechatStore)
 livechatStore.markAsReadEventBus.on((readedConversationID) => {
   if (conversation.conversationID === readedConversationID) {
     conversation.unread = 0;
