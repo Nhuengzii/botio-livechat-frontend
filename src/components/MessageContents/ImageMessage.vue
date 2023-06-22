@@ -1,29 +1,62 @@
 <template>
   <template v-if="amountImage > 1">
-    <div class="flex flex-row">
+    <div class="flex mb-3">
       <ImageProfileConversation :conversation="conversation" />
       <div class="grid gap-1 w-full"
-        :class="{ 'grid-cols-3': amountImage >= 3, 'grid-cols-2': amountImage == 2 || amountImage == 4 }">
+        :class="{ 'grid-cols-3': amountImage >= 3 && amountImage !== 4, 'grid-cols-2': amountImage === 2 || amountImage === 4 }">
         <template v-for="(item, index) in message.attachments">
-          <div class="h-80">
-            <img :src="message.attachments[index].payload.src" alt=""
-              class="absolute inset-0 object-cover w-full h-full" />
+          <div
+            :class="{ 'h-80': amountImage === 2 || amountImage === 4, 'h-64': amountImage >= 3 && amountImage < 7, 'h-56': amountImage >= 7 }">
+            <template v-if="index == 0 && amountImage <= 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl rounded-bl-xl" />
+            </template>
+            <template v-else-if="index == 0 && amountImage > 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
+            </template>
+            <template v-else-if="index == (amountImage - 1) && amountImage <= 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-tr-xl rounded-br-xl"/>
+            </template>
+            <template v-else-if="index == 2 && amountImage > 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-tr-xl "/>
+            </template>
+            <template v-else-if="index == 0 && amountImage > 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
+            </template>
+            
+            <template v-else-if="index == (amountImage-1) && amountImage > 3">
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full rounded-br-xl"/>
+            </template>
+            <template v-else>
+              <img :src="message.attachments[index].payload.src" alt=""
+                class="absolute inset-0 object-cover w-full h-full"/>
+            </template>
           </div>
         </template>
       </div>
+      <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     </div>
-    <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+
+
+
+
   </template>
 
   <template v-else>
     <div class="flex flex-row">
       <ImageProfileConversation :conversation="conversation" />
-      <img :src="message.attachments[0].payload.src" alt="" class="self-center relative shadow rounded-2xl" />
+      <div class="">
+        <img :src="message.attachments[0].payload.src" alt=""
+          class="self-center max-h-96 shadow rounded-2xl object-cover" />
+      </div>
       <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     </div>
-    
   </template>
-  
 </template>
 
 <script setup lang="ts">
@@ -48,6 +81,26 @@ const formatTimestamp = (timestamp: number) => {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
+}
+
+const getGridColumnsClass = () => {
+  // Determine the appropriate grid column class based on the 'amountImage' variable
+  if (amountImage.value === 2 || amountImage.value === 4) {
+    return 'grid-cols-2';
+  } else if (amountImage.value >= 3 && amountImage.value !== 4) {
+    return 'grid-cols-3';
+  } else {
+    return ''; // Add a default grid class if needed
+  }
+}
+const getImageContainerStyle = () => {
+  if (amountImage.value === 2 || amountImage.value === 4) {
+    return 'h-80';
+  } else if (amountImage.value >= 3 && amountImage.value !== 4) {
+    return 'h-72';
+  } else {
+    return ''; // Add a default grid class if needed
+  }
 }
 </script>
 
