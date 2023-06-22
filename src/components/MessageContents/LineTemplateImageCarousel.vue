@@ -1,7 +1,7 @@
 <template>
   <Carousel :items-to-show="2.5" :wrap-around="false" class="mb-4">
     <Slide v-for="(column, index) in payload.columns" :key="index">
-      <div class="carousel__item mx-2">
+      <div class="mx-2">
         <div class="relative">
           
           <img :src="column.imageUrl" class="object-cover rounded-lg">
