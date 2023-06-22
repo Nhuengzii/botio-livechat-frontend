@@ -5,14 +5,7 @@
     <!-- user send Text -->
     <template v-if="messageType == 'NormalText'">
       <div class="flex flex-row">
-        <template v-if="isShowProfile">
-          <ImageProfileConversation :conversation="conversation"/>  
-        </template>
-        <template v-else>
-          <NotshowImageProfile />
-        </template>
-
-        <NormalText :message="message" :conversation="conversation" />
+        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
       </div>
     </template>
     <!-- end-->
@@ -39,7 +32,7 @@
     <!-- admin send Text -->
     <template v-if="messageType == 'NormalText'">
       <div class="flex items-center justify-start flex-row-reverse">
-        <NormalText :message="message" :conversation="conversation" />
+        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile"/>
       </div>
 
     </template>
@@ -117,7 +110,7 @@ import LineTemplateConfirm from './MessageContents/LineTemplatConfirm.vue';
 import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
 import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric.vue';
 import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct.vue';
-import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
+
 const { message, conversation } = defineProps<
   {
     message: Message
