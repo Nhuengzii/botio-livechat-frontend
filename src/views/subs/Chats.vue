@@ -2,11 +2,14 @@
   <div class="flex-[2] shrink-1 bg-while">
     <div class="flex flex-col w-full h-full ">
       <div class="flex mx-3">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="w-[85%]"/>
-        <button @click="clearTab" class="bg-[#D9D9D9] w-[15%] flex flex-row justify-center items-center">
-          <h1>ปิดแท็บทั้งหมด</h1>
-          <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
-        </button>
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" :class="{'w-[85%]' : tabs.length > 0, 'w-[100%]' : tabs.length == 0}" />
+        <template v-if="tabs.length > 0">
+          <button @click="clearTab" class="bg-[#D9D9D9] w-[15%] flex flex-row justify-center items-center">
+            <h1>ปิดแท็บทั้งหมด</h1>
+            <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
+          </button>
+        </template>
+
       </div>
 
       <!-- header chats-->
