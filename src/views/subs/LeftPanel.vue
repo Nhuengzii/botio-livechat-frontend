@@ -5,7 +5,8 @@
           <div class="px-2">
             <ShopDisplay />
           </div>        
-              <PlatformSelector class="pt-4  mx-2" />
+               <PlatformSelector class="pt-4  mx-2" />
+ 
               <ThreadsUtils mode="normal" class="mx-2" />
               <ConversationThred class="px-2 no-scrollbar" />
         </template>
