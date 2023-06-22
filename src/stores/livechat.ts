@@ -164,8 +164,12 @@ export const useLivechatStore = defineStore("livechat", () => {
     const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.get(platform) as string, name);
     return covnersation;
   }
+  async function searchConversationByMessage(platform: string, message: string) {
+    const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.get(platform) as string, message);
+    return covnersation;
+  }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage }
 })
 
 function messageToActivity(message: Message): string {
