@@ -5,8 +5,8 @@
     </div>
     <div class="rounded-b-lg bg-white pb-2 pt-1">
       <div class="ml-3 mb-3">
-        <h1 class="font-bold">{{ payload.title }}</h1>
-        <p>{{ payload.text }}</p>
+        <h1 class="font-bold break-all px-4">{{ payload.title }}</h1>
+        <p class="break-all px-4">{{ payload.text }}</p>
       </div>
       <hr>
       <div class="flex justify-center mb-2 py-4 hover:bg-gray-50" v-for="button in payload.actions">
