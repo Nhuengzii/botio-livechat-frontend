@@ -47,9 +47,7 @@
     <!-- end-->
 
     <template v-else-if="messageType == 'FacebookTemplateGeneric'">
-      <div class="flex flex-row-reverse">
         <FacebookTemplateGeneric :message="message" />
-      </div>
     </template>
 
     <template v-else-if="messageType == 'LineTemplatButtons'">
