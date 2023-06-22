@@ -1,8 +1,9 @@
 <template>
   <div class="h-16 w-16"><img :src=profilePic class="rounded-full object-cover relative"></div>
-  <div v-if="showPlatform" class="absolute bottom-0.5 right-6 bg-white rounded-full p-0.5">
+  <div v-if="true" class="absolute top-10 left-11 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
     <font-awesome-icon v-if="platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;" size="xl" />
-    <font-awesome-icon v-if="platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;" size="xl" />
+    <font-awesome-icon v-if="platform === 'instagram'" :icon="['fab', 'instagram']" style="color: #DF2E38;" size="xl" />
+    <font-awesome-icon v-if="platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;" size="lg" /> 
   </div>
 </template>
 
