@@ -21,6 +21,24 @@ export const useUIStore = defineStore('ui', {
         is_editTemplateMessage: false,
         is_changePage: false
     }),
+    getters: {
+        pageInformation(state) {
+            return (platform: string) => {
+                if (platform === 'all') {
+                    return {
+                        unreadConversations: state.availablesPlatforms.get('facebook')!.unreadConversations +
+                            state.availablesPlatforms.get('instagram')!.unreadConversations +
+                            state.availablesPlatforms.get('line')!.unreadConversations,
+                        allConversations: state.availablesPlatforms.get('facebook')!.allConversations +
+                            state.availablesPlatforms.get('instagram')!.allConversations +
+                            state.availablesPlatforms.get('line')!.allConversations
+                    }
+                } else {
+                    return state.availablesPlatforms.get(platform)!
+                }
+            }
+        }
+    },
     actions: {
         ToggleMenu() {
             this.is_expanded = !this.is_expanded

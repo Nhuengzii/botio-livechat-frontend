@@ -4,7 +4,7 @@
       <div class="flex">
         <h1 class="text-slate-800">ข้อความทั้งหมด</h1>
         <h1 class="ml-5 bg-[#F94A2999] rounded-full px-2 font-semibold text-[#394867]">
-          {{ uiStore.availablesPlatforms.get(platform)?.allConversations }} </h1>
+          {{ uiStore.pageInformation(platform)?.allConversations }} </h1>
       </div>
       <div class="relative w-full mr-4 mt-4">
         <div class="absolute inset-y-0  left-0 flex items-center pl-4 pointer-events-none"
