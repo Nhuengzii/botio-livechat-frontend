@@ -10,7 +10,6 @@ import type { PageInformation } from '@/types/pageInformation'
 onMounted(async () => {
   for (const platform of ["facebook", "line", "instagram"]) {
     const information: PageInformation = await livechatStore.getPageInformation(platform)
-    console.log(`information for ${platform} is ${JSON.stringify(information, null, 2)}`);
     uiStore.availablesPlatforms.set(platform, information)
   }
 })
