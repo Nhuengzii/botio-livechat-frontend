@@ -14,7 +14,7 @@
 
       <!-- header chats-->
       <header class="bg-[#EEEEEE]  mx-3 flex-[1] " :class="[querying ?'pb-5':'']">
-        <div v-if="!querying" class="flex items-center py-5 justify-start">
+        <div v-show="!querying" class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
@@ -55,7 +55,7 @@
         </div>
         <div c>
           <!-- search conversation  --> 
-        <div  v-if="querying" class="flex items-center ">
+        <div  v-show="querying" class="flex items-center  ">
           <div class="pl-8 pt-5" @click="querying=false ">
             <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
           </div>
