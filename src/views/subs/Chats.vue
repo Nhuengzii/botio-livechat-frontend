@@ -20,27 +20,36 @@
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
-              <div
-                class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;"
-                  size="xl" />
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']" style="color: #DF2E38;"
-                  size="xl" />
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;" size="lg" />
+              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
+                  style="color: #2F58CD;" size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
+                  style="color: #DF2E38;" size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
+                  style="color: #38E54D;" size="lg" />
               </div>
             </template>
-
           </div>
 
           <!-- show picture conversation -->
-          <div class="px-4">
-            <template v-if="currentChat?.conversation.participants[0].username">
-              <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
-              <div class="justify-self-end">
-                <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" />
-              </div>
-            </template>
+          <div class="flex-1">
+            <div class="px-4 flex items-center justify-center">
+              <template v-if="currentChat?.conversation.participants[0].username">
+                <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
+                <div class="flex ml-auto items-center">
+
+                  <!-- click to search conversation  --> 
+                  <button @click="console.log('click to search')">
+                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mr-4" />
+                  </button>
+                  <!-- end -->
+                  
+                  <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="mx-2"/>
+                </div>
+              </template>
+            </div>
           </div>
+
         </div>
       </header>
 
