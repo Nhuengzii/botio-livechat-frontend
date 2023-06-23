@@ -33,11 +33,16 @@
           </div>
 
           <!-- show picture conversation -->
-          <div class="px-4">
+          <div class="px-4 w-full">
             <template v-if="currentChat?.conversation.participants[0].username">
-              <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
-              <div class="justify-self-end">
-                <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" />
+              <div class="flex justify-between">
+                <p class="font-medium text-[16px]" >{{ currentChat?.conversation.participants[0].username }}</p>
+                <div class="flex mr-10">
+                  <button >
+                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl"  class="button"/>
+                  </button>
+                  <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="ml-5 " style="color: #000000;"/>
+                </div>
               </div>
             </template>
             <!-- <p class="font-medium">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p> -->
@@ -299,5 +304,12 @@ onUpdated(() => {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+button {
+    color: #B2B2B2;
+}
+.button:hover {
+      color:#000000;
+      transition: 0.5s;
+  }
 </style>
 
