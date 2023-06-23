@@ -92,7 +92,9 @@ export const useLivechatStore = defineStore("livechat", () => {
     })
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
-    conversation.unread++;
+    if (message.source.userType === 'user') {
+      conversation.unread++;
+    }
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
       conversation.unread = 0;
       markAsReadEventBus.value.emit(conversation.conversationID);
