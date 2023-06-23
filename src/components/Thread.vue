@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-[#eeeeee]"
     @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }"
-    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-[#eaeaea]' : ''">
+    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-gray-300' : ''">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="$route.query.platform === 'all'"
       :update-time-status="updateTimeStatus" />
     <ThreadSearched v-if="mode === 'searching'" :conversation="conversation"
