@@ -7,7 +7,7 @@
       <div>
         <div class="truncate w-40" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ conversation.participants[0].username }}</div>
       </div>
-      <div class="text-[11px] ml-3 mt-1">{{ updateTimeStatus }}</div>
+      <div class="text-sm ml-6 mt-1" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ updateTimeStatus }}</div>
     </div>
     <div class="flex justify-between">
       <div class="truncate w-40 ml-3" :class="conversation.unread == 0 ? '' : 'font-bold'"> {{ conversation.lastActivity }}</div>
