@@ -1,7 +1,7 @@
 <template>
   <div class="flex-[2]  bg-while min-w-48">
     <div class="flex flex-col w-full h-full">
-      <div v-if="!querying" class="flex mx-3">
+      <div v-show="!querying" class="flex mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]"
           :class="{ 'w-[calc(100%-176px)]': tabs.length > 0, 'w-[100%]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
