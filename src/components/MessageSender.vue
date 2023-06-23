@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-[1]  py-4 items-center bg-[#EEEEEE] mx-3">
+  <div class="flex  items-center bg-[#EEEEEE] mx-3">
 
     <!-- space -->
     <div class="flex-[1]"></div>
@@ -15,7 +15,9 @@
         </button>
         <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
           @input="handleTyping" :rows="calculateTextareaRows"
-          class="inline-flex self-center border-2 rounded-lg px-2 py-2 w-full h-auto ml -2 text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+          class="inline-flex self-center border-2 rounded-lg 
+          px-2 py-1 w-full  ml-2 text-black break-words my-2
+          outline-none resize-none max-h-64 overflow-auto" />
 
         <div class="inline-flex">
           <button>
@@ -68,8 +70,8 @@
     </div>
 
     <!-- space -->
-    <div class="pl-3 flex-[1]">
-      <button @click="sendMessage" v-if="showSendMessageButton" class="flex">
+    <div class="pl-3 flex-[1]  ">
+      <button @click="sendMessage" v-if="showSendMessageButton" class="flex ">
         <div class="flex rounded-full bg-white">
           <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
         </div>

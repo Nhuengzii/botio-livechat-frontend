@@ -1,6 +1,6 @@
 <template>
   <div class="flex-[1] flex flex-col justify-between bg-[#D9D9D94c]  min-w-[320px] max-w-[350px]">
-    <div class="">
+    <div  >
       <template v-if="conversationsThreadMode == 'normal'">
         <div class="px-2">
           <ShopDisplay />
