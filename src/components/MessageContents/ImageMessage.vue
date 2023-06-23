@@ -56,26 +56,24 @@
   </template>
 
   <template v-else>
-
-
-
-    <template v-if="message.source.userType === 'user'">
-      <ImageProfileConversation :conversation="conversation" />
-    </template>
-
     <div class="flex flex-row">
-      <template v-if="message.source.userType === 'admin'">
-        <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-      </template>
-      <div>
-        <img :src="message.attachments[0].payload.src" alt=""
-          class="self-center max-h-96 shadow rounded-2xl object-cover" />
-      </div>
-
       <template v-if="message.source.userType === 'user'">
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+        <ImageProfileConversation :conversation="conversation" />
       </template>
 
+      <div class="flex flex-row">
+        <template v-if="message.source.userType === 'admin'">
+          <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+        </template>
+        <div>
+          <img :src="message.attachments[0].payload.src" alt=""
+            class="self-center max-h-96 shadow rounded-2xl object-cover" />
+        </div>
+
+        <template v-if="message.source.userType === 'user'">
+          <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+        </template>
+      </div>
     </div>
   </template>
 </template>
