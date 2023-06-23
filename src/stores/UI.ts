@@ -19,7 +19,8 @@ export const useUIStore = defineStore('ui', {
         is_typing: false,
         is_createTemplateMessage: false,
         is_editTemplateMessage: false,
-        is_changePage: false
+        is_changePage: false,
+        
     }),
     getters: {
         pageInformation(state) {
