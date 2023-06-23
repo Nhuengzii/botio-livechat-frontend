@@ -12,9 +12,9 @@
 
     <!-- user send Image -->
     <template v-else-if="messageType == 'ImageMessage'">
-      <div class="flex flex-row">
+      
         <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
+      
     </template>
     <!-- end-->
 
