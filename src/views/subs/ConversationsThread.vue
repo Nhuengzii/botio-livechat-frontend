@@ -6,7 +6,7 @@
       <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
         :mode="conversationsThreadMode" />
     </div>
-    <InfiniteLoading @infinite="loadmore" :firstload="false">
+    <InfiniteLoading @infinite="loadmore" :firstload="false" :identifier="$route.query.platform as string">
       <template #spinner>
         <span>loading...</span>
       </template>
