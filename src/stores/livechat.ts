@@ -77,13 +77,17 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   async function receiveMessage(message: Message) {
     const uiStore = useUIStore()
-    let conversation = conversationRaw.value.get(message.conversationID);
+    let conversation: Conversation | undefined | null = conversationRaw.value.get(message.conversationID);
     if (!conversation) {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
+      if (!conversation) {
+        throw new Error("cannot find this conversation");
+      }
       conversationRaw.value.set(conversation.conversationID, conversation);
     }
     botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
       uiStore.availablesPlatforms.set(message.platform, pageInformation);
+      console.log(`update ${message.platform} page information`);
     })
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
