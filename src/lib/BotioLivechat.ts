@@ -46,12 +46,13 @@ class BotioLivechat implements IBotioLivechat {
     }
   }
 
-  async listConversation(platform: string, pageID: string) {
+  async listConversation(platform: string, pageID: string, skip: number = 0, limit: number = 50) {
 
     let conversations: Conversation[];
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform !== 'all' ? `/${pageID}/conversations` : '/conversations');
+    console.log(url);
     try {
-      const response = await axios.get<{ conversations: Conversation[] }>(url);
+      const response = await axios.get<{ conversations: Conversation[] }>(url, { params: { skip: skip, limit: limit } });
       conversations = response.data.conversations;
     } catch (error) {
       throw new Error("Error fetching conversations");
@@ -76,12 +77,12 @@ class BotioLivechat implements IBotioLivechat {
     return conversation;
   }
 
-  async listMessage(platform: string, pageID: string, conversationId: string) {
+  async listMessage(platform: string, pageID: string, conversationId: string, skip: number = 0, limit = 999) {
     let messages: Message[];
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages`;
 
     try {
-      const response = await axios.get<{ messages: Message[] }>(url);
+      const response = await axios.get<{ messages: Message[] }>(url, { params: { skip: skip, limit: limit } });
       messages = response.data.messages;
     }
     catch (error) {
