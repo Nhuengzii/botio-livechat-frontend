@@ -13,7 +13,7 @@
       </div>
 
       <!-- header chats-->
-      <header class="bg-[#EEEEEE]  mx-3 flex-[1] " :class="[querying ?'pb-5':'']">
+      <header class="bg-[#EEEEEE]  mx-3 flex-[1] " :class="[querying ? 'pb-5' : '']">
         <div v-show="!querying" class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
@@ -37,15 +37,16 @@
                 <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
                 <div class="flex ml-auto items-center">
 
-                  <!-- click to search conversation  --> 
-                  <button @click="querying=true">
+                  <!-- click to search conversation  -->
+                  <button @click="querying = true">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mx-4 button" />
                   </button>
                   <button>
-                    <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="mx-4 " style="color: #000000;"/>
+                    <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="mx-4 " style="color: #000000;" />
                   </button>
                   <button>
-                    <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="mx-4 " size="xl" style="color: #000000;"/>
+                    <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="mx-4 " size="xl"
+                      style="color: #000000;" />
                   </button>
                 </div>
               </template>
@@ -54,39 +55,48 @@
 
         </div>
         <div c>
-          <!-- search conversation  --> 
-        <div  v-show="querying" class="flex items-center  ">
-          <div class="pl-8 pt-5" @click="querying=false ">
-            <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
-          </div>
-          <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
-            <input type="text"
-              class="ml-2 bg-[#D9D9D9] pr-8  border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="ค้นหาการสนทนา" v-model="query">
-            <div class="absolute bottom-1 right-6 ">
-              <div v-if="query!=''" class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
-                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+          <!-- search conversation  -->
+          <div v-show="querying" class="flex items-center  ">
+            <div class="pl-8 pt-5" @click="querying = false">
+              <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
+            </div>
+            <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
+              <input type="text"
+                class="ml-2 bg-[#D9D9D9] pr-8  border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="ค้นหาการสนทนา" v-model="query">
+              <div class="absolute bottom-1 right-6 ">
+                <div v-if="query != ''" class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
+                  <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+                </div>
               </div>
             </div>
-          </div>
-          <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="{}" >
+            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="{ }">
               <div class=" text-white">ค้นหา</div>
-          </button>
+            </button>
+          </div>
         </div>
-      </div>
       </header>
 
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
+        <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
+          :identifier="currentChat?.conversation.conversationID">
+          <template #spinner>
+            <span>loading...</span>
+          </template>
+          <template #complete>
+            <span>No more data found!</span>
+          </template>
+        </InfiniteLoading>
         <div class="grid grid-cols-12 gap-y-0.5">
-          <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
+          <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
             <template v-if="isNewDay(index)">
 
               <div class="col-start-6 col-end-8 py-8 px-4">
                 <div class="flex flex-row justify-center rounded-xl bg-gray-100 py-0.5">
                   <span class="justify-center">{{ getFormattedDate(message.timestamp) }}</span>
-                  
+
                 </div>
               </div>
             </template>
@@ -136,6 +146,28 @@ const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
+// infinite loading
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+const isFetchingMore = ref(false);
+const lastSize = ref(0);
+async function loadmore($state) {
+  if (isFetchingMore.value) return;
+  console.log('load more')
+  isFetchingMore.value = true;
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(null);
+    }, 2000);
+  });
+  isFetchingMore.value = false;
+  const olderMessage = await livechatStore.fetchMoreMessages();
+  if (olderMessage?.length === 0) {
+    $state.complete();
+    return;
+  }
+  console.log('load more done')
+}
 
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
@@ -325,12 +357,14 @@ onUpdated(() => {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 button {
-    color: #B2B2B2;
+  color: #B2B2B2;
 }
+
 .button:hover {
-      color:#000000;
-      transition: 0.5s;
-  }
+  color: #000000;
+  transition: 0.5s;
+}
 </style>
 

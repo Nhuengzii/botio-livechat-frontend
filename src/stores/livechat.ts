@@ -115,6 +115,17 @@ export const useLivechatStore = defineStore("livechat", () => {
     currentChat.value.messages.push(...messages);
   }
 
+  async function fetchMoreMessages() {
+    if (!currentChat.value) {
+      console.log('currentChat is undefined so i dont fetch more!')
+      return
+    }
+    const messages = await botioLivechat.value.listMessage(currentChat.value.conversation.platform, pageIDMap.get(currentChat.value.conversation.platform) as string, currentChat.value.conversation.conversationID, currentChat.value.messages.length);
+    currentChat.value.messages.unshift(...messages);
+    console.log('fetching done')
+    return messages;
+  }
+
   async function sendTextMessage(conversation: Conversation, message: string) {
     if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
       const tempMid = `temp-${Date.now()}`;
@@ -175,7 +186,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     return covnersation;
   }
 
-  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage, markAsRead }
+  return { botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages, openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation, searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages }
 })
 
 function messageToActivity(message: Message): string {
