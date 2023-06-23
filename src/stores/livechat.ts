@@ -97,6 +97,12 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
       conversation.unread = 0;
+      if (message.isDeleted) {
+        const idx = currentChat.value.messages.findIndex((m) => m.messageID === message.messageID);
+        if (idx !== -1) {
+          currentChat.value.messages[idx] = message;
+        }
+      }
       markAsReadEventBus.value.emit(conversation.conversationID);
     }
   }
