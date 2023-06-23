@@ -42,6 +42,7 @@
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl"  class="button"/>
                   </button>
                   <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="ml-5 " style="color: #000000;"/>
+                  <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="ml-5 " size="xl"/>
                 </div>
               </div>
             </template>
