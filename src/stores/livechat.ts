@@ -59,11 +59,12 @@ export const useLivechatStore = defineStore("livechat", () => {
   })
 
   // Action
-  async function fetchConversations(platform: string): Promise<void> {
-    const conversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string);
+  async function fetchConversations(platform: string, skip = 0, limit = 7): Promise<Conversation[]> {
+    const conversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string, skip, limit);
     conversations.forEach((conversation) => {
       conversationRaw.value.set(conversation.conversationID, conversation);
     })
+    return conversations;
   }
 
   async function getPageInformation(platform: string): Promise<PageInformation> {

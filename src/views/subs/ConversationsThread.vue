@@ -1,13 +1,20 @@
 <template>
   <div>
     <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
-    <div v-bind="containerProps" v-show="!isLoading">
-      <div v-bind="wrapperProps">
-        <div v-for="({ data }, index) in list" :key="data.conversationID">
-          <Thread :conversation="data" :show-platform="$route.query.platform == 'all'" :mode="conversationsThreadMode" />
-        </div>
-      </div>
+    <div v-for="(conversation, index) in conversations($route.query.platform as string)"
+      :key="conversation.conversationID">
+      <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
+        :mode="conversationsThreadMode" />
     </div>
+    <InfiniteLoading @infinite="loadmore" :firstload="false">
+      <template #spinner>
+        <span>loading...</span>
+      </template>
+      <template #complete>
+        <span>No more data found!</span>
+      </template>
+    </InfiniteLoading>
+
   </div>
 </template>
 
@@ -26,7 +33,36 @@ const uiStore = useUIStore();
 const { conversations } = storeToRefs(livechatStore);
 const { conversationsThreadMode } = storeToRefs(uiStore)
 const isLoading = ref(false);
+const isFetchingMore = ref(false);
 const route = useRoute()
+// infinite loading
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+import type { Conversation } from '@/types/conversation';
+
+async function loadmore($state) {
+  if (isFetchingMore.value) return;
+  console.log('load more')
+  isFetchingMore.value = true;
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(null);
+    }, 2000);
+  });
+  const skip = conversations.value(route.query.platform as string).length
+  isFetchingMore.value = false;
+  const olderConversation: Conversation[] = await livechatStore.fetchConversations(route.query.platform as string, skip, 2)
+  if (olderConversation.length === 0) {
+    console.log('no more conversation')
+    $state.complete();
+  }
+  console.log('load more done')
+}
+
+
+
+
+
 const conversationsForVirtualList = computed(() => {
   const currentPlatform = route.query.platform as string;
   return conversations.value(currentPlatform, conversationsThreadMode.value === 'searching')
