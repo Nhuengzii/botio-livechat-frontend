@@ -30,7 +30,10 @@ import {
     faCircleInfo,
     faMagnifyingGlass,
     faArrowLeft,
-    faXmark
+    faXmark,
+    faEllipsisVertical
+    
+    
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -55,8 +58,8 @@ library.add(faCircleInfo)
 library.add(faMagnifyingGlass)
 library.add(faArrowLeft)
 library.add(faXmark)
-
-
+library.add(faEllipsisVertical)
+ 
 const app = createApp(App)
 
 app.use(createPinia())
