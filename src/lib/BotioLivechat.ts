@@ -88,7 +88,7 @@ class BotioLivechat implements IBotioLivechat {
     catch (error) {
       throw new Error("Error fetching messages");
     }
-    return messages
+    return messages.reverse();
   };
 
   async getMessage(platform: string, pageID: string, conversationId: string) {
