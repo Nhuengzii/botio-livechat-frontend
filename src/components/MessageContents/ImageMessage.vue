@@ -1,7 +1,12 @@
 <template>
   <template v-if="amountImage > 1">
     <div class="flex mb-3">
-      <ImageProfileConversation :conversation="conversation" />
+      <template v-if="message.source.userType === 'admin'">
+        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+      </template>
+      <template v-if="message.source.userType === 'user'">
+          <ImageProfileConversation :conversation="conversation" />
+      </template>
       <div class="grid gap-1 w-full"
         :class="{ 'grid-cols-3': amountImage >= 3 && amountImage !== 4, 'grid-cols-2': amountImage === 2 || amountImage === 4 }">
         <template v-for="(item, index) in message.attachments">
@@ -83,25 +88,6 @@ const formatTimestamp = (timestamp: number) => {
   return `${hours}:${minutes}`;
 }
 
-const getGridColumnsClass = () => {
-  // Determine the appropriate grid column class based on the 'amountImage' variable
-  if (amountImage.value === 2 || amountImage.value === 4) {
-    return 'grid-cols-2';
-  } else if (amountImage.value >= 3 && amountImage.value !== 4) {
-    return 'grid-cols-3';
-  } else {
-    return ''; // Add a default grid class if needed
-  }
-}
-const getImageContainerStyle = () => {
-  if (amountImage.value === 2 || amountImage.value === 4) {
-    return 'h-80';
-  } else if (amountImage.value >= 3 && amountImage.value !== 4) {
-    return 'h-72';
-  } else {
-    return ''; // Add a default grid class if needed
-  }
-}
 </script>
 
 <style scoped></style>

@@ -54,7 +54,9 @@
     </template>
 
     <template v-else-if="messageType == 'FacebookTemplateButton'">
-      <FacebookTemplateButton :message="message" />
+      <div class="flex items-center justify-end mr-4">
+        <FacebookTemplateButton :message="message" />
+      </div>
     </template>
 
     <template v-else-if="messageType == 'LineTemplatButtons'">

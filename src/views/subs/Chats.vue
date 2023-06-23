@@ -2,10 +2,11 @@
   <div class="flex-[2] shrink-1 bg-while">
     <div class="flex flex-col w-full h-full">
       <div class="flex mx-3">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" :class="{'w-[85%]' : tabs.length > 0, 'w-[100%]' : tabs.length == 0}" />
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]"
+          :class="{ 'w-[calc(100%-176px)]': tabs.length > 0, 'w-[100%]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
-          <button @click="clearTab" class="bg-[#D9D9D9] w-[15%] flex flex-row justify-center items-center">
-            <h1>ปิดแท็บทั้งหมด</h1>
+          <button @click="clearTab" class="bg-gray-50 hover:bg-gray-200 w-44 flex flex-row justify-center items-center">
+            <h1 class="pr-2 font-semibold">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
         </template>
@@ -15,20 +16,34 @@
       <!-- header chats-->
       <header class="bg-[#EEEEEE] flex-[2] mx-3 ">
         <div class="flex items-center py-5 justify-start">
-
           <!-- show name conversation-->
-          <div class="mx-3 object-cover h-12 w-12 rounded-full">
+          <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
+            <template v-if="currentChat?.conversation.participants[0].username">
+              <div
+                class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;"
+                  size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']" style="color: #DF2E38;"
+                  size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;" size="lg" />
+              </div>
+            </template>
+
           </div>
 
           <!-- show picture conversation -->
           <div class="px-4">
-            <p class="">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p>
+            <template v-if="currentChat?.conversation.participants[0].username">
+              <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
+              <div class="justify-self-end">
+                <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" />
+              </div>
+            </template>
+            <!-- <p class="font-medium">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p> -->
           </div>
 
-          <div class="justify-self-end">
-            <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" />
-          </div>
+
 
 
         </div>
@@ -38,8 +53,10 @@
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-indigo-50  mx-3" id="containMessage"
         ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-0.5">
+
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
             <template v-if="isNewDay(index)">
+
               <div class="col-start-5 col-end-8 py-8">
                 <div class="flex flex-row justify-center">{{ getFormattedDate(message.timestamp) }}</div>
               </div>
@@ -85,10 +102,13 @@ import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineCom
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
+
 
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
@@ -256,9 +276,12 @@ const scrollToLastMessage = () => {
   });
 };
 
+
+
 onMounted(() => {
   scrollToLastMessage();
-});
+})
+
 
 onUpdated(() => {
   scrollToLastMessage();
