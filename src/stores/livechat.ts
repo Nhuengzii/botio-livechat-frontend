@@ -93,11 +93,6 @@ export const useLivechatStore = defineStore("livechat", () => {
     conversation.updatedTime = message.timestamp
     conversation.unread++;
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
-      const lastIndex = currentChat.value.messages.length - 1;
-      if (currentChat.value.messages[lastIndex].messageID.startsWith('temp-')) {
-        currentChat.value.messages.pop();
-      }
-      currentChat.value.messages.push(message);
       conversation.unread = 0;
       markAsReadEventBus.value.emit(conversation.conversationID);
     }
@@ -121,12 +116,13 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   async function sendTextMessage(conversation: Conversation, message: string) {
     if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
+      const tempMid = `temp-${Date.now()}`;
       const tempMessage: Message = {
         shopID: conversation.shopID,
         platform: conversation.platform,
         pageID: conversation.pageID,
         conversationID: conversation.conversationID,
-        messageID: `temp-${Date.now()}`,
+        messageID: tempMid,
         timestamp: Date.now(),
         source: {
           userType: "admin",
@@ -137,9 +133,15 @@ export const useLivechatStore = defineStore("livechat", () => {
         attachments: []
       }
       currentChat.value.messages.push(tempMessage)
+      const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
+      const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+      if (idx != -1) {
+        currentChat.value.messages[idx] = newMessage;
+      }
     }
-    const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
-    receiveMessage(newMessage);
+    else {
+      const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
+    }
   }
 
   function openChat(platform: string, conversationID: string) {
