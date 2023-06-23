@@ -1,7 +1,7 @@
 <template>
   <div class="flex-[2]  bg-while min-w-48">
     <div class="flex flex-col w-full h-full">
-      <div class="flex mx-3">
+      <div v-if="!querying" class="flex mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]"
           :class="{ 'w-[calc(100%-176px)]': tabs.length > 0, 'w-[100%]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
@@ -10,12 +10,11 @@
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
         </template>
-
       </div>
 
       <!-- header chats-->
-      <header class="bg-[#EEEEEE] flex-[1] mx-3 ">
-        <div class="flex items-center py-5 justify-start">
+      <header class="bg-[#EEEEEE]  mx-3 flex-[1] " :class="[querying ?'pb-5':'']">
+        <div v-if="!querying" class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
@@ -39,7 +38,7 @@
                 <div class="flex ml-auto items-center">
 
                   <!-- click to search conversation  --> 
-                  <button @click="console.log('click to search')">
+                  <button @click="querying=true">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mx-4 button" />
                   </button>
                   <button>
@@ -54,6 +53,27 @@
           </div>
 
         </div>
+        <div c>
+          <!-- search conversation  --> 
+        <div  v-if="querying" class="flex items-center ">
+          <div class="pl-8 pt-5" @click="querying=false ">
+            <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
+          </div>
+          <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
+            <input type="text"
+              class="ml-2 bg-[#D9D9D9] pr-8  border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="ค้นหาการสนทนา" v-model="query">
+            <div class="absolute bottom-1 right-6 ">
+              <div v-if="query!=''" class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
+                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+              </div>
+            </div>
+          </div>
+          <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="{}" >
+              <div class=" text-white">ค้นหา</div>
+          </button>
+        </div>
+      </div>
       </header>
 
 
@@ -114,7 +134,8 @@ const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
-
+const query = ref("");
+const querying = ref(false);
 
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
