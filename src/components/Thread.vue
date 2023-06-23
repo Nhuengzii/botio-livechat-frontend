@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-[#eeeeee]"
     @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }"
-    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-gray-300' : ''">
+    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-[#eeeeee]' : ''">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="$route.query.platform === 'all'"
       :update-time-status="updateTimeStatus" />
     <ThreadSearched v-if="mode === 'searching'" :conversation="conversation"
@@ -16,6 +16,9 @@ import ThreadNormal from '@/components/ThreadVariants/ThreadNormal.vue'
 import ThreadSearched from './ThreadVariants/ThreadSearched.vue';
 import { useLivechatStore } from '@/stores/livechat';
 import { storeToRefs } from 'pinia';
+import { useUIStore } from '@/stores/UI';
+
+const UIStore = useUIStore();
 
 const { conversation, mode } = defineProps<{
   conversation: Conversation

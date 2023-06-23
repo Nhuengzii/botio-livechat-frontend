@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-[2] shrink-1 bg-while">
+  <div class="flex-[2]  bg-while min-w-48">
     <div class="flex flex-col w-full h-full">
       <div class="flex mx-3">
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]"
@@ -14,52 +14,50 @@
       </div>
 
       <!-- header chats-->
-      <header class="bg-[#EEEEEE] flex-[2] mx-3 ">
+      <header class="bg-[#EEEEEE] flex-[1] mx-3 ">
         <div class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
-              <div
-                class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;"
-                  size="xl" />
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']" style="color: #DF2E38;"
-                  size="xl" />
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;" size="lg" />
+              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
+                  style="color: #2F58CD;" size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
+                  style="color: #DF2E38;" size="xl" />
+                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
+                  style="color: #38E54D;" size="lg" />
               </div>
             </template>
-
           </div>
 
           <!-- show picture conversation -->
-          <div class="px-4 w-full">
-            <template v-if="currentChat?.conversation.participants[0].username">
-              <div class="flex justify-between">
-                <p class="font-medium text-[16px]" >{{ currentChat?.conversation.participants[0].username }}</p>
-                <div class="flex mr-10">
-                  <button >
-                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl"  class="button"/>
+          <div class="flex-1">
+            <div class="px-4 flex items-center justify-center">
+              <template v-if="currentChat?.conversation.participants[0].username">
+                <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
+                <div class="flex ml-auto items-center">
+
+                  <!-- click to search conversation  --> 
+                  <button @click="console.log('click to search')">
+                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mr-4" />
                   </button>
-                  <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="ml-5 " style="color: #000000;"/>
+                   <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="ml-5 " style="color: #000000;"/>
                   <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="ml-5 " size="xl"/>
+ 
                 </div>
-              </div>
-            </template>
-            <!-- <p class="font-medium">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p> -->
+              </template>
+            </div>
           </div>
-
-
-
 
         </div>
       </header>
 
 
-      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-indigo-50  mx-3" id="containMessage"
+      <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-0.5">
-
+          
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
             <template v-if="isNewDay(index)">
 

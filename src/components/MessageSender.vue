@@ -1,28 +1,22 @@
 <template>
-  <div class="flex flex-[1]  py-4 items-center bg-gray-200 mx-3">
+  <div class="flex flex-[1]  py-4 items-center bg-[#EEEEEE] mx-3">
 
     <!-- space -->
-    <div class="flex-[1]">
-      <button @click="openImageDialog">
-        <div class="pl-4 ml-8 mr-2 text-gray-500">
-          <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
-        </div>
-      </button>
-    </div>
+    <div class="flex-[1]"></div>
     <!-- end space-->
 
-    <div class="flex-[6] flex-col">
-      <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-2">
 
-        <textarea 
-          type="text" 
-          placeholder="พิมพ์ข้อความ" 
-          v-model="newMessage" 
-          @keydown.enter="sendMessageOnEnter"
-          @input="handleTyping"
-          :rows="calculateTextareaRows"
-          class="inline-flex bg-stone-300 w-full h-auto ml-8 break-words outline-none resize-none max-h-64 overflow-auto"/>
-          
+    <div class="flex-[10] flex-col">
+      <div class="flex rounded-lg justify-around items-center text-gray-500 ">
+        <button @click="openImageDialog">
+          <div class="px-3">
+            <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
+          </div>
+        </button>
+        <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
+          @input="handleTyping" :rows="calculateTextareaRows"
+          class="inline-flex self-center border-2 rounded-lg px-2 py-2 w-full h-auto ml -2 text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+
         <div class="inline-flex">
           <button>
             <div class="pl-2 mr-4">
@@ -149,27 +143,27 @@ const calculateTextareaRows = computed(() => {
 const selectedImage = ref<string | null>(null);
 
 const openImageDialog = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (event) => displaySelectedImage(event, selectedImage);
-    input.click();
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = (event) => displaySelectedImage(event, selectedImage);
+  input.click();
 };
 
 const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  const file = (event.target as HTMLInputElement).files?.[0];
 
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
 
-        reader.onload = () => {
-            selectedImage.value = reader.result as string;
-        };
+    reader.onload = () => {
+      selectedImage.value = reader.result as string;
+    };
 
-        reader.readAsDataURL(file);
-    } else {
-        selectedImage.value = null;
-    }
+    reader.readAsDataURL(file);
+  } else {
+    selectedImage.value = null;
+  }
 };
 
 /// move to store
@@ -250,16 +244,17 @@ watch(newMessage, () => {
 </script>
 
 <style scoped>
-  .resize-none {
-    resize: none;
-  }
+.resize-none {
+  resize: none;
+}
 
-  .hidden {
-    display: none;
-  }
+.hidden {
+  display: none;
+}
 
-  textarea::-webkit-scrollbar {
-  width: 0.5em; /* Adjust the width as needed */
+textarea::-webkit-scrollbar {
+  width: 0.5em;
+  /* Adjust the width as needed */
   background-color: transparent;
 }
 
@@ -270,4 +265,16 @@ textarea::-webkit-scrollbar-thumb {
 textarea::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+.textarea-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.textarea-container textarea::placeholder {
+  text-align: center;
+}
+
+
 </style>
