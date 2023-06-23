@@ -83,8 +83,11 @@
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
             <template v-if="isNewDay(index)">
 
-              <div class="col-start-5 col-end-8 py-8">
-                <div class="flex flex-row justify-center">{{ getFormattedDate(message.timestamp) }}</div>
+              <div class="col-start-6 col-end-8 py-8 px-4">
+                <div class="flex flex-row justify-center rounded-xl bg-gray-100 py-0.5">
+                  <span class="justify-center">{{ getFormattedDate(message.timestamp) }}</span>
+                  
+                </div>
               </div>
             </template>
             <!-- Render the message content from user -->
@@ -225,9 +228,8 @@ const isNewDay = (index: number): boolean => {
   }
 
   const thailandOffset = 7; // Thailand timezone offset in hours
-
   const previousDate = new Date(previousMessage.timestamp);
-  previousDate.setHours(previousDate.getHours() + thailandOffset);
+  previousDate.setHours(previousDate.getHours());
   const previousFormattedDate = previousDate.toLocaleDateString('th-TH', {
     day: 'numeric',
     month: 'numeric',
@@ -235,7 +237,7 @@ const isNewDay = (index: number): boolean => {
   });
 
   const currentDate = new Date(currentMessage.timestamp);
-  currentDate.setHours(currentDate.getHours() + thailandOffset);
+  currentDate.setHours(currentDate.getHours());
   const currentFormattedDate = currentDate.toLocaleDateString('th-TH', {
     day: 'numeric',
     month: 'numeric',
