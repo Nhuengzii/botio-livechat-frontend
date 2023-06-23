@@ -13,7 +13,6 @@
         <h1>{{ unread }}</h1>
       </div>
     </div>
-    <div class="px-4 py-1 mt-2 duration-300" :class="isFocus ? 'bg-[#27374D]' : 'bg-[#ffffff00]'"></div>
   </router-link>
 </template>
 
