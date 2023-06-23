@@ -77,7 +77,7 @@ class BotioLivechat implements IBotioLivechat {
     return conversation;
   }
 
-  async listMessage(platform: string, pageID: string, conversationId: string, skip: number = 0, limit = 999) {
+  async listMessage(platform: string, pageID: string, conversationId: string, skip: number = 0, limit = 15) {
     let messages: Message[];
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages`;
 
