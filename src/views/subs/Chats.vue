@@ -40,11 +40,10 @@
 
                   <!-- click to search conversation  --> 
                   <button @click="console.log('click to search')">
-                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mr-4" />
+                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mx-4" />
                   </button>
-                   <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="ml-5 " style="color: #000000;"/>
-                  <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="ml-5 " size="xl"/>
- 
+                   <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="mx-4 " style="color: #000000;"/>
+                  <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="mx-4 " size="xl"/>
                 </div>
               </template>
             </div>
