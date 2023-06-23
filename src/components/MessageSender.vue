@@ -13,11 +13,17 @@
             <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
           </div>
         </button>
-        <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
-          @input="handleTyping" :rows="calculateTextareaRows"
-          class="inline-flex self-center border-2 rounded-lg 
-          px-2 py-1 w-full  ml-2 text-black break-words my-2
-          outline-none resize-none max-h-64 overflow-auto" />
+        <div class="relative w-full">
+          <textarea type="text" 
+            placeholder="พิมพ์ข้อความ" 
+            v-model="newMessage" 
+            @keydown.enter="sendMessageOnEnter"
+            @input="handleTyping" :rows="calculateTextareaRows"
+            class="inline-flex self-center border-2 rounded-lg px-2 py-2 w-full h-auto ml -2 text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+          <img v-if="selectedImage" :src="selectedImage" alt="Selected Image"
+            class="absolute top-0 left-0 w-full h-full object-contain" />
+        </div>
+
 
         <div class="inline-flex">
           <button>
@@ -95,15 +101,11 @@ import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/Head
 import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
 import HeaderCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/HeaderCreateMessage.vue'
 import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/BodyCreateMessage.vue'
-
 import { useUIStore } from '@/stores/UI';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
-
-
-/// use value from store ///
 
 const uiStore = useUIStore()
 const newMessage = ref('');
@@ -113,7 +115,6 @@ const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 
-///////////////////////////
 const image: Ref<string | null> = ref(null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const openFilePicker = () => {
@@ -168,7 +169,7 @@ const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) =
   }
 };
 
-/// move to store
+
 const sendMessage = () => {
   if (newMessage.value.trim() !== '') {
     // Handle sending the message here
@@ -180,9 +181,8 @@ const sendMessage = () => {
     uiStore.is_typing = false;
   }
 };
-////////////////////////////
 
-/// move to store
+
 const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) => {
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
@@ -196,9 +196,9 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
     } // Call the sendMessage function to send the message
   }
 };
-////////////////////////////
 
-/// move to store
+
+
 const handleTyping = () => {
   clearTimeout(typingTimeout); // Clear the previous typing timeout
 
@@ -221,15 +221,11 @@ const handleTyping = () => {
 
 
 
-////////////////////////////
 const sendTextMessageWithImage = () => {
   if (newMessage.value.trim() !== '') {
-    // Handle sending the message and image here
+
     console.log('Sending message:', newMessage.value);
     console.log('Sending image:', selectedImage.value);
-
-    // Implement your logic to send the message and image to the server
-    // You can access the message and selectedImage data using the `newMessage.value` and `selectedImage.value` variables
 
     newMessage.value = ''; // Reset the input field after sending the message
     selectedImage.value = null; // Reset the selected image
@@ -274,9 +270,8 @@ textarea::-webkit-scrollbar-track {
   justify-content: center;
   height: 100%;
 }
+
 .textarea-container textarea::placeholder {
   text-align: center;
 }
-
-
 </style>

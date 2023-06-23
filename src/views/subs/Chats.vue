@@ -6,7 +6,7 @@
           :class="{ 'w-[calc(100%-176px)]': tabs.length > 0, 'w-[100%]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
           <button @click="clearTab" class="bg-gray-50 hover:bg-gray-200 w-44 flex flex-row justify-center items-center">
-            <h1 class="pr-2 font-semibold">ปิดแท็บทั้งหมด</h1>
+            <h1 class="pr-2 font-semibold text-black">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
         </template>
@@ -89,9 +89,6 @@
             </template>
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
-
-
-
               <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full"
                 :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
