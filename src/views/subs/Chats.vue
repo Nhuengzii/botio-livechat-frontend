@@ -57,7 +57,6 @@
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
         <div class="grid grid-cols-12 gap-y-0.5">
-          
           <template v-for="(message, index, timestamp) in currentChat?.messages" key="message.messageID">
             <template v-if="isNewDay(index)">
 
