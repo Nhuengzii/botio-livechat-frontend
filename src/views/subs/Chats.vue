@@ -14,7 +14,7 @@
       </div>
 
       <!-- header chats-->
-      <header class="bg-[#EEEEEE] flex-[2] mx-3 ">
+      <header class="bg-[#EEEEEE] flex-[1] mx-3 ">
         <div class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
@@ -40,12 +40,7 @@
                 <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" />
               </div>
             </template>
-            <!-- <p class="font-medium">{{ currentChat?.conversation.participants[0].username ?? 'ไม่มีชื่อ' }}</p> -->
           </div>
-
-
-
-
         </div>
       </header>
 
