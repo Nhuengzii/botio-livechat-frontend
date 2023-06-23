@@ -17,7 +17,7 @@
         </div>
       </template>
     </div>
-    <div class="flex w-full p-5 bg-slate-700 justify-center text-[#FFD95A] text-[16px]">
+    <div v-if="conversationsThreadMode == 'normal'" class="flex w-full h-[70vh] items-center justify-center bg-slate-700  text-[#FFD95A] text-[16px]">
       Botio X CPE
     </div>
   </div>

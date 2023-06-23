@@ -5,18 +5,18 @@
     <div>
     <div class="flex justify-between ml-3">
       <div>
-        <div class="truncate w-32" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ conversation.participants[0].username }}</div>
+        <div class="truncate w-40" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ conversation.participants[0].username }}</div>
       </div>
       <div class="text-[11px] ml-3 mt-1">{{ updateTimeStatus }}</div>
     </div>
     <div class="flex justify-between">
-      <div class="truncate w-44 ml-3" :class="conversation.unread == 0 ? '' : 'font-bold'"> {{ conversation.lastActivity }}</div>
-      <div v-if="conversation.unread != 0" class="bg-[#F05454] rounded-full  text-white px-2 mr-2 mt-1">{{conversation.unread}}</div>
+      <div class="truncate w-40 ml-3" :class="conversation.unread == 0 ? '' : 'font-bold'"> {{ conversation.lastActivity }}</div>
+      <div v-if="conversation.unread != 0" class="bg-[#F05454] rounded-full  text-white px-2  mt-1">{{conversation.unread}}</div>
     </div>
   </div>
   
   </div>
-</template>background
+</template>
 
 
 <script setup lang="ts">
