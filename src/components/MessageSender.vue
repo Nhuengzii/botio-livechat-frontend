@@ -9,10 +9,12 @@
     <div class="flex-[10] flex-col">
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
         <button @click="openImageDialog">
-          <div class="px-3">
+          <div class="px-3 pr-5">
             <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
           </div>
+
         </button>
+ 
         <div class="relative w-full">
           <textarea type="text" 
             placeholder="พิมพ์ข้อความ" 
@@ -24,10 +26,10 @@
             class="absolute top-0 left-0 w-full h-full object-contain" />
         </div>
 
-
+ 
         <div class="inline-flex">
           <button>
-            <div class="pl-2 mr-4">
+            <div class="pl-2  bottom-0 right-12">
               <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
             </div>
           </button>
@@ -76,7 +78,7 @@
     </div>
 
     <!-- space -->
-    <div class="pl-3 flex-[1]  ">
+    <div class="px-3 flex-[1]">
       <button @click="sendMessage" v-if="showSendMessageButton" class="flex ">
         <div class="flex rounded-full bg-white">
           <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
@@ -274,4 +276,9 @@ textarea::-webkit-scrollbar-track {
 .textarea-container textarea::placeholder {
   text-align: center;
 }
+textarea[type='text'] { 
+  font-size: 18px; font-family: monospace; 
+}
+
+ 
 </style>
