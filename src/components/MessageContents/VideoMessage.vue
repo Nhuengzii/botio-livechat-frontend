@@ -13,12 +13,7 @@ import type { Message } from '@/types/message'
 import type { Conversation } from '@/types/conversation'
 import ImageProfileConversation from './subs/ImageProfileConversation.vue';
 const { message, conversation } = defineProps<{ message: Message, conversation: Conversation }>()
-const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+import { formatTimestamp } from "@/lib/Time"
 </script>
 
 <style scoped></style>
