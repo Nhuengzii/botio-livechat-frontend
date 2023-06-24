@@ -222,12 +222,6 @@ async function loadmore($state) {
 
 
 
-
-
-
-
-
-
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
 import '@/assets/vue3-tabs-chrome.css'
@@ -416,7 +410,7 @@ onMounted(() => {
 
 
 onUpdated(() => {
-  // scrollToLastMessage();
+  scrollToLastMessage();
 })
 
 
