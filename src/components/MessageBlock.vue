@@ -19,6 +19,14 @@
       </template>
       <!-- end-->
 
+      <!-- user send audio -->
+      <template v-else-if="messageType == 'AudioMessage'">
+
+        <AudioMessage :message="message" :conversation="conversation" />
+
+      </template>
+      <!-- end -->
+
       <!-- user send template or unsupportMessage -->
       <template v-else>
         <div class="flex flex-row">
@@ -45,6 +53,14 @@
       <template v-else-if="messageType == 'ImageMessage'">
         <div class="flex flex-row-reverse">
           <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
+      </template>
+      <!-- end-->
+
+      <!-- admin send Audio -->
+      <template v-else-if="messageType == 'AudioMessage'">
+        <div class="flex flex-row-reverse">
+          <AudioMessage :message="message" :conversation="conversation" />
         </div>
       </template>
       <!-- end-->
@@ -123,6 +139,7 @@ import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
 import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric.vue';
 import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct.vue';
 import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue';
+import AudioMessage from './MessageContents/AudioMessage.vue';
 
 const { message, conversation } = defineProps<
   {
@@ -140,7 +157,10 @@ if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'ImageMessage'
 } else if (message.attachments[0].attachmentType == 'sticker') {
   messageType.value = 'ImageMessage'
-} else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
+} else if (message.attachments[0].attachmentType == 'audio') {
+  messageType.value = 'AudioMessage'
+}
+else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'FacebookTemplateGeneric'
 } else if (message.attachments[0].attachmentType == 'line-template-buttons') {
   messageType.value = 'LineTemplatButtons'
