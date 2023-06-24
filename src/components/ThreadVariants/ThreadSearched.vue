@@ -11,7 +11,6 @@
     </div>
     <div class="truncate w-44 ml-3" :class="conversation.unread == 0 ? '' : 'font-bold'"> {{ conversation.lastActivity }}</div>
   </div>
-  
   </div>
 </template>
 
