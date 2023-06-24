@@ -3,7 +3,7 @@
   <template v-if="template.elements.length == 1">
     <div v-for="element in template.elements" class="">
       <div class="mx-2 border-2 rounded-xl flex">
-          <div class="rounded-t-xl min-h-48 max-h-56 overflow-hidden">
+          <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden">
             <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
           </div>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
@@ -21,7 +21,7 @@
     </div>
   </template>
   <template v-else>
-    <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl"
+    <Carousel :items-to-show="1.5" :wrap-around="false" class="mb-4 rounded-xl"
       :class="{ 'w-80': template.elements.length === 1 }">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
         <div class="mx-2 border-2 rounded-xl">
@@ -30,8 +30,8 @@
           </div>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
             <div class="pb-2 border-b-2 flex flex-col items-center justify-start">
-              <h1 class="font-bold break-all self-start pl-8">{{ element.title }}</h1>
-              <h2 class="break-all self-start pl-8">{{ element.subtitle }}</h2>
+              <h1 class="font-bold break-all self-start pl-10">{{ element.title }}</h1>
+              <h2 class="break-all self-start pl-10">{{ element.subtitle }}</h2>
             </div>
             <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100" 
             v-for="button, index in element.buttons"
@@ -56,7 +56,6 @@
 import type { Message } from "@/types/message"
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Navigation, Slide, } from 'vue3-carousel'
-import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{
   message: Message
 }>()
@@ -78,7 +77,12 @@ type InstagramTemplateGeneric = {
 }
 const template: InstagramTemplateGeneric = JSON.parse(message.attachments[0].payload.src)
 console.log(JSON.stringify(template, null, 2))
-
+const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
 </script>
 
 <style scoped></style>
