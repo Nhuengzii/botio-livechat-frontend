@@ -2,7 +2,7 @@
   <div>
     <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
     <div v-for="(conversation, index) in conversations($route.query.platform as string)"
-      :key="conversation.conversationID">
+      :key="conversation.conversationID" v-show="!isLoading">
       <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
         :mode="conversationsThreadMode" />
     </div>
