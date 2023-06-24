@@ -38,6 +38,7 @@ import type { Message } from "@/types/message";
 import type { Conversation } from "@/types/conversation";
 import NotshowImageProfile from "@/components/MessageContents/subs/NotshowImageProfile.vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue"
+import { formatTimestamp } from "@/lib/Time"
 
 defineProps<{
   message: Message
@@ -45,12 +46,7 @@ defineProps<{
   isShowProfile: boolean
 }>()
 
-const formatTimestamp = (timestamp:number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+
 
 
 </script>

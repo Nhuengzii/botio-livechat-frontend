@@ -18,16 +18,16 @@
     </div>
   </template>
   <template v-else>
-    <Carousel :items-to-show="template.elements.length" :wrap-around="false" class="mb-4 rounded-xl">
-      <Slide v-for="element, index in template.elements" :key="index">
+    <Carousel :items-to-show="1.5" :wrap-around="false" class="mb-4 rounded-xl">
+      <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
         <div class="mx-2 border-2 rounded-xl">
-          <div class="rounded-t-xl h-64 overflow-hidden">
+          <div class="rounded-t-xl h-48 overflow-hidden">
             <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
           </div>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
-            <div class="pb-2 border-b-2">
-              <h1 class="font-bold break-all">{{ element.title }}</h1>
-              <h2 class="break-all">{{ element.subtitle }}</h2>
+            <div class="pb-2 border-b-2 flex flex-col items-center justify-start">
+              <h1 class="font-bold break-all self-start pl-10">{{ element.title }}</h1>
+              <h2 class="break-all self-start pl-10">{{ element.subtitle }}</h2>
             </div>
             <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
               v-for="button, index in element.buttons" :key="index">
@@ -48,6 +48,7 @@
 import type { Message } from '@/types/message'
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Navigation, Slide, } from 'vue3-carousel'
+import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{ message: Message }>()
 type Template = {
   elements: {
@@ -69,12 +70,7 @@ type Template = {
   "template": string,
 }
 const template: Template = JSON.parse(message.attachments[0].payload.src)
-const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+
 </script>
 
 <style scoped></style>

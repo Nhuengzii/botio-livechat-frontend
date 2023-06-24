@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import type { Message } from '@/types/message'
+import { formatTimestamp } from "@/lib/Time"
 type LineTemplateImageCarousel = {
   payload: {
     altText: string,

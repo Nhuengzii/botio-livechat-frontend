@@ -21,6 +21,7 @@
 <script setup lang="ts">
 // TODO - in only show first template
 import type { Message } from "@/types/message"
+import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{
   message: Message
 }>()

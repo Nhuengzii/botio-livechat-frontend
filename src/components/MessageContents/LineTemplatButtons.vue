@@ -1,6 +1,5 @@
 <template>
   <div class="mb-4 mt-2 w-80 border-2 rounded-2xl">
- 
     <div class="rounded-t-2xl h-56 overflow-hidden object-cover">
       <img :src="payload.thumbnailImageUrl" class="object-contain" alt="">
     </div>
@@ -19,6 +18,7 @@
 
 <script setup lang="ts">
 import type { Message } from '@/types/message';
+import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{
   message: Message
 }>()
