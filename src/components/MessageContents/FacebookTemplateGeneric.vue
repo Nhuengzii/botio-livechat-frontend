@@ -18,10 +18,10 @@
     </div>
   </template>
   <template v-else>
-    <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl">
+    <Carousel :items-to-show="1.5" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
-        <div class="mx-2 border-2 rounded-xl w-72">
-          <div class="rounded-t-xl h-44 overflow-hidden">
+        <div class="mx-2 border-2 rounded-xl">
+          <div class="rounded-t-xl h-48 overflow-hidden">
             <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
           </div>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
