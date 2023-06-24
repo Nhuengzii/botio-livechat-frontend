@@ -6,10 +6,16 @@
       <!-- user send Text -->
       <template v-if="messageType == 'NormalText'">
         <div class="flex flex-row">
-          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="true" />
         </div>
       </template>
       <!-- end-->
+
+      <template v-else-if="messageType == 'DeletedMessage'">
+        <div class="flex flex-row">
+          <DeletedMessage :message="message" :conversation="conversation" :is-show-profile="true" />
+        </div>
+      </template>
 
       <!-- user send Image -->
       <template v-else-if="messageType == 'ImageMessage'">
@@ -156,6 +162,7 @@ import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct
 import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue';
 import AudioMessage from './MessageContents/AudioMessage.vue';
 import VideoMessage from './MessageContents/VideoMessage.vue';
+import DeletedMessage from './MessageContents/DeletedMessage.vue';
 
 const { message, conversation } = defineProps<
   {
@@ -167,7 +174,10 @@ const { message, conversation } = defineProps<
 const messageType = ref('')
 if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'NormalText'
-} else if (message.attachments.length == 0) {
+} else if (message.isDeleted) {
+  messageType.value = 'DeletedMessage'
+}
+else if (message.attachments.length == 0) {
   messageType.value = 'Unsupport'
 } else if (message.attachments[0].attachmentType == 'image') {
   messageType.value = 'ImageMessage'
