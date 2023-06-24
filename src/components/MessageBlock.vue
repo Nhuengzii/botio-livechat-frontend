@@ -1,108 +1,126 @@
 <template>
   <!-- USER -->
-  <template v-if="message.source.userType === 'user'">
+  <div :id="message.messageID">
+    <template v-if="message.source.userType === 'user'">
 
-    <!-- user send Text -->
-    <template v-if="messageType == 'NormalText'">
-      <div class="flex flex-row">
-        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
-    </template>
-    <!-- end-->
+      <!-- user send Text -->
+      <template v-if="messageType == 'NormalText'">
+        <div class="flex flex-row">
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
+      </template>
+      <!-- end-->
 
-    <!-- user send Image -->
-    <template v-else-if="messageType == 'ImageMessage'">
-      
+      <!-- user send Image -->
+      <template v-else-if="messageType == 'ImageMessage'">
+
         <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      
-    </template>
-    <!-- end-->
 
-    <!-- user send template or unsupportMessage -->
+      </template>
+      <!-- end-->
+
+      <!-- user send audio -->
+      <template v-else-if="messageType == 'AudioMessage'">
+
+        <AudioMessage :message="message" :conversation="conversation" />
+
+      </template>
+      <!-- end -->
+
+      <!-- user send template or unsupportMessage -->
+      <template v-else>
+        <div class="flex flex-row">
+          <UnsupportMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
+
+    </template>
+
+    <!-- ADMIN -->
     <template v-else>
-      <div class="flex flex-row">
-        <UnsupportMessage :message="message" :conversation="conversation" />
-      </div>
-    </template>
-    <!-- end-->
 
-  </template>
+      <!-- admin send Text -->
+      <template v-if="messageType == 'NormalText'">
+        <div class="flex items-center justify-start flex-row-reverse">
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
 
-  <!-- ADMIN -->
-  <template v-else>
+      </template>
+      <!-- end-->
 
-    <!-- admin send Text -->
-    <template v-if="messageType == 'NormalText'">
-      <div class="flex items-center justify-start flex-row-reverse">
-        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
+      <!-- admin send Image -->
+      <template v-else-if="messageType == 'ImageMessage'">
+        <div class="flex flex-row-reverse">
+          <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
+      </template>
+      <!-- end-->
 
-    </template>
-    <!-- end-->
+      <!-- admin send Audio -->
+      <template v-else-if="messageType == 'AudioMessage'">
+        <div class="flex flex-row-reverse">
+          <AudioMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
 
-    <!-- admin send Image -->
-    <template v-else-if="messageType == 'ImageMessage'">
-      <div class="flex flex-row-reverse">
-        <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
-    </template>
-    <!-- end-->
+      <template v-else-if="messageType == 'FacebookTemplateGeneric'">
+        <div class="flex items-center justify-end mr-4">
+          <FacebookTemplateGeneric :message="message" />
+        </div>
 
-    <template v-else-if="messageType == 'FacebookTemplateGeneric'">
-      <div class="flex items-center justify-end mr-4">
-        <FacebookTemplateGeneric :message="message" />
-      </div>
-        
-    </template>
+      </template>
 
-    <template v-else-if="messageType == 'FacebookTemplateButton'">
-      <div class="flex items-center justify-end mr-4">
-        <FacebookTemplateButton :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'FacebookTemplateButton'">
+        <div class="flex items-center justify-end mr-4">
+          <FacebookTemplateButton :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'LineTemplatButtons'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplatButtons :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplatButtons'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplatButtons :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'LineTemplateImageCarousel'">
-      <div>
-        <LineTemplateImageCarousel :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplateImageCarousel'">
+        <div>
+          <LineTemplateImageCarousel :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'LineTemplatConfirm'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplateConfirm :message="message" />
-      </div>
-    </template>
-    <template v-else-if="messageType == 'LineTemplateCarousel'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplateCarousel :message="message" />
-      </div>
-      
-    </template>
-    <template v-else-if="messageType == 'InstagramTemplateGeneric'">
-      <div class="flex items-center justify-end mr-4">
-        <InstagramTemplateGeneric :message="message" />
-      </div>
-    </template>
-    <template v-else-if="messageType == 'InstagramTemplateProduct'">
-      <div>
-        <InstagramTemplateProduct :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplatConfirm'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplateConfirm :message="message" />
+        </div>
+      </template>
+      <template v-else-if="messageType == 'LineTemplateCarousel'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplateCarousel :message="message" />
+        </div>
 
-    <!-- admin send template or unsupportMessage -->
-    <template v-else>
-      <div>
-        <UnsupportMessage :message="message" :conversation="conversation" />
-      </div>
+      </template>
+      <template v-else-if="messageType == 'InstagramTemplateGeneric'">
+        <div class="flex items-center justify-end mr-4">
+          <InstagramTemplateGeneric :message="message" />
+        </div>
+      </template>
+      <template v-else-if="messageType == 'InstagramTemplateProduct'">
+        <div>
+          <InstagramTemplateProduct :message="message" />
+        </div>
+      </template>
+
+      <!-- admin send template or unsupportMessage -->
+      <template v-else>
+        <div>
+          <UnsupportMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
     </template>
-    <!-- end-->
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -121,6 +139,7 @@ import LineTemplateCarousel from './MessageContents/LineTemplateCarousel.vue';
 import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric.vue';
 import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct.vue';
 import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue';
+import AudioMessage from './MessageContents/AudioMessage.vue';
 
 const { message, conversation } = defineProps<
   {
@@ -138,7 +157,10 @@ if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'ImageMessage'
 } else if (message.attachments[0].attachmentType == 'sticker') {
   messageType.value = 'ImageMessage'
-} else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
+} else if (message.attachments[0].attachmentType == 'audio') {
+  messageType.value = 'AudioMessage'
+}
+else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'FacebookTemplateGeneric'
 } else if (message.attachments[0].attachmentType == 'line-template-buttons') {
   messageType.value = 'LineTemplatButtons'

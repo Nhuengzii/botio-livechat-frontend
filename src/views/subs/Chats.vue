@@ -145,7 +145,6 @@ import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import { useRoute } from 'vue-router';
-const route = useRoute()
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const isLoading = ref(false)
@@ -159,7 +158,40 @@ const isFetchingMore = ref(false);
 const lastSize = ref(0);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
 
+// async function loadmore($state) {
+//   if (isLoading.value) return;
+//   if (isFetchingMore.value) return;
+//   console.log('load more')
+//   isFetchingMore.value = true;
+//   await new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(null);
+//     }, 2000);
+//   });
+//   isFetchingMore.value = false;
+//   const messages = currentChat.value?.messages;
+//   const lastIdx = messages?.length;
+//   const lastMessage = messages && lastIdx ? messages[lastIdx - 1] : null;
+  
+//   const olderMessage = await livechatStore.fetchMoreMessages();
+
+//   if (olderMessage?.length === 0) {
+//     $state.complete();
+//   }
+//   console.log('load more done')
+//   await nextTick();
+//   if (messagesContainerRef.value && lastMessage) {
+//     console.log('must scroll');
+//     const lastMessageElement = document.getElementById(lastMessage.messageID);
+//     if (lastMessageElement) {
+//       lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+//     }
+//   }
+//   isFetchingMore.value = false;
+// }
+
 async function loadmore($state) {
+  if (isLoading.value) return;
   if (isFetchingMore.value) return;
   console.log('load more')
   isFetchingMore.value = true;
@@ -169,26 +201,23 @@ async function loadmore($state) {
     }, 2000);
   });
   isFetchingMore.value = false;
-  const messages = currentChat.value?.messages;
-  const lastIdx = messages?.length;
-  const lastMessage = messages && lastIdx ? messages[lastIdx - 1] : null;
-  
+  const currentSize = currentChat.value?.messages.length;
+  if (!currentSize) return;
   const olderMessage = await livechatStore.fetchMoreMessages();
-
+  const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
+  if (!lastMid) {
+    return
+  }
+  const el = document.getElementById(lastMid);
+  if (el) {
+    nextTick(() => {
+      el.scrollIntoView({ behavior: "auto" });
+    });
+  };
   if (olderMessage?.length === 0) {
     $state.complete();
-    return;
   }
   console.log('load more done')
-  await nextTick();
-  if (messagesContainerRef.value && lastMessage) {
-    console.log('must scroll');
-    const lastMessageElement = document.getElementById(lastMessage.messageID);
-    if (lastMessageElement) {
-      lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  }
-  isFetchingMore.value = false;
 }
 
 
@@ -268,6 +297,7 @@ function openChat(conversation: Conversation) {
   handleAdd(conversation)
   livechatStore.fetchMessages(conversation.platform, conversation).then(() => {
     console.log("fetch message success")
+    isLoading.value = false;
   })
 }
 openChatEventBus.value.on(openChat)
