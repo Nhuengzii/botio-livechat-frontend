@@ -5,12 +5,12 @@
     <div>
     <div class="flex justify-between ml-3">
       <div>
-        <div class="truncate w-40" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ conversation.participants[0].username }}</div>
+        <div class="truncate w-40" :class="conversation.unread == 0 ? 'text-[#3C4048]' : 'text-[#3C4048] font-bold'">{{ conversation.participants[0].username }}</div>
       </div>
-      <div class="text-sm ml-6 mt-1" :class="conversation.unread == 0 ? '' : 'font-bold'">{{ updateTimeStatus }}</div>
+      <div class="text-sm ml-6 mt-1" :class="conversation.unread == 0 ? 'text-[#3C4048]' : 'text-[#3C4048] font-bold'">{{ updateTimeStatus }}</div>
     </div>
     <div class="flex justify-between">
-      <div class="truncate w-40 ml-3" :class="conversation.unread == 0 ? '' : 'font-bold'"> {{ conversation.lastActivity }}</div>
+      <div class="truncate w-40 ml-3" :class="conversation.unread == 0 ? 'text-[#3C4048]' : 'text-[#394867] font-bold'"> {{ conversation.lastActivity }}</div>
       <div v-if="conversation.unread != 0" class="bg-[#F05454] rounded-full  text-white px-2  mt-1">{{conversation.unread}}</div>
     </div>
   </div>

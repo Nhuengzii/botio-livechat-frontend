@@ -1,38 +1,23 @@
 <template>
-  <div class="flex  items-center bg-[#EEEEEE] mx-3">
+  <div class="flex static mx-3 ">
 
-    <!-- space -->
-    <div class="flex-[1]"></div>
-    <!-- end space-->
-
-
-    <div class="flex-[10] flex-col">
+    <div class="w-full mx-1 ">
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
-        <button @click="openImageDialog">
-          <div class="px-3 pr-5">
-            <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
-          </div>
-
-        </button>
- 
         <div class="relative w-full">
-          <textarea type="text" 
+          <div class=" w-full h-full rounded-lg self-center border-2  pt-1 mt-1">
+            <textarea type="text" 
             placeholder="พิมพ์ข้อความ" 
             v-model="newMessage" 
             @keydown.enter="sendMessageOnEnter"
             @input="handleTyping" :rows="calculateTextareaRows"
-            class="inline-flex self-center border-2 rounded-lg px-2 py-2 w-full h-auto ml -2 text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+            class="inline-flex px-2  mb-6 w-full h-auto 
+             text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+          </div>
           <img v-if="selectedImage" :src="selectedImage" alt="Selected Image"
             class="absolute top-0 left-0 w-full h-full object-contain" />
         </div>
-
- 
         <div class="inline-flex">
-          <button>
-            <div class="pl-2  bottom-0 right-12">
-              <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
-            </div>
-          </button>
+
 
           <!-- show Modal Chat Message Template -->
           <Teleport to="body">
@@ -78,17 +63,29 @@
     </div>
 
     <!-- space -->
-    <div class="px-3 flex-[1]">
+    <div class="flex absolute bottom-2 right-7">
+      <button>
+        <div class="">
+          <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
+        </div>
+      </button>
+      <button @click="openImageDialog">
+        <div class="px-3 ">
+          <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
+        </div>
+      </button>
+      <div class="w-[22px] h-[22px]">
       <button @click="sendMessage" v-if="showSendMessageButton" class="flex ">
-        <div class="flex rounded-full bg-white">
-          <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
+        <div class="rounded-full bg-white">
+          <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl"   />
         </div>
       </button>
       <button v-else type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
-        <div class="pl-2 text-gray-500">
+        <div class="text-gray-500">
           <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
         </div>
       </button>
+    </div>
     </div>
     <!-- end space-->
 
@@ -277,7 +274,7 @@ textarea::-webkit-scrollbar-track {
   text-align: center;
 }
 textarea[type='text'] { 
-  font-size: 18px; font-family: monospace; 
+  font-size: 16px; font-family: monospace; 
 }
 
  
