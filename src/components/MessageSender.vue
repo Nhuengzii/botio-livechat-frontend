@@ -74,13 +74,13 @@
           <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
         </div>
       </button>
-      <div class="w-[22px] h-[22px]">
-      <button @click="sendMessage" v-if="showSendMessageButton" class="flex ">
+      <div class="w-[22px] h-[22px] duration-500">
+      <button @click="sendMessage" v-show="showSendMessageButton" class="flex ">
         <div class="rounded-full bg-white">
           <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl"   />
         </div>
       </button>
-      <button v-else type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
+      <button v-show="!showSendMessageButton"  type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
         <div class="text-gray-500">
           <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
         </div>

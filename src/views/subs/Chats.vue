@@ -19,11 +19,11 @@
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
-              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
+              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[24px] h-[24px] items-center justify-center">
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
-                  style="color: #2F58CD;" size="xl" />
+                  style="color: #2F58CD;" size="lg" />
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
-                  style="color: #DF2E38;" size="xl" />
+                  style="color: #DF2E38;" size="lg" />
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
                   style="color: #38E54D;" size="lg" />
               </div>
@@ -34,7 +34,7 @@
           <div class="flex-1">
             <div class="px-4 flex items-center justify-center">
               <template v-if="currentChat?.conversation.participants[0].username">
-                <p class="font-medium">{{ currentChat?.conversation.participants[0].username }}</p>
+                <p class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username }}</p>
                 <div class="flex ml-auto items-center">
 
                   <!-- click to search conversation  -->
@@ -57,12 +57,12 @@
         <div>
           <!-- search conversation  -->
           <div v-show="querying" class="flex items-center  ">
-            <div class="pl-8 pt-5" @click="() => { searchMode = false }">
+            <div class="pl-8 pt-5" @click="() => { querying = false ;query='';searchMode = false}">
               <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
               <input type="text"
-                class="ml-2 bg-[#D9D9D9] pr-8  border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="ml-2 bg-[#D9D9D9] pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
               <div class="absolute bottom-1 right-6 ">
                 <div v-if="query != ''" class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
@@ -70,7 +70,7 @@
                 </div>
               </div>
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="() => { searchMode = true }">
+            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="() => { if(query!=''){searchMode = true} }">
               <div class=" text-white">ค้นหา</div>
             </button>
           </div>
@@ -161,6 +161,9 @@ const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
+const { platform} = defineProps<{
+  platform: string,
+}>();
 // infinite loading
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
@@ -374,7 +377,17 @@ onMounted(() => {
 onUpdated(() => {
   scrollToLastMessage();
 })
-
+watch([query], ([newQuery ], [prevQuery]) => {
+  if (newQuery.length > 0) {
+      console.log('by-message')
+      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+      })
+    
+  } else {
+    querying.value = false
+   
+  }
+})
 
 </script>
 
