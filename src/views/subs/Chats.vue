@@ -158,38 +158,6 @@ const isFetchingMore = ref(false);
 const lastSize = ref(0);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
 
-// async function loadmore($state) {
-//   if (isLoading.value) return;
-//   if (isFetchingMore.value) return;
-//   console.log('load more')
-//   isFetchingMore.value = true;
-//   await new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(null);
-//     }, 2000);
-//   });
-//   isFetchingMore.value = false;
-//   const messages = currentChat.value?.messages;
-//   const lastIdx = messages?.length;
-//   const lastMessage = messages && lastIdx ? messages[lastIdx - 1] : null;
-
-//   const olderMessage = await livechatStore.fetchMoreMessages();
-
-//   if (olderMessage?.length === 0) {
-//     $state.complete();
-//   }
-//   console.log('load more done')
-//   await nextTick();
-//   if (messagesContainerRef.value && lastMessage) {
-//     console.log('must scroll');
-//     const lastMessageElement = document.getElementById(lastMessage.messageID);
-//     if (lastMessageElement) {
-//       lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-//     }
-//   }
-//   isFetchingMore.value = false;
-// }
-
 async function loadmore($state) {
   if (isLoading.value) return;
   if (isFetchingMore.value) return;
@@ -373,13 +341,6 @@ const getFormattedDate = (timestamp: number): string => {
     return messageDate.toLocaleDateString('th-TH', options);
   }
 };
-
-const hasNewMessage = ref(false);
-const handleNewMessage = () => {
-
-}
-
-
 const scrollToLastMessage = () => {
   nextTick(() => {
     nextTick(() => {
@@ -389,17 +350,6 @@ const scrollToLastMessage = () => {
       }
     });
   });
-};
-
-const containerRef = ref(null);
-const itemRefs = ref([]);
-
-const scrollTarget = ref<HTMLElement | null>(null);
-
-const scrollToElement = () => {
-  if (scrollTarget.value instanceof HTMLElement) {
-    scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
-  }
 };
 
 
