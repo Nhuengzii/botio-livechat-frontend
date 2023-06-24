@@ -172,7 +172,7 @@ const messagesContainerRef = ref<HTMLDivElement | null>(null);
 //   const messages = currentChat.value?.messages;
 //   const lastIdx = messages?.length;
 //   const lastMessage = messages && lastIdx ? messages[lastIdx - 1] : null;
-  
+
 //   const olderMessage = await livechatStore.fetchMoreMessages();
 
 //   if (olderMessage?.length === 0) {
@@ -204,6 +204,7 @@ async function loadmore($state) {
   const currentSize = currentChat.value?.messages.length;
   if (!currentSize) return;
   const olderMessage = await livechatStore.fetchMoreMessages();
+  $state.loaded()
   const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
   if (!lastMid) {
     return

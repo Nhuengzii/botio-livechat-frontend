@@ -52,6 +52,7 @@ async function loadmore($state) {
   const skip = conversations.value(route.query.platform as string).length
   isFetchingMore.value = false;
   const olderConversation: Conversation[] = await livechatStore.fetchConversations(route.query.platform as string, skip, 2)
+  $state.loaded()
   if (olderConversation.length === 0) {
     console.log('no more conversation')
     $state.complete();
