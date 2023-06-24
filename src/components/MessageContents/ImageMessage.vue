@@ -83,6 +83,7 @@ import type { Message } from "@/types/message";
 import type { Conversation } from "@/types/conversation";
 import { ref } from "vue";
 import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue"
+import { formatTimestamp } from "@/lib/Time"
 const { message, conversation } = defineProps<{
   message: Message
   conversation: Conversation
@@ -95,12 +96,7 @@ function error() {
   imageUrl.value = 'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'
 }
 
-const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+
 
 </script>
 
