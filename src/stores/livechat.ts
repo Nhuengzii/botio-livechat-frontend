@@ -103,7 +103,9 @@ export const useLivechatStore = defineStore("livechat", () => {
           currentChat.value.messages[idx] = message;
         }
       }
-      currentChat.value.messages.push(message);
+      if (message.source.userType === 'user') {
+        currentChat.value.messages.push(message);
+      }
       markAsReadEventBus.value.emit(conversation.conversationID);
     }
   }
@@ -157,6 +159,7 @@ export const useLivechatStore = defineStore("livechat", () => {
       const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
       const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
       if (idx != -1) {
+        console.log('replace temp message')
         currentChat.value.messages[idx] = newMessage;
       }
     }
