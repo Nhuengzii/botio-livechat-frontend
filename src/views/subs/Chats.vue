@@ -54,10 +54,10 @@
           </div>
 
         </div>
-        <div c>
+        <div>
           <!-- search conversation  -->
           <div v-show="querying" class="flex items-center  ">
-            <div class="pl-8 pt-5" @click="querying = false">
+            <div class="pl-8 pt-5" @click="() => { searchMode = false }">
               <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
@@ -70,7 +70,7 @@
                 </div>
               </div>
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="{ }">
+            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="() => { searchMode = true }">
               <div class=" text-white">ค้นหา</div>
             </button>
           </div>
@@ -80,52 +80,61 @@
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
-        <template v-if="currentChat !== null">
-          <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
-            :identifier="currentChat?.conversation.conversationID">
-            <template #spinner>
-              <div class="flex justify-center pt-5 pb-3">
-                <span class="loader"></span>
-              </div>
 
-
-            </template>
-            <template #complete>
-              <span>No more data found!</span>
-            </template>
-          </InfiniteLoading>
+        <template v-if="searchMode">
+          <MessageSearchResult :query="query" :conversation="currentChat!.conversation" />
         </template>
-        <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
-          <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
-            <template v-if="isNewDay(index)">
-
-              <div class="col-start-6 col-end-8 py-8 px-4">
-                <div class="flex flex-row justify-center rounded-xl bg-gray-100 py-0.5">
-                  <span class="justify-center">{{ getFormattedDate(message.timestamp) }}</span>
-
+        <template v-else>
+          <template v-if="currentChat !== null">
+            <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
+              :identifier="currentChat?.conversation.conversationID">
+              <template #spinner>
+                <div class="flex justify-center pt-5 pb-3">
+                  <span class="loader"></span>
                 </div>
-              </div>
-            </template>
-            <!-- Render the message content from user -->
-            <template v-if="message.source.userType === 'user'">
-              <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full" :id="message.messageID"
-                :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :is-show-profile="shouldShowProfilePicture(index)" />
-              </div>
-            </template>
 
-            <!-- Render the message content from admin -->
-            <template v-else>
-              <div class="col-start-6 col-end-13 pr-3 rounded-lg" :id="message.messageID"
-                :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                <MessageBlock :message="message" :conversation="currentChat!.conversation"
-                  :is-show-profile="shouldShowProfilePicture(index)" />
-              </div>
-            </template>
 
+              </template>
+              <template #complete>
+                <span>No more data found!</span>
+              </template>
+            </InfiniteLoading>
           </template>
-        </div>
+          <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
+            <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
+              <template v-if="isNewDay(index)">
+
+                <div class="col-start-6 col-end-8 py-8 px-4">
+                  <div class="flex flex-row justify-center rounded-xl bg-gray-100 py-0.5">
+                    <span class="justify-center">{{ getFormattedDate(message.timestamp) }}</span>
+
+                  </div>
+                </div>
+              </template>
+              <!-- Render the message content from user -->
+              <template v-if="message.source.userType === 'user'">
+                <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full" :id="message.messageID"
+                  :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                    :is-show-profile="shouldShowProfilePicture(index)" />
+                </div>
+              </template>
+
+              <!-- Render the message content from admin -->
+              <template v-else>
+                <div class="col-start-6 col-end-13 pr-3 rounded-lg" :id="message.messageID"
+                  :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                    :is-show-profile="shouldShowProfilePicture(index)" />
+                </div>
+              </template>
+
+            </template>
+          </div>
+        </template>
+
+
+
       </main>
 
       <template v-if="currentChat?.conversation.participants[0].username">
@@ -144,6 +153,7 @@ import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineCom
 import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
+import MessageSearchResult from "@/components/MessageSearchResult.vue";
 import { useRoute } from 'vue-router';
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
@@ -157,6 +167,7 @@ import "v3-infinite-loading/lib/style.css";
 const isFetchingMore = ref(false);
 const lastSize = ref(0);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
+const searchMode = ref(false);
 
 async function loadmore($state) {
   if (isLoading.value) return;

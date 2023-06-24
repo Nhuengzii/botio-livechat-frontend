@@ -132,6 +132,13 @@ class BotioLivechat implements IBotioLivechat {
     return res.data.conversations
   }
 
+  async searchMessageByText(conversation: Conversation, text: string) {
+    const { conversationID, pageID, platform } = conversation
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`
+    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ with_message: text }) } })
+    return res.data.messages
+  }
+
   broadcastMessage(platform: string, pageID: string, message: Message) {
     if (!this.websocketClient) {
       throw new Error("websocket not connected")
