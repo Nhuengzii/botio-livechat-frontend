@@ -27,6 +27,13 @@
       </template>
       <!-- end -->
 
+      <!-- user send Video -->
+      <template v-else-if="messageType == 'VideoMessage'">
+
+        <VideoMessage :message="message" :conversation="conversation" />
+
+      </template>
+
       <!-- user send template or unsupportMessage -->
       <template v-else>
         <div class="flex flex-row">
@@ -61,6 +68,14 @@
       <template v-else-if="messageType == 'AudioMessage'">
         <div class="flex flex-row-reverse">
           <AudioMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
+
+      <!-- admin send Audio -->
+      <template v-else-if="messageType == 'VideoMessage'">
+        <div class="flex flex-row-reverse">
+          <VideoMessage :message="message" :conversation="conversation" />
         </div>
       </template>
       <!-- end-->
@@ -140,6 +155,7 @@ import InstagramTemplateGeneric from './MessageContents/InstagramTemplateGeneric
 import InstagramTemplateProduct from './MessageContents/InstagramTemplateProduct.vue';
 import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue';
 import AudioMessage from './MessageContents/AudioMessage.vue';
+import VideoMessage from './MessageContents/VideoMessage.vue';
 
 const { message, conversation } = defineProps<
   {
@@ -159,6 +175,8 @@ if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'ImageMessage'
 } else if (message.attachments[0].attachmentType == 'audio') {
   messageType.value = 'AudioMessage'
+} else if (message.attachments[0].attachmentType == 'video') {
+  messageType.value = 'VideoMessage'
 }
 else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'FacebookTemplateGeneric'
