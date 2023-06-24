@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import type { Message } from '@/types/message'
+import { formatTimestamp } from "@/lib/Time"
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Navigation, Slide } from 'vue3-carousel'
 const { message } = defineProps<{

@@ -11,6 +11,7 @@
 <script lang="ts">
 import type { Message } from "@/types/message";
 import type { Conversation } from "@/types/conversation";
+import { formatTimestamp } from "@/lib/Time"
 defineProps<{
     message: Message
     conversation: Conversation

@@ -48,6 +48,7 @@
 import type { Message } from '@/types/message'
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Navigation, Slide, } from 'vue3-carousel'
+import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{ message: Message }>()
 type Template = {
   elements: {
@@ -69,12 +70,7 @@ type Template = {
   "template": string,
 }
 const template: Template = JSON.parse(message.attachments[0].payload.src)
-const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+
 </script>
 
 <style scoped></style>

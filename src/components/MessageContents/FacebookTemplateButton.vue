@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import type { Message } from '../../types/message';
+import { formatTimestamp } from "@/lib/Time"
 const { message } = defineProps<{ message: Message }>()
 type FacebookTemplateButton = {
   buttons: {
