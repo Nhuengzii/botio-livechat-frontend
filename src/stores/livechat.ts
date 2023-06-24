@@ -78,6 +78,9 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   async function receiveMessage(message: Message) {
     const uiStore = useUIStore()
+    if (message.isDeleted) {
+      return;
+    }
     let conversation: Conversation | undefined | null = conversationRaw.value.get(message.conversationID);
     if (!conversation) {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
@@ -97,12 +100,6 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
     if (currentChat.value && currentChat.value.conversation.conversationID === conversation.conversationID) {
       conversation.unread = 0;
-      if (message.isDeleted) {
-        const idx = currentChat.value.messages.findIndex((m) => m.messageID === message.messageID);
-        if (idx !== -1) {
-          currentChat.value.messages[idx] = message;
-        }
-      }
       if (message.source.userType === 'user') {
         currentChat.value.messages.push(message);
       }
