@@ -80,16 +80,22 @@
 
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
-        <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
-          :identifier="currentChat?.conversation.conversationID">
-          <template #spinner>
-            <span>loading...</span>
-          </template>
-          <template #complete>
-            <span>No more data found!</span>
-          </template>
-        </InfiniteLoading>
-        <div class="grid grid-cols-12 gap-y-0.5">
+        <template v-if="currentChat !== null">
+          <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
+            :identifier="currentChat?.conversation.conversationID">
+            <template #spinner>
+              <div class="flex justify-center pt-5 pb-3">
+                <span class="loader"></span>
+              </div>
+
+
+            </template>
+            <template #complete>
+              <span>No more data found!</span>
+            </template>
+          </InfiniteLoading>
+        </template>
+        <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
           <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
             <template v-if="isNewDay(index)">
 
@@ -102,7 +108,7 @@
             </template>
             <!-- Render the message content from user -->
             <template v-if="message.source.userType === 'user'">
-              <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full"
+              <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full" :id="message.messageID"
                 :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
@@ -111,7 +117,7 @@
 
             <!-- Render the message content from admin -->
             <template v-else>
-              <div class="col-start-6 col-end-13 pr-3 rounded-lg"
+              <div class="col-start-6 col-end-13 pr-3 rounded-lg" :id="message.messageID"
                 :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
                 <MessageBlock :message="message" :conversation="currentChat!.conversation"
                   :is-show-profile="shouldShowProfilePicture(index)" />
@@ -139,7 +145,6 @@ import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import { useRoute } from 'vue-router';
-const route = useRoute()
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const isLoading = ref(false)
@@ -151,6 +156,40 @@ import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 const isFetchingMore = ref(false);
 const lastSize = ref(0);
+const messagesContainerRef = ref<HTMLDivElement | null>(null);
+
+// async function loadmore($state) {
+//   if (isLoading.value) return;
+//   if (isFetchingMore.value) return;
+//   console.log('load more')
+//   isFetchingMore.value = true;
+//   await new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(null);
+//     }, 2000);
+//   });
+//   isFetchingMore.value = false;
+//   const messages = currentChat.value?.messages;
+//   const lastIdx = messages?.length;
+//   const lastMessage = messages && lastIdx ? messages[lastIdx - 1] : null;
+  
+//   const olderMessage = await livechatStore.fetchMoreMessages();
+
+//   if (olderMessage?.length === 0) {
+//     $state.complete();
+//   }
+//   console.log('load more done')
+//   await nextTick();
+//   if (messagesContainerRef.value && lastMessage) {
+//     console.log('must scroll');
+//     const lastMessageElement = document.getElementById(lastMessage.messageID);
+//     if (lastMessageElement) {
+//       lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+//     }
+//   }
+//   isFetchingMore.value = false;
+// }
+
 async function loadmore($state) {
   if (isLoading.value) return;
   if (isFetchingMore.value) return;
@@ -180,6 +219,9 @@ async function loadmore($state) {
   }
   console.log('load more done')
 }
+
+
+
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
 import '@/assets/vue3-tabs-chrome.css'
@@ -271,7 +313,6 @@ const isNewDay = (index: number): boolean => {
     return true;
   }
 
-  const thailandOffset = 7; // Thailand timezone offset in hours
   const previousDate = new Date(previousMessage.timestamp);
   previousDate.setHours(previousDate.getHours());
   const previousFormattedDate = previousDate.toLocaleDateString('th-TH', {
@@ -332,7 +373,10 @@ const getFormattedDate = (timestamp: number): string => {
   }
 };
 
+const hasNewMessage = ref(false);
+const handleNewMessage = () => {
 
+}
 
 
 const scrollToLastMessage = () => {
@@ -346,10 +390,22 @@ const scrollToLastMessage = () => {
   });
 };
 
+const containerRef = ref(null);
+const itemRefs = ref([]);
+
+const scrollTarget = ref<HTMLElement | null>(null);
+
+const scrollToElement = () => {
+  if (scrollTarget.value instanceof HTMLElement) {
+    scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 
 
 onMounted(() => {
   scrollToLastMessage();
+
 })
 
 
@@ -377,6 +433,74 @@ button {
 .button:hover {
   color: #000000;
   transition: 0.5s;
+}
+
+.loader {
+  color: rgb(26, 156, 231);
+  font-size: 32px;
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  transform: translateZ(0);
+  animation: mltShdSpin 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+@keyframes mltShdSpin {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    /* color: #E3FDFD; */
+  }
+
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    /* color: #CBF1F5; */
+  }
+
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em,
+      -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+    /* color: #A6E3E9; */
+  }
+
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+    /* color: #71C9CE; */
+  }
+
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+    /* color: #71C9CE; */
+  }
+
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em,
+      0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    /* color: #71C9CE; */
+  }
+}
+
+@keyframes round {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
 }
 </style>
 
