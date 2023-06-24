@@ -60,11 +60,17 @@ export const useLivechatStore = defineStore("livechat", () => {
 
   // Action
   async function fetchConversations(platform: string, skip = 0, limit = 7): Promise<Conversation[]> {
-    const conversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string, skip, limit);
-    conversations.forEach((conversation) => {
+    if (platform != 'all') {
+      if (conversations.value(platform).length > 20) {
+        console.log('dont fetch more use data form cache')
+        return [];
+      }
+    }
+    const fetchedConversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string, skip, limit);
+    fetchedConversations.forEach((conversation) => {
       conversationRaw.value.set(conversation.conversationID, conversation);
     })
-    return conversations;
+    return fetchedConversations;
   }
 
   async function getPageInformation(platform: string): Promise<PageInformation> {
