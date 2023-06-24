@@ -152,6 +152,7 @@ import "v3-infinite-loading/lib/style.css";
 const isFetchingMore = ref(false);
 const lastSize = ref(0);
 async function loadmore($state) {
+  if (isLoading.value) return;
   if (isFetchingMore.value) return;
   console.log('load more')
   isFetchingMore.value = true;
@@ -161,14 +162,24 @@ async function loadmore($state) {
     }, 2000);
   });
   isFetchingMore.value = false;
+  const currentSize = currentChat.value?.messages.length;
+  if (!currentSize) return;
   const olderMessage = await livechatStore.fetchMoreMessages();
+  const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
+  if (!lastMid) {
+    return
+  }
+  const el = document.getElementById(lastMid);
+  if (el) {
+    nextTick(() => {
+      el.scrollIntoView({ behavior: "auto" });
+    });
+  };
   if (olderMessage?.length === 0) {
     $state.complete();
-    return;
   }
   console.log('load more done')
 }
-
 // tabs-chrome
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
 import '@/assets/vue3-tabs-chrome.css'
@@ -238,6 +249,7 @@ function openChat(conversation: Conversation) {
   handleAdd(conversation)
   livechatStore.fetchMessages(conversation.platform, conversation).then(() => {
     console.log("fetch message success")
+    isLoading.value = false;
   })
 }
 openChatEventBus.value.on(openChat)

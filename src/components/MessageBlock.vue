@@ -1,108 +1,110 @@
 <template>
   <!-- USER -->
-  <template v-if="message.source.userType === 'user'">
+  <div :id="message.messageID">
+    <template v-if="message.source.userType === 'user'">
 
-    <!-- user send Text -->
-    <template v-if="messageType == 'NormalText'">
-      <div class="flex flex-row">
-        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
-    </template>
-    <!-- end-->
+      <!-- user send Text -->
+      <template v-if="messageType == 'NormalText'">
+        <div class="flex flex-row">
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
+      </template>
+      <!-- end-->
 
-    <!-- user send Image -->
-    <template v-else-if="messageType == 'ImageMessage'">
-      
+      <!-- user send Image -->
+      <template v-else-if="messageType == 'ImageMessage'">
+
         <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      
-    </template>
-    <!-- end-->
 
-    <!-- user send template or unsupportMessage -->
+      </template>
+      <!-- end-->
+
+      <!-- user send template or unsupportMessage -->
+      <template v-else>
+        <div class="flex flex-row">
+          <UnsupportMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
+
+    </template>
+
+    <!-- ADMIN -->
     <template v-else>
-      <div class="flex flex-row">
-        <UnsupportMessage :message="message" :conversation="conversation" />
-      </div>
-    </template>
-    <!-- end-->
 
-  </template>
+      <!-- admin send Text -->
+      <template v-if="messageType == 'NormalText'">
+        <div class="flex items-center justify-start flex-row-reverse">
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
 
-  <!-- ADMIN -->
-  <template v-else>
+      </template>
+      <!-- end-->
 
-    <!-- admin send Text -->
-    <template v-if="messageType == 'NormalText'">
-      <div class="flex items-center justify-start flex-row-reverse">
-        <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
+      <!-- admin send Image -->
+      <template v-else-if="messageType == 'ImageMessage'">
+        <div class="flex flex-row-reverse">
+          <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+        </div>
+      </template>
+      <!-- end-->
 
-    </template>
-    <!-- end-->
+      <template v-else-if="messageType == 'FacebookTemplateGeneric'">
+        <div class="flex items-center justify-end mr-4">
+          <FacebookTemplateGeneric :message="message" />
+        </div>
 
-    <!-- admin send Image -->
-    <template v-else-if="messageType == 'ImageMessage'">
-      <div class="flex flex-row-reverse">
-        <ImageMessage :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
-      </div>
-    </template>
-    <!-- end-->
+      </template>
 
-    <template v-else-if="messageType == 'FacebookTemplateGeneric'">
-      <div class="flex items-center justify-end mr-4">
-        <FacebookTemplateGeneric :message="message" />
-      </div>
-        
-    </template>
+      <template v-else-if="messageType == 'FacebookTemplateButton'">
+        <div class="flex items-center justify-end mr-4">
+          <FacebookTemplateButton :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'FacebookTemplateButton'">
-      <div class="flex items-center justify-end mr-4">
-        <FacebookTemplateButton :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplatButtons'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplatButtons :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'LineTemplatButtons'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplatButtons :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplateImageCarousel'">
+        <div>
+          <LineTemplateImageCarousel :message="message" />
+        </div>
+      </template>
 
-    <template v-else-if="messageType == 'LineTemplateImageCarousel'">
-      <div>
-        <LineTemplateImageCarousel :message="message" />
-      </div>
-    </template>
+      <template v-else-if="messageType == 'LineTemplatConfirm'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplateConfirm :message="message" />
+        </div>
+      </template>
+      <template v-else-if="messageType == 'LineTemplateCarousel'">
+        <div class="flex items-center justify-end mr-4">
+          <LineTemplateCarousel :message="message" />
+        </div>
 
-    <template v-else-if="messageType == 'LineTemplatConfirm'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplateConfirm :message="message" />
-      </div>
-    </template>
-    <template v-else-if="messageType == 'LineTemplateCarousel'">
-      <div class="flex items-center justify-end mr-4">
-        <LineTemplateCarousel :message="message" />
-      </div>
-      
-    </template>
-    <template v-else-if="messageType == 'InstagramTemplateGeneric'">
-      <div class="flex items-center justify-end mr-4">
-        <InstagramTemplateGeneric :message="message" />
-      </div>
-    </template>
-    <template v-else-if="messageType == 'InstagramTemplateProduct'">
-      <div>
-        <InstagramTemplateProduct :message="message" />
-      </div>
-    </template>
+      </template>
+      <template v-else-if="messageType == 'InstagramTemplateGeneric'">
+        <div class="flex items-center justify-end mr-4">
+          <InstagramTemplateGeneric :message="message" />
+        </div>
+      </template>
+      <template v-else-if="messageType == 'InstagramTemplateProduct'">
+        <div>
+          <InstagramTemplateProduct :message="message" />
+        </div>
+      </template>
 
-    <!-- admin send template or unsupportMessage -->
-    <template v-else>
-      <div>
-        <UnsupportMessage :message="message" :conversation="conversation" />
-      </div>
+      <!-- admin send template or unsupportMessage -->
+      <template v-else>
+        <div>
+          <UnsupportMessage :message="message" :conversation="conversation" />
+        </div>
+      </template>
+      <!-- end-->
     </template>
-    <!-- end-->
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
