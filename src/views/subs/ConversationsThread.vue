@@ -8,7 +8,7 @@
     </div>
     <InfiniteLoading @infinite="loadmore" :firstload="false" :identifier="$route.query.platform as string">
       <template #spinner>
-        <span>loading...</span>
+        <ThreadSkeleton :num-skeletons="2" />
       </template>
       <template #complete>
         <span>No more data found!</span>
