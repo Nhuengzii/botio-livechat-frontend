@@ -199,26 +199,35 @@ export const useLivechatStore = defineStore("livechat", () => {
 })
 
 function messageToActivity(message: Message): string {
-  if (message.message.length > 0) {
-    if (message.source.userType === "user") {
-      return message.message;
-    } else if (message.source.userType === "admin") {
-      return "คุณ: " + message.message;
-    } else {
-      return `WTF ${message.source.userType} พิมพ์ข้อความ`
-    }
-  } else if (message.attachments.length > 0) {
-    if (message.attachments[0].attachmentType === "image") {
-      if (message.source.userType === "user") {
-        return "ส่งรูปภาพ";
-      } else if (message.source.userType === "admin") {
-        return "คุณส่งรูปภาพ";
-      } else {
-        return `WTF ${message.source.userType} ส่งรูปภาพ`
-      }
+  let activity = "";
+  if (message.attachments.length > 0) {
+    let aType = message.attachments[0].attachmentType;
+    switch (aType) {
+      case "image":
+        activity = "ส่งรูปภาพ";
+        break
+      case "video":
+        activity = "ส่งวิดีโอ";
+        break
+      case "audio":
+        activity = "ส่งข้อความเสียง";
+        break
+      case "file":
+        activity = "ส่งไฟล์";
+        break
+      default:
+        activity = "ส่งเทมเพลต";
+        break;
     }
   } else {
-    return "WTF";
+    activity = message.message;
   }
-  return "wwwwwwwwwwwwwwwwwwwwwwwww"
+  if (message.isDeleted) {
+    activity = "ยกเลิกข้อความ"
+  }
+  if (message.source.userType == 'user') {
+    return activity;
+  } else {
+    return `คุณ: ${activity}`;
+  }
 }
