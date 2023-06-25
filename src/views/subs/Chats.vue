@@ -65,12 +65,13 @@
                 class="ml-2 bg-[#D9D9D9] pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
               <div class="absolute bottom-1 right-6 ">
-                <div v-show="query != '' " class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
+                <button  v-show="query!=''"  class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
                   <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
-                </div>
+                </button>
               </div>      
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-blue-500 hover:bg-blue-400']" @click="() => { if(query!=''){searchMode = true} }">
+            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-blue-500 hover:bg-blue-400']" 
+            @click="() => { if(query!=''){searchMode = true} }">
               <div class=" text-white">ค้นหา</div>
             </button>
           </div>
@@ -116,7 +117,7 @@
               <template v-if="message.source.userType === 'user'">
                 <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full" :id="message.messageID"
                   :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                  <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :query="''"
                     :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
@@ -125,7 +126,7 @@
               <template v-else>
                 <div class="col-start-6 col-end-13 pr-3 rounded-lg" :id="message.messageID"
                   :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                  <MessageBlock :message="message" :conversation="currentChat!.conversation"
+                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :query="''"
                     :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
@@ -385,8 +386,7 @@ watch([query], ([newQuery ], [prevQuery]) => {
       })
     
   } else {
-    querying.value = false
-   
+    searchMode.value = false
   }
 })
 
