@@ -10,7 +10,9 @@
                     <template v-else>
                         <div class="w-5 h-5"></div>
                     </template>
-                    <button @click="uiStore.closeTemplateMessage" class="bg-gray-200 px-5 py-3 rounded-full">X</button>
+                    <button @click="uiStore.closeTemplateMessage" class="bg-red-400 w-10 h-10 rounded-full font-bold">
+                        <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+                    </button>
                 </div>
                 
                 <div class="modal-header flex-[1] justify-between bg-white">

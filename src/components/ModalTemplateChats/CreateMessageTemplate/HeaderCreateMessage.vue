@@ -1,8 +1,9 @@
 <template>
     <div class="flex justify-center">
         <header class="flex">
-            <div class="bg-blue-dark py-4 px-12">
-                <h3 class="text-lg text-white font-semibold">สร้างเทมเพลตข้อความ</h3>
+            <div class="bg-blue-dark py-4 px-12 flex items-center">
+                <h3 class="text-lg text-white font-semibold pr-4">สร้างเทมเพลตข้อความสำหรับ</h3>
+                <font-awesome-icon :icon="['fab', 'facebook']" style="color: #2F58CD;" size="lg" />
             </div>
         </header>
     </div>
