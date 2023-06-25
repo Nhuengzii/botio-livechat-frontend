@@ -5,7 +5,8 @@
 
 
             <!-- button template -->
-            <button @click="" class="hover:bg-red-100">
+
+            <button @click="selectTemplate(1)" class="hover:bg-gray-200" :class="{ 'bg-gray-200': selectedTemplate === 1 }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-32 bg-blue-700 rounded-t-lg">
@@ -26,7 +27,7 @@
             </button>
 
             <!-- image+text template -->
-            <button @click="" class="hover:bg-red-100">
+            <button @click="selectTemplate(2)" class="hover:bg-gray-200" :class="{ 'bg-gray-200': selectedTemplate === 2 }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-44 bg-blue-700 rounded-t-lg">
@@ -44,17 +45,17 @@
 
 
         </div>
-        <button @click="submitSelection">Submit</button>
+        <button @click="openEditModal" :disabled="selectedTemplate === null">{{showEditModal}}</button>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
 import { ref, type Ref } from 'vue';
-
+import ModalTemplateChat from '@/components/ModalTemplateChat.vue';
 const uiStore = useUIStore()
-
-
+const showEditModal = ref(false);
 const selectedTemplate = ref<string | number | null>(null);
 function selectTemplate(template: string | number) {
     selectedTemplate.value = template;
@@ -62,6 +63,14 @@ function selectTemplate(template: string | number) {
 function submitSelection() {
     console.log('Selected Template:', selectedTemplate.value);
 }
+
+const openEditModal = () => {
+    showEditModal.value = true;
+};
+
+const closeEditModal = () => {
+    showEditModal.value = false;
+};
 
 // select image
 const selectedImage = ref<string | null>(null);
@@ -72,6 +81,7 @@ const openImageDialog = () => {
     input.onchange = (event) => displaySelectedImage(event, selectedImage);
     input.click();
 };
+
 
 const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
     const file = (event.target as HTMLInputElement).files?.[0];
