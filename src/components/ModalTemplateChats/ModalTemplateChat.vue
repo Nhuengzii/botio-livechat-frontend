@@ -2,7 +2,6 @@
     <Transition name="modal">
         <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask">
             <div class="flex flex-col modal-container">
-
                 <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
                     <template v-if="uiStore.is_createTemplateMessage">
                         <button class="bg-gray-200 px-5 py-3 rounded-full" @click="uiStore.activeCreateTemplateMessage">back</button>
@@ -10,7 +9,7 @@
                     <template v-else>
                         <div class="w-5 h-5"></div>
                     </template>
-                    <button @click="uiStore.closeTemplateMessage" class="bg-red-400 w-10 h-10 rounded-full font-bold">
+                    <button @click="uiStore.closeTemplateMessage" class="w-10 h-10 rounded-full font-bold bg-red-400">
                         <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                     </button>
                 </div>
@@ -19,7 +18,7 @@
                     <slot name="header">default header</slot>
                 </div>
 
-                <div class="modal-body  flex-[5] overflow-x-hidden no-scrollbar">
+                <div class="modal-body  flex-[5] overflow-x-hidden no-scrollbar justify-center">
                     <slot name="body">default body</slot>
                 </div>
 
