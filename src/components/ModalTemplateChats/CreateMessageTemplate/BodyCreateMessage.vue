@@ -1,23 +1,67 @@
 <template>
-    <div class="flex justify-center">
-        <div class="background-d9-250 w-[40vw] h-[80vh]">
-            <!-- <div class="w-full"> -->
-            <input class="my-2 w-full" type="text" placeholder="ชื่อข้อความ">
-            <textarea class="" type="text" placeholder="ข้อความ" />
-            <button @click="openImageDialog">add image</button>
-            <div class="bg-red-100 w-48 h-48">
-                <span v-if="!selectedImage">No image selected</span>
-                <img class="object-cover" v-else :src="selectedImage" alt="Selected Image" />
-            </div>
-            <!-- </div> -->
+    <div class="flex flex-col">
+        <h1 class="text-xl pl-4 mx-2 pb-4">เลือกรูปแบบเทมเพลตที่ต้องการจะสร้าง</h1>
+        <div class="flex flex-warp h-[50vh] items-start">
+
+
+            <!-- button template -->
+            <button @click="" class="hover:bg-red-100">
+                <div class="flex mx-2 my-4 px-4">
+                    <div class="bg-white  border-2 rounded-lg">
+                        <div class="flex items-center justify-center w-52 h-32 bg-blue-700 rounded-t-lg">
+                            <p class="text-white">image</p>
+                            <img src="" alt="">
+                        </div>
+                        <div class="border-b-2 flex flex-col items-start">
+                            <h1 class="break-all pl-3 pt-2 font-semibold">หัวข้อ</h1>
+                            <p class="break-all pl-3 pb-4">ข้อความ . . .</p>
+                        </div>
+                        <div class="flex flex-col">
+                            <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">ปุ่มกดที่1</button>
+                            <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">ปุ่มกดที่2</button>
+                            <button class="bg-gray-100 hover:bg-gray-100 py-2 rounded-b-lg">ปุ่มกดที่3</button>
+                        </div>
+                    </div>
+                </div>
+            </button>
+
+            <!-- image+text template -->
+            <button @click="" class="hover:bg-red-100">
+                <div class="flex mx-2 my-4 px-4">
+                    <div class="bg-white  border-2 rounded-lg">
+                        <div class="flex items-center justify-center w-52 h-44 bg-blue-700 rounded-t-lg">
+                            <p class="text-white">image</p>
+                            <img src="" alt="">
+                        </div>
+                        <div class="border-b-2 flex flex-col items-start">
+                            <h1 class="break-all pl-3 pt-2 font-semibold">หัวข้อ</h1>
+                            <p class="break-all pl-3 pb-4">ข้อความ . . .</p>
+                        </div>
+                    </div>
+                </div>
+            </button>
+
+
+
         </div>
+        <button @click="submitSelection">Submit</button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
 import { ref, type Ref } from 'vue';
+
 const uiStore = useUIStore()
+
+
+const selectedTemplate = ref<string | number | null>(null);
+function selectTemplate(template: string | number) {
+    selectedTemplate.value = template;
+}
+function submitSelection() {
+    console.log('Selected Template:', selectedTemplate.value);
+}
 
 // select image
 const selectedImage = ref<string | null>(null);
