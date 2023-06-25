@@ -383,8 +383,15 @@ watch([query], ([newQuery ], [prevQuery]) => {
   if (newQuery.length > 0) {
       console.log('by-message')
       livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
-      })
-    
+      }
+      )
+      if(newQuery.length!=prevQuery.length){
+        searchMode.value = false
+        console.log('by-message')
+      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+      }
+      )
+      };  
   } else {
     searchMode.value = false
   }
