@@ -2,18 +2,18 @@
   <div class="flex-[2]  bg-while min-w-48">
     <div class="flex flex-col w-full h-full">
       <div v-show="!querying" class="flex mx-3">
-        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EAEAEA]"
-          :class="{ 'w-[calc(100%-176px)]': tabs.length > 0, 'w-[100%]': tabs.length == 0 }" />
+        <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#FFD95A] "
+          :class="{ 'w-[calc(100%-176px)] rounded-tl-[10px]': tabs.length > 0, 'w-[100%] rounded-t-[10px]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
-          <button @click="clearTab" class="bg-gray-50 hover:bg-gray-200 w-44 flex flex-row justify-center items-center">
-            <h1 class="pr-2 font-semibold text-black">ปิดแท็บทั้งหมด</h1>
+          <button @click="clearTab" class="bg-[#FFD95A] rounded-tr-[10px] hover:bg-yellow-500  w-44 flex flex-row justify-center items-center">
+            <h1 class="pr-2 font-semibold text-[#6d613a]">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
         </template>
       </div>
 
       <!-- header chats-->
-      <header class="bg-[#EEEEEE]  mx-3 flex-[1] " :class="[querying ? 'pb-5' : '']">
+      <header class=" mx-3 flex-[1] " :class="[querying ? 'pb-5 bg-[#FFD95A] rounded-t-[10px]' : 'bg-[#EEEEEE] ']">
         <div v-show="!querying" class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
@@ -62,7 +62,7 @@
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
               <input type="text"
-                class="ml-2 bg-[#D9D9D9] pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="ml-2 bg-white pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
               <div class="absolute bottom-1 right-6 ">
                 <button  v-show="query!=''"  class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
@@ -70,7 +70,7 @@
                 </button>
               </div>      
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-blue-500 hover:bg-blue-400']" 
+            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-yellow-600	 hover:bg-yellow-500']" 
             @click="() => { if(query!=''){searchMode = true} }">
               <div class=" text-white">ค้นหา</div>
             </button>

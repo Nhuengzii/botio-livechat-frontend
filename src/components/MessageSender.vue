@@ -1,5 +1,5 @@
 <template>
-  <div class="flex static mx-3 ">
+  <div class="flex static mx-3">
 
     <div class="w-full mx-1 ">
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
