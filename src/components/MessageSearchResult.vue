@@ -2,10 +2,11 @@
   <div>
     <template v-if="ready">
       <div v-for="message in messages">
-        <MessageBlock :message="message" :conversation="conversation" :is-show-profile="message.source.userType == 'user'"
-          v-if="message.attachments.length == 0" />
-      </div>
-    </template>
+        <MessageBlock :message="message"  :conversation="conversation" :is-show-profile="message.source.userType == 'user'"
+        :query="query"
+        v-if="message.attachments.length == 0" />
+        </div>
+      </template>
   </div>
 </template>
 

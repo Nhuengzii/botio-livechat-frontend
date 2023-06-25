@@ -1,5 +1,4 @@
 <template>
-  
   <!-- user send message-->
   <template v-if="message.source.userType === 'user'">
     <div class="flex flex-row">
@@ -10,7 +9,7 @@
         <NotshowImageProfile />
       </template>
       <div class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-sm font-medium bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
-      {{ message.message }}
+        <div v-html="highlight(message.message,query)"></div>
     </div>
     <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     </div>
@@ -22,7 +21,7 @@
   <!-- admin send message-->
   <template v-else>
     <div class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-sm font-medium bg-[#30A2FF] break-all text-white overflow-hidden">
-      {{ message.message }}
+      <div v-html="highlight(message.message,query)"></div>
     </div>
     <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     
@@ -44,7 +43,16 @@ defineProps<{
   message: Message
   conversation: Conversation
   isShowProfile: boolean
+  query:string
 }>()
+
+function highlight(text:string,query:string) {
+  var regex = new RegExp(query, 'gi');
+  text = text.replace(/(<mark class="highlight">|<\/mark>)/gim, '');
+  var newText = text.replace(regex, '<mark class="highlight">$&</mark>');
+  return newText
+            
+}
 
 
 
@@ -55,4 +63,8 @@ defineProps<{
 .bg-message-admin {
   background-color: #394867;
 }
+
+.highlightText {
+        background: yellow;
+    }
 </style>
