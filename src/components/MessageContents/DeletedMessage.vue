@@ -9,7 +9,7 @@
         <NotshowImageProfile />
       </template>
       <div
-        class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-sm font-medium bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
+        class="self-center  py-2 px-3 rounded-xl  ml-2 text-sm font-medium bg-white text-[#4949498C] break-all overflow-hidden border-2 border-[#D9D9D9]">
         ข้อความถูกยกเลิก
       </div>
       <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>

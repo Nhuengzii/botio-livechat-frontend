@@ -3,11 +3,16 @@
         <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask">
             <div class="flex flex-col modal-container">
 
-                <div class="flex mb-4" :class="{'justify-between' : uiStore.activeCreateTemplateMessage, 'justify-end' : !uiStore.activeCreateTemplateMessage }">
+                <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
                     <template v-if="uiStore.is_createTemplateMessage">
                         <button class="bg-gray-200 px-5 py-3 rounded-full" @click="uiStore.activeCreateTemplateMessage">back</button>
                     </template>
-                    <button @click="uiStore.closeTemplateMessage" class="bg-gray-200 px-5 py-3 rounded-full">X</button>
+                    <template v-else>
+                        <div class="w-5 h-5"></div>
+                    </template>
+                    <button @click="uiStore.closeTemplateMessage" class="bg-red-400 w-10 h-10 rounded-full font-bold">
+                        <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+                    </button>
                 </div>
                 
                 <div class="modal-header flex-[1] justify-between bg-white">
