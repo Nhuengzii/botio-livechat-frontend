@@ -215,6 +215,9 @@ function messageToActivity(message: Message): string {
       case "video":
         activity = "ส่งวิดีโอ";
         break
+      case "sticker":
+        activity = "ส่งสติกเกอร์";
+        break
       case "audio":
         activity = "ส่งข้อความเสียง";
         break

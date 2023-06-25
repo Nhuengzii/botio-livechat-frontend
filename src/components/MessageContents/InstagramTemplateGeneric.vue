@@ -3,21 +3,20 @@
   <template v-if="template.elements.length == 1">
     <div v-for="element in template.elements" class="">
       <div class="mx-2 border-2 rounded-xl flex">
-          <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden">
-            <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
+        <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden">
+          <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
+        </div>
+        <div class="rounded-b-xl bg-white pb-2 pt-1">
+          <div class="pb-2 border-b-2">
+            <h1 class="font-bold break-all">{{ element.title }}</h1>
+            <h2 class="break-all">{{ element.subtitle }}</h2>
           </div>
-          <div class="rounded-b-xl bg-white pb-2 pt-1">
-            <div class="pb-2 border-b-2">
-              <h1 class="font-bold break-all">{{ element.title }}</h1>
-              <h2 class="break-all">{{ element.subtitle }}</h2>
-            </div>
-            <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100" 
-            v-for="button, index in element.buttons"
-              :key="index">
-              <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
-            </div>
+          <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
+            v-for="button, index in element.buttons" :key="index">
+            <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
           </div>
         </div>
+      </div>
     </div>
   </template>
   <template v-else>
@@ -33,9 +32,8 @@
               <h1 class="font-bold break-all self-start pl-10">{{ element.title }}</h1>
               <h2 class="break-all self-start pl-10">{{ element.subtitle }}</h2>
             </div>
-            <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100" 
-            v-for="button, index in element.buttons"
-              :key="index">
+            <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
+              v-for="button, index in element.buttons" :key="index">
               <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
             </div>
           </div>
@@ -48,8 +46,6 @@
     </Carousel>
   </template>
   <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-    
-  
 </template>
 
 <script setup lang="ts">
@@ -76,7 +72,6 @@ type InstagramTemplateGeneric = {
   }[]
 }
 const template: InstagramTemplateGeneric = JSON.parse(message.attachments[0].payload.src)
-console.log(JSON.stringify(template, null, 2))
 const formatTimestamp = (timestamp: number) => {
   const date = new Date(timestamp);
   const hours = date.getHours().toString().padStart(2, '0');
