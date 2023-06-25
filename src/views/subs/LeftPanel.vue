@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-[1] flex flex-col justify-between bg-[#D9D9D94c]  min-w-[320px] max-w-[350px]">
+  <div class="flex-[1] flex flex-col justify-between bg-[#FFD95A]  min-w-[320px] max-w-[350px] ml-1 rounded-[10px]">
     <div>
       <template v-if="conversationsThreadMode == 'normal'">
         <div class="px-2">
@@ -20,7 +20,7 @@
       </template>
     </div>
     <div v-if="conversationsThreadMode == 'normal'"
-      class="flex w-full items-center justify-center bg-slate-700 h-[370px]  text-[#FFD95A] text-[16px]">
+      class="flex w-full items-center  justify-center bg-[#6d613a] h-[370px] rounded-b-[10px] text-[#FFD95A] text-[16px]">
       Botio X CPE
     </div>
   </div>

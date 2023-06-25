@@ -11,7 +11,7 @@
         <ThreadSkeleton :num-skeletons="2" />
       </template>
       <template #complete>
-        <span>No more data found!</span>
+        <div class="p-2">No more data found!</div>
       </template>
     </InfiniteLoading>
 

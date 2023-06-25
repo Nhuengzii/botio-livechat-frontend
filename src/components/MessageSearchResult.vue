@@ -1,10 +1,13 @@
 <template>
   <div>
     <template v-if="ready">
-      <div v-for="message in messages">
+      <div v-if="messages.length>0" v-for="message in messages">
         <MessageBlock :message="message"  :conversation="conversation" :is-show-profile="message.source.userType == 'user'"
         :query="query"
         v-if="message.attachments.length == 0" />
+        </div>
+        <div v-else class="flex justify-center">
+          No more data found!
         </div>
       </template>
   </div>
