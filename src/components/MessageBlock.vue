@@ -6,7 +6,7 @@
       <!-- user send Text -->
       <template v-if="messageType == 'NormalText'">
         <div class="flex flex-row">
-          <NormalText :message="message" :conversation="conversation" :is-show-profile="true" />
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="true" :query="query"/>
         </div>
       </template>
       <!-- end-->
@@ -56,7 +56,7 @@
       <!-- admin send Text -->
       <template v-if="messageType == 'NormalText'">
         <div class="flex items-center justify-start flex-row-reverse">
-          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile" />
+          <NormalText :message="message" :conversation="conversation" :is-show-profile="isShowProfile " :query="query"/>
         </div>
 
       </template>
@@ -169,6 +169,7 @@ const { message, conversation } = defineProps<
     message: Message
     conversation: Conversation
     isShowProfile: boolean
+    query:string
   }
 >()
 const messageType = ref('')

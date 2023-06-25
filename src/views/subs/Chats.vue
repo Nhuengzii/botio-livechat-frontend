@@ -57,7 +57,7 @@
         <div>
           <!-- search conversation  -->
           <div v-show="querying" class="flex items-center  ">
-            <div class="pl-8 pt-5" @click="() => { querying = false ;query='';searchMode = false}">
+            <div class="pl-8 pt-5" @click="() => { querying = false ;query='' ;searchMode = false}">
               <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
@@ -65,16 +65,17 @@
                 class="ml-2 bg-[#D9D9D9] pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
               <div class="absolute bottom-1 right-6 ">
-                <div v-if="query != ''" class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
+                <div v-show="query != '' " class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
                   <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                 </div>
-              </div>
+              </div>      
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 bg-[#B2B2B2] hover:bg-gray-400" @click="() => { if(query!=''){searchMode = true} }">
+            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-blue-500 hover:bg-blue-400']" @click="() => { if(query!=''){searchMode = true} }">
               <div class=" text-white">ค้นหา</div>
             </button>
           </div>
         </div>
+        
       </header>
 
 
