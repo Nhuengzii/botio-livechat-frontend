@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[62px] w-[62px]"><img :src=profilePic class="rounded-full object-cover relative"></div>
+  <div class="h-[58px] w-[58px]"><img :src=profilePic class="rounded-full object-cover relative"></div>
   <div v-if="showPlatform"
     class="absolute top-10 left-11 bg-white rounded-full flex w-[26px] h-[26px] items-center justify-center">
     <font-awesome-icon v-if="platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;" size="xl" />

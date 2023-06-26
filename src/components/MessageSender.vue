@@ -17,7 +17,7 @@
               <div  v-for="(image, index) in images" :key="index" class="image-item " >
                 <div class="static">
                   <img :src="image.url" class="h-16 w-16  my-2"/>
-                  <div class="absolute top-0 left-14 ">
+                  <div class="absolute top-0 left-14 ">d
                     <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]" @click="removeImage(index)">x</button>
                   </div>
                 </div>
