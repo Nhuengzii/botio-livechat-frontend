@@ -20,6 +20,9 @@ export const useUIStore = defineStore('ui', {
         is_createTemplateMessage: false,
         is_editTemplateMessage: false,
         is_changePage: false,
+        is_selectTemplate: false,
+        is_finishCreateTemplate: false,
+        showEditModal:false,
         
     }),
     getters: {
@@ -72,6 +75,20 @@ export const useUIStore = defineStore('ui', {
             this.is_editTemplateMessage = false
             this.is_createTemplateMessage = false
             this.is_activeTemplateMessage = false
+        },
+        activeSelectTemplate() {
+            this.is_selectTemplate = true
+        },
+        finishCreateTemplate() {
+            this.is_finishCreateTemplate = true
+            
+        },
+        openEditModal(){
+            this.showEditModal = true;
+        },
+        
+        closeEditModal() {
+            this.showEditModal = false;
         },
     }
 })
