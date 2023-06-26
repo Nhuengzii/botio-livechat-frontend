@@ -2,7 +2,8 @@
   <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
   <template v-if="template.elements.length == 1">
     <div class="mx-2 border-2 rounded-xl">
-      <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden">
+      <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden bg-blue-500">
+        <p>{{ template.elements[0].image_url }}</p>
         <img :src="template.elements[0].image_url" class="object-cover rounded-t-xl" alt="">
       </div>
       <div class="rounded-b-xl bg-white pb-2 pt-1">
@@ -21,7 +22,8 @@
     <Carousel :items-to-show="1.5" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
         <div class="mx-2 border-2 rounded-xl">
-          <div class="rounded-t-xl h-48 overflow-hidden">
+          <div class="rounded-t-xl h-48 w-64 overflow-hidden bg-blue-400">
+            <p>{{ element.image_url }}</p>
             <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
           </div>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
