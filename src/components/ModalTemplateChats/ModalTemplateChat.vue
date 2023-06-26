@@ -3,7 +3,7 @@
         <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask">
             <div class="flex flex-col modal-container">
                 <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
-                    <template v-if="uiStore.is_createTemplateMessage">
+                    <template v-if="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
                         <button class="bg-gray-200 px-5 py-3 rounded-full" @click="uiStore.activeCreateTemplateMessage">back</button>
                     </template>
                     <template v-else>
@@ -14,11 +14,11 @@
                     </button>
                 </div>
                 
-                <div class="modal-header flex-[1] justify-between bg-white">
+                <div class="modal-header flex-[1] justify-between bg-red-300">
                     <slot name="header">default header</slot>
                 </div>
 
-                <div class="modal-body  flex-[5] overflow-x-hidden no-scrollbar justify-center">
+                <div class="modal-body  flex-[8] overflow-x-hidden bg-red-100  no-scrollbar justify-center">
                     <slot name="body">default body</slot>
                 </div>
 
