@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col">
         <h1 class="text-xl pl-4 mx-2 pb-4">เลือกรูปแบบเทมเพลตที่ต้องการจะสร้าง</h1>
-        <div class="flex flex-warp h-[50vh] items-start">
+        <div class="flex flex-warp  items-start bg-green-200">
 
 
             <!-- button template -->
 
-            <button @click="selectTemplate(1)" class="hover:bg-gray-200" :class="{ 'bg-gray-200': selectedTemplate === 1 }">
+            <button @click="modalStore.selectTemplate('Button')" class="hover:bg-gray-200" :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'Button' }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-32 bg-blue-700 rounded-t-lg">
@@ -24,10 +24,10 @@
                         </div>
                     </div>
                 </div>
-            </button>
+            </button>   
 
             <!-- image+text template -->
-            <button @click="selectTemplate(2)" class="hover:bg-gray-200" :class="{ 'bg-gray-200': selectedTemplate === 2 }">
+            <button @click="modalStore.selectTemplate('TextImage')" class="hover:bg-gray-200" :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'TextImage' }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-44 bg-blue-700 rounded-t-lg">
@@ -41,20 +41,19 @@
                     </div>
                 </div>
             </button>
-
-
-
         </div>
-        <button @click="openEditModal" :disabled="selectedTemplate === null">{{showEditModal}}</button>
+        <button @click="uiStore.activeEditTemplateMessage" class="self-center bg-red-100">ถัดไป</button>
 
     </div>
 </template>
 
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
+import {useModalStore } from '@/stores/modal'
 import { ref, type Ref } from 'vue';
 import ModalTemplateChat from '@/components/ModalTemplateChat.vue';
 const uiStore = useUIStore()
+const modalStore = useModalStore()
 const showEditModal = ref(false);
 const selectedTemplate = ref<string | number | null>(null);
 function selectTemplate(template: string | number) {
@@ -64,13 +63,7 @@ function submitSelection() {
     console.log('Selected Template:', selectedTemplate.value);
 }
 
-const openEditModal = () => {
-    showEditModal.value = true;
-};
 
-const closeEditModal = () => {
-    showEditModal.value = false;
-};
 
 // select image
 const selectedImage = ref<string | null>(null);

@@ -4,6 +4,12 @@
             <div class="bg-blue-dark py-4 px-12 flex items-center">
                 <h3 class="text-lg text-white font-semibold pr-4">สร้างเทมเพลตข้อความสำหรับ</h3>
                 <div class="flex bg-white rounded-full w-8 h-8 items-center justify-center">
+                    <font-awesome-icon v-if="platform === 'facebook'" :icon="['fab', 'facebook']"
+                  style="color: #2F58CD;" size="xl" />
+                <font-awesome-icon v-if="platform === 'instagram'" :icon="['fab', 'instagram']"
+                  style="color: #DF2E38;" size="xl" />
+                <font-awesome-icon v-if="platform === 'line'" :icon="['fab', 'line']"
+                  style="color: #38E54D;" size="xl" />
                     <!-- <font-awesome-icon :icon="['fab', 'facebook']" style="color: #2F58CD;" size="xl" /> -->
                 </div>
             </div>
@@ -13,6 +19,10 @@
 
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
+defineProps<{
+  platform:String
+}>()
+
 const uiStore = useUIStore()
 </script>
 
