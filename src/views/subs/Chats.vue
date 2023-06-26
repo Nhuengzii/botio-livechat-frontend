@@ -107,8 +107,8 @@
               <template v-if="isNewDay(index)">
 
                 <div class="col-start-6 col-end-8 py-8 px-4">
-                  <div class="flex flex-row justify-center rounded-xl bg-gray-100 py-0.5">
-                    <span class="justify-center">{{ getFormattedDate(message.timestamp) }}</span>
+                  <div class="flex justify-center py-0.5">
+                    <span class="bg-gray-100 rounded-2xl py-1 px-4 ">{{ getFormattedDate(message.timestamp) }}</span>
 
                   </div>
                 </div>
@@ -156,6 +156,7 @@ import 'vue3-tabs-chrome/dist/vue3-tabs-chrome.css'
 import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import MessageSearchResult from "@/components/MessageSearchResult.vue";
+import { getFormattedDate } from "@/lib/Time"
 import { useRoute } from 'vue-router';
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
@@ -337,26 +338,7 @@ const shouldShowProfilePicture = (index: number): boolean => {
   );
 };
 
-const getFormattedDate = (timestamp: number): string => {
-  const currentDate = new Date();
-  const messageDate = new Date(timestamp);
 
-  if (
-    currentDate.getDate() === messageDate.getDate() &&
-    currentDate.getMonth() === messageDate.getMonth() &&
-    currentDate.getFullYear() === messageDate.getFullYear()
-  ) {
-    return 'วันนี้';
-  } else {
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-      timeZone: 'Asia/Bangkok',
-    };
-    return messageDate.toLocaleDateString('th-TH', options);
-  }
-};
 const scrollToLastMessage = () => {
   nextTick(() => {
     nextTick(() => {
