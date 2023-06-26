@@ -228,7 +228,8 @@ function messageToActivity(message: Message): string {
         activity = "ส่งเทมเพลต";
         break;
     }
-  } else {
+  } 
+  else {
     activity = message.message;
   }
   if (message.isDeleted) {

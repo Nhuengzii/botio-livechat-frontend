@@ -5,16 +5,25 @@
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
         <div class="relative w-full">
           <div class=" w-full h-full rounded-lg self-center border-2  pt-1 mt-1">
-            <textarea type="text" 
+            <textarea v-show="images.length==0" type="text" 
             placeholder="พิมพ์ข้อความ" 
             v-model="newMessage" 
             @keydown.enter="sendMessageOnEnter"
             @input="handleTyping" :rows="calculateTextareaRows"
             class="inline-flex px-2  mb-6 w-full h-auto 
-             text-black break-words outline-none resize-none max-h-64 overflow-auto" />
+             text-black break-words outline-none resize-none max-h-64" />
+            <div class="mb-10 flex   ">
+              <button v-if="images.length>0" @click="openImageDialog" class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
+              <div  v-for="(image, index) in images" :key="index" class="image-item " >
+                <div class="static">
+                  <img :src="image.url" class="h-16 w-16  my-2"/>
+                  <div class="absolute top-0 left-14 ">
+                    <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]" @click="removeImage(index)">x</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <img v-if="selectedImage" :src="selectedImage" alt="Selected Image"
-            class="absolute top-0 left-0 w-full h-full object-contain" />
         </div>
         <div class="inline-flex">
 
@@ -75,12 +84,12 @@
         </div>
       </button>
       <div class="w-[22px] h-[22px] duration-500">
-      <button @click="sendMessage" v-show="showSendMessageButton" class="flex ">
+      <button @click="sendMessage" v-show="showSendMessageButton || images.length>0" class="flex ">
         <div class="rounded-full bg-white">
           <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl"   />
         </div>
       </button>
-      <button v-show="!showSendMessageButton"  type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
+      <button v-show="!showSendMessageButton && images.length==0"  type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
         <div class="text-gray-500">
           <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
         </div>
@@ -116,21 +125,6 @@ const isTyping = ref(false)
 
 const image: Ref<string | null> = ref(null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
-const openFilePicker = () => {
-  fileInputRef.value?.click();
-}
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      image.value = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-};
 
 
 const calculateTextareaRows = computed(() => {
@@ -142,40 +136,29 @@ const calculateTextareaRows = computed(() => {
   return calculatedRows;
 });
 
-const selectedImage = ref<string | null>(null);
 
 const openImageDialog = () => {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
-  input.onchange = (event) => displaySelectedImage(event, selectedImage);
+  input.onchange = (event) => handleFileChange(event);
   input.click();
-};
-
-const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
-  const file = (event.target as HTMLInputElement).files?.[0];
-
-  if (file && file.type.startsWith('image/')) {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      selectedImage.value = reader.result as string;
-    };
-
-    reader.readAsDataURL(file);
-  } else {
-    selectedImage.value = null;
-  }
 };
 
 
 const sendMessage = () => {
-  if (newMessage.value.trim() !== '') {
+  if(images.value.length>0){
+    let a = currentChat.value?.conversation!
+  for (let i = 0; i < images.value.length; i++) {
+    console.log(images.value[i].url)
+    }
+    images.value=[]
+  }
+  else if (newMessage.value.trim() !== '') {
     // Handle sending the message here
     console.log('Sending message:', newMessage.value);
     let a = currentChat.value?.conversation!
     livechatStore.sendTextMessage(currentChat.value!.conversation, newMessage.value)
-
     newMessage.value = ''; // Reset the input field after sending the message
     uiStore.is_typing = false;
   }
@@ -186,9 +169,13 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
 
-    if (selectedImage.value) {
+    if (images.value.length>0) {
       // Send the message and image
-      sendTextMessageWithImage();
+      //sendTextMessageWithImage();
+      for (let i = 0; i < images.value.length; i++) {
+      console.log(images.value[i])
+      alert(images.value[i])
+      }
     } else {
       // Send only the message
       sendMessage();
@@ -224,11 +211,10 @@ const sendTextMessageWithImage = () => {
   if (newMessage.value.trim() !== '') {
 
     console.log('Sending message:', newMessage.value);
-    console.log('Sending image:', selectedImage.value);
+    console.log('Sending image:', images);
 
     newMessage.value = ''; // Reset the input field after sending the message
-    selectedImage.value = null; // Reset the selected image
-    uiStore.is_typing = false;
+     uiStore.is_typing = false;
   }
 };
 
@@ -238,6 +224,29 @@ watch(newMessage, () => {
 });
 
 
+interface Image {
+    url: string;
+    file: File;
+  }
+      const images = ref<Image[]>([]);
+  
+      const handleFileChange = (event: Event) => {
+        const inputElement = event.target as HTMLInputElement;
+        const fileList = inputElement.files;
+  
+        if (fileList) {
+          for (let i = 0; i < fileList.length; i++) {
+            const file = fileList[i];
+            const imageUrl = URL.createObjectURL(file);
+            images.value.push({ url: imageUrl, file });
+          }
+        }
+      };
+  
+      const removeImage = (index: number) => {
+        images.value.splice(index, 1);
+      };
+  
 </script>
 
 <style scoped>
@@ -276,6 +285,20 @@ textarea::-webkit-scrollbar-track {
 textarea[type='text'] { 
   font-size: 16px; font-family: monospace; 
 }
+.image-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+ 
+}
+
+.image-item {
+  margin: 10px;
+}
  
 </style>
