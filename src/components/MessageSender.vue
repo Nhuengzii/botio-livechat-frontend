@@ -57,23 +57,34 @@
                   <div>
                     <template v-if="modalStore.selectedTemplate === 'Button'">
                       <div class="flex justify-center items-center">
-                        <TemplateButton />
+                        <TemplateButton :text="textUserInput" :title="titleUserInput" :image_url="'image'"/>
                         <div class="flex flex-col">
                           <button @click="openImageDialog">
                             <div class="bg-gray-100 text-[#d9d9d9] w-40 h-40 flex items-center justify-center">
                               add Image
                             </div>
                           </button>
-                          <input type="text" placeholder="title">
-                          <input type="text" placeholder="content message">
-                          
+                          <h1>หัวข้อ</h1>
+                          <input type="text" placeholder="title" v-model="titleUserInput">
+                          <h1>ข้อความ</h1>
+                          <input type="text" placeholder="content message" v-model="textUserInput">
                         </div>
-
                       </div>
                     </template>
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
                       <div class="flex justify-center items-center">
-                        <TemplateTextImage />
+                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'" />
+                        <div class="flex flex-col">
+                          <button @click="openImageDialog">
+                            <div class="bg-gray-100 text-[#d9d9d9] w-40 h-40 flex items-center justify-center">
+                              add Image
+                            </div>
+                          </button>
+                          <h1>หัวข้อ</h1>
+                          <input type="text" placeholder="title" v-model="titleUserInput">
+                          <h1>ข้อความ</h1>
+                          <input type="text" placeholder="content message" v-model="textUserInput">
+                        </div>
                       </div>
                     </template>
                   </div>
@@ -149,6 +160,8 @@ defineProps<{
 
 const modalStore = useModalStore()
 const uiStore = useUIStore()
+const titleUserInput = ref('')
+const textUserInput = ref('')
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()
