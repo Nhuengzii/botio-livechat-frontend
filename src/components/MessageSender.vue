@@ -5,12 +5,8 @@
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
         <div class="relative w-full">
           <div class=" w-full h-full rounded-lg self-center border-2  pt-1 mt-1">
-            <textarea type="text" 
-            placeholder="พิมพ์ข้อความ" 
-            v-model="newMessage" 
-            @keydown.enter="sendMessageOnEnter"
-            @input="handleTyping" :rows="calculateTextareaRows"
-            class="inline-flex px-2  mb-6 w-full h-auto 
+            <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
+              @input="handleTyping" :rows="calculateTextareaRows" class="inline-flex px-2  mb-6 w-full h-auto 
              text-black break-words outline-none resize-none max-h-64 overflow-auto" />
           </div>
           <img v-if="selectedImage" :src="selectedImage" alt="Selected Image"
@@ -26,11 +22,11 @@
               <!--HEADER-->
               <template #header>
                 <template v-if="uiStore.is_createTemplateMessage"> <!-- Header Modal create chat template-->
-                  <HeaderCreateMessage />
+                  <HeaderCreateMessage :platform="platform" />
                 </template>
 
                 <template v-else-if="uiStore.is_editTemplateMessage"> <!-- Header Modal edit chat template-->
-                  <p>edit message</p>
+                  <p>{{ modalStore.selectedTemplate }}</p>
                 </template>
 
                 <template v-else> <!-- Header Modal chat template-->
@@ -44,17 +40,41 @@
                 <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
                   <BodyCreateMessage />
                 </template>
+                <template v-else-if="uiStore.is_editTemplateMessage">
+                  <div>
+                    <template v-if="modalStore.selectedTemplate === 'Button'">
+                      <div class="flex justify-center items-center">
+                        <TemplateButton />
+                        <div class="flex flex-col">
+                          <button @click="openImageDialog">
+                            <div class="bg-gray-100 text-[#d9d9d9] w-40 h-40 flex items-center justify-center">
+                              add Image
+                            </div>
+                          </button>
+                          <input type="text" placeholder="title">
+                          <input type="text" placeholder="content message">
+                          
+                        </div>
+
+                      </div>
+                    </template>
+                    <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
+                      <div class="flex justify-center items-center">
+                        <TemplateTextImage />
+                      </div>
+                    </template>
+                  </div>
+                </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage"> <!-- Body Modal chat template-->
                   <BodyTemplate />
                 </template>
+
               </template>
 
               <!--END BODY-->
               <template #footer>
-                <div>
 
-                </div>
               </template>
             </ModalTemplateChat>
           </Teleport>
@@ -75,17 +95,18 @@
         </div>
       </button>
       <div class="w-[22px] h-[22px] duration-500">
-      <button @click="sendMessage" v-show="showSendMessageButton" class="flex ">
-        <div class="rounded-full bg-white">
-          <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl"   />
-        </div>
-      </button>
-      <button v-show="!showSendMessageButton"  type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
-        <div class="text-gray-500">
-          <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
-        </div>
-      </button>
-    </div>
+        <button @click="sendMessage" v-show="showSendMessageButton" class="flex ">
+          <div class="rounded-full bg-white">
+            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" />
+          </div>
+        </button>
+        <button v-show="!showSendMessageButton" type="button" id="show-modal" @click="uiStore.activeTemplateMessage"
+          class="flex">
+          <div class="text-gray-500">
+            <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
+          </div>
+        </button>
+      </div>
     </div>
     <!-- end space-->
 
@@ -100,12 +121,21 @@ import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/Head
 import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
 import HeaderCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/HeaderCreateMessage.vue'
 import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/BodyCreateMessage.vue'
+
+import TemplateTextImage from './ModalTemplateChats/TemplateType/TemplateTextImage.vue';
+import TemplateButton from './ModalTemplateChats/TemplateType/TemplateButton.vue';
 import { useUIStore } from '@/stores/UI';
+import { useModalStore } from '@/stores/modal';
 import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
+defineProps<{
+  platform: String
+}>()
 
+
+const modalStore = useModalStore()
 const uiStore = useUIStore()
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
@@ -273,9 +303,9 @@ textarea::-webkit-scrollbar-track {
 .textarea-container textarea::placeholder {
   text-align: center;
 }
-textarea[type='text'] { 
-  font-size: 16px; font-family: monospace; 
-}
 
- 
+textarea[type='text'] {
+  font-size: 16px;
+  font-family: monospace;
+}
 </style>
