@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType == 'user'" />
-    <video class="max-w-[200px] max-h-[400px]" controls>
+    <video class="max-w-[200px] max-h-[400px] rounded-xl" controls>
       <source :src="message.attachments[0].payload.src" type="video/mp4">
     </video>
     <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
