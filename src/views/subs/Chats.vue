@@ -140,7 +140,7 @@
       </main>
 
       <template v-if="currentChat?.conversation.participants[0].username">
-        <MessageSender />
+        <MessageSender :platform="currentChat.conversation.platform" />
       </template>
 
     </div>
