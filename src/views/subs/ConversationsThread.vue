@@ -3,11 +3,11 @@
     <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
     <div v-for="(conversation, index) in conversations($route.query.platform as string)"
       :key="conversation.conversationID" v-show="!isLoading">
-      <TransitionGroup name="list" tag="div">
+      <!-- <TransitionGroup name="list" tag="div"> -->
       <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
         :mode="conversationsThreadMode" />
-      </TransitionGroup>
-      </div>
+      <!-- </TransitionGroup> -->
+    </div>
     <InfiniteLoading @infinite="loadmore" :firstload="false" :identifier="$route.query.platform as string">
       <template #spinner>
         <ThreadSkeleton :num-skeletons="2" />
@@ -49,11 +49,11 @@ async function loadmore($state) {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve(null);
-    }, 2000);
+    }, 1000);
   });
   const skip = conversations.value(route.query.platform as string).length
   isFetchingMore.value = false;
-  const olderConversation: Conversation[] = await livechatStore.fetchConversations(route.query.platform as string, skip, 2)
+  const olderConversation: Conversation[] = await livechatStore.fetchConversations(route.query.platform as string, skip, 3)
   $state.loaded()
   if (olderConversation.length === 0) {
     console.log('no more conversation')
@@ -105,10 +105,8 @@ onMounted(async () => {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-.list-move{
+
+.list-move {
   transition: all 0.5s ease;
 }
-
-
-
 </style>
