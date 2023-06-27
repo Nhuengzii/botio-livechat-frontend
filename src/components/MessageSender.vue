@@ -57,23 +57,34 @@
                   <div>
                     <template v-if="modalStore.selectedTemplate === 'Button'">
                       <div class="flex justify-center items-center">
-                        <TemplateButton />
+                        <TemplateButton :text="textUserInput" :title="titleUserInput" :image_url="'image'"/>
                         <div class="flex flex-col">
-                          <button @click="openImageDialog">
-                            <div class="bg-gray-100 text-[#d9d9d9] w-40 h-40 flex items-center justify-center">
+                          <button @click="openImageDialog" class="my-4">
+                            <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
                               add Image
                             </div>
                           </button>
-                          <input type="text" placeholder="title">
-                          <input type="text" placeholder="content message">
-                          
+                          <h1>หัวข้อ</h1>
+                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8 my-2" maxlength="50">
+                          <h1 class="mt-2">ข้อความ</h1>
+                          <textarea type="text" placeholder="content message" v-model="textUserInput" class="h-52 w-64 px-2 py-1 mt-2" maxlength="100"/>
                         </div>
-
                       </div>
                     </template>
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
-                      <div class="flex justify-center items-center">
-                        <TemplateTextImage />
+                      <div class="flex flex justify-center items-center">
+                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'" class="self-start"/>
+                        <div class="flex flex-col">
+                          <button @click="openImageDialog" class="my-4">
+                            <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
+                              add Image
+                            </div>
+                          </button>
+                          <h1>หัวข้อ</h1>
+                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8 my-2" maxlength="50">
+                          <h1 class="mt-2">ข้อความ</h1>
+                          <textarea type="text" placeholder="content message" v-model="textUserInput" class="h-52 w-64 px-2 py-1 mt-2" maxlength="200"/>
+                        </div>
                       </div>
                     </template>
                   </div>
@@ -87,7 +98,16 @@
 
               <!--END BODY-->
               <template #footer>
-
+                <template v-if="uiStore.is_createTemplateMessage">
+                  <div class="flex items-center justify-center">
+                    <button @click="uiStore.activeEditTemplateMessage" class="py-3 px-4 rounded-2xl text-xl bg-blue-100">ถัดไป</button>
+                  </div>
+                </template>
+                <template v-if="uiStore.is_editTemplateMessage">
+                  <div class="flex items-center justify-center">
+                    <button @click="" class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
+                  </div>
+                </template>
               </template>
             </ModalTemplateChat>
           </Teleport>
@@ -149,6 +169,8 @@ defineProps<{
 
 const modalStore = useModalStore()
 const uiStore = useUIStore()
+const titleUserInput = ref('')
+const textUserInput = ref('')
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()

@@ -14,7 +14,7 @@
                     </button>
                 </div>
                 
-                <div class="modal-header flex-[1] justify-between bg-red-300">
+                <div class="modal-header flex-[1] justify-between">
                     <slot name="header">default header</slot>
                 </div>
 
