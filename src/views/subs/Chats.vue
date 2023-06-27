@@ -14,18 +14,18 @@
 
       <!-- header chats-->
       <header class=" mx-3 flex-[1] " :class="[querying ? 'pb-5 bg-[#EEEEEE] rounded-t-[10px]' : 'bg-[#EEEEEE] ']">
-        <div v-show="!querying" class="flex items-center py-5 justify-start">
+        <div v-show="!querying" class="flex items-center py-3 justify-start">
           <!-- show name conversation-->
           <div  class="mx-6 object-cover h-12 w-12 rounded-full" >
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
-              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[24px] h-[24px] items-center justify-center">
+              <div class="absolute top-8 left-8 bg-white rounded-full flex w-[20px] h-[20px] items-center justify-center">
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
-                  style="color: #2F58CD;" size="lg" />
+                  style="color: #2F58CD;" size="sm" />
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
-                  style="color: #DF2E38;" size="lg" />
+                  style="color: #DF2E38;" size="sm" />
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
-                  style="color: #38E54D;" size="lg" />
+                  style="color: #38E54D;" size="sm" />
               </div>
             </template>
           </div>
