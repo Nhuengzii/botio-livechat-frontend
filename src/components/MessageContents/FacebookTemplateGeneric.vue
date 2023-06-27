@@ -1,35 +1,40 @@
 <template>
   <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
   <template v-if="template.elements.length == 1">
-    <div class="mx-2 border-2 rounded-xl">
-      <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden bg-blue-500">
-        <p>{{ template.elements[0].image_url }}</p>
-        <img :src="template.elements[0].image_url" class="object-cover rounded-t-xl" alt="">
-      </div>
-      <div class="rounded-b-xl bg-white pb-2 pt-1">
-        <div class="pb-2 border-b-2 pl-4">
-          <h1 class="font-bold break-all">{{ template.elements[0].title }}</h1>
-          <h2 class="break-all">{{ template.elements[0].subtitle }}</h2>
+    <button onclick="window.location.href='https://w3docs.com';">
+      <div class="mx-2 my-2 border-2 rounded-xl">
+        <template v-if="template.elements[0].image_url">
+          <div class="rounded-t-xl h-48 w-80 overflow-hidden">
+            <img :src="template.elements[0].image_url" class="object-cover rounded-t-xl" alt="" @error="handleImageError(template.elements[0].image_url)">
+          </div>
+        </template>
+        <div class="rounded-b-xl bg-white pt-1">
+          <div class="pb-2 border-b-2 pl-4 min-w-[120px] max-w-[320px]">
+            <h1 class="font-bold break-all truncate">{{ template.elements[0].title }}</h1>
+            <p class="break-all text-ellipsis">{{ template.elements[0].subtitle }}</p>
+          </div>
+          <div class="flex col justify-center bg-white py-4 border-b-2 hover:bg-gray-100"
+            v-for="button, index in template.elements[0].buttons" :key="index">
+            <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
+          </div>
         </div>
-        <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
-          v-for="button, index in template.elements[0].buttons" :key="index">
-          <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
-        </div>
       </div>
-    </div>
+    </button>
   </template>
   <template v-else>
-    <Carousel :items-to-show="1.5" :wrap-around="false" class="mb-4 rounded-xl">
+    <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
-        <div class="mx-2 border-2 rounded-xl">
-          <div class="rounded-t-xl h-48 w-64 overflow-hidden bg-blue-400">
-            <p>{{ element.image_url }}</p>
-            <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
-          </div>
+        <div class="mx-2 my-2 border-2 rounded-xl">
+          <template v-if="element.image_url">
+            <p>{{ element.image_url }}</p>   
+            <div class="rounded-t-xl h-48 w-80 overflow-hidden">
+              <img :src="element.image_url" class="object-cover rounded-t-xl" alt="" @error="handleImageError(element.image_url)">
+            </div>
+          </template>
           <div class="rounded-b-xl bg-white pb-2 pt-1">
-            <div class="pb-2 border-b-2 flex flex-col items-center justify-start">
-              <h1 class="font-bold break-all self-start pl-10">{{ element.title }}</h1>
-              <h2 class="break-all self-start pl-10">{{ element.subtitle }}</h2>
+            <div class="pb-2 border-b-2 pl-4 min-1-w-[120px] max-w-[320px] flex flex-col items-center justify-start">
+              <h1 class="font-bold break-all self-start pl-10 truncate ">{{ element.title }}</h1>
+              <p class="break-all self-start pl-10">{{ element.subtitle }}</p>
             </div>
             <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
               v-for="button, index in element.buttons" :key="index">
@@ -72,6 +77,10 @@ type Template = {
   "template": string,
 }
 const template: Template = JSON.parse(message.attachments[0].payload.src)
+
+const handleImageError = (imageUrl:String) => {
+  imageUrl= 'https://th.bing.com/th/id/OIP.2Sw7OWq_1hrOdTrBraUFIgAAAA?pid=ImgDet&rs=1'
+}
 
 </script>
 
