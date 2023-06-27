@@ -66,6 +66,13 @@ export const useLivechatStore = defineStore("livechat", () => {
         return [];
       }
     }
+    setTimeout(() => {
+      const uiStore = useUIStore()
+      botioLivechat.value.getPageInformation(platform, pageIDMap.get(platform) as string).then((pageInformation) => {
+        uiStore.availablesPlatforms.set(platform, pageInformation);
+        console.log(`update ${platform} page information`);
+      })
+    }, 100)
     const fetchedConversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string, skip, limit);
     fetchedConversations.forEach((conversation) => {
       conversationRaw.value.set(conversation.conversationID, conversation);
