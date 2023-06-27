@@ -94,9 +94,10 @@
             <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
               :identifier="currentChat?.conversation.conversationID">
               <template #spinner>
-                <div class="flex justify-center pt-5 pb-3">
+                <div class="flex justify-center pt-5 pb-3" v-if="isLoading">
                   <span class="loader"></span>
                 </div>
+                <span v-else></span>
 
 
               </template>
