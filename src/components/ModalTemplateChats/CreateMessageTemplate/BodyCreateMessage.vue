@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <h1 class="text-xl pl-4 mx-2 pb-4">เลือกรูปแบบเทมเพลตที่ต้องการจะสร้าง</h1>
-        <div class="flex flex-warp  items-start bg-green-200">
+        <div class="flex flex-warp  items-start">
 
 
             <!-- button template -->
@@ -42,7 +42,7 @@
                 </div>
             </button>
         </div>
-        <button @click="uiStore.activeEditTemplateMessage" class="self-center bg-red-100">ถัดไป</button>
+        
 
     </div>
 </template>
