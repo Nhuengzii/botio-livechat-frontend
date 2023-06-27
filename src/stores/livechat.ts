@@ -66,6 +66,13 @@ export const useLivechatStore = defineStore("livechat", () => {
         return [];
       }
     }
+    setTimeout(() => {
+      const uiStore = useUIStore()
+      botioLivechat.value.getPageInformation(platform, pageIDMap.get(platform) as string).then((pageInformation) => {
+        uiStore.availablesPlatforms.set(platform, pageInformation);
+        console.log(`update ${platform} page information`);
+      })
+    }, 100)
     const fetchedConversations = await botioLivechat.value.listConversation(platform, pageIDMap.get(platform) as string, skip, limit);
     fetchedConversations.forEach((conversation) => {
       conversationRaw.value.set(conversation.conversationID, conversation);
@@ -95,10 +102,12 @@ export const useLivechatStore = defineStore("livechat", () => {
       }
       conversationRaw.value.set(conversation.conversationID, conversation);
     }
-    botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
-      uiStore.availablesPlatforms.set(message.platform, pageInformation);
-      console.log(`update ${message.platform} page information`);
-    })
+    setTimeout(() => {
+      botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
+        uiStore.availablesPlatforms.set(message.platform, pageInformation);
+        console.log(`update ${message.platform} page information`);
+      })
+    }, 500)
     conversation.lastActivity = messageToActivity(message);
     conversation.updatedTime = message.timestamp
     if (message.source.userType === 'user') {
@@ -120,9 +129,11 @@ export const useLivechatStore = defineStore("livechat", () => {
   async function fetchMessages(platform: string, conversation: Conversation) {
     const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID);
     const uiStore = useUIStore()
-    botioLivechat.value.getPageInformation(platform, conversation.pageID).then((pageInformation) => {
-      uiStore.availablesPlatforms.set(platform, pageInformation);
-    })
+    setTimeout(() => {
+      botioLivechat.value.getPageInformation(platform, conversation.pageID).then((pageInformation) => {
+        uiStore.availablesPlatforms.set(platform, pageInformation);
+      })
+    }, 500)
     if (!currentChat.value) {
       throw new Error("currentChat is undefined");
     }
