@@ -100,12 +100,12 @@
               <template #footer>
                 <template v-if="uiStore.is_createTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="uiStore.activeEditTemplateMessage" class="py-5 px-4 rounded-2xl bg-blue-100">ถัดไป</button>
+                    <button @click="uiStore.activeEditTemplateMessage" class="py-3 px-4 rounded-2xl text-xl bg-blue-100">ถัดไป</button>
                   </div>
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="" class="py-5 px-4 rounded-2xl bg-blue-100">สร้างเทมเพลต</button>
+                    <button @click="" class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
                   </div>
                 </template>
               </template>
