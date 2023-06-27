@@ -59,7 +59,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   })
 
   // Action
-  async function fetchConversations(platform: string, skip = 0, limit = 7): Promise<Conversation[]> {
+  async function fetchConversations(platform: string, skip = 0, limit = 8): Promise<Conversation[]> {
     if (platform != 'all') {
       if (conversations.value(platform).length > 20) {
         console.log('dont fetch more use data form cache')
@@ -228,7 +228,7 @@ function messageToActivity(message: Message): string {
         activity = "ส่งเทมเพลต";
         break;
     }
-  } 
+  }
   else {
     activity = message.message;
   }
