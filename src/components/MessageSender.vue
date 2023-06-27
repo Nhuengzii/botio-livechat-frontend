@@ -81,9 +81,9 @@
                             </div>
                           </button>
                           <h1>หัวข้อ</h1>
-                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8">
+                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8" maxlength="50">
                           <h1>ข้อความ</h1>
-                          <input type="text" placeholder="content message" v-model="textUserInput" class="h-20">
+                          <input type="text" placeholder="content message" v-model="textUserInput" class="h-20" maxlength="200">
                         </div>
                       </div>
                     </template>
