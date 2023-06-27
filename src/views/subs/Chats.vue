@@ -73,7 +73,7 @@
               </div>
             </div>
             <button class="px-5 py-1 mt-5 mr-6 rounded-xl "
-              :class="[query == '' ? 'bg-[#B2B2B2]' : 'bg-yellow-600	 hover:bg-yellow-500']"
+              :class="[query == '' ? 'bg-[#B2B2B2]' : 'bg-blue-600	 hover:bg-blue-700']"
               @click="() => { if (query != '') { searchMode = true } }">
               <div class=" text-white">ค้นหา</div>
             </button>
@@ -482,5 +482,6 @@ button {
   100% {
     transform: rotate(360deg)
   }
-}</style>
+}
+</style>
 
