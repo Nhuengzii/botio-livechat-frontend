@@ -1,13 +1,13 @@
 <template>
   <div>
     <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
-    <div v-for="(conversation, index) in conversations($route.query.platform as string)"
-      :key="conversation.conversationID" v-show="!isLoading">
-      <!-- <TransitionGroup name="list" tag="div"> -->
-      <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
-        :mode="conversationsThreadMode" />
-      <!-- </TransitionGroup> -->
-    </div>
+    <TransitionGroup name="fade" tag="ul">
+      <div v-for="(conversation, index) in conversations($route.query.platform as string)"
+        :key="conversation.conversationID" v-show="!isLoading">
+        <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
+          :mode="conversationsThreadMode" />
+      </div>
+    </TransitionGroup>
     <InfiniteLoading @infinite="loadmore" :firstload="false" :identifier="$route.query.platform as string">
       <template #spinner>
         <ThreadSkeleton :num-skeletons="2" />
@@ -106,7 +106,8 @@ onMounted(async () => {
   display: none;
 }
 
-.list-move {
-  transition: all 0.5s ease;
+
+.fade-move {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 </style>
