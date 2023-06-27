@@ -16,7 +16,7 @@
       <header class=" mx-3 flex-[1] " :class="[querying ? 'pb-5 bg-[#FFD95A] rounded-t-[10px]' : 'bg-[#EEEEEE] ']">
         <div v-show="!querying" class="flex items-center py-5 justify-start">
           <!-- show name conversation-->
-          <div class="mx-6 object-cover h-12 w-12 rounded-full">
+          <div  class="mx-6 object-cover h-12 w-12 rounded-full" >
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
               <div class="absolute top-8 left-8 bg-white rounded-full flex w-[24px] h-[24px] items-center justify-center">
@@ -34,7 +34,7 @@
           <div class="flex-1">
             <div class="px-4 flex items-center justify-center">
               <template v-if="currentChat?.conversation.participants[0].username">
-                <p class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username }}</p>
+                <p   class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username }}</p>
                 <div class="flex ml-auto items-center">
 
                   <!-- click to search conversation  -->
@@ -98,7 +98,11 @@
 
               </template>
               <template #complete>
-                <span>No more data found!</span>
+                <div class="flex justify-center mt-2">
+                  <img  class="w-[100px] h-[100px] rounded-full" :src="currentChat.conversation.participants[0].profilePic.src"/>
+                </div>
+                <div class="flex justify-center text-[16px] font-bold mt-2">{{currentChat.conversation.participants[0].username}}</div>
+                
               </template>
             </InfiniteLoading>
           </template>
@@ -174,6 +178,9 @@ const isFetchingMore = ref(false);
 const lastSize = ref(0);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
 const searchMode = ref(false);
+const load = ref(true);
+
+
 
 async function loadmore($state) {
   if (isLoading.value) return;
@@ -190,9 +197,12 @@ async function loadmore($state) {
   if (!currentSize) return;
   const olderMessage = await livechatStore.fetchMoreMessages();
   $state.loaded()
+ 
+  
   const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
   if (!lastMid) {
     return
+    
   }
   const el = document.getElementById(lastMid);
   if (el) {
@@ -202,9 +212,14 @@ async function loadmore($state) {
   };
   if (olderMessage?.length === 0) {
     $state.complete();
+
   }
   console.log('load more done')
 }
+
+
+
+
 
 
 

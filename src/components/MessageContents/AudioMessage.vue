@@ -3,6 +3,7 @@
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
     <audio controls>
       <source :src="message.attachments[0].payload.src" type="audio/mpeg">
+      
     </audio>
     <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
   </div>
