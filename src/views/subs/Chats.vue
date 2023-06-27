@@ -5,7 +5,7 @@
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EEEEEE] "
           :class="{ 'w-[calc(100%-176px)] rounded-tl-[10px]': tabs.length > 0, 'w-[100%] rounded-t-[10px]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
-          <button @click="clearTab" class="bg-white rounded-tr-[10px] hover:bg-white  w-44 flex flex-row justify-center items-center">
+          <button @click="clearTab" class="bg-[#EEEEEE] rounded-tr-[10px] hover:bg-white  w-44 flex flex-row justify-center items-center">
             <h1 class="pr-2 font-semibold text-[#27374D]">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
