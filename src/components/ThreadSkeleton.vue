@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 const { numSkeletons } = defineProps({
     numSkeletons: {
         type: Number,
