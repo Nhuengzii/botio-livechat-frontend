@@ -9,7 +9,9 @@
           </div>
         </template>
         <div class="rounded-b-xl bg-white pt-1">
-          <div class="pb-2 border-b-2 pl-4 min-w-[120px] max-w-[320px]">
+          <div class="flex flex-col justify-center items-start pb-2 border-b-2 pl-4 min-w-[120px] max-w-[320px]">
+            <p class="break-all text-gray-400">{{ template.elements[0].item_url }}</p>
+            <a :href="template.elements[0].item_url"></a>
             <h1 class="font-bold break-all truncate">{{ template.elements[0].title }}</h1>
             <p class="break-all text-ellipsis">{{ template.elements[0].subtitle }}</p>
           </div>
@@ -32,9 +34,10 @@
               </div>
             </template>
             <div class="rounded-b-xl bg-white pb-2 pt-1">
-              <div class="pb-2 border-b-2 pl-4 min-1-w-[120px] max-w-[320px] flex flex-col items-center justify-start">
-                <h1 class="font-bold break-all self-start pl-10 truncate ">{{ element.title }}</h1>
-                <p class="break-all self-start pl-10">{{ element.subtitle }}</p>
+              <div class="pb-2 border-b-2 pl-4 min-1-w-[120px] max-w-[320px] flex flex-col items-center">
+                <p class="break-all self-start pl-8 pb-4 text-gray-400">{{ element.item_url }}</p>
+                <h1 class="font-bold break-all self-start pl-8 pb-4 truncate ">{{ element.title }}</h1>
+                <p class="break-all self-start pl-8 pb-2">{{ element.subtitle }}</p>
               </div>
               <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
                 v-for="button, index in element.buttons" :key="index">
