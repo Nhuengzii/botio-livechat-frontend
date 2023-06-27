@@ -1,5 +1,6 @@
 
 <template>
+  <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
   <template v-if="template.elements.length == 1">
     <div v-for="element in template.elements" class="">
       <div class="mx-2 border-2 rounded-xl flex flex-col">
@@ -45,7 +46,7 @@
       </template>
     </Carousel>
   </template>
-  <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
+  
 </template>
 
 <script setup lang="ts">
