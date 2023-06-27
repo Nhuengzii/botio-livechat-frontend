@@ -72,18 +72,18 @@
                       </div>
                     </template>
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
-                      <div class="flex justify-center items-center">
-                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'" />
+                      <div class="flex flex justify-center items-center">
+                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'" class="self-start"/>
                         <div class="flex flex-col">
-                          <button @click="openImageDialog">
-                            <div class="bg-gray-100 text-[#d9d9d9] w-40 h-40 flex items-center justify-center">
+                          <button @click="openImageDialog" class="my-4">
+                            <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
                               add Image
                             </div>
                           </button>
                           <h1>หัวข้อ</h1>
-                          <input type="text" placeholder="title" v-model="titleUserInput">
+                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8">
                           <h1>ข้อความ</h1>
-                          <input type="text" placeholder="content message" v-model="textUserInput">
+                          <input type="text" placeholder="content message" v-model="textUserInput" class="h-20">
                         </div>
                       </div>
                     </template>
@@ -98,7 +98,11 @@
 
               <!--END BODY-->
               <template #footer>
-
+                <template v-if="uiStore.is_editTemplateMessage">
+                  <div class="flex items-center justify-center">
+                    <button @click="" class="py-5 px-4 rounded-2xl bg-blue-100">สร้างเทมเพลต</button>
+                  </div>
+                </template>
               </template>
             </ModalTemplateChat>
           </Teleport>
