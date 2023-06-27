@@ -5,7 +5,8 @@
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EEEEEE] "
           :class="{ 'w-[calc(100%-176px)] rounded-tl-[10px]': tabs.length > 0, 'w-[100%] rounded-t-[10px]': tabs.length == 0 }" />
         <template v-if="tabs.length > 0">
-          <button @click="clearTab" class="bg-[#EEEEEE] rounded-tr-[10px] hover:bg-white  w-44 flex flex-row justify-center items-center">
+          <button @click="clearTab"
+            class="bg-[#EEEEEE] rounded-tr-[10px] hover:bg-white  w-44 flex flex-row justify-center items-center">
             <h1 class="pr-2 font-semibold text-[#27374D]">ปิดแท็บทั้งหมด</h1>
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" color="red" />
           </button>
@@ -16,7 +17,7 @@
       <header class=" mx-3 flex-[1] " :class="[querying ? 'pb-5 bg-[#EEEEEE] rounded-t-[10px]' : 'bg-[#EEEEEE] ']">
         <div v-show="!querying" class="flex items-center py-3 justify-start">
           <!-- show name conversation-->
-          <div  class="mx-6 object-cover h-12 w-12 rounded-full" >
+          <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
             <template v-if="currentChat?.conversation.participants[0].username">
               <div class="absolute top-8 left-8 bg-white rounded-full flex w-[20px] h-[20px] items-center justify-center">
@@ -34,7 +35,8 @@
           <div class="flex-1">
             <div class="px-4 flex items-center justify-center">
               <template v-if="currentChat?.conversation.participants[0].username">
-                <p   class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username }}</p>
+                <p class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username
+                }}</p>
                 <div class="flex ml-auto items-center">
 
                   <!-- click to search conversation  -->
@@ -57,7 +59,7 @@
         <div>
           <!-- search conversation  -->
           <div v-show="querying" class="flex items-center  ">
-            <div class="pl-8 pt-5" @click="() => { querying = false ;query='' ;searchMode = false}">
+            <div class="pl-8 pt-5" @click="() => { querying = false; query = ''; searchMode = false }">
               <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
@@ -65,18 +67,19 @@
                 class="ml-2 bg-white pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
               <div class="absolute bottom-1 right-6 ">
-                <button  v-show="query!=''"  class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
+                <button v-show="query != ''" class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
                   <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                 </button>
-              </div>      
+              </div>
             </div>
-            <button class="px-5 py-1 mt-5 mr-6 rounded-xl " :class="[query==''? 'bg-[#B2B2B2]':'bg-yellow-600	 hover:bg-yellow-500']" 
-            @click="() => { if(query!=''){searchMode = true} }">
+            <button class="px-5 py-1 mt-5 mr-6 rounded-xl "
+              :class="[query == '' ? 'bg-[#B2B2B2]' : 'bg-yellow-600	 hover:bg-yellow-500']"
+              @click="() => { if (query != '') { searchMode = true } }">
               <div class=" text-white">ค้นหา</div>
             </button>
           </div>
         </div>
-        
+
       </header>
 
 
@@ -99,10 +102,12 @@
               </template>
               <template #complete>
                 <div class="flex justify-center mt-2">
-                  <img  class="w-[100px] h-[100px] rounded-full" :src="currentChat.conversation.participants[0].profilePic.src"/>
+                  <img class="w-[100px] h-[100px] rounded-full"
+                    :src="currentChat.conversation.participants[0].profilePic.src" />
                 </div>
-                <div class="flex justify-center text-[16px] font-bold mt-2">{{currentChat.conversation.participants[0].username}}</div>
-                
+                <div class="flex justify-center text-[16px] font-bold mt-2">
+                  {{ currentChat.conversation.participants[0].username }}</div>
+
               </template>
             </InfiniteLoading>
           </template>
@@ -168,7 +173,7 @@ const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
-const { platform} = defineProps<{
+const { platform } = defineProps<{
   platform: string,
 }>();
 // infinite loading
@@ -190,19 +195,19 @@ async function loadmore($state) {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve(null);
-    }, 2000);
+    }, 1000);
   });
   isFetchingMore.value = false;
   const currentSize = currentChat.value?.messages.length;
   if (!currentSize) return;
   const olderMessage = await livechatStore.fetchMoreMessages();
   $state.loaded()
- 
-  
+
+
   const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
   if (!lastMid) {
     return
-    
+
   }
   const el = document.getElementById(lastMid);
   if (el) {
@@ -376,15 +381,15 @@ onMounted(() => {
 onUpdated(() => {
   scrollToLastMessage();
 })
-watch([query], ([newQuery ], [prevQuery]) => {
+watch([query], ([newQuery], [prevQuery]) => {
   if (newQuery.length > 0) {
-      console.log('by-message')
-      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
-      }
-      )
-      if(newQuery.length!=prevQuery.length){
-        searchMode.value = false
-      };  
+    console.log('by-message')
+    livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+    }
+    )
+    if (newQuery.length != prevQuery.length) {
+      searchMode.value = false
+    };
   } else {
     searchMode.value = false
   }
@@ -477,6 +482,5 @@ button {
   100% {
     transform: rotate(360deg)
   }
-}
-</style>
+}</style>
 
