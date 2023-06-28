@@ -79,7 +79,6 @@
             </button>
           </div>
         </div>
-
       </header>
 
 
@@ -114,20 +113,23 @@
           </template>
           <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
             <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
-              <template v-if="isNewDay(index)">
 
-                <div class="col-start-6 col-end-8 py-8 px-4">
+              <!-- if new messge conversation is not same last message show date-->
+              <template v-if="isNewDay(index)">
+                <div class="col-start-5 col-end-9 py-8 px-4">
                   <div class="flex justify-center py-0.5">
                     <span class="bg-gray-100 rounded-2xl py-1 px-4 ">{{ getFormattedDate(message.timestamp) }}</span>
                   </div>
                 </div>
               </template>
+
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
                 <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
                   <MessageBlock :message="message" :conversation="currentChat.conversation" />
                 </div>
               </template>
+
               <!-- Render the message content from admin -->
               <template v-else>
                 <div v-if="currentChat" class="col-start-8 col-end-13">
