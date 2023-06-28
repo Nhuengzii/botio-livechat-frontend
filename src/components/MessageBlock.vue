@@ -48,7 +48,7 @@ const { message, conversation } = defineProps<
   {
     message: Message
     conversation: Conversation
-    indexMessage: Number
+    isShowProfile: boolean
   }
 >()
 const messageType = ref('')
@@ -85,6 +85,8 @@ if (message.message.length > 0 && message.attachments.length == 0) {
 } else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
 }
+
+
 
 </script>
 
