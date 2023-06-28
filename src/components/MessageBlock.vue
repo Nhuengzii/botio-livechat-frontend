@@ -4,7 +4,7 @@
     'flex flex-row': message.source.userType !== 'admin',
     'py-0.5' : !isShowProfile,
     'pt-6' : isShowProfile
-  }" class="items-end">
+  }" class="items-start">
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user' && isShowProfile" />
     <NotshowImageProfile v-if="message.source.userType === 'user' && !isShowProfile"/>
     <AudioMessage :message="message" v-if="messageType === 'AudioMessage'" />
@@ -21,8 +21,8 @@
     <NormalText :message="message" :is-show-profile="isShowProfile" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
-    <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</div>
-    <div v-else class="mr-3 align-bottom text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</div>
+    <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2] self-end">{{ formatTimestamp(message.timestamp) }}</div>
+    <div v-else class="mr-3 align-bottom text-sm text-[#B2B2B2] self-end">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
 
