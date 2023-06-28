@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-end">
+  <div class="flex flex-row">
     <div v-if="message.source.userType === 'admin'" class="mr-3 align-bottom">{{ formatTimestamp(message.timestamp) }}
     </div>
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
@@ -17,7 +17,7 @@
     <NormalText :message="message" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
-    <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}
+    <div v-if="message.source.userType === 'user'" class="ml-3 self-end">{{ formatTimestamp(message.timestamp) }}
     </div>
   </div>
 </template>
