@@ -1,7 +1,9 @@
 <template>
   <div :class="{
     'flex flex-row-reverse' : message.source.userType === 'admin',
-    'flex flex-row': message.source.userType !== 'admin'
+    'flex flex-row': message.source.userType !== 'admin',
+    'py-0.5' : !isShowProfile,
+    'pt-6' : isShowProfile
   }" class="items-end">
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user' && isShowProfile" />
     <NotshowImageProfile v-if="message.source.userType === 'user' && !isShowProfile"/>
