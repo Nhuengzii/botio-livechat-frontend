@@ -1,4 +1,5 @@
 <template>
+  <!-- if template is has 1 item -->
   <template v-if="template.elements.length == 1">
     <button @click="onClickTemplate(template.elements[0].item_url)">
       <div class="mx-2 my-2 border-2 rounded-xl">
@@ -22,22 +23,31 @@
       </div>
     </button>
   </template>
+
+  <!-- if template is has more 1 items -->
   <template v-else>
+    <!-- Carousel  -->
     <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
         <button @click="onClickTemplate(element.item_url)">
           <div class="mx-2 my-2 border-2 rounded-xl">
+
+            <!-- Image Section -->
             <template v-if="element.image_url">   
               <div class="rounded-t-xl h-48 w-80 overflow-hidden">
                 <img :src="element.image_url" class="object-cover rounded-t-xl" alt="" @error="handleImageError(element.image_url)">
               </div>
             </template>
+
+            <!-- section Title & subTitle -->
             <div class="rounded-b-xl bg-white pb-2 pt-1">
               <div class="pb-2 border-b-2 pl-4 min-1-w-[120px] max-w-[320px] flex flex-col items-center">
                 <p class="break-all self-start pl-8 pb-4 text-gray-400">{{ element.item_url }}</p>
                 <h1 class="font-bold break-all self-start pl-8 pb-4 truncate ">{{ element.title }}</h1>
                 <p class="break-all self-start pl-8 pb-2">{{ element.subtitle }}</p>
               </div>
+
+              <!-- section button -->
               <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
                 v-for="button, index in element.buttons" :key="index">
                 <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
@@ -47,6 +57,7 @@
         </button>
 
       </Slide>
+      <!-- click to next & previous Item in Carousel  -->
       <template #addons>
         <Navigation />
       </template>
