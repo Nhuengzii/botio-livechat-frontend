@@ -138,15 +138,10 @@
             </template>
           </div>
         </template>
-
-
-
       </main>
-
       <template v-if="currentChat?.conversation.participants[0].username">
         <MessageSender :platform="currentChat.conversation.platform" />
       </template>
-
     </div>
   </div>
 </template>
@@ -167,9 +162,6 @@ const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
-const { platform } = defineProps<{
-  platform: string,
-}>();
 // infinite loading
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
@@ -376,7 +368,10 @@ onUpdated(() => {
 watch([query], ([newQuery], [prevQuery]) => {
   if (newQuery.length > 0) {
     console.log('by-message')
-    livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+    if (!currentChat.value) {
+      return;
+    }
+    livechatStore.searchConversationByMessage(currentChat?.value.conversation.platform, query.value).then((result) => {
     }
     )
     if (newQuery.length != prevQuery.length) {
