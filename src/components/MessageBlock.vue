@@ -3,6 +3,7 @@
     <div v-if="message.source.userType === 'admin'" class="mr-3">{{ formatTimestamp(message.timestamp) }}</div>
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
     <NormalText :message="message" v-if="messageType === 'NormalText'" />
+    <AudioMessage :message="message" v-else-if="messageType === 'AudioMessage'" />
     <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
