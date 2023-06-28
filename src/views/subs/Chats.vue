@@ -133,14 +133,14 @@
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
                 <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" :index-message="index"/>
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
 
               <!-- Render the message content from admin -->
               <template v-else>
                 <div v-if="currentChat" class="col-start-8 col-end-13">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" :index-message="index" />
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="false" />
                 </div>
               </template>
 
@@ -214,30 +214,6 @@ async function loadmore($state) {
   }
   console.log('load more done')
 }
-
-const shouldShowProfilePicture = (index: number): boolean => {
-  if (index === 0) return true;
-
-  const previousMessage = currentChat.value?.messages[index - 1];
-  const currentMessage = currentChat.value?.messages[index];
-
-  if (!previousMessage || !currentMessage) return true; // Add null check
-
-  const previousTime = new Date(previousMessage.timestamp).getTime();
-  const currentTime = new Date(currentMessage.timestamp).getTime();
-
-  const timeDiff = currentTime - previousTime;
-  const minuteInMs = 60 * 1000;
-
-  return (
-    (previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user') || // Different user
-    timeDiff > minuteInMs // Time interval greater than 1 minute
-  );
-};
-
-
-
-
 
 
 // tabs-chrome
