@@ -3,7 +3,8 @@
     'flex flex-row-reverse' : message.source.userType === 'admin',
     'flex flex-row': message.source.userType !== 'admin'
   }" class="items-end">
-    <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
+    <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user' && isShowProfile" />
+    <NotshowImageProfile v-if="message.source.userType === 'user' && !isShowProfile"/>
     <AudioMessage :message="message" v-if="messageType === 'AudioMessage'" />
     <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
     <FacebookTemplateButton :message="message" v-else-if="messageType === 'FacebookTemplateButton'" />
@@ -15,7 +16,7 @@
     <LineTemplateConfirm :message="message" v-else-if="messageType === 'LineTemplatConfirm'" />
     <LineTemplateCarousel :message="message" v-else-if="messageType === 'LineTemplateCarousel'" />
     <LineTemplateImageCarousel :message="message" v-else-if="messageType === 'LineTemplateImageCarousel'" />
-    <NormalText :message="message" v-else-if="messageType === 'NormalText'" />
+    <NormalText :message="message" :is-show-profile="isShowProfile" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
     <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</div>
@@ -43,6 +44,7 @@ import FacebookTemplateButton from './MessageContents/FacebookTemplateButton.vue
 import AudioMessage from './MessageContents/AudioMessage.vue';
 import VideoMessage from './MessageContents/VideoMessage.vue';
 import DeletedMessage from './MessageContents/DeletedMessage.vue';
+import NotshowImageProfile from './MessageContents/subs/NotshowImageProfile.vue';
 
 const { message, conversation } = defineProps<
   {
