@@ -1,7 +1,8 @@
 <template>
-  <div class="flex flex-row items-end">
-    <div v-if="message.source.userType === 'admin'" class="mr-3 align-bottom">{{ formatTimestamp(message.timestamp) }}
-    </div>
+  <div :class="{
+    'flex flex-row-reverse' : message.source.userType === 'admin',
+    'flex flex-row': message.source.userType !== 'admin'
+  }" class="items-end">
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
     <AudioMessage :message="message" v-if="messageType === 'AudioMessage'" />
     <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
@@ -17,8 +18,8 @@
     <NormalText :message="message" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
-    <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}
-    </div>
+    <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</div>
+    <div v-else class="mr-3 align-bottom text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
 
