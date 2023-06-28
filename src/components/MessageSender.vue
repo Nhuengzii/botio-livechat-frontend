@@ -5,20 +5,18 @@
       <div class="flex rounded-lg justify-around items-center text-gray-500 ">
         <div class="relative w-full">
           <div class=" w-full h-full rounded-lg self-center border-2  pt-1 mt-1">
-            <textarea v-show="images.length==0" type="text" 
-            placeholder="พิมพ์ข้อความ" 
-            v-model="newMessage" 
-            @keydown.enter="sendMessageOnEnter"
-            @input="handleTyping" :rows="calculateTextareaRows"
-            class="inline-flex px-2  mb-6 w-full h-auto 
-             text-black break-words outline-none resize-none max-h-64" />
+            <textarea v-show="images.length == 0" type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage"
+              @keydown.enter="sendMessageOnEnter" @input="handleTyping" :rows="calculateTextareaRows" class="inline-flex px-2  mb-6 w-full h-auto 
+            text-black break-words outline-none resize-none max-h-64" />
             <div class="mb-10 flex   ">
-              <button v-if="images.length>0" @click="openImageDialog" class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
-              <div  v-for="(image, index) in images" :key="index" class="image-item " >
+              <button v-if="images.length > 0" @click="openImageDialog"
+                class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
+              <div v-for="(image, index) in images" :key="index" class="image-item ">
                 <div class="static">
-                  <img :src="image.url" class="h-16 w-16  my-2"/>
+                  <img :src="image.url" class="h-28 w-24 my-2 rounded-xl" />
                   <div class="absolute top-0 left-14 ">d
-                    <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]" @click="removeImage(index)">x</button>
+                    <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]"
+                      @click="removeImage(index)">x</button>
                   </div>
                 </div>
               </div>
@@ -55,11 +53,12 @@
                 </template>
                 <template v-else-if="uiStore.is_editTemplateMessage">
                   <div>
+
                     <template v-if="modalStore.selectedTemplate === 'Button'">
                       <div class="flex justify-center items-center">
-                        <TemplateButton :text="textUserInput" :title="titleUserInput" :image_url="'image'"/>
+                        <TemplateButton :text="textUserInput" :title="titleUserInput" :image_url="'image'" />
                         <div class="flex flex-col">
-                          <button @click="openImageDialog" class="my-4">
+                          <button @click="" class="my-4">
                             <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
                               add Image
                             </div>
@@ -67,13 +66,16 @@
                           <h1>หัวข้อ</h1>
                           <input type="text" placeholder="title" v-model="titleUserInput" class="h-8 my-2" maxlength="50">
                           <h1 class="mt-2">ข้อความ</h1>
-                          <textarea type="text" placeholder="content message" v-model="textUserInput" class="h-52 w-64 px-2 py-1 mt-2" maxlength="100"/>
+                          <textarea type="text" placeholder="content message" v-model="textUserInput"
+                            class="h-52 w-64 px-2 py-1 mt-2" maxlength="100" />
                         </div>
                       </div>
                     </template>
+
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
                       <div class="flex flex justify-center items-center">
-                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'" class="self-start"/>
+                        <TemplateTextImage :text="textUserInput" :title="titleUserInput" :image_url="'image'"
+                          class="self-start" />
                         <div class="flex flex-col">
                           <button @click="openImageDialog" class="my-4">
                             <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
@@ -83,10 +85,12 @@
                           <h1>หัวข้อ</h1>
                           <input type="text" placeholder="title" v-model="titleUserInput" class="h-8 my-2" maxlength="50">
                           <h1 class="mt-2">ข้อความ</h1>
-                          <textarea type="text" placeholder="content message" v-model="textUserInput" class="h-52 w-64 px-2 py-1 mt-2" maxlength="200"/>
+                          <textarea type="text" placeholder="content message" v-model="textUserInput"
+                            class="h-52 w-64 px-2 py-1 mt-2" maxlength="200" />
                         </div>
                       </div>
                     </template>
+
                   </div>
                 </template>
 
@@ -100,7 +104,8 @@
               <template #footer>
                 <template v-if="uiStore.is_createTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="uiStore.activeEditTemplateMessage" class="py-3 px-4 rounded-2xl text-xl bg-blue-100">ถัดไป</button>
+                    <button @click="uiStore.activeEditTemplateMessage"
+                      class="py-3 px-4 rounded-2xl text-xl bg-blue-100">ถัดไป</button>
                   </div>
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
@@ -128,17 +133,18 @@
         </div>
       </button>
       <div class="w-[22px] h-[22px] duration-500">
-      <button @click="sendMessage" v-show="showSendMessageButton || images.length>0" class="flex ">
-        <div class="rounded-full bg-white">
-          <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl"   />
-        </div>
-      </button>
-      <button v-show="!showSendMessageButton && images.length==0"  type="button" id="show-modal" @click="uiStore.activeTemplateMessage" class="flex">
-        <div class="text-gray-500">
-          <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
-        </div>
-      </button>
-    </div>
+        <button @click="sendMessage" v-show="showSendMessageButton || images.length > 0" class="flex ">
+          <div class="rounded-full bg-white">
+            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" />
+          </div>
+        </button>
+        <button v-show="!showSendMessageButton && images.length == 0" type="button" id="show-modal"
+          @click="uiStore.activeTemplateMessage" class="flex">
+          <div class="text-gray-500">
+            <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
+          </div>
+        </button>
+      </div>
     </div>
     <!-- end space-->
 
@@ -178,8 +184,6 @@ const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 
-const image: Ref<string | null> = ref(null);
-const fileInputRef = ref<HTMLInputElement | null>(null);
 
 
 const calculateTextareaRows = computed(() => {
@@ -202,12 +206,12 @@ const openImageDialog = () => {
 
 
 const sendMessage = () => {
-  if(images.value.length>0){
+  if (images.value.length > 0) {
     let a = currentChat.value?.conversation!
-  for (let i = 0; i < images.value.length; i++) {
-    console.log(images.value[i].url)
+    for (let i = 0; i < images.value.length; i++) {
+      console.log(images.value[i].url)
     }
-    images.value=[]
+    images.value = []
   }
   else if (newMessage.value.trim() !== '') {
     // Handle sending the message here
@@ -224,12 +228,12 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
 
-    if (images.value.length>0) {
+    if (images.value.length > 0) {
       // Send the message and image
       //sendTextMessageWithImage();
       for (let i = 0; i < images.value.length; i++) {
-      console.log(images.value[i])
-      alert(images.value[i])
+        console.log(images.value[i])
+        alert(images.value[i])
       }
     } else {
       // Send only the message
@@ -258,50 +262,34 @@ const handleTyping = () => {
 };
 
 
-
-
-
-
-const sendTextMessageWithImage = () => {
-  if (newMessage.value.trim() !== '') {
-
-    console.log('Sending message:', newMessage.value);
-    console.log('Sending image:', images);
-
-    newMessage.value = ''; // Reset the input field after sending the message
-     uiStore.is_typing = false;
-  }
-};
-
-
 watch(newMessage, () => {
   handleTyping();
 });
 
 
 interface Image {
-    url: string;
-    file: File;
+  url: string;
+  file: File;
+}
+const images = ref<Image[]>([]);
+
+const handleFileChange = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const fileList = inputElement.files;
+
+  if (fileList) {
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i];
+      const imageUrl = URL.createObjectURL(file);
+      images.value.push({ url: imageUrl, file });
+    }
   }
-      const images = ref<Image[]>([]);
-  
-      const handleFileChange = (event: Event) => {
-        const inputElement = event.target as HTMLInputElement;
-        const fileList = inputElement.files;
-  
-        if (fileList) {
-          for (let i = 0; i < fileList.length; i++) {
-            const file = fileList[i];
-            const imageUrl = URL.createObjectURL(file);
-            images.value.push({ url: imageUrl, file });
-          }
-        }
-      };
-  
-      const removeImage = (index: number) => {
-        images.value.splice(index, 1);
-      };
-  
+};
+
+const removeImage = (index: number) => {
+  images.value.splice(index, 1);
+};
+
 </script>
 
 <style scoped>
@@ -342,6 +330,7 @@ textarea[type='text'] {
   font-size: 16px;
   font-family: monospace;
 }
+
 .image-uploader {
   display: flex;
   flex-direction: column;
@@ -351,11 +340,9 @@ textarea[type='text'] {
 .image-container {
   display: flex;
   flex-wrap: wrap;
- 
+
 }
 
 .image-item {
   margin: 10px;
-}
- 
-</style>
+}</style>
