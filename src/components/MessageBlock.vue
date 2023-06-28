@@ -6,6 +6,7 @@
     <AudioMessage :message="message" v-else-if="messageType === 'AudioMessage'" />
     <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
     <ImageMessage :message="message" v-else-if="messageType === 'ImageMessage'" />
+    <UnsupportMessage :message="message" v-else />
     <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
