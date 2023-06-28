@@ -2,10 +2,18 @@
   <div class="flex flex-row">
     <div v-if="message.source.userType === 'admin'" class="mr-3">{{ formatTimestamp(message.timestamp) }}</div>
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
-    <NormalText :message="message" v-if="messageType === 'NormalText'" />
-    <AudioMessage :message="message" v-else-if="messageType === 'AudioMessage'" />
+    <AudioMessage :message="message" v-if="messageType === 'AudioMessage'" />
     <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
+    <FacebookTemplateButton :message="message" v-else-if="messageType === 'FacebookTemplateButton'" />
+    <FacebookTemplateGeneric :message="message" v-else-if="messageType === 'FacebookTemplateGeneric'" />
     <ImageMessage :message="message" v-else-if="messageType === 'ImageMessage'" />
+    <InstagramTemplateGeneric :message="message" v-else-if="messageType === 'InstagramTemplateGeneric'" />
+    <InstagramTemplateProduct :message="message" v-else-if="messageType === 'InstagramTemplateProduct'" />
+    <LineTemplatButtons :message="message" v-else-if="messageType === 'LineTemplatButtons'" />
+    <LineTemplateConfirm :message="message" v-else-if="messageType === 'LineTemplatConfirm'" />
+    <LineTemplateCarousel :message="message" v-else-if="messageType === 'LineTemplateCarousel'" />
+    <LineTemplateImageCarousel :message="message" v-else-if="messageType === 'LineTemplateImageCarousel'" />
+    <NormalText :message="message" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
     <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}</div>
@@ -15,12 +23,13 @@
 <script setup lang="ts">
 import type { Message } from '@/types/message';
 import type { Conversation } from '@/types/conversation';
+import { ref } from 'vue';
+import { formatTimestamp } from '@/lib/Time';
 import NormalText from './MessageContents/NormalText.vue';
 import ImageMessage from './MessageContents/ImageMessage.vue';
 import UnsupportMessage from './MessageContents/UnsupportMessage.vue';
 import LineTemplatButtons from './MessageContents/LineTemplatButtons.vue';
 import LineTemplateImageCarousel from './MessageContents/LineTemplateImageCarousel.vue';
-import { computed, ref } from 'vue';
 import ImageProfileConversation from './MessageContents/subs/ImageProfileConversation.vue';
 import FacebookTemplateGeneric from './MessageContents/FacebookTemplateGeneric.vue';
 import LineTemplateConfirm from './MessageContents/LineTemplatConfirm.vue';
@@ -74,13 +83,6 @@ else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
 }
 else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
-}
-
-const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
 }
 
 </script>
