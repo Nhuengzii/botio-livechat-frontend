@@ -119,25 +119,19 @@
                 <div class="col-start-6 col-end-8 py-8 px-4">
                   <div class="flex justify-center py-0.5">
                     <span class="bg-gray-100 rounded-2xl py-1 px-4 ">{{ getFormattedDate(message.timestamp) }}</span>
-
                   </div>
                 </div>
               </template>
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
-                <div class="col-start-1 col-end-8 pl-3 round-lg max-w-full" :id="message.messageID"
-                  :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :query="''"
-                    :is-show-profile="shouldShowProfilePicture(index)" />
+                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" />
                 </div>
               </template>
-
               <!-- Render the message content from admin -->
               <template v-else>
-                <div class="col-start-6 col-end-13 pr-3 rounded-lg" :id="message.messageID"
-                  :class="{ 'pt-4': shouldShowProfilePicture(index), 'py-1': !shouldShowProfilePicture(index) }">
-                  <MessageBlock :message="message" :conversation="currentChat!.conversation" :query="''"
-                    :is-show-profile="shouldShowProfilePicture(index)" />
+                <div v-if="currentChat" class="col-start-8 col-end-13">
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" />
                 </div>
               </template>
 
@@ -167,7 +161,6 @@ import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import MessageSearchResult from "@/components/MessageSearchResult.vue";
 import { getFormattedDate } from "@/lib/Time"
-import { useRoute } from 'vue-router';
 const livechatStore = useLivechatStore()
 const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
 const isLoading = ref(false)
@@ -181,10 +174,8 @@ const { platform } = defineProps<{
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 const isFetchingMore = ref(false);
-const lastSize = ref(0);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
 const searchMode = ref(false);
-const load = ref(true);
 
 
 

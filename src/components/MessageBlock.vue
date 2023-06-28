@@ -36,8 +36,6 @@ const { message, conversation } = defineProps<
   {
     message: Message
     conversation: Conversation
-    isShowProfile: boolean
-    query: string
   }
 >()
 const messageType = ref('')
