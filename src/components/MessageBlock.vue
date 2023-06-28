@@ -4,6 +4,7 @@
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user'" />
     <NormalText :message="message" v-if="messageType === 'NormalText'" />
     <AudioMessage :message="message" v-else-if="messageType === 'AudioMessage'" />
+    <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
     <div v-if="message.source.userType === 'user'" class="ml-3">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
