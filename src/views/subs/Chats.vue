@@ -2,8 +2,11 @@
   <div class="flex-[2]  bg-while min-w-48">
     <div class="flex flex-col w-full h-full">
       <div v-show="!querying" class="flex mx-3">
+        <!-- tab on top header chats content -->
         <Vue3TabsChrome :ref="setTabRef" :tabs="tabs" v-model="tabKey" :on-close="handleClose" class="bg-[#EEEEEE] "
           :class="{ 'w-[calc(100%-176px)] rounded-tl-[10px]': tabs.length > 0, 'w-[100%] rounded-t-[10px]': tabs.length == 0 }" />
+
+        <!-- button click to closeTab conversation all -->
         <template v-if="tabs.length > 0">
           <button @click="clearTab"
             class="bg-[#EEEEEE] rounded-tr-[10px] hover:bg-white  w-44 flex flex-row justify-center items-center">
@@ -19,15 +22,25 @@
 
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
+
+            <!-- ProfileConversation -->
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
+
+            <!-- show icon platform in ProfileConversation -->
             <template v-if="currentChat?.conversation.participants[0].username">
               <div class="absolute top-8 left-8 bg-white rounded-full flex w-[20px] h-[20px] items-center justify-center">
+                <!--show icon facebook -->
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
                   style="color: #2F58CD;" size="sm" />
+
+                <!-- show icon instagram-->
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
                   style="color: #DF2E38;" size="sm" />
+
+                <!-- show icon Line -->
                 <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
                   style="color: #38E54D;" size="sm" />
+
               </div>
             </template>
           </div>
@@ -44,9 +57,13 @@
                   <button @click="querying = true">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" class="mx-4 button" />
                   </button>
+
+                  <!-- just icon circle info-->
                   <button>
                     <font-awesome-icon :icon="['fas', 'circle-info']" size="xl" class="mx-4 " style="color: #000000;" />
                   </button>
+
+                  <!-- just icon ellipsis-vertical -->
                   <button>
                     <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="mx-4 " size="xl"
                       style="color: #000000;" />
@@ -148,6 +165,8 @@
           </div>
         </template>
       </main>
+
+      <!-- send Message&Image create TemplateMessage -->
       <template v-if="currentChat?.conversation.participants[0].username">
         <MessageSender :platform="currentChat.conversation.platform" />
       </template>
