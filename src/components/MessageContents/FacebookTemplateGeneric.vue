@@ -1,5 +1,4 @@
 <template>
-  <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
   <template v-if="template.elements.length == 1">
     <button @click="onClickTemplate(template.elements[0].item_url)">
       <div class="mx-2 my-2 border-2 rounded-xl">
