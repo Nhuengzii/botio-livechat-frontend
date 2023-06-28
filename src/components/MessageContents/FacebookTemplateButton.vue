@@ -1,8 +1,11 @@
 <template>
   <div class="w-96 mt-1 mb-2">
+    <!-- message section -->
     <div class="bg-blue-400 rounded-t-2xl">
       <p class="px-2 py-3 text-white"> {{ message.message }}</p>
     </div>
+
+    <!-- button section -->
     <div class="bg-white">
       <div v-for="button in template.buttons"
         class="flex flex-col py-3 px-1 bg-white text-blue-500 hover:bg-gray-100 items-center border-4">
