@@ -388,6 +388,7 @@ onMounted(() => {
 onUpdated(() => {
   scrollToLastMessage();
 })
+
 watch([query], ([newQuery], [prevQuery]) => {
   if (newQuery.length > 0) {
     console.log('by-message')
