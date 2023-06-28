@@ -16,6 +16,7 @@
       <!-- header chats-->
       <header class=" mx-3 flex-[1] " :class="[querying ? 'pb-5 bg-[#EEEEEE] rounded-t-[10px]' : 'bg-[#EEEEEE] ']">
         <div v-show="!querying" class="flex items-center py-3 justify-start">
+
           <!-- show name conversation-->
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
             <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
@@ -54,24 +55,29 @@
               </template>
             </div>
           </div>
-
         </div>
+        
+        <!-- search conversation  -->
         <div>
-          <!-- search conversation  -->
           <div v-show="querying" class="flex items-center  ">
             <div class="pl-8 pt-5" @click="() => { querying = false; query = ''; searchMode = false }">
               <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
             </div>
             <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
+
+              <!-- input message want to search -->
               <input type="text"
                 class="ml-2 bg-white pr-8 rounded-xl border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ค้นหาการสนทนา" v-model="query">
+
               <div class="absolute bottom-1 right-6 ">
                 <button v-show="query != ''" class="ml-2" @click="query = ''" :class="[querying ? '' : 'z-50']">
                   <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                 </button>
               </div>
             </div>
+
+            <!-- click to query message in conversation  -->
             <button class="px-5 py-1 mt-5 mr-6 rounded-xl "
               :class="[query == '' ? 'bg-[#B2B2B2]' : 'bg-blue-600	 hover:bg-blue-700']"
               @click="() => { if (query != '') { searchMode = true } }">
@@ -81,7 +87,7 @@
         </div>
       </header>
 
-
+      <!-- main chat content-->
       <main class="flex-[12] overflow-x-hidden no-scrollbar h-full bg-white mb-4  mx-3" id="containMessage"
         ref="conversationRef">
 
@@ -92,14 +98,15 @@
           <template v-if="currentChat !== null">
             <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
               :identifier="currentChat?.conversation.conversationID">
+              <!-- show animation fetch old message-->
               <template #spinner>
                 <div class="flex justify-center pt-5 pb-3" v-if="isLoading">
                   <span class="loader"></span>
                 </div>
                 <span v-else></span>
-
-
               </template>
+
+              <!-- if not no more data message show profile -->
               <template #complete>
                 <div class="flex justify-center mt-2">
                   <img class="w-[100px] h-[100px] rounded-full"
@@ -126,14 +133,14 @@
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
                 <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" />
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" :index-message="index"/>
                 </div>
               </template>
 
               <!-- Render the message content from admin -->
               <template v-else>
                 <div v-if="currentChat" class="col-start-8 col-end-13">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" />
+                  <MessageBlock :message="message" :conversation="currentChat.conversation" :index-message="index" />
                 </div>
               </template>
 
@@ -208,6 +215,25 @@ async function loadmore($state) {
   console.log('load more done')
 }
 
+const shouldShowProfilePicture = (index: number): boolean => {
+  if (index === 0) return true;
+
+  const previousMessage = currentChat.value?.messages[index - 1];
+  const currentMessage = currentChat.value?.messages[index];
+
+  if (!previousMessage || !currentMessage) return true; // Add null check
+
+  const previousTime = new Date(previousMessage.timestamp).getTime();
+  const currentTime = new Date(currentMessage.timestamp).getTime();
+
+  const timeDiff = currentTime - previousTime;
+  const minuteInMs = 60 * 1000;
+
+  return (
+    (previousMessage.source.userType !== 'user' && currentMessage.source.userType === 'user') || // Different user
+    timeDiff > minuteInMs // Time interval greater than 1 minute
+  );
+};
 
 
 
