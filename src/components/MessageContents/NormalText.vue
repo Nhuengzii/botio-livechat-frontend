@@ -1,16 +1,18 @@
 <template>
   <div>
-    <p class="bg-sky-50">{{ message.message }}</p>
+    <div v-if="message.source.userType === 'user'"
+      class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-sm font-medium bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
+      <p>{{ message.message }}</p>
+    </div>
+    <div v-if="message.source.userType === 'admin'"
+      class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-sm font-medium bg-[#30A2FF] break-all text-white overflow-hidden">
+      <p>{{ message.message }}</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Message } from "@/types/message";
-import type { Conversation } from "@/types/conversation";
-import NotshowImageProfile from "@/components/MessageContents/subs/NotshowImageProfile.vue";
-import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue"
-import { formatTimestamp } from "@/lib/Time"
-
 defineProps<{
   message: Message
 }>()
