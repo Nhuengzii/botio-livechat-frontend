@@ -1,6 +1,6 @@
 <template>
   <div class="w-96 mt-1 mb-2">
-    <!-- message section -->
+    <!-- message section-->
     <div class="bg-blue-400 rounded-t-2xl">
       <p class="px-2 py-3 text-white"> {{ message.message }}</p>
     </div>
