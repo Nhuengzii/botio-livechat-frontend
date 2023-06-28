@@ -1,6 +1,9 @@
 <template>
+  <!--User send Message > 1 Image in one time  -->
   <template v-if="amountImage > 1">
     <div class="flex mb-3">
+
+      <!-- layout Image like Message  -->
       <div class="grid gap-1 w-full"
         :class="{ 'grid-cols-3': amountImage >= 3 && amountImage !== 4, 'grid-cols-2': amountImage === 2 || amountImage === 4 }">
         <template v-for="(item, index) in message.attachments">
@@ -40,6 +43,7 @@
       </div>
     </div>
   </template>
+  <!-- User send 1 image in one time-->
   <template v-else>
     <div>
       <img :src="message.attachments[0].payload.src" alt=""
