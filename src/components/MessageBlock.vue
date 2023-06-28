@@ -52,8 +52,7 @@ if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'NormalText'
 } else if (message.isDeleted) {
   messageType.value = 'DeletedMessage'
-}
-else if (message.attachments.length == 0) {
+} else if (message.attachments.length == 0) {
   messageType.value = 'Unsupport'
 } else if (message.attachments[0].attachmentType == 'image') {
   messageType.value = 'ImageMessage'
@@ -63,8 +62,7 @@ else if (message.attachments.length == 0) {
   messageType.value = 'AudioMessage'
 } else if (message.attachments[0].attachmentType == 'video') {
   messageType.value = 'VideoMessage'
-}
-else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
+} else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'FacebookTemplateGeneric'
 } else if (message.attachments[0].attachmentType == 'line-template-buttons') {
   messageType.value = 'LineTemplatButtons'
@@ -80,8 +78,7 @@ else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
   messageType.value = 'InstagramTemplateProduct'
 } else if (message.attachments[0].attachmentType == 'facebook-template-button') {
   messageType.value = 'FacebookTemplateButton'
-}
-else if (message.attachments[0].attachmentType) {
+} else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'
 }
 
