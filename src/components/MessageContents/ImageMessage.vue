@@ -1,15 +1,6 @@
 <template>
   <template v-if="amountImage > 1">
     <div class="flex mb-3">
-
-      <template v-if="message.source.userType === 'admin'">
-        <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-      </template>
-
-      <template v-if="message.source.userType === 'user'">
-        <ImageProfileConversation :conversation="conversation" />
-      </template>
-
       <div class="grid gap-1 w-full"
         :class="{ 'grid-cols-3': amountImage >= 3 && amountImage !== 4, 'grid-cols-2': amountImage === 2 || amountImage === 4 }">
         <template v-for="(item, index) in message.attachments">
@@ -47,47 +38,21 @@
           </div>
         </template>
       </div>
-      <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
     </div>
-
-
-
-
   </template>
-
   <template v-else>
-    <div class="flex flex-row">
-      <template v-if="message.source.userType === 'user'">
-        <ImageProfileConversation :conversation="conversation" />
-      </template>
-
-      <div class="flex flex-row">
-        <template v-if="message.source.userType === 'admin'">
-          <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-        </template>
-        <div>
-          <img :src="message.attachments[0].payload.src" alt=""
-            class="self-center max-h-96 shadow rounded-2xl object-cover" />
-        </div>
-
-        <template v-if="message.source.userType === 'user'">
-          <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-        </template>
-      </div>
+    <div>
+      <img :src="message.attachments[0].payload.src" alt=""
+        class="self-center max-h-96 shadow rounded-2xl object-cover" />
     </div>
   </template>
 </template>
 
 <script setup lang="ts">
 import type { Message } from "@/types/message";
-import type { Conversation } from "@/types/conversation";
 import { ref } from "vue";
-import ImageProfileConversation from "@/components/MessageContents/subs/ImageProfileConversation.vue"
-import { formatTimestamp } from "@/lib/Time"
-const { message, conversation } = defineProps<{
+const { message } = defineProps<{
   message: Message
-  conversation: Conversation
-  isShowProfile: boolean
 }>()
 const imageUrl = ref(message.attachments[0].payload.src)
 const amountImage = ref(message.attachments.length)
