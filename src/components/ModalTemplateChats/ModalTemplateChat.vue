@@ -4,7 +4,7 @@
             <div class="flex flex-col modal-container">
                 <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
                     <template v-if="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
-                        <button class="bg-gray-200 px-5 py-3 rounded-full" @click="uiStore.activeCreateTemplateMessage">back</button>
+                        <button class="bg-gray-200 px-5 py-3 rounded-full" @click="handleButtonClickBack">back</button>
                     </template>
                     <template v-else>
                         <div class="w-5 h-5"></div>
@@ -35,7 +35,14 @@
 <script setup lang="ts">
 
 import { useUIStore } from '@/stores/UI';
+import { useModalStore } from '@/stores/modal';
 const uiStore = useUIStore()
+const modalStore = useModalStore()
+
+const handleButtonClickBack = () => {
+    uiStore.activeCreateTemplateMessage();
+    modalStore.reset();
+}
 
 </script>
 
