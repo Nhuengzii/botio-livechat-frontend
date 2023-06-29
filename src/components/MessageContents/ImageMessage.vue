@@ -49,6 +49,7 @@
       <img :src="message.attachments[0].payload.src" alt=""
         class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover " />
     </div>
+    
   </template>
 </template>
 
