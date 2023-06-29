@@ -68,6 +68,7 @@
                     <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="mx-4 " size="xl"
                       style="color: #000000;" />
                   </button>
+
                 </div>
               </template>
             </div>
@@ -100,6 +101,7 @@
               @click="() => { if (query != '') { searchMode = true } }">
               <div class=" text-white">ค้นหา</div>
             </button>
+
           </div>
         </div>
       </header>
@@ -115,6 +117,7 @@
           <template v-if="currentChat !== null">
             <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
               :identifier="currentChat?.conversation.conversationID">
+
               <!-- show animation fetch old message-->
               <template #spinner>
                 <div class="flex justify-center pt-5 pb-3" v-if="isLoading">
@@ -130,14 +133,15 @@
                     :src="currentChat.conversation.participants[0].profilePic.src" />
                 </div>
                 <div class="flex justify-center text-[16px] font-bold mt-2">
-                  {{ currentChat.conversation.participants[0].username }}</div>
-
+                  {{ currentChat.conversation.participants[0].username }}
+                </div>
               </template>
+
             </InfiniteLoading>
           </template>
+
           <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
             <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
-
               <!-- if new messge conversation is not same last message show date-->
               <template v-if="isNewDay(index)">
                 <div class="col-start-5 col-end-9 py-8 px-4">
@@ -149,14 +153,14 @@
 
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
-                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
+                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full bg-red-100">
                   <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
 
               <!-- Render the message content from admin -->
               <template v-else>
-                <div v-if="currentChat" class="col-start-8 col-end-13">
+                <div v-if="currentChat" class="col-start-6 col-end-13 bg-blue-100">
                   <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="false" />
                 </div>
               </template>
@@ -170,6 +174,7 @@
       <template v-if="currentChat?.conversation.participants[0].username">
         <MessageSender :platform="currentChat.conversation.platform" />
       </template>
+
     </div>
   </div>
 </template>
@@ -381,7 +386,6 @@ const scrollToLastMessage = () => {
 
 onMounted(() => {
   scrollToLastMessage();
-
 })
 
 
