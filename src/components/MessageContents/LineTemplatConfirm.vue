@@ -1,6 +1,7 @@
 
 <template>
-    <div class="rounded-lg flex flex-col w-96 items-center self-center mb-4 mt-2 border-2">
+  <div class="pt-6">
+    <div class="rounded-lg flex flex-col w-96 items-center self-center mt-2 border-2">
       <div class="flex justify-center border-gray-300 w-full border-b py-4 bg-gray-100 rounded-tl-lg rounded-tr-lg text-base break-all">
         {{ payload.text }} 
       </div>
@@ -10,6 +11,8 @@
         </div>
       </div>
     </div>
+  </div>
+    
   
 </template>
 
