@@ -153,14 +153,14 @@
 
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
-                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full bg-red-100">
+                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
                   <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
 
               <!-- Render the message content from admin -->
               <template v-else>
-                <div v-if="currentChat" class="col-start-6 col-end-13 bg-blue-100">
+                <div v-if="currentChat" class="col-start-6 col-end-13">
                   <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="false" />
                 </div>
               </template>
