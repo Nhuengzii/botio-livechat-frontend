@@ -67,6 +67,9 @@ export const useLivechatStore = defineStore("livechat", () => {
       }
     }
     setTimeout(() => {
+      if (platform == "all") {
+        return;
+      }
       const uiStore = useUIStore()
       botioLivechat.value.getPageInformation(platform, pageIDMap.get(platform) as string).then((pageInformation) => {
         uiStore.availablesPlatforms.set(platform, pageInformation);
