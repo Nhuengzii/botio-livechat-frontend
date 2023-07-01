@@ -1,7 +1,7 @@
 <template>
   <!-- if template is has 1 item -->
   <template v-if="template.elements.length == 1">
-    <button @click="onClickTemplate(template.elements[0].default_action.url)">
+    <button @click="uiStore.onClickTemplate(template.elements[0].default_action.url)">
       <div class="mx-2 my-2 border-2 rounded-xl">
         <template v-if="template.elements[0].image_url">
           <div class="rounded-t-xl h-48 w-80 overflow-hidden">
@@ -29,7 +29,7 @@
     <!-- Carousel  -->
     <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
-        <button @click="onClickTemplate(element.default_action.url)">
+        <button @click="uiStore.onClickTemplate(element.default_action.url)">
           <div class="mx-2 my-2 border-2 rounded-xl">
 
             <!-- Image Section -->
@@ -69,7 +69,8 @@
 import type { Message } from '@/types/message'
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Navigation, Slide, } from 'vue3-carousel'
-import { formatTimestamp } from "@/lib/Time"
+import { useUIStore} from '@/stores/UI'
+const uiStore = useUIStore()
 const { message } = defineProps<{ message: Message }>()
 type Template = {
   elements: {
@@ -96,9 +97,7 @@ const handleImageError = (imageUrl:String) => {
   imageUrl= 'https://th.bing.com/th/id/OIP.2Sw7OWq_1hrOdTrBraUFIgAAAA?pid=ImgDet&rs=1'
 }
 
-const onClickTemplate = (link_url:string) => {
-  window.open(link_url)
-}
+
 
 </script>
 
