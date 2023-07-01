@@ -5,6 +5,7 @@ import type { Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { PageInformation } from "@/types/pageInformation";
+import type { ShopInformation } from "@/types/ShopInformation";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -17,6 +18,25 @@ class BotioLivechat implements IBotioLivechat {
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
     this.shopID = shopID;
     this.connect(onmessageCallbacks);
+  }
+  async getShopInformation(shopID: string) {
+    const mock: ShopInformation = {
+      available_pages: [
+        {
+          platform_name: "facebook",
+          page_id: "108362942229009"
+        },
+        {
+          platform_name: "instagram",
+          page_id: "17841460321068782"
+        },
+        {
+          platform_name: "line",
+          page_id: "U6972d1d58590afb114378eeab0b08d52"
+        }
+      ]
+    }
+    return mock;
   }
   connect(onmessageCallback: (event: MessageEvent<any>) => void) {
     this.websocketClient = new WebSocket(`${this.botioWebsocketApiUrl}?shopID=${this.shopID}`)

@@ -1,6 +1,7 @@
 import type { Conversation } from "./conversation"
 import type { Message } from "./message"
 import type { PageInformation } from "./pageInformation"
+import type { ShopInformation } from "./ShopInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
@@ -19,6 +20,7 @@ interface IBotioLivechat {
   searchMessageByText(conversation: Conversation, text: string): Promise<Message[]>
   connect: (onmessageCallback: (event: MessageEvent<any>) => void) => void
   markAsRead: (platform: string, pageID: string, conversationID: string) => Promise<void>
+  getShopInformation: (shopID: string) => Promise<ShopInformation>
 }
 
 export default IBotioLivechat;
