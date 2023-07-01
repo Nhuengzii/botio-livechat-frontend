@@ -5,30 +5,6 @@
                 <h3 class="text-white text-lg font-semibold">เทมเพลตข้อความ</h3>
             </div>
         </header>
-
-        <!-- search & create chat template-->
-        <div class="py-10 flex items-center">
-
-            <!-- search chat template -->
-            <div class="flex-[8] basis-auto bg-ea py-4 mr-3 rounded-2xl">
-                <p class="px-8 color-d9">ค้นหาด้วย ชื่อ หรือรายละเอียดข้อความ</p>
-            </div>
-
-            <!-- create chat template -->
-            <button @click="uiStore.activeCreateTemplateMessage"
-                class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
-                    <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl"/>
-                    <div class="rounded-2xl px-2 py-1">
-                        <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความ</p>
-                    </div>
-            </button>
-            <!-- end create chat template -->
-
-            <!-- space -->
-            <div class="flex-[5]"></div>
-            <!-- space -->
-        </div>
-        <!-- end search & create chat template-->
     </div>
 </template>
 
