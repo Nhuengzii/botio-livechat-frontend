@@ -75,18 +75,18 @@ class BotioLivechat implements IBotioLivechat {
     * Return a Conversation of a given platform, pageID and conversationID
     * @param platform - Platform of the given page
     * @param pageID - ID of the page
-    * @param conversationId - ID of the conversation
+    * @param conversationID - ID of the conversation
     * @returns Conversation of the page with given platform, pageID and conversationID
     */
-  async getConversation(platform: string, pageID: string, conversationId: string) {
+  async getConversation(platform: string, pageID: string, conversationID: string) {
     let conversation: Conversation | null = null;
-    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}`;
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}`;
     for (let i = 0; i < 3; i++) {
       try {
         const response = await axios.get<{ conversation: Conversation }>(url);
         conversation = response.data.conversation;
       } catch (error) {
-        console.log(`failed get conversation ${conversationId} from ${platform} ${pageID} ${i} times`)
+        console.log(`failed get conversation ${conversationID} from ${platform} ${pageID} ${i} times`)
         if (i === 2) {
           throw new Error("Error fetching conversation");
         }
