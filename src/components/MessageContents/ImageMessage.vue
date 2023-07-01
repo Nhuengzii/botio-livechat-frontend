@@ -10,9 +10,9 @@
           <div
             :class="{ 
               'h-80': amountImage === 2 || amountImage === 4, 
-              'h-64': amountImage >= 3 && amountImage < 7, 
-              'h-56': amountImage >= 7 && amountImage < 13, 
-              'h-44' : amountImage >= 13 
+              'h-60': amountImage >= 3 && amountImage < 7, 
+              'h-52': amountImage >= 7 && amountImage < 13, 
+              'h-40' : amountImage >= 13 
               }">
 
             <template v-if="index == 0 && amountImage <= 3">
