@@ -13,6 +13,7 @@ onMounted(async () => {
       unreadConversations: 0,
       allConversations: 0,
     })
+    livechatStore.pageIDMap.set(page.platform_name, page.page_id)
   }
   console.log(JSON.stringify(availablePages))
 })
