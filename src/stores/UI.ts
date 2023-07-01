@@ -90,5 +90,9 @@ export const useUIStore = defineStore('ui', {
         closeEditModal() {
             this.showEditModal = false;
         },
+        onClickTemplate(link_url:string)
+        {
+            window.open(link_url)
+        }
     }
 })
