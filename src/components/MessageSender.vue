@@ -67,10 +67,10 @@
                               class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
                           </div>
 
-                          <div v-if="modalStore.imagePreview"
+                          <!-- <div v-if="modalStore.imagePreview"
                             class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
                             <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
-                          </div>
+                          </div> -->
 
                           <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
