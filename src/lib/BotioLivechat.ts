@@ -231,6 +231,15 @@ class BotioLivechat implements IBotioLivechat {
     return res.data.conversations
   }
 
+  async uploadImage(imageFile: File) {
+    const url: string = `${this.botioRestApiUrl}/upload_url`
+    const res = await axios.get<{ presignedURL: string }>(url)
+    const presignedURL = res.data.presignedURL
+    const uploadRes = await axios.put(presignedURL, imageFile, { headers: { 'Content-Type': 'application/octet-stream' } })
+    const imageUrl = presignedURL.split("?")[0]
+    return imageUrl
+  }
+
   async searchMessageByText(conversation: Conversation, text: string) {
     const { conversationID, pageID, platform } = conversation
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`
