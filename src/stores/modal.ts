@@ -80,9 +80,12 @@ export const useModalStore = defineStore("modal", {
                 this.templateList.push(template)
                 this.reset();
             }
+            console.log(this.templateList)
+            console.log(this.titleUserInput)
+            console.log(this.imagePreview)
         },
         showButtonCreateTemplate() {
-            if (this.textUserInput && this.titleUserInput && this.imagePreview) {
+            if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
                 if (this.selectedTemplate === "TextImage") {
                     return true;
                 } else if (this.selectedTemplate === "Button") {
@@ -93,7 +96,6 @@ export const useModalStore = defineStore("modal", {
             }
         },
         reset() {
-            this.imagePreview = "";
             this.imagePreview = "";
             this.textUserInput = "";
             this.titleUserInput = "";
