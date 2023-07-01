@@ -173,11 +173,21 @@ export const useLivechatStore = defineStore("livechat", () => {
         attachments: []
       }
       currentChat.value.messages.push(tempMessage)
-      const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
-      const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
-      if (idx != -1) {
-        console.log('replace temp message')
-        currentChat.value.messages[idx] = newMessage;
+      try {
+
+        const newMessage = await botioLivechat.value.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, message)
+        const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+        if (idx != -1) {
+          console.log('replace temp message')
+          currentChat.value.messages[idx] = newMessage;
+        }
+      } catch (err) {
+        console.log(err)
+        const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+        if (idx != -1) {
+          // remove temp message
+          currentChat.value.messages.splice(idx, 1);
+        }
       }
     }
     else {
@@ -209,11 +219,20 @@ export const useLivechatStore = defineStore("livechat", () => {
         }]
       }
       currentChat.value.messages.push(tempMessage)
-      const newMessage = await botioLivechat.value.sendImageMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, imageFile)
-      const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
-      if (idx != -1) {
-        console.log('replace temp message')
-        currentChat.value.messages[idx] = newMessage;
+      try {
+        const newMessage = await botioLivechat.value.sendImageMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, imageFile)
+        const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+        if (idx != -1) {
+          console.log('replace temp message')
+          currentChat.value.messages[idx] = newMessage;
+        }
+      } catch (error) {
+        console.log(error)
+        const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+        if (idx != -1) {
+          // delete temp message from array
+          currentChat.value.messages.splice(idx, 1);
+        }
       }
     }
     else {
