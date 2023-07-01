@@ -1,7 +1,6 @@
 <template>
   <Carousel :items-to-show="payload.columns.length" :wrap-around="false" class="pt-6">
     <Slide v-for="(column, index) in payload.columns" :key="index">
-      <button @click="uiStore.onClickTemplate(column.defaultActions.uri)">
         <div class="mx-2 bg-white rounded-t-lg border-2">
           <div class="rounded-t-lg  h-64 overflow-hidden">
             <img :src="column.thumbnailImageUrl" class="object-contain" alt="">
@@ -17,7 +16,6 @@
             </div>
           </div>
         </div>
-      </button>
     </Slide>
 
 
