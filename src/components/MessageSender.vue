@@ -28,7 +28,7 @@
 
           <!-- show Modal Chat Message Template -->
           <Teleport to="body">
-            <ModalTemplateChat :show="uiStore.is_activeTemplateMessage">
+            <ModalTemplateChat v-if="uiStore.is_activeTemplateMessage">
 
               <!--HEADER-->
               <template #header>
@@ -37,7 +37,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_editTemplateMessage"> <!-- Header Modal edit chat template-->
-                  <p>{{ modalStore.selectedTemplate }}</p>
+                  <p class="flex justify-center">{{ modalStore.selectedTemplate }}</p>
                 </template>
 
                 <template v-else> <!-- Header Modal chat template-->
@@ -52,50 +52,64 @@
                   <BodyCreateMessage />
                 </template>
                 <template v-else-if="uiStore.is_editTemplateMessage">
-                  <div>
+                  <div class="flex items-center h-full">
 
                     <template v-if="modalStore.selectedTemplate === 'Button'">
-                      <div class="flex justify-center items-center">
-                        <TemplateButton/>
-                        <div class="flex flex-col">
-                          <div @click="selecImage" class="my-4">
-                            <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
-                              <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
-                              <p v-else>add image</p>
-                            </div>
+                      <div class="flex-1 flex h-full justify-center items-center bg-blue-100">
+                        <TemplateButton class="self-start" />
+                      </div>
+
+                      <div class="bg-blue-200 h-full flex-[2]">
+                        <div class="flex flex-col pl-2">
+
+                          <div class="flex">
+                            <button @click="selecImage"
+                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-1 shadow-lg">เลือกรูปภาพ</button>
                           </div>
-                        
-                          <h1>หัวข้อ</h1>
-                          <input type="text" placeholder="title" v-model="modalStore.titleUserInput" class="h-8 my-2" maxlength="50">
-                          <h1 class="mt-2">ข้อความ</h1>
+
+                          <div v-if="modalStore.imagePreview"
+                            class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
+                            <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
+                          </div>
+
+                          <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
+                            class="h-8 my-2 w-96 shadow-lg" maxlength="50">
+                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 120 ตัวอักษร)</p>
                           <textarea type="text" placeholder="content message" v-model="modalStore.textUserInput"
-                            class="h-52 w-64 px-2 py-1 mt-2" maxlength="100" />
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg" maxlength="120" />
                         </div>
                       </div>
+
+
                     </template>
 
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
-                      <div class="flex flex justify-center items-center">
+                      <div class="flex-1 flex h-full justify-center items-center bg-blue-100">
                         <TemplateTextImage class="self-start" />
-                        <div class="flex flex-col">
-                          <div @click="selecImage" class="my-4">
-                            <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
-                              <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
-                              <p v-else>add image</p>
-                            </div>
+                      </div>
+
+                      <div class="bg-blue-200 h-full flex-[2]">
+                        <div class="flex flex-col pl-2">
+                          <div class="flex items-center">
+                            <button @click="selecImage"
+                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-1 shadow-lg">เลือกรูปภาพ</button>
+
                           </div>
-                          <h1>หัวข้อ</h1>
-                          <input type="text" placeholder="title" v-model="titleUserInput" class="h-8 my-2" maxlength="50">
-                          <h1 class="mt-2">ข้อความ</h1>
-                          <textarea type="text" placeholder="content message" v-model="textUserInput"
-                            class="h-52 w-64 px-2 py-1 mt-2" maxlength="200" />
+
+                          <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
+                            class="h-8 my-2 w-96 shadow-lg" maxlength="50">
+                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
+                          <textarea type="text" placeholder="content message" v-model="modalStore.textUserInput"
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg" maxlength="170" />
                         </div>
                       </div>
                     </template>
 
                   </div>
                 </template>
-                
+
                 <template v-else-if="uiStore.is_activeTemplateMessage">
                   <BodyTemplate />
                 </template>
@@ -204,8 +218,8 @@ const selecImage = () => {
   input.accept = 'image/*';
   input.click();
   input.addEventListener('change', (event) => {
-        modalStore.handleFileSelect(event);
-      });
+    modalStore.handleFileSelect(event);
+  });
 }
 
 // boom use in MessageSender
