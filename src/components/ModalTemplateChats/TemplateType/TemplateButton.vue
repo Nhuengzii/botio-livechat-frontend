@@ -1,18 +1,18 @@
 <template>
     <div class="flex mx-2 my-4 px-4">
         <div class="bg-white  border-2 rounded-lg w-full">
-            <div class="flex items-center justify-center w-60 h-40 bg-blue-700 rounded-t-lg">
+            <div class="flex items-center justify-center w-72 h-40 bg-blue-700 rounded-t-lg">
                 <img :src="modalStore.imagePreview" alt="" class="object-cover h-full w-full overflow-hidden" v-if="modalStore.imagePreview">
                 <p class="text-white" v-else>image</p>
             </div>
-            <div class="border-b-2 flex flex-col w-60 items-start px-3">
-                <h1 class="break-all  py-2 max-h-16 w-64 font-semibold text-ellipsis" v-if="modalStore.titleUserInput">
+            <div class="border-b-2 flex flex-col w-72 items-start px-3">
+                <h1 class="break-all  py-2 max-h-20  font-semibold text-ellipsis" v-if="modalStore.titleUserInput">
                     {{ modalStore.titleUserInput }}
                 </h1>
                 <h1 class="break-all  py-2 font-semibold" v-else>
                     หัวข้อ
                 </h1>
-                <p class="break-all  pb-4 max-h-32 w-60 text-ellipsis overflow-hidden" v-if="modalStore.textUserInput">
+                <p class="break-all  pb-4 max-h-32 text-ellipsis overflow-hidden" v-if="modalStore.textUserInput">
                     {{ modalStore.textUserInput }}
                 </p>
                 <p class="break-all pb-4 " v-else>
