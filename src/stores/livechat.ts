@@ -7,6 +7,7 @@ import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useUIStore } from "./UI";
+import type IBotioLivechat from "@/types/IBotioLivechat";
 
 type ConversationsMap = Map<string, Conversation>;
 type Chat = { conversation: Conversation, messages: Message[], isFetching: boolean };
@@ -45,7 +46,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   // State
   const botioLivechat = ref(new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
     `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
-    "1", _onmessageCallbacks));
+    "1", _onmessageCallbacks) as IBotioLivechat);
   const conversationRaw = ref<ConversationsMap>(new Map<string, Conversation>());
 
   const currentChat = ref(null as Chat | null);
@@ -130,7 +131,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
-    const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID);
+    const messages = await botioLivechat.value.listMessage(platform, pageIDMap.get(platform) as string, conversation.conversationID, 0, 20);
     const uiStore = useUIStore()
     setTimeout(() => {
       botioLivechat.value.getPageInformation(platform, conversation.pageID).then((pageInformation) => {
@@ -148,7 +149,11 @@ export const useLivechatStore = defineStore("livechat", () => {
       console.log('currentChat is undefined so i dont fetch more!')
       return
     }
-    const messages = await botioLivechat.value.listMessage(currentChat.value.conversation.platform, pageIDMap.get(currentChat.value.conversation.platform) as string, currentChat.value.conversation.conversationID, currentChat.value.messages.length);
+    const messages = await botioLivechat.value.listMessage(currentChat.value.conversation.platform,
+      pageIDMap.get(currentChat.value.conversation.platform) as string,
+      currentChat.value.conversation.conversationID,
+      currentChat.value.messages.length,
+      20);;
     currentChat.value.messages.unshift(...messages);
     console.log('fetching done')
     return messages;

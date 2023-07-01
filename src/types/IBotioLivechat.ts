@@ -7,11 +7,11 @@ interface IBotioLivechat {
   botioWebsocketApiUrl: string
   websocketClient: WebSocket | null
   shopID: string
-  listConversation: (platform: string, pageID: string) => Promise<Conversation[]>
+  listConversation: (platform: string, pageID: string, skip: number, limit: number) => Promise<Conversation[]>
   getConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null>
-  listMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message[]>
+  listMessage: (platform: string, pageID: string, conversationId: string, skip: number, limit: number) => Promise<Message[]>
   getMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message | null>
-  sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message | null>
+  sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
