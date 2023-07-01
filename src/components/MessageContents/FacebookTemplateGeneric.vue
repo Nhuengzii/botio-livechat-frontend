@@ -1,7 +1,7 @@
 <template>
   <!-- if template is has 1 item -->
   <template v-if="template.elements.length == 1">
-    <button @click="onClickTemplate(template.elements[0].item_url)">
+    <button @click="onClickTemplate(template.elements[0].default_action.url)">
       <div class="mx-2 my-2 border-2 rounded-xl">
         <template v-if="template.elements[0].image_url">
           <div class="rounded-t-xl h-48 w-80 overflow-hidden">
@@ -10,8 +10,8 @@
         </template>
         <div class="rounded-b-xl bg-white pt-1">
           <div class="flex flex-col justify-center items-start pb-2 border-b-2 pl-4 min-w-[120px] max-w-[320px]">
-            <p class="break-all text-gray-400">{{ template.elements[0].item_url }}</p>
-            <a :href="template.elements[0].item_url"></a>
+            <p class="break-all text-gray-400 pt-1 pb-2">{{ template.elements[0].default_action.url }}</p>
+            
             <h1 class="font-bold break-all truncate">{{ template.elements[0].title }}</h1>
             <p class="break-all text-ellipsis">{{ template.elements[0].subtitle }}</p>
           </div>
@@ -29,7 +29,7 @@
     <!-- Carousel  -->
     <Carousel :items-to-show="2" :wrap-around="false" class="mb-4 rounded-xl">
       <Slide v-for="element, index in template.elements" :key="index" class="flex flex-col justify-start">
-        <button @click="onClickTemplate(element.item_url)">
+        <button @click="onClickTemplate(element.default_action.url)">
           <div class="mx-2 my-2 border-2 rounded-xl">
 
             <!-- Image Section -->
@@ -42,7 +42,7 @@
             <!-- section Title & subTitle -->
             <div class="rounded-b-xl bg-white pb-2 pt-1">
               <div class="pb-2 border-b-2 pl-4 min-1-w-[120px] max-w-[320px] flex flex-col items-center">
-                <p class="break-all self-start pl-8 pb-4 text-gray-400">{{ element.item_url }}</p>
+                <p class="break-all self-start pl-8 pb-4 text-gray-400">{{ element.default_action.url }}</p>
                 <h1 class="font-bold break-all self-start pl-8 pb-4 truncate ">{{ element.title }}</h1>
                 <p class="break-all self-start pl-8 pb-2">{{ element.subtitle }}</p>
               </div>
