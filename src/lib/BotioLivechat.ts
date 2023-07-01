@@ -178,6 +178,48 @@ class BotioLivechat implements IBotioLivechat {
     }
   }
 
+  async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
+    const imageUrl = ""
+    const body: { attachment: { type: string, payload: { src: string } } } = {
+      attachment: {
+        type: "image",
+        payload: {
+          src: imageUrl
+        }
+      }
+    }
+    try {
+      const response = await axios.post(url, body);
+      const message: Message = {
+        shopID: this.shopID,
+        pageID: pageID,
+        platform: platform,
+        conversationID: conversationID,
+        messageID: response.data.message_id,
+        timestamp: response.data.timestamp ?? Date.now(),
+        message: "",
+        source: {
+          userID: psid,
+          userType: "admin",
+        },
+        isDeleted: false,
+        attachments: [
+          {
+            attachmentType: "image",
+            payload: {
+              src: imageUrl,
+            }
+          }
+        ],
+      }
+      return message
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error sending message");
+    }
+  }
+
   async searchConversationByName(platform: string, pageID: string, name: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
     const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })

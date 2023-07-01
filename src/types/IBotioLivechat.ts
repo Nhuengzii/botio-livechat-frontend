@@ -13,6 +13,7 @@ interface IBotioLivechat {
   listMessage: (platform: string, pageID: string, conversationId: string, skip: number, limit: number) => Promise<Message[]>
   getMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message>
+  sendImageMessage: (platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) => Promise<Message>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
