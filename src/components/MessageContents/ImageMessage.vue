@@ -8,7 +8,12 @@
         :class="{ 'grid-cols-3': amountImage >= 3 && amountImage !== 4, 'grid-cols-2': amountImage === 2 || amountImage === 4 }">
         <template v-for="(item, index) in message.attachments">
           <div
-            :class="{ 'h-80': amountImage === 2 || amountImage === 4, 'h-64': amountImage >= 3 && amountImage < 7, 'h-56': amountImage >= 7 }">
+            :class="{ 
+              'h-80': amountImage === 2 || amountImage === 4, 
+              'h-64': amountImage >= 3 && amountImage < 7, 
+              'h-56': amountImage >= 7 && amountImage < 13, 
+              'h-44' : amountImage >= 13 
+              }">
 
             <template v-if="index == 0 && amountImage <= 3">
               <img :src="message.attachments[index].payload.src" alt=""
