@@ -64,7 +64,7 @@
 
                           <div class="flex">
                             <button @click="selecImage"
-                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-1 shadow-lg">เลือกรูปภาพ</button>
+                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
                           </div>
 
                           <div v-if="modalStore.imagePreview"
@@ -72,14 +72,26 @@
                             <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
                           </div>
 
-                          <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
-                            class="h-8 my-2 w-96 shadow-lg" maxlength="50">
+                            class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
                           <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 120 ตัวอักษร)</p>
-                          <textarea type="text" placeholder="content message" v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg" maxlength="120" />
+                          <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="120" />
                         </div>
+                        <div class="flex pt-4 pl-2" v-for="i in 1">
+                          ปุ่มที่ {{ i }}
+                          <p class="px-2">ระบุชื่อของในปุ่ม</p>
+                          <input type="text">
+                          <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                          <input type="text">
+                          
+                        </div>
+                        <button class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
+                          <span class="py-1 px-2">เพิ่มปุ่ม</span>
+                        </button>
                       </div>
+
 
 
                     </template>
@@ -93,16 +105,17 @@
                         <div class="flex flex-col pl-2">
                           <div class="flex items-center">
                             <button @click="selecImage"
-                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-1 shadow-lg">เลือกรูปภาพ</button>
+                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
 
                           </div>
 
                           <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
-                            class="h-8 my-2 w-96 shadow-lg" maxlength="50">
+                            class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
                           <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
-                          <textarea type="text" placeholder="content message" v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg" maxlength="170" />
+                          <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="170" />
+
                         </div>
                       </div>
                     </template>
@@ -126,7 +139,10 @@
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="" class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
+                    <template v-if="modalStore.showButtonCreateTemplate()">
+                      
+                      <button class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
+                    </template>
                   </div>
                 </template>
               </template>
