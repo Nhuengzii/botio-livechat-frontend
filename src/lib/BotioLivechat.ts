@@ -99,14 +99,14 @@ class BotioLivechat implements IBotioLivechat {
   * Return a list of Message of a given platform, pageID and conversationID
   * @param platform - Platform of the given page
     * @param pageID - ID of the page
-    * @param conversationId - ID of the conversation
+    * @param conversationID - ID of the conversation
     * @param skip - Number of messages to skip
     * @param limit - Number of messages to return
     * @returns List of Message of the page with given platform, pageID and conversationID
   */
-  async listMessage(platform: string, pageID: string, conversationId: string, skip: number = 0, limit = 20) {
+  async listMessage(platform: string, pageID: string, conversationID: string, skip: number = 0, limit = 20) {
     let messages: Message[];
-    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages`;
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`;
 
     try {
       const response = await axios.get<{ messages: Message[] }>(url, { params: { skip: skip, limit: limit } });
@@ -126,13 +126,13 @@ class BotioLivechat implements IBotioLivechat {
   * Return a Message delivered to a given platform, pageID and conversationID
   * @param platform - Platform of the given page
     * @param pageID - ID of the page
-    * @param conversationId - ID of the conversation
+    * @param conversationID - ID of the conversation
     * @param psid - PSID of the user
     * @param text - Text of the message
     * @returns Message delivered to the page with given platform, pageID and conversationID
   */
-  async sendTextMessage(platform: string, conversationId: string, pageID: string, psid: string, text: string) {
-    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationId}/messages?psid=${psid}`;
+  async sendTextMessage(platform: string, conversationID: string, pageID: string, psid: string, text: string) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
     const body: { message: string } = { message: text }
     try {
       const response = await axios.post(url, body);
@@ -140,7 +140,7 @@ class BotioLivechat implements IBotioLivechat {
         shopID: this.shopID,
         pageID: pageID,
         platform: platform,
-        conversationID: conversationId,
+        conversationID: conversationID,
         messageID: response.data.message_id,
         timestamp: response.data.timestamp ?? Date.now(),
         message: text,
