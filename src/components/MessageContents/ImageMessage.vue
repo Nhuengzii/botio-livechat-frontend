@@ -1,7 +1,7 @@
 <template>
   <!--User send Message > 1 Image in one time  -->
   <template v-if="amountImage > 1">
-    <div class="flex mb-3">
+    
 
       <!-- layout Image like Message  -->
       <div class="grid gap-1 w-full"
@@ -41,14 +41,15 @@
           </div>
         </template>
       </div>
-    </div>
+    
   </template>
   <!-- User send 1 image in one time-->
   <template v-else>
-    <div>
+    <div class="max-h-80 max-w-24">
       <img :src="message.attachments[0].payload.src" alt=""
-        class="self-center max-h-96 shadow rounded-2xl object-cover" />
+        class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover " />
     </div>
+    
   </template>
 </template>
 
