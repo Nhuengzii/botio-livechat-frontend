@@ -215,10 +215,15 @@ export const useLivechatStore = defineStore("livechat", () => {
     return covnersation;
   }
 
+  async function getShopInformation() {
+    const shopInformation = await botioLivechat.value.getShopInformation("1");
+    return shopInformation;
+  }
+
   return {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
-    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages
+    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation
   }
 })
 
