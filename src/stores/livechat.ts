@@ -223,7 +223,7 @@ export const useLivechatStore = defineStore("livechat", () => {
   return {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
-    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation
+    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap
   }
 })
 
