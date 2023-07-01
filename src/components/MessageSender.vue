@@ -79,8 +79,7 @@
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
                             class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="120" />
                         </div>
-                        <div class="flex pt-4 pl-2" v-for="i in 1">
-                          ปุ่มที่ {{ i }}
+                        <div class="flex pt-4 pl-2">
                           <p class="px-2">ระบุชื่อของในปุ่ม</p>
                           <input type="text">
                           <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
