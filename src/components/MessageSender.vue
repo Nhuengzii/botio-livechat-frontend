@@ -56,7 +56,7 @@
 
                     <template v-if="modalStore.selectedTemplate === 'Button'">
                       <div class="flex justify-center items-center">
-                        <TemplateButton/>
+                        <TemplateButton />
                         <div class="flex flex-col">
                           <div @click="selecImage" class="my-4">
                             <div class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
@@ -64,9 +64,10 @@
                               <p v-else>add image</p>
                             </div>
                           </div>
-                        
+
                           <h1>หัวข้อ</h1>
-                          <input type="text" placeholder="title" v-model="modalStore.titleUserInput" class="h-8 my-2" maxlength="50">
+                          <input type="text" placeholder="title" v-model="modalStore.titleUserInput" class="h-8 my-2"
+                            maxlength="50">
                           <h1 class="mt-2">ข้อความ</h1>
                           <textarea type="text" placeholder="content message" v-model="modalStore.textUserInput"
                             class="h-52 w-64 px-2 py-1 mt-2" maxlength="100" />
@@ -95,7 +96,7 @@
 
                   </div>
                 </template>
-                
+
                 <template v-else-if="uiStore.is_activeTemplateMessage">
                   <BodyTemplate />
                 </template>
@@ -204,8 +205,8 @@ const selecImage = () => {
   input.accept = 'image/*';
   input.click();
   input.addEventListener('change', (event) => {
-        modalStore.handleFileSelect(event);
-      });
+    modalStore.handleFileSelect(event);
+  });
 }
 
 // boom use in MessageSender
@@ -218,11 +219,12 @@ const openImageDialog = () => {
 };
 
 
-const sendMessage = () => {
+const sendMessage = async () => {
   if (images.value.length > 0) {
     let a = currentChat.value?.conversation!
     for (let i = 0; i < images.value.length; i++) {
-      console.log(images.value[i].url)
+      await livechatStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      console.log('sended')
     }
     images.value = []
   }

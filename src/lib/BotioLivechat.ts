@@ -180,7 +180,7 @@ class BotioLivechat implements IBotioLivechat {
 
   async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
-    const imageUrl = ""
+    const imageUrl = await this.uploadImage(imageFile);
     const body: { attachment: { type: string, payload: { src: string } } } = {
       attachment: {
         type: "image",

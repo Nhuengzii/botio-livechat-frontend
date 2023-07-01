@@ -185,6 +185,42 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
   }
 
+  async function sendImageMessage(conversation: Conversation, imageFile: File) {
+    if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
+      const tempMid = `temp-${Date.now()}`;
+      const tempMessage: Message = {
+        shopID: conversation.shopID,
+        platform: conversation.platform,
+        pageID: conversation.pageID,
+        conversationID: conversation.conversationID,
+        messageID: tempMid,
+        timestamp: Date.now(),
+        source: {
+          userType: "admin",
+          userID: "ADMIN",
+        },
+        message: '',
+        isDeleted: false,
+        attachments: [{
+          attachmentType: 'image',
+          payload: {
+            src: URL.createObjectURL(imageFile),
+          }
+        }]
+      }
+      currentChat.value.messages.push(tempMessage)
+      const newMessage = await botioLivechat.value.sendImageMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, imageFile)
+      const idx = currentChat.value.messages.findIndex((message) => message.messageID === tempMid);
+      if (idx != -1) {
+        console.log('replace temp message')
+        currentChat.value.messages[idx] = newMessage;
+      }
+    }
+    else {
+      const newMessage = await botioLivechat.value.sendImageMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, imageFile)
+    }
+  }
+
   function openChat(platform: string, conversationID: string) {
     const conversation = conversationRaw.value.get(conversationID);
     if (!conversation) {
@@ -223,7 +259,8 @@ export const useLivechatStore = defineStore("livechat", () => {
   return {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
-    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap
+    searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap,
+    sendImageMessage
   }
 })
 
