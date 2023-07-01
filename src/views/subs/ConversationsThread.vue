@@ -38,11 +38,16 @@ const isLoading = ref(false);
 const isFetchingMore = ref(false);
 const route = useRoute()
 // infinite loading
+// 
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 import type { Conversation } from '@/types/conversation';
 
-async function loadmore($state) {
+async function loadmore($state: {
+  loaded: () => void,
+  complete: () => void,
+  error: () => void
+}) {
   if (isFetchingMore.value) return;
   console.log('load more')
   isFetchingMore.value = true;
