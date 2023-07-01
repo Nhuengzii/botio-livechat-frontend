@@ -3,7 +3,6 @@ import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import { useLivechatStore } from './stores/livechat';
 import { useUIStore } from './stores/UI';
-import type { Message } from './types/message';
 const livechatStore = useLivechatStore()
 const uiStore = useUIStore();
 import type { PageInformation } from '@/types/pageInformation'
