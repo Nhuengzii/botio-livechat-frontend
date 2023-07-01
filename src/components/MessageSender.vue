@@ -118,6 +118,7 @@
                         </div>
                       </div>
                     </template>
+                    
 
                   </div>
                 </template>
@@ -138,9 +139,9 @@
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <template v-if="modalStore.showButtonCreateTemplate()">
+                    <template v-if="modalStore.showButtonCreateTemplate">
                       
-                      <button class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
+                      <button @click="modalStore.actionsCreateTemplate"  class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
                     </template>
                   </div>
                 </template>
