@@ -1,5 +1,4 @@
 <template>
-
     <main class="flex h-[calc(100vh-24px)]">
         <LeftPanel />
         <Chats />
@@ -12,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import ConversationsThread from './subs/ConversationsThread.vue';
 import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
 
