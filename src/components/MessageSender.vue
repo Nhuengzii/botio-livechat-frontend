@@ -55,11 +55,11 @@
                   <div class="flex items-center h-full">
 
                     <template v-if="modalStore.selectedTemplate === 'Button'">
-                      <div class="flex-1 shrink-0 flex h-full justify-center items-center bg-blue-100">
+                      <div class="flex-1 shrink-0 flex h-full justify-center items-center">
                         <TemplateButton class="self-start" />
                       </div>
 
-                      <div class="bg-blue-200 h-full flex-[2]">
+                      <div class="h-full flex-[2]">
                         <div class="flex flex-col pl-2">
 
                           <div class="flex">
@@ -93,11 +93,11 @@
                     </template>
 
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
-                      <div class="flex-[1] shrink-0 flex h-full justify-center items-center bg-blue-100">
+                      <div class="flex-[1] shrink-0 flex h-full justify-center items-center">
                         <TemplateTextImage class="self-start" />
                       </div>
 
-                      <div class="bg-blue-200 h-full flex-[2]">
+                      <div class="h-full flex-[2]">
                         <div class="flex flex-col pl-2">
 
                           <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
