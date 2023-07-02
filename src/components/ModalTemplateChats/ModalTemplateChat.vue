@@ -18,7 +18,7 @@
                     <slot name="header">default header</slot>
                 </div>
 
-                <div class="modal-body  flex-[8] overflow-x-hidden bg-red-100  no-scrollbar justify-center">
+                <div class="modal-body  flex-[8] overflow-x-hidden  no-scrollbar justify-center">
                     <slot name="body">default body</slot>
                 </div>
 
