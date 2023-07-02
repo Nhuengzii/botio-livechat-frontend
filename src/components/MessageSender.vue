@@ -65,7 +65,7 @@
                           <div class="flex">
                             <button @click="selecImage"
                               class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
-                            <div class="">{{ getImageFilename() }}</div>
+                              <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}</p>
                           </div>
 
 
