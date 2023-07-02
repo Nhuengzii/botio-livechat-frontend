@@ -39,6 +39,9 @@ export const useUIStore = defineStore('ui', {
         ToggleMenu() {
             this.is_expanded = !this.is_expanded
         },
+        addAvailablePlatform(platform: string, pageInformation: PageInformation) {
+            this.availablesPlatforms.set(platform, pageInformation);
+        },
         activeButtonNav() {
             this.is_activeButton = !this.is_activeButton
         },

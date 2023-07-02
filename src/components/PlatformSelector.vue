@@ -5,9 +5,6 @@
         :unread="pageInformation(platform).unreadConversations" />
     </div>
   </div>
-  <div class="py-1 mt-2 duration-300 w-[12%] bg-[#27374D] rounded-xl"
-    :class="[$route.query.platform == 'all' ? 'ml-[10.5%]' : $route.query.platform == 'facebook' ? 'ml-[33%]' : ($route.query.platform == 'instagram') ? 'ml-[55%]' : 'ml-[77.5%]']">
-  </div>
 </template> 
 
 <script setup lang="ts">
