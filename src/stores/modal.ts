@@ -85,12 +85,19 @@ export const useModalStore = defineStore("modal", {
             console.log(this.imagePreview)
         },
         showButtonCreateTemplate() {
-            if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
-                if (this.selectedTemplate === "TextImage") {
-                    return true;
-                } else if (this.selectedTemplate === "Button") {
-                    if (this.button.title && this.button.url) {
-                        return true;
+            if (this.selectedTemplate === "TextImage"){
+                if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
+                    return true
+                } else {
+                    return false
+                }
+
+            } else if (this.selectedTemplate === "Button"){
+                if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
+                    if (this.button.title !== "" && this.button.url !== "") {
+                        return true
+                    } else {
+                        return false
                     }
                 }
             }
