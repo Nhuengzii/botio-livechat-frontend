@@ -16,7 +16,7 @@
                     <template v-else>
                         <div class="w-5 h-5"></div>
                     </template>
-                    <button @click="uiStore.closeTemplateMessage" class="w-10 h-10 rounded-full font-bold bg-red-400">
+                    <button @click="handleButtonClickToClose" class="w-10 h-10 rounded-full font-bold bg-red-400">
                         <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                     </button>
                 </div>
@@ -48,6 +48,11 @@ const modalStore = useModalStore()
 
 const handleButtonClickBack = () => {
     uiStore.activeCreateTemplateMessage();
+    modalStore.reset();
+}
+
+const handleButtonClickToClose = () => {
+    uiStore.closeTemplateMessage();
     modalStore.reset();
 }
 
