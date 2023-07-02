@@ -9,11 +9,9 @@ import type { PageInformation } from '@/types/pageInformation'
 onMounted(async () => {
   const availablePages = await livechatStore.getShopInformation()
   for (const page of availablePages.available_pages) {
-    uiStore.availablesPlatforms.set(page.platform_name, {
-      unreadConversations: 0,
-      allConversations: 0,
-    })
     livechatStore.pageIDMap.set(page.platform_name, page.page_id)
+    const pageInformation = await livechatStore.getPageInformation(page.platform_name);
+    uiStore.addAvailablePlatform(page.platform_name, pageInformation)
   }
   console.log(JSON.stringify(availablePages))
 })
