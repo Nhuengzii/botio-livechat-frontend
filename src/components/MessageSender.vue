@@ -59,12 +59,12 @@
                         <TemplateButton class="self-start" />
                       </div>
 
-                      <div class="h-full flex-[2]">
-                        <div class="flex flex-col pl-2">
+                      <div class="h-full flex-[3] bg-gray-100 pl-6 pb-3 rounded-xl">
+                        <div class="flex flex-col">
 
-                          <div class="flex">
+                          <div class="flex items-center">
                             <button @click="selecImage"
-                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
+                              class="my-4 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
                               <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}</p>
                           </div>
 
@@ -74,7 +74,7 @@
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
                           <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="150" />
+                            class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="150" />
                         </div>
                         <div class="flex pt-4 pl-2">
                           <p class="px-2">ระบุชื่อของในปุ่ม</p>
