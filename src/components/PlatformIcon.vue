@@ -14,6 +14,7 @@
         v-if="unread > 0">
         <h1>{{ unread }}</h1>
       </div>
+      <div class="py-1 mt-1 duration-300 w-[100%] bg-[#27374D] rounded-xl" v-if="isFocus"></div>
     </div>
   </router-link>
 </template>
