@@ -52,19 +52,7 @@ export const useModalStore = defineStore("modal", {
         selectTemplate(template: string) {
             this.selectedTemplate = template;
         },
-        handleFileSelect(event: Event) {
-            const file = (event.target as HTMLInputElement).files?.[0];
-            //console.log(file)
-            if (file) {
-                // Read the selected file and generate a preview URL
-                const reader = new FileReader();
-                reader.onload = () => {
-                    this.imagePreview = reader.result as string;
-                };
-                reader.readAsDataURL(file);
-                console.log(this.imagePreview);
-            }
-        },
+        
         actionAddButton() {
             const newButton: Button = {
                 title: "",
@@ -91,10 +79,6 @@ export const useModalStore = defineStore("modal", {
 
             this.templateList.push(template)
             this.reset();
-
-            console.log(this.templateList)
-            console.log(this.titleUserInput)
-            console.log(this.imagePreview)
         },
         showButtonCreateTemplate() {
             switch (this.selectedTemplate) {
@@ -119,6 +103,9 @@ export const useModalStore = defineStore("modal", {
             this.titleUserInput = "";
             this.button.title = "";
             this.button.url = "";
+            this.name = "";
+            this.platform = "";
+            this.buttonList = [];
         },
     },
 });
