@@ -7,7 +7,7 @@
                         <button class="" @click="handleButtonClickBack">
                             <div class="flex items-center">
                                 <div class="flex items-center justify-center rounded-full w-8 h-8 bg-[#394867]">
-                                    <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" />
+                                    <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" size="lg" />
                                 </div>
                                 <p class="text-lg pl-2">ย้อนกลับ</p>
                             </div>
