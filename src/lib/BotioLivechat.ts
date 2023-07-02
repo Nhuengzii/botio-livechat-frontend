@@ -5,6 +5,7 @@ import type { Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { PageInformation } from "@/types/pageInformation";
+import type { ShopInformation } from "@/types/ShopInformation";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -17,6 +18,25 @@ class BotioLivechat implements IBotioLivechat {
     this.botioWebsocketApiUrl = botioWebsocketApiUrl;
     this.shopID = shopID;
     this.connect(onmessageCallbacks);
+  }
+  async getShopInformation(shopID: string) {
+    const mock: ShopInformation = {
+      available_pages: [
+        {
+          platform_name: "facebook",
+          page_id: "108362942229009"
+        },
+        {
+          platform_name: "instagram",
+          page_id: "17841460321068782"
+        },
+        {
+          platform_name: "line",
+          page_id: "U6972d1d58590afb114378eeab0b08d52"
+        }
+      ]
+    }
+    return mock;
   }
   connect(onmessageCallback: (event: MessageEvent<any>) => void) {
     this.websocketClient = new WebSocket(`${this.botioWebsocketApiUrl}?shopID=${this.shopID}`)
@@ -158,6 +178,48 @@ class BotioLivechat implements IBotioLivechat {
     }
   }
 
+  async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
+    const imageUrl = await this.uploadImage(imageFile);
+    const body: { attachment: { type: string, payload: { src: string } } } = {
+      attachment: {
+        type: "image",
+        payload: {
+          src: imageUrl
+        }
+      }
+    }
+    try {
+      const response = await axios.post(url, body);
+      const message: Message = {
+        shopID: this.shopID,
+        pageID: pageID,
+        platform: platform,
+        conversationID: conversationID,
+        messageID: response.data.message_id,
+        timestamp: response.data.timestamp ?? Date.now(),
+        message: "",
+        source: {
+          userID: psid,
+          userType: "admin",
+        },
+        isDeleted: false,
+        attachments: [
+          {
+            attachmentType: "image",
+            payload: {
+              src: imageUrl,
+            }
+          }
+        ],
+      }
+      return message
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error sending message");
+    }
+  }
+
   async searchConversationByName(platform: string, pageID: string, name: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
     const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })
@@ -167,6 +229,15 @@ class BotioLivechat implements IBotioLivechat {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
     const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_message: message }) } })
     return res.data.conversations
+  }
+
+  async uploadImage(imageFile: File) {
+    const url: string = `${this.botioRestApiUrl}/upload_url`
+    const res = await axios.get<{ presignedURL: string }>(url)
+    const presignedURL = res.data.presignedURL
+    const uploadRes = await axios.put(presignedURL, imageFile, { headers: { 'Content-Type': 'application/octet-stream' } })
+    const imageUrl = presignedURL.split("?")[0]
+    return imageUrl
   }
 
   async searchMessageByText(conversation: Conversation, text: string) {

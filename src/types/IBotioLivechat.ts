@@ -1,6 +1,7 @@
 import type { Conversation } from "./conversation"
 import type { Message } from "./message"
 import type { PageInformation } from "./pageInformation"
+import type { ShopInformation } from "./ShopInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
@@ -12,6 +13,7 @@ interface IBotioLivechat {
   listMessage: (platform: string, pageID: string, conversationId: string, skip: number, limit: number) => Promise<Message[]>
   getMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message>
+  sendImageMessage: (platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) => Promise<Message>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
@@ -19,6 +21,8 @@ interface IBotioLivechat {
   searchMessageByText(conversation: Conversation, text: string): Promise<Message[]>
   connect: (onmessageCallback: (event: MessageEvent<any>) => void) => void
   markAsRead: (platform: string, pageID: string, conversationID: string) => Promise<void>
+  getShopInformation: (shopID: string) => Promise<ShopInformation>
+  uploadImage: (imageFile: File) => Promise<string>
 }
 
 export default IBotioLivechat;

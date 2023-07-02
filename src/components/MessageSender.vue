@@ -84,7 +84,7 @@
                           <input type="text">
                           <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
                           <input type="text">
-                          
+
                         </div>
                         <button class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
                           <span class="py-1 px-2">เพิ่มปุ่ม</span>
@@ -118,7 +118,7 @@
                         </div>
                       </div>
                     </template>
-                    
+
 
                   </div>
                 </template>
@@ -140,8 +140,9 @@
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
                     <template v-if="modalStore.showButtonCreateTemplate">
-                      
-                      <button @click="modalStore.actionsCreateTemplate"  class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
+
+                      <button @click="modalStore.actionsCreateTemplate"
+                        class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
                     </template>
                   </div>
                 </template>
@@ -248,11 +249,12 @@ const openImageDialog = () => {
 };
 
 
-const sendMessage = () => {
+const sendMessage = async () => {
   if (images.value.length > 0) {
     let a = currentChat.value?.conversation!
     for (let i = 0; i < images.value.length; i++) {
-      console.log(images.value[i].url)
+      await livechatStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      console.log('sended')
     }
     images.value = []
   }

@@ -10,9 +10,6 @@ export const useUIStore = defineStore('ui', {
         is_read: false,
         conversationsThreadMode: "normal",
         availablesPlatforms: new Map<string, PageInformation>([
-            ['facebook', { unreadConversations: 0, allConversations: 0 }],
-            ['instagram', { unreadConversations: 0, allConversations: 0 }],
-            ['line', { unreadConversations: 0, allConversations: 0 }],
             ['all', { unreadConversations: 0, allConversations: 0 }],
         ]),
         is_activeTemplateMessage: false,
@@ -22,21 +19,16 @@ export const useUIStore = defineStore('ui', {
         is_changePage: false,
         is_selectTemplate: false,
         is_finishCreateTemplate: false,
-        showEditModal:false,
-        
+        showEditModal: false,
+
     }),
     getters: {
         pageInformation(state) {
             return (platform: string) => {
                 if (platform === 'all') {
-                    return {
-                        unreadConversations: state.availablesPlatforms.get('facebook')!.unreadConversations +
-                            state.availablesPlatforms.get('instagram')!.unreadConversations +
-                            state.availablesPlatforms.get('line')!.unreadConversations,
-                        allConversations: state.availablesPlatforms.get('facebook')!.allConversations +
-                            state.availablesPlatforms.get('instagram')!.allConversations +
-                            state.availablesPlatforms.get('line')!.allConversations
-                    }
+                    const sumUnreadConversations = Array.from(state.availablesPlatforms.values()).reduce((acc, cur) => acc + cur.unreadConversations, 0)
+                    const sumAllConversations = Array.from(state.availablesPlatforms.values()).reduce((acc, cur) => acc + cur.allConversations, 0)
+                    return { unreadConversations: sumUnreadConversations, allConversations: sumAllConversations }
                 } else {
                     return state.availablesPlatforms.get(platform)!
                 }
@@ -81,17 +73,16 @@ export const useUIStore = defineStore('ui', {
         },
         finishCreateTemplate() {
             this.is_finishCreateTemplate = true
-            
+
         },
-        openEditModal(){
+        openEditModal() {
             this.showEditModal = true;
         },
-        
+
         closeEditModal() {
             this.showEditModal = false;
         },
-        onClickTemplate(link_url:string)
-        {
+        onClickTemplate(link_url: string) {
             window.open(link_url)
         }
     }
