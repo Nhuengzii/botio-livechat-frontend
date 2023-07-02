@@ -97,7 +97,7 @@
                         <TemplateTextImage class="self-start" />
                       </div>
 
-                      <div class="h-full flex-[2]">
+                      <div class="h-full flex-[3] bg-gray-100 pl-6 pb-3 rounded-xl">
                         <div class="flex flex-col pl-2">
 
                           <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
