@@ -107,9 +107,9 @@
                           <div class="flex items-center">
                             <button @click="selecImage"
                               class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
+                              <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}</p>
                           </div>
 
-                          <p v-if="modalStore.imagePreview" class="text-sm">Selected Image: {{ getImageFilename() }}</p>
 
                           <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
