@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 type ModalState = {
+    name: string;
     selectedTemplate: string;
     imagePreview: string;
     textUserInput: string;
@@ -10,7 +11,7 @@ type ModalState = {
         url: string;
     };
     buttonList: number[];
-    templateList: TextImageTemplate[];
+    templateList: Template[];
 };
 
 type ButtonTemplate = {
@@ -32,8 +33,23 @@ type TextImageTemplate = {
     };
 };
 
+type Template = {
+    elements: {
+        name: string
+        type: string;
+        title: string;
+        text: string;
+        image_url: string;
+        button?: {
+            title: string;
+            url: string
+        }
+    }
+}
+
 export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
+        name: "",
         selectedTemplate: "",
         imagePreview: "",
         textUserInput: "",
@@ -62,46 +78,44 @@ export const useModalStore = defineStore("modal", {
                 console.log(this.imagePreview);
             }
         },
-        actionsCreateTemplate() {
-            if (
-                this.selectedTemplate === "TextImage" &&
-                this.textUserInput &&
-                this.titleUserInput &&
-                this.imagePreview
-            ) {
-                const template: TextImageTemplate = {
-                    elements: {
-                        title: this.titleUserInput,
-                        text: this.textUserInput,
-                        image_url: this.imagePreview,
-                    },
-                };
+        actionAddButton() {
 
-                this.templateList.push(template)
-                this.reset();
-            }
+        },
+        actionsCreateTemplate() {
+            const template: Template = {
+                elements: {
+                    name: this.name,
+                    type: this.selectedTemplate,
+                    title: this.titleUserInput,
+                    text: this.textUserInput,
+                    image_url: this.imagePreview,
+                },
+            };
+
+            this.templateList.push(template)
+            this.reset();
+
             console.log(this.templateList)
             console.log(this.titleUserInput)
             console.log(this.imagePreview)
         },
         showButtonCreateTemplate() {
-            if (this.selectedTemplate === "TextImage"){
-                if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
-                    return true
-                } else {
-                    return false
-                }
+            switch (this.selectedTemplate) {
+                case "TextImage":
+                    return this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "";
 
-            } else if (this.selectedTemplate === "Button"){
-                if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
-                    if (this.button.title !== "" && this.button.url !== "") {
-                        return true
-                    } else {
-                        return false
+                case "Button":
+                    if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
+                        if (this.button && this.button.title !== "" && this.button.url !== "") {
+                            return true;
+                        }
                     }
-                }
+                    break;
             }
+
+            return false;
         },
+        
         reset() {
             this.imagePreview = "";
             this.textUserInput = "";
