@@ -1,6 +1,6 @@
 <template>
   <div :class="{
-    'flex flex-row-reverse pt-3' : message.source.userType === 'admin',
+    'flex flex-row-reverse py-0.5' : message.source.userType === 'admin',
     'flex flex-row': message.source.userType !== 'admin',
     'py-0.5' : !isShowProfile,
     'pt-6' : isShowProfile
