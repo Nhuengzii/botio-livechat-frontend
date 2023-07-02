@@ -55,7 +55,7 @@
                   <div class="flex items-center h-full">
 
                     <template v-if="modalStore.selectedTemplate === 'Button'">
-                      <div class="flex-1 flex h-full justify-center items-center bg-blue-100">
+                      <div class="flex-1 shrink-0 flex h-full justify-center items-center bg-blue-100">
                         <TemplateButton class="self-start" />
                       </div>
 
@@ -65,19 +65,16 @@
                           <div class="flex">
                             <button @click="selecImage"
                               class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
+                            <div class="">{{ getImageFilename() }}</div>
                           </div>
 
-                          <!-- <div v-if="modalStore.imagePreview"
-                            class="bg-gray-100 text-[#d9d9d9] w-48 h-48 rounded-xl flex items-center justify-center">
-                            <img v-if="modalStore.imagePreview" :src="modalStore.imagePreview" alt="Selected Image" />
-                          </div> -->
 
                           <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
-                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 120 ตัวอักษร)</p>
+                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="120" />
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="150" />
                         </div>
                         <div class="flex pt-4 pl-2">
                           <p class="px-2">ระบุชื่อของในปุ่ม</p>
@@ -86,7 +83,7 @@
                           <input type="text">
 
                         </div>
-                        <button class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
+                        <button @click="modalStore.actionAddButton" class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
                           <span class="py-1 px-2">เพิ่มปุ่ม</span>
                         </button>
                       </div>
@@ -96,24 +93,30 @@
                     </template>
 
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
-                      <div class="flex-1 flex h-full justify-center items-center bg-blue-100">
+                      <div class="flex-[1] shrink-0 flex h-full justify-center items-center bg-blue-100">
                         <TemplateTextImage class="self-start" />
                       </div>
 
                       <div class="bg-blue-200 h-full flex-[2]">
                         <div class="flex flex-col pl-2">
+
+                          <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
+                          <input type="text" v-model="modalStore.name" class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
+
+                          <!-- button select image-->
                           <div class="flex items-center">
                             <button @click="selecImage"
-                              class="my-4 bg-gray-200 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
-
+                              class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
                           </div>
+
+                          <p v-if="modalStore.imagePreview" class="text-sm">Selected Image: {{ getImageFilename() }}</p>
 
                           <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
-                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
+                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 175 ตัวอักษร)</p>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="170" />
+                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="175" />
 
                         </div>
                       </div>
@@ -134,16 +137,13 @@
                 <template v-if="uiStore.is_createTemplateMessage">
                   <div class="flex items-center justify-center">
                     <button @click="uiStore.activeEditTemplateMessage"
-                      class="py-3 px-4 rounded-2xl text-xl bg-blue-100">ถัดไป</button>
+                      class="py-3 px-8 rounded-3xl text-xl bg-[#00ABB3] text-white">ถัดไป</button>
                   </div>
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <template v-if="modalStore.showButtonCreateTemplate">
-
-                      <button @click="modalStore.actionsCreateTemplate"
-                        class="py-3 px-4 rounded-2xl bg-blue-100 text-xl">สร้างเทมเพลต</button>
-                    </template>
+                    <button @click="modalStore.actionsCreateTemplate" v-if="modalStore.showButtonCreateTemplate"
+                      class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">สร้างเทมเพลต</button>
                   </div>
                 </template>
               </template>
@@ -155,10 +155,10 @@
 
     <!-- space -->
     <div class="flex absolute bottom-2 right-7">
-      
+
       <button>
-        <EmojiPicker class="absolute bottom-10 right-0" v-show="isShowEmojiPicker"  @select="onSelectEmoji" />
-        <div @click="isShowEmojiPicker=!isShowEmojiPicker">
+        <EmojiPicker class="absolute bottom-10 right-0" v-show="isShowEmojiPicker" @select="onSelectEmoji" />
+        <div @click="isShowEmojiPicker = !isShowEmojiPicker">
           <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
         </div>
       </button>
@@ -212,7 +212,7 @@ defineProps<{
   platform: String
 }>()
 
-const onSelectEmoji=(emoji: any)=> {
+const onSelectEmoji = (emoji: any) => {
   console.log(emoji);
   newMessage.value += emoji.i;
 }
@@ -227,7 +227,8 @@ const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
-const isShowEmojiPicker =ref(false)
+const isShowEmojiPicker = ref(false)
+
 
 
 const calculateTextareaRows = computed(() => {
@@ -246,8 +247,27 @@ const selecImage = () => {
   input.accept = 'image/*';
   input.click();
   input.addEventListener('change', (event) => {
-    modalStore.handleFileSelect(event);
+    handleFileSelect(event);
   });
+}
+
+const handleFileSelect = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      modalStore.imagePreview = reader.result as string;
+      modalStore.selectedFile = file;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+const getImageFilename = () => {
+  if (modalStore.imagePreview && modalStore.selectedFile) {
+    return modalStore.selectedFile.name;
+  }
+  return '';
 }
 
 // boom use in MessageSender
