@@ -20,23 +20,12 @@ class BotioLivechat implements IBotioLivechat {
     this.connect(onmessageCallbacks);
   }
   async getShopInformation(shopID: string) {
-    const mock: ShopInformation = {
-      available_pages: [
-        {
-          platform_name: "facebook",
-          page_id: "108362942229009"
-        },
-        {
-          platform_name: "instagram",
-          page_id: "17841460321068782"
-        },
-        {
-          platform_name: "line",
-          page_id: "U6972d1d58590afb114378eeab0b08d52"
-        }
-      ]
+    try {
+      const shopInformation: ShopInformation = (await axios.get(`${this.botioRestApiUrl}/shops/${shopID}`)).data
+      return shopInformation;
+    } catch (error) {
+      throw new Error("Error fetching shop information");
     }
-    return mock;
   }
   connect(onmessageCallback: (event: MessageEvent<any>) => void) {
     this.websocketClient = new WebSocket(`${this.botioWebsocketApiUrl}?shopID=${this.shopID}`)
