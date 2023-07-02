@@ -8,7 +8,7 @@
             <textarea v-show="images.length == 0" type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage"
               @keydown.enter="sendMessageOnEnter" @input="handleTyping" :rows="calculateTextareaRows" class="inline-flex px-2  mb-6 w-full h-auto 
             text-black break-words outline-none resize-none max-h-64" />
-            <div class="mb-10 flex   ">
+            <div class="mb-10 flex">
               <button v-if="images.length > 0" @click="openImageDialog"
                 class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
               <div v-for="(image, index) in images" :key="index" class="image-item ">
@@ -61,6 +61,9 @@
 
                       <div class="h-full flex-[3] bg-gray-100 pl-6 pb-3 rounded-xl">
                         <div class="flex flex-col">
+
+                          <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
+                          <input type="text" v-model="modalStore.name" class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
 
                           <div class="flex items-center">
                             <button @click="selecImage"
