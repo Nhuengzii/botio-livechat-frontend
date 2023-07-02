@@ -155,8 +155,10 @@
 
     <!-- space -->
     <div class="flex absolute bottom-2 right-7">
+      
       <button>
-        <div class="">
+        <EmojiPicker class="absolute bottom-10 right-0" v-show="isShowEmojiPicker"  @select="onSelectEmoji" />
+        <div @click="isShowEmojiPicker=!isShowEmojiPicker">
           <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
         </div>
       </button>
@@ -187,6 +189,11 @@
 <script setup lang="ts">
 import { useLivechatStore } from '@/stores/livechat';
 
+import EmojiPicker from 'vue3-emoji-picker'
+import 'vue3-emoji-picker/css'
+
+
+
 import ModalTemplateChat from '@/components/ModalTemplateChats/ModalTemplateChat.vue'
 import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/HeaderTemplate.vue'
 import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
@@ -205,6 +212,10 @@ defineProps<{
   platform: String
 }>()
 
+const onSelectEmoji=(emoji: any)=> {
+  console.log(emoji);
+  newMessage.value += emoji.i;
+}
 
 const modalStore = useModalStore()
 const uiStore = useUIStore()
@@ -216,7 +227,7 @@ const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
-
+const isShowEmojiPicker =ref(false)
 
 
 const calculateTextareaRows = computed(() => {
