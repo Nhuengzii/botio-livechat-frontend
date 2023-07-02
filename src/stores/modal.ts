@@ -6,44 +6,30 @@ type ModalState = {
     imagePreview: string;
     textUserInput: string;
     titleUserInput: string;
+    platform: string
     button: {
         title: string;
         url: string;
     };
-    buttonList: number[];
+    buttonList: Button[];
     templateList: Template[];
 };
 
-type ButtonTemplate = {
-    elements: {
-        title: string;
-        text: String;
-        button: {
-            title: string;
-            url: string;
-        };
-    };
-};
-
-type TextImageTemplate = {
-    elements: {
-        title: string;
-        text: string;
-        image_url: string;
-    };
-};
+type Button = {
+    title: string;
+    url: string;
+}
 
 type Template = {
+    id: number
+    platform: string
+    name: string;
     elements: {
-        name: string
         type: string;
         title: string;
         text: string;
         image_url: string;
-        button?: {
-            title: string;
-            url: string
-        }
+        button?: Button
     }
 }
 
@@ -54,6 +40,7 @@ export const useModalStore = defineStore("modal", {
         imagePreview: "",
         textUserInput: "",
         titleUserInput: "",
+        platform: "",
         button: {
             title: "",
             url: "",
@@ -79,16 +66,26 @@ export const useModalStore = defineStore("modal", {
             }
         },
         actionAddButton() {
-
+            const newButton: Button = {
+                title: "",
+                url: "",
+            };
+            this.buttonList.push(newButton);
         },
         actionsCreateTemplate() {
             const template: Template = {
+                id: this.templateList.length + 1,
+                platform: 'line',
+                name: this.name,
                 elements: {
-                    name: this.name,
                     type: this.selectedTemplate,
                     title: this.titleUserInput,
                     text: this.textUserInput,
                     image_url: this.imagePreview,
+                    button: {
+                        title: this.button.title,
+                        url: this.button.url,
+                    }
                 },
             };
 
