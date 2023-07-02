@@ -4,7 +4,14 @@
             <div class="flex flex-col modal-container">
                 <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
                     <template v-if="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
-                        <button class="bg-gray-200 px-5 py-3 rounded-full" @click="handleButtonClickBack">back</button>
+                        <button class="" @click="handleButtonClickBack">
+                            <div class="flex items-center">
+                                <div class="flex items-center justify-center rounded-full w-8 h-8 bg-[#394867]">
+                                    <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" />
+                                </div>
+                                <p class="text-lg pl-2">ย้อนกลับ</p>
+                            </div>
+                        </button>
                     </template>
                     <template v-else>
                         <div class="w-5 h-5"></div>
