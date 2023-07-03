@@ -4,7 +4,7 @@ import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
-import type { PageInformation } from "@/types/pageInformation";
+import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
 import type { ShopInformation } from "@/types/ShopInformation";
 
 class BotioLivechat implements IBotioLivechat {
@@ -58,6 +58,16 @@ class BotioLivechat implements IBotioLivechat {
       return information;
     } catch (error) {
       throw new Error("Error fetching platform information");
+    }
+  }
+  async getAllPageInformation() {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
+    try {
+      const response = await axios.get(url);
+      const informations: AllPageInformation = response.data;
+      return informations;
+    } catch (error) {
+      throw new Error("Error fetching all platform information");
     }
   }
   /**

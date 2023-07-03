@@ -1,6 +1,6 @@
 import type { Conversation } from "./conversation"
 import type { Message } from "./message"
-import type { PageInformation } from "./pageInformation"
+import type { PageInformation, AllPageInformation } from "./pageInformation"
 import type { ShopInformation } from "./ShopInformation"
 
 interface IBotioLivechat {
@@ -16,6 +16,7 @@ interface IBotioLivechat {
   sendImageMessage: (platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) => Promise<Message>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
+  getAllPageInformation: () => Promise<AllPageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
   searchConversationByMessage: (platform: string, pageID: string, message: string) => Promise<Conversation[]>
   searchMessageByText(conversation: Conversation, text: string): Promise<Message[]>

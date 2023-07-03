@@ -3,4 +3,12 @@ type PageInformation = {
   allConversations: number
 }
 
-export type { PageInformation };
+type AllPageInformation = {
+  statuses: {
+    platform: string,
+    unreadConversations: number,
+    allConversations: number
+  }[]
+}
+
+export type { PageInformation, AllPageInformation };

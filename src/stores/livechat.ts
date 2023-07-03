@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
-import type { PageInformation } from "@/types/pageInformation";
+import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
@@ -73,7 +73,7 @@ export const useLivechatStore = defineStore("livechat", () => {
       })
     }, 100)
     const fetchedConversations = await botioLivechat.value.listConversation(platform, pageIDMap.value.get(platform) as string, skip, limit);
-    if (fetchedConversations != undefined && fetchedConversations.length == 0) {
+    if (fetchedConversations === undefined || fetchedConversations.length == 0) {
       return [];
     }
     fetchedConversations.forEach((conversation) => {
@@ -89,6 +89,11 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
     const platformInformation = await botioLivechat.value.getPageInformation(platform, pageID);
     return platformInformation;
+  }
+
+  async function getAllPageInformation(): Promise<AllPageInformation> {
+    const allPageInformation = await botioLivechat.value.getAllPageInformation();
+    return allPageInformation;
   }
 
   async function receiveMessage(message: Message) {
@@ -282,7 +287,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
     searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap,
-    sendImageMessage
+    sendImageMessage, getAllPageInformation
   }
 })
 

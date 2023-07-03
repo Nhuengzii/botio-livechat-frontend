@@ -5,15 +5,15 @@ import { useLivechatStore } from './stores/livechat';
 import { useUIStore } from './stores/UI';
 const livechatStore = useLivechatStore()
 const uiStore = useUIStore();
-import type { PageInformation } from '@/types/pageInformation'
 onMounted(async () => {
   const availablePages = await livechatStore.getShopInformation()
   for (const page of availablePages.available_pages) {
     livechatStore.pageIDMap.set(page.platform_name, page.page_id)
-    const pageInformation = await livechatStore.getPageInformation(page.platform_name);
-    uiStore.addAvailablePlatform(page.platform_name, pageInformation)
   }
-  console.log(JSON.stringify(availablePages))
+  const allPageInformation = await livechatStore.getAllPageInformation()
+  allPageInformation.statuses.forEach((status => {
+    uiStore.addAvailablePlatform(status.platform, { unreadConversations: status.unreadConversations, allConversations: status.allConversations })
+  }))
 })
 </script>
 
