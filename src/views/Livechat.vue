@@ -13,11 +13,18 @@
 <script setup lang="ts">
 import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
-import { onMounted } from 'vue';
+import { onBeforeMount, onMounted } from 'vue';
 import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
+import { useRouter } from 'vue-router';
 const livechatStore = useLivechatStore()
 const uiStore = useUIStore();
+const router = useRouter()
+onBeforeMount(() => {
+    if (livechatStore.botioLivechat === null) {
+        router.replace('/')
+    }
+})
 onMounted(async () => {
     const availablePages = await livechatStore.getShopInformation()
     for (const page of availablePages.available_pages) {
