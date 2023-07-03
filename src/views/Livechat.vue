@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated } from 'vue';
 import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
 import { useRouter } from 'vue-router';
@@ -22,6 +22,13 @@ const uiStore = useUIStore();
 const router = useRouter()
 onBeforeMount(() => {
     if (livechatStore.botioLivechat === null) {
+        console.log('from beforemount botioLivechat is null so redirect to /')
+        router.replace('/')
+    }
+})
+onBeforeUpdate(() => {
+    if (livechatStore.botioLivechat === null) {
+        console.log('from beforeupdate botioLivechat is null so redirect to /')
         router.replace('/')
     }
 })
