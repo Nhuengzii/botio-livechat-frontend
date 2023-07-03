@@ -38,9 +38,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
   }
   // State
-  const botioLivechat = ref(new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
-    `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
-    "1", _onmessageCallbacks) as IBotioLivechat);
+  const botioLivechat = ref(null as IBotioLivechat | null)
   const conversationRaw = ref<ConversationsMap>(new Map<string, Conversation>());
 
   const currentChat = ref(null as Chat | null);
@@ -55,7 +53,19 @@ export const useLivechatStore = defineStore("livechat", () => {
   })
 
   // Action
+  function setupBotioLivechat(shopID: string) {
+    if (botioLivechat.value) {
+      return
+    }
+    botioLivechat.value = new BotioLivechat(`https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
+      `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`,
+      shopID, _onmessageCallbacks) as IBotioLivechat;
+  }
+
   async function fetchConversations(platform: string, skip = 0, limit = 8): Promise<Conversation[]> {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     if (platform != 'all') {
       if (conversations.value(platform).length > 20) {
         console.log('dont fetch more use data form cache')
@@ -67,6 +77,9 @@ export const useLivechatStore = defineStore("livechat", () => {
         return;
       }
       const uiStore = useUIStore()
+      if (botioLivechat.value === null) {
+        throw new Error("botioLivechat is not setup");
+      }
       botioLivechat.value.getPageInformation(platform, pageIDMap.value.get(platform) as string).then((pageInformation) => {
         uiStore.availablesPlatforms.set(platform, pageInformation);
         console.log(`update ${platform} page information`);
@@ -87,11 +100,17 @@ export const useLivechatStore = defineStore("livechat", () => {
     if (!pageID) {
       throw new Error("pageID is undefined");
     }
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const platformInformation = await botioLivechat.value.getPageInformation(platform, pageID);
     return platformInformation;
   }
 
   async function getAllPageInformation(): Promise<AllPageInformation> {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const allPageInformation = await botioLivechat.value.getAllPageInformation();
     return allPageInformation;
   }
@@ -102,6 +121,9 @@ export const useLivechatStore = defineStore("livechat", () => {
       return;
     }
     let conversation: Conversation | undefined | null = conversationRaw.value.get(message.conversationID);
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     if (!conversation) {
       conversation = await botioLivechat.value.getConversation(message.platform, message.pageID, message.conversationID);
       if (!conversation) {
@@ -110,6 +132,9 @@ export const useLivechatStore = defineStore("livechat", () => {
       conversationRaw.value.set(conversation.conversationID, conversation);
     }
     setTimeout(() => {
+      if (botioLivechat.value === null) {
+        throw new Error("botioLivechat is not setup");
+      }
       botioLivechat.value.getPageInformation(message.platform, message.pageID).then((pageInformation) => {
         uiStore.availablesPlatforms.set(message.platform, pageInformation);
         console.log(`update ${message.platform} page information`);
@@ -130,13 +155,22 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function markAsRead(platform: string, conversationID: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     await botioLivechat.value.markAsRead(platform, pageIDMap.value.get(platform) as string, conversationID);
   }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const messages = await botioLivechat.value.listMessage(platform, pageIDMap.value.get(platform) as string, conversation.conversationID, 0, 20);
     const uiStore = useUIStore()
     setTimeout(() => {
+      if (botioLivechat.value === null) {
+        throw new Error("botioLivechat is not setup");
+      }
       botioLivechat.value.getPageInformation(platform, conversation.pageID).then((pageInformation) => {
         uiStore.availablesPlatforms.set(platform, pageInformation);
       })
@@ -152,6 +186,9 @@ export const useLivechatStore = defineStore("livechat", () => {
       console.log('currentChat is undefined so i dont fetch more!')
       return
     }
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const messages = await botioLivechat.value.listMessage(currentChat.value.conversation.platform,
       pageIDMap.value.get(currentChat.value.conversation.platform) as string,
       currentChat.value.conversation.conversationID,
@@ -163,6 +200,9 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function sendTextMessage(conversation: Conversation, message: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
       const tempMid = `temp-${Date.now()}`;
       const tempMessage: Message = {
@@ -204,6 +244,12 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   async function sendImageMessage(conversation: Conversation, imageFile: File) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     if (currentChat.value?.conversation.conversationID == conversation.conversationID) {
       const tempMid = `temp-${Date.now()}`;
       const tempMessage: Message = {
@@ -249,6 +295,9 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 
   function openChat(platform: string, conversationID: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const conversation = conversationRaw.value.get(conversationID);
     if (!conversation) {
       throw new Error("conversation is undefined");
@@ -265,20 +314,32 @@ export const useLivechatStore = defineStore("livechat", () => {
     openChatEventBus.value.emit(conversation);
   }
   function closeChat(conversationID: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     if (currentChat.value?.conversation.conversationID === conversationID) {
       currentChat.value = null;
     }
   }
   async function searchConversationByName(platform: string, name: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const covnersation = await botioLivechat.value.searchConversationByName(platform, pageIDMap.value.get(platform) as string, name);
     return covnersation;
   }
   async function searchConversationByMessage(platform: string, message: string) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const covnersation = await botioLivechat.value.searchConversationByMessage(platform, pageIDMap.value.get(platform) as string, message);
     return covnersation;
   }
 
   async function getShopInformation() {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
     const shopInformation = await botioLivechat.value.getShopInformation("1");
     return shopInformation;
   }
@@ -287,7 +348,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
     searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap,
-    sendImageMessage, getAllPageInformation
+    sendImageMessage, getAllPageInformation, setupBotioLivechat
   }
 })
 
