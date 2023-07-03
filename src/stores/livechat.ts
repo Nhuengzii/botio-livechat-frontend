@@ -158,7 +158,12 @@ export const useLivechatStore = defineStore("livechat", () => {
     if (botioLivechat.value === null) {
       throw new Error("botioLivechat is not setup");
     }
-    await botioLivechat.value.markAsRead(platform, pageIDMap.value.get(platform) as string, conversationID);
+    try {
+      await botioLivechat.value.markAsRead(platform, pageIDMap.value.get(platform) as string, conversationID);
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   async function fetchMessages(platform: string, conversation: Conversation) {
@@ -340,7 +345,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     if (botioLivechat.value === null) {
       throw new Error("botioLivechat is not setup");
     }
-    const shopInformation = await botioLivechat.value.getShopInformation("1");
+    const shopInformation = await botioLivechat.value.getShopInformation(botioLivechat.value.shopID);
     return shopInformation;
   }
 
