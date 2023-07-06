@@ -30,7 +30,7 @@ type ButtonForm = {
     image_url: string;
     title: string;
     text: string;
-    button: Button[];
+    buttonList: Button[];
 }
 
 
@@ -73,17 +73,31 @@ export const useModalStore = defineStore("modal", {
                 id: this.templateList.length + 1,
                 platform: 'line',
                 name: this.name,
-                elements: {
-                    type: this.selectedTemplate,
+                elements: {} as GenericForm | ButtonForm
+                ,
+            };
+
+            if (this.selectedTemplate === "ImageText") {
+                // for ImageText template type, set elemets as GenericForm
+                const genericForm: GenericForm = {
+                    image_url: this.imagePreview,
+                    title: this.titleUserInput,
+                    text: this.textUserInput
+                };
+                template.elements = genericForm
+
+
+            } else if (this.selectedTemplate === "Button") {
+                // for Button template type, set elements as ButtonForm
+                const buttonForm: ButtonForm = {
+                    image_url: this.imagePreview,
                     title: this.titleUserInput,
                     text: this.textUserInput,
-                    image_url: this.imagePreview,
-                    button: {
-                        title: this.button.title,
-                        url: this.button.url,
-                    }
-                },
-            };
+                    buttonList: this.buttonList,
+                }
+                template.elements = buttonForm
+            }
+
 
             this.templateList.push(template)
             this.reset();
