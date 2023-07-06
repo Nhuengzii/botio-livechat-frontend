@@ -21,12 +21,12 @@
     </div>
     <div class="background-d9-250 flex flex-wrap">
 
-        <template v-for="i in 2">
+        <template v-for="{ elements, name, platform } in modalStore.templateList">
             <div class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
 
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
-                        <p>Name Template</p>
+                        <p>{{ name }}</p>
                     </div>
                 </div>
 
@@ -63,7 +63,10 @@
 
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
+import { useModalStore } from '@/stores/modal'
 const uiStore = useUIStore()
+
+const modalStore = useModalStore()  
 </script>
 
 <style scoped>

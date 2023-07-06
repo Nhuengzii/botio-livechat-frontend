@@ -20,17 +20,25 @@ type Button = {
     url: string;
 }
 
+type GenericForm = {
+    image_url: string,
+    title: string,
+    text: string,
+}
+
+type ButtonForm = {
+    image_url: string;
+    title: string;
+    text: string;
+    button: Button[];
+}
+
+
 type Template = {
     id: number
     platform: string
     name: string;
-    elements: {
-        type: string;
-        title: string;
-        text: string;
-        image_url: string;
-        button?: Button
-    }
+    elements: GenericForm | ButtonForm
 }
 
 export const useModalStore = defineStore("modal", {
@@ -52,7 +60,7 @@ export const useModalStore = defineStore("modal", {
         selectTemplate(template: string) {
             this.selectedTemplate = template;
         },
-        
+
         actionAddButton() {
             const newButton: Button = {
                 title: "",
@@ -96,7 +104,7 @@ export const useModalStore = defineStore("modal", {
 
             return false;
         },
-        
+
         reset() {
             this.imagePreview = "";
             this.textUserInput = "";
