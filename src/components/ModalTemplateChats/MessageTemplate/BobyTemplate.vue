@@ -32,9 +32,7 @@
 
                 <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
                     <button class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
-                        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-white">
-                            <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
-                        </div>
+                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
                 </div>
