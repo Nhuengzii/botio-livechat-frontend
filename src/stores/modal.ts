@@ -77,7 +77,7 @@ export const useModalStore = defineStore("modal", {
                 ,
             };
 
-            if (this.selectedTemplate === "ImageText") {
+            if (this.selectedTemplate === 'ImageText') {
                 // for ImageText template type, set elemets as GenericForm
                 const genericForm: GenericForm = {
                     image_url: this.imagePreview,
@@ -103,20 +103,21 @@ export const useModalStore = defineStore("modal", {
             this.reset();
         },
         showButtonCreateTemplate() {
-            switch (this.selectedTemplate) {
-                case "TextImage":
-                    return this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "";
-
-                case "Button":
-                    if (this.textUserInput !== "" && this.titleUserInput !== "" && this.imagePreview !== "") {
-                        if (this.button && this.button.title !== "" && this.button.url !== "") {
-                            return true;
-                        }
-                    }
-                    break;
+            if (this.selectedTemplate === 'ImageText') {
+                return (
+                    this.imagePreview !== "" &&
+                    this.titleUserInput !== "" &&
+                    this.textUserInput !== ""
+                )
+            } else if (this.selectedTemplate === 'Button') {
+                return (
+                    this.imagePreview !== "" &&
+                    this.titleUserInput !== "" &&
+                    this.textUserInput !== "" &&
+                    this.button.url !== "" &&
+                    this.button.title !== ""
+                )
             }
-
-            return false;
         },
 
         reset() {
