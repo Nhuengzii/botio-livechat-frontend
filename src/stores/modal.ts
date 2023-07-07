@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 type ModalState = {
     name: string;
     selectedTemplate: string;
+    selectedFile: string;
     imagePreview: string;
     textUserInput: string;
     titleUserInput: string;
@@ -45,6 +46,7 @@ export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
         name: "",
         selectedTemplate: "",
+        selectedFile: "",
         imagePreview: "",
         textUserInput: "",
         titleUserInput: "",
