@@ -224,8 +224,6 @@ const onSelectEmoji = (emoji: any) => {
 
 const modalStore = useModalStore()
 const uiStore = useUIStore()
-const titleUserInput = ref('')
-const textUserInput = ref('')
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()
