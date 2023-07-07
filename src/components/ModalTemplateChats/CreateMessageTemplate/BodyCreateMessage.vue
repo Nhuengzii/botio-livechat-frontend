@@ -6,7 +6,8 @@
 
             <!-- button template -->
 
-            <button @click="modalStore.selectTemplate('Button')" class="hover:bg-gray-200" :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'Button' }">
+            <button @click="modalStore.selectTemplate('Button')" class="hover:bg-gray-200"
+                :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'Button' }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-32 bg-blue-700 rounded-t-lg">
@@ -24,10 +25,11 @@
                         </div>
                     </div>
                 </div>
-            </button>   
+            </button>
 
             <!-- image+text template -->
-            <button @click="modalStore.selectTemplate('TextImage')" class="hover:bg-gray-200" :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'TextImage' }">
+            <button @click="modalStore.selectTemplate('TextImage')" class="hover:bg-gray-200"
+                :class="{ 'bg-gray-200': modalStore.selectedTemplate === 'TextImage' }">
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-44 bg-blue-700 rounded-t-lg">
@@ -42,55 +44,20 @@
                 </div>
             </button>
         </div>
-        
+
 
     </div>
 </template>
 
 <script setup lang="ts">
-import { useUIStore } from '@/stores/UI';
-import {useModalStore } from '@/stores/modal'
-import { ref, type Ref } from 'vue';
-import ModalTemplateChat from '@/components/ModalTemplateChat.vue';
-const uiStore = useUIStore()
+import { useModalStore } from '@/stores/modal'
 const modalStore = useModalStore()
-const showEditModal = ref(false);
-const selectedTemplate = ref<string | number | null>(null);
-function selectTemplate(template: string | number) {
-    selectedTemplate.value = template;
-}
-function submitSelection() {
-    console.log('Selected Template:', selectedTemplate.value);
-}
 
 
 
 // select image
-const selectedImage = ref<string | null>(null);
-const openImageDialog = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (event) => displaySelectedImage(event, selectedImage);
-    input.click();
-};
 
 
-const displaySelectedImage = (event: Event, selectedImage: Ref<string | null>) => {
-    const file = (event.target as HTMLInputElement).files?.[0];
-
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-
-        reader.onload = () => {
-            selectedImage.value = reader.result as string;
-        };
-
-        reader.readAsDataURL(file);
-    } else {
-        selectedImage.value = null;
-    }
-};
 </script>
 
 <style scoped></style>
