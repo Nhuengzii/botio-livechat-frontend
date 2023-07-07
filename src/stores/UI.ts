@@ -75,7 +75,9 @@ export const useUIStore = defineStore('ui', {
             this.is_selectTemplate = true
         },
         finishCreateTemplate() {
-            this.is_finishCreateTemplate = true
+            this.is_editTemplateMessage = false
+            this.is_createTemplateMessage = false
+            this.is_activeTemplateMessage = true
 
         },
         openEditModal() {
