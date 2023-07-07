@@ -68,7 +68,8 @@
                           <div class="flex items-center">
                             <button @click="selecImage"
                               class="my-4 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
-                              <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}</p>
+                            <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
+                            </p>
                           </div>
 
 
@@ -110,7 +111,8 @@
                           <div class="flex items-center">
                             <button @click="selecImage"
                               class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
-                              <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}</p>
+                            <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
+                            </p>
                           </div>
 
 
@@ -145,7 +147,7 @@
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="modalStore.actionsCreateTemplate" v-if="modalStore.showButtonCreateTemplate"
+                    <button @click="handleButtonCreateTemplate" v-show="modalStore.showButtonCreateTemplate"
                       class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">สร้างเทมเพลต</button>
                   </div>
                 </template>
@@ -232,7 +234,10 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 
-
+const handleButtonCreateTemplate = () => {
+  modalStore.actionsCreateTemplate();
+  uiStore.finishCreateTemplate();
+}
 
 const calculateTextareaRows = computed(() => {
   const lineHeight = 20; // Adjust this value based on your font size and line height
