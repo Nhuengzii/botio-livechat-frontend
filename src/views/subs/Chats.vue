@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- search conversation  -->
         <div>
           <div v-show="querying" class="flex items-center  ">
@@ -154,7 +154,8 @@
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
                 <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="shouldShowProfilePicture(index)" />
+                  <MessageBlock :message="message" :conversation="currentChat.conversation"
+                    :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
 
@@ -166,6 +167,7 @@
               </template>
 
             </template>
+            <div id="bottom_messages"></div>
           </div>
         </template>
       </main>
@@ -311,6 +313,13 @@ function openChat(conversation: Conversation) {
     console.log("fetch message success")
     isLoading.value = false;
   })
+  setTimeout(() => {
+    // scroll to bottom
+    const el = document.getElementById("bottom_messages");
+    if (el) {
+      el.scrollTop = el.scrollHeight - el.clientHeight;
+    }
+  }, 1000)
 }
 openChatEventBus.value.on(openChat)
 
