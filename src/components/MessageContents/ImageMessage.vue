@@ -17,32 +17,32 @@
 
             <template v-if="index == 0 && amountImage <= 3">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl rounded-bl-xl" />
+              @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl rounded-bl-xl" />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
+              @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
             <template v-else-if="index == (amountImage - 1) && amountImage <= 3">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-tr-xl rounded-br-xl" />
+              @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl rounded-br-xl" />
             </template>
             <template v-else-if="index == 2 && amountImage > 3 && amountImage != 4">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-tr-xl " />
+              @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl " />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
+              @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
 
             <template v-else-if="index == (amountImage - 1) && amountImage > 3">
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full rounded-br-xl" />
+                @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-br-xl" />
             </template>
             <template v-else>
               <img :src="message.attachments[index].payload.src" alt=""
-                class="absolute inset-0 object-cover w-full h-full" />
+               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full" />
             </template>
           </div>
         </template>
@@ -52,15 +52,15 @@
   <!-- User send 1 image in one time-->
   <template v-else>
     <div class="max-h-80 max-w-24">
-      <img :src="message.attachments[0].payload.src" alt=""
-        class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover " />
+      <img :src="(StatusLoadImg)? message.attachments[0].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+      @load="handleImageLoad" class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover " />
     </div>
-    
   </template>
 </template>
 
 <script setup lang="ts">
 import type { Message } from "@/types/message";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import { ref } from "vue";
 const { message } = defineProps<{
   message: Message
@@ -71,9 +71,16 @@ const amountImage = ref(message.attachments.length)
 function error() {
   imageUrl.value = 'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'
 }
-
-
+const StatusLoadImg =ref(false);
+const handleImageLoad=()=> {
+      StatusLoadImg.value=true;
+      console.log('Image has finished loading');
+    }
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.loading.leave {
+  opacity: 0;
+}
+</style>
