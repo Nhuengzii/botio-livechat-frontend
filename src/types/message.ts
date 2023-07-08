@@ -30,6 +30,11 @@ type RepliedMessage = {
   messageID: string
 }
 
+type AttachmentForSending = {
+  type: string,
+  payload: FacebookTemplateGeneric | LineTemplateCarosel | LineTemplateButtons | LineTemplateConfirm | LineTemplateImageCarousel
+}
+
 type FacebookTemplateGeneric = {
   fb_template_generic: {
     title: string,
@@ -106,4 +111,4 @@ type LineTemplateCarosel = {
 }
 
 
-export type { Message, Attachment, Source, Payload, FacebookTemplateGeneric, LineTemplateButtons, LineTemplateConfirm, LineTemplateCarosel, LineTemplateImageCarousel }
+export type { Message, Attachment, Source, Payload, FacebookTemplateGeneric, LineTemplateButtons, LineTemplateConfirm, LineTemplateCarosel, LineTemplateImageCarousel, AttachmentForSending }

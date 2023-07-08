@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
-import type { Message } from "@/types/message";
+import type { AttachmentForSending, Message } from "@/types/message";
 import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
@@ -299,6 +299,13 @@ export const useLivechatStore = defineStore("livechat", () => {
     }
   }
 
+
+  async function sendAttachmentMessage(conversation: Conversation, attachment: AttachmentForSending) {
+    if (botioLivechat.value === null) {
+      throw new Error("botioLivechat is not setup");
+    }
+    await botioLivechat.value.sendAttachmentMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, attachment)
+  }
   function openChat(platform: string, conversationID: string) {
     if (botioLivechat.value === null) {
       throw new Error("botioLivechat is not setup");
@@ -353,7 +360,7 @@ export const useLivechatStore = defineStore("livechat", () => {
     botioLivechat, conversationRaw, currentChat, conversations, fetchConversations, fetchMessages,
     openChat, openChatEventBus, markAsReadEventBus, receiveMessage, sendTextMessage, closeChat, getPageInformation,
     searchConversationByName, searchConversationByMessage, markAsRead, fetchMoreMessages, getShopInformation, pageIDMap,
-    sendImageMessage, getAllPageInformation, setupBotioLivechat
+    sendImageMessage, getAllPageInformation, setupBotioLivechat, sendAttachmentMessage
   }
 })
 

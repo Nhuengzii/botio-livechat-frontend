@@ -1,7 +1,7 @@
 import type { useLivechatStore } from "@/stores/livechat";
 import type IBotioLivechat from "@/types/IBotioLivechat";
 import type { Conversation } from "@/types/conversation";
-import type { Message } from "@/types/message";
+import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
@@ -213,6 +213,19 @@ class BotioLivechat implements IBotioLivechat {
         ],
       }
       return message
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error sending message");
+    }
+  }
+
+  async sendAttachmentMessage(platform: string, conversationID: string, pageID: string, psid: string, attachment: AttachmentForSending) {
+    const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
+    const body = {
+      attachment: attachment
+    }
+    try {
+      await axios.post(url, body);
     } catch (error) {
       console.log(error);
       throw new Error("Error sending message");

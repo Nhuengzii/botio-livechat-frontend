@@ -1,5 +1,5 @@
 import type { Conversation } from "./conversation"
-import type { Message } from "./message"
+import type { AttachmentForSending, Message } from "./message"
 import type { PageInformation, AllPageInformation } from "./pageInformation"
 import type { ShopInformation } from "./ShopInformation"
 
@@ -14,6 +14,7 @@ interface IBotioLivechat {
   getMessage: (platform: string, pageID: string, conversationId: string) => Promise<Message | null>
   sendTextMessage: (platform: string, conversationId: string, pageID: string, psid: string, text: string) => Promise<Message>
   sendImageMessage: (platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) => Promise<Message>
+  sendAttachmentMessage: (platform: string, conversationID: string, pageID: string, psid: string, attachment: AttachmentForSending) => Promise<void>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
   getAllPageInformation: () => Promise<AllPageInformation>
