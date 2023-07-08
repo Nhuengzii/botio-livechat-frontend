@@ -20,19 +20,11 @@ import { useRouter } from 'vue-router';
 const livechatStore = useLivechatStore()
 const uiStore = useUIStore();
 const router = useRouter()
-onBeforeMount(() => {
+onBeforeMount(async () => {
     if (livechatStore.botioLivechat === null) {
         console.log('from beforemount botioLivechat is null so redirect to /')
         router.replace('/')
     }
-})
-onBeforeUpdate(() => {
-    if (livechatStore.botioLivechat === null) {
-        console.log('from beforeupdate botioLivechat is null so redirect to /')
-        router.replace('/')
-    }
-})
-onMounted(async () => {
     const availablePages = await livechatStore.getShopInformation()
     for (const page of availablePages.available_pages) {
         livechatStore.pageIDMap.set(page.platform_name, page.page_id)
@@ -41,6 +33,14 @@ onMounted(async () => {
     allPageInformation.statuses.forEach((status => {
         uiStore.addAvailablePlatform(status.platform, { unreadConversations: status.unreadConversations, allConversations: status.allConversations })
     }))
+})
+onBeforeUpdate(() => {
+    if (livechatStore.botioLivechat === null) {
+        console.log('from beforeupdate botioLivechat is null so redirect to /')
+        router.replace('/')
+    }
+})
+onMounted(async () => {
 })
 </script>
 
