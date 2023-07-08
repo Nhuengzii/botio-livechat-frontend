@@ -16,32 +16,32 @@
               }">
 
             <template v-if="index == 0 && amountImage <= 3">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl rounded-bl-xl" />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
             <template v-else-if="index == (amountImage - 1) && amountImage <= 3">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl rounded-br-xl" />
             </template>
             <template v-else-if="index == 2 && amountImage > 3 && amountImage != 4">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png' " alt=""
               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl " />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
 
             <template v-else-if="index == (amountImage - 1) && amountImage > 3">
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
                 @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-br-xl" />
             </template>
             <template v-else>
-              <img :src="message.attachments[index].payload.src" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
                @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full" />
             </template>
           </div>
