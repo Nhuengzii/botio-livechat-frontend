@@ -199,7 +199,10 @@ export const useLivechatStore = defineStore("livechat", () => {
       currentChat.value.conversation.conversationID,
       currentChat.value.messages.length,
       20);;
-    currentChat.value.messages.unshift(...messages);
+    currentChat.value.messages.unshift(...(messages.filter((message) => {
+      const exitst = currentChat.value?.messages.find((m) => m.messageID === message.messageID);
+      return !exitst;
+    })));
     console.log('fetching done')
     return messages;
   }

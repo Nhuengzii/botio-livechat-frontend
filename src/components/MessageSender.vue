@@ -13,8 +13,8 @@
                 class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
               <div v-for="(image, index) in images" :key="index" class="image-item ">
                 <div class="static">
-                  <img :src="image.url" class="h-28 w-24 my-2 rounded-xl" />
-                  <div class="absolute top-0 left-14 ">d
+                  <img :src="image.url" class="h-24 my-2 rounded-xl" />
+                  <div class="absolute top-3 right-1 ">
                     <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]"
                       @click="removeImage(index)">x</button>
                   </div>
