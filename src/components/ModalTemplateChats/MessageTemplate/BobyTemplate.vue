@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
-                    <button class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
+                    <button @click="" class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
                         <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
@@ -49,22 +49,31 @@
                     </button>
                 </div>
 
-                <div class="flex-[1] px-1">
-                    <button class="flex">
-                        <font-awesome-icon :icon="['fas', 'chevron-down']" />
-                    </button>
-                </div>
             </div>
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
+import type { Conversation } from '@/types/conversation';
+defineProps<{
+    conversation: Conversation
+}>()
+
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
-const uiStore = useUIStore()
+import { useLivechatStore } from '@/stores/livechat';
 
-const modalStore = useModalStore()  
+const livechatstore = useLivechatStore()
+const uiStore = useUIStore()
+const modalStore = useModalStore()
+const handleSendTemplate = async () => {
+    // uploadImage
+    const image_url = await livechatstore.botioLivechat?.uploadImage(modalStore.selectedFile)
+    // send Template
+    livechatstore.sendAttachmentMessage(conversation)
+
+}
 </script>
 
 <style scoped>
