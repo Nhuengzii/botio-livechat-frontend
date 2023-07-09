@@ -60,9 +60,12 @@ defineProps<{
     conversation: Conversation
 }>()
 
+import type { FacebookTemplateGeneric } from '@/types/message'
+
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
+
 
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
@@ -71,6 +74,13 @@ const handleSendTemplate = async () => {
     // uploadImage
     const image_url = await livechatstore.botioLivechat?.uploadImage(modalStore.selectedFile)
     // send Template
+    const attachment: FacebookTemplateGeneric = {
+        templateGenneric: [
+            {
+                
+            }
+        ]
+    }
     livechatstore.sendAttachmentMessage(conversation)
 
 }
