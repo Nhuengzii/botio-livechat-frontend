@@ -2,7 +2,8 @@
     <div class="flex mx-2 my-4 px-4">
         <div class="bg-white  border-2 rounded-lg w-full">
             <div class="flex items-center justify-center w-72 h-40 bg-blue-700 rounded-t-lg">
-                <img :src="modalStore.imagePreview" alt="" class="object-cover h-full w-full overflow-hidden" v-if="modalStore.imagePreview">
+                <img :src="modalStore.imagePreview" alt="" class="object-cover h-full w-full overflow-hidden"
+                    v-if="modalStore.imagePreview">
                 <p class="text-white" v-else>image</p>
             </div>
             <div class="border-b-2 flex flex-col w-72 items-start px-3">
@@ -19,10 +20,8 @@
                     ข้อความ . . .
                 </p>
             </div>
-            <div class="flex flex-col">
-                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">ปุ่มกดที่1</button>
-                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">ปุ่มกดที่1</button>
-                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">ปุ่มกดที่1</button>
+            <div v-for="( button, index )  in modalStore.buttonList" :key="button.id" class="flex flex-col">
+                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">{{ button.title }} {{ index }}</button>
             </div>
         </div>
     </div>
