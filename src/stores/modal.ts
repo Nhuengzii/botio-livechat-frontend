@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 type ModalState = {
     name: string;
     selectedTemplate: string;
-    selectedFile: string;
+    selectedFile: File;
     imagePreview: string;
     textUserInput: string;
     titleUserInput: string;
@@ -17,6 +17,7 @@ type ModalState = {
 };
 
 type Button = {
+    id: number
     title: string;
     url: string;
 }
@@ -33,7 +34,6 @@ type ButtonForm = {
     text: string;
     buttonList: Button[];
 }
-
 
 type Template = {
     id: number
@@ -64,11 +64,23 @@ export const useModalStore = defineStore("modal", {
         },
 
         actionAddButton() {
+            if (this.buttonList.length >= 3) {
+                return;
+            }
             const newButton: Button = {
-                title: "",
-                url: "",
+                title: this.button.title,
+                url: this.button.url,
+                id: Date.now()
             };
             this.buttonList.push(newButton);
+            this.button.url = "",
+                this.button.title = ""
+        },
+        clickToAddButton() {
+            if (this.buttonList.length >= 3) {
+                return;
+            }
+
         },
         actionsCreateTemplate() {
             const template: Template = {
