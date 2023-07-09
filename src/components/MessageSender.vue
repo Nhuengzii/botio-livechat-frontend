@@ -80,13 +80,27 @@
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
                             class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="150" />
                         </div>
-                        <div class="flex pt-4 pl-2">
-                          <p class="px-2">ระบุชื่อของในปุ่ม</p>
-                          <input type="text">
-                          <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
-                          <input type="text">
 
+
+
+                        <div v-if="modalStore.buttonList.length < 1" class="flex pt-4 pl-2">
+                          <p class="px-2">ระบุชื่อของในปุ่มที่ 1</p>
+                          <input type="text" v-model="modalStore.button.title">
+                          <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                          <input type="text" v-model="modalStore.button.url">
                         </div>
+
+                        <template v-if="modalStore.buttonList.length > 1">
+                          <div v-for="index in modalStore.buttonList.length - 1" class="flex pt-4 pl-2">
+                            <p class="px-2">ระบุชื่อของในปุ่มที่ {{ index + 1 }}</p>
+                            <input type="text" v-model="modalStore.button.title">
+                            <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                            <input type="text" v-model="modalStore.button.url">
+                          </div>
+                        </template>
+
+
+
                         <button @click="modalStore.actionAddButton" class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
                           <span class="py-1 px-2">เพิ่มปุ่ม</span>
                         </button>
@@ -132,7 +146,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate />
+                  <BodyTemplate :conversation="converstion" />
                 </template>
 
               </template>
@@ -215,6 +229,7 @@ import { ref, watch, type Ref, computed } from 'vue'
 
 defineProps<{
   platform: String
+  converstion: Conversation
 }>()
 
 const onSelectEmoji = (emoji: any) => {
@@ -236,6 +251,8 @@ const handleButtonCreateTemplate = () => {
   modalStore.actionsCreateTemplate();
   uiStore.finishCreateTemplate();
 }
+
+const buttonCOunt = computed(() => modalStore.buttonList.length)
 
 const calculateTextareaRows = computed(() => {
   const lineHeight = 20; // Adjust this value based on your font size and line height
