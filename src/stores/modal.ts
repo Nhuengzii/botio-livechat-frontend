@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 type ModalState = {
     name: string;
     selectedTemplate: string;
-    selectedFile: File;
+    selectedFileImage: File;
     imagePreview: string;
     textUserInput: string;
     titleUserInput: string;
@@ -16,6 +16,7 @@ type ModalState = {
     templateList: Template[];
 };
 
+
 type Button = {
     id: number
     title: string;
@@ -23,13 +24,13 @@ type Button = {
 }
 
 type GenericForm = {
-    image_url: string,
+    picture: File,
     title: string,
     text: string,
 }
 
 type ButtonForm = {
-    image_url: string;
+    picture: File;
     title: string;
     text: string;
     buttonList: Button[];
@@ -46,7 +47,7 @@ export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
         name: "",
         selectedTemplate: "",
-        selectedFile: "",
+        selectedFileImage: new File([], ""),
         imagePreview: "",
         textUserInput: "",
         titleUserInput: "",
@@ -85,7 +86,7 @@ export const useModalStore = defineStore("modal", {
         actionsCreateTemplate() {
             const template: Template = {
                 id: this.templateList.length + 1,
-                platform: 'line',
+                platform: this.platform,
                 name: this.name,
                 elements: {} as GenericForm | ButtonForm
                 ,
@@ -94,7 +95,7 @@ export const useModalStore = defineStore("modal", {
             if (this.selectedTemplate === 'ImageText') {
                 // for ImageText template type, set elemets as GenericForm
                 const genericForm: GenericForm = {
-                    image_url: this.imagePreview,
+                    picture: this.selectedFileImage,
                     title: this.titleUserInput,
                     text: this.textUserInput
                 };
@@ -104,7 +105,7 @@ export const useModalStore = defineStore("modal", {
             } else if (this.selectedTemplate === "Button") {
                 // for Button template type, set elements as ButtonForm
                 const buttonForm: ButtonForm = {
-                    image_url: this.imagePreview,
+                    picture: this.selectedFileImage,
                     title: this.titleUserInput,
                     text: this.textUserInput,
                     buttonList: this.buttonList,
