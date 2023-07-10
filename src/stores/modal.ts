@@ -83,7 +83,7 @@ export const useModalStore = defineStore("modal", {
         async actionsCreateTemplate(image_url: string) {
 
             const template: Template = {
-                id: this.templateList.length + 1,
+                id: Date.now(),
                 type: this.selectedTemplate,
                 platform: this.platform,
                 name: this.name,
