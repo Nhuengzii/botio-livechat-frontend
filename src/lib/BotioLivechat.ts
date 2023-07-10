@@ -37,7 +37,7 @@ class BotioLivechat implements IBotioLivechat {
       console.log('websocket connected');
     }
     this.websocketClient.onclose = () => {
-      alert("websocket disconnected with duration: " + `${(Date.now() - this._startTimestamp) / 1000} seconds`)
+      // alert("websocket disconnected with duration: " + `${(Date.now() - this._startTimestamp) / 1000} seconds`)
       console.log('websocket disconnected');
       // reconnect
       this.connect(onmessageCallback);
