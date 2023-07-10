@@ -16,7 +16,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@vueuse/core": "^10.1.2",
     "axios": "^1.4.0",
-    "pinia": "^2.0.32",
+    "pinia": "^2.1.4",
     "v3-infinite-loading": "^1.2.2",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
