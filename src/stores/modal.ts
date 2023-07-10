@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useLivechatStore } from '@/stores/livechat';
-
 const livechatstore = useLivechatStore()
 
 type ModalState = {
@@ -48,7 +47,7 @@ type Template = {
     elements: {
         title: string;
         message: string;
-        picture: string | undefined;
+        picture: string;
         buttons: Button[]
 
 
@@ -99,21 +98,25 @@ export const useModalStore = defineStore("modal", {
             console.log("pre uploadImage")
             const image_url = await livechatstore.botioLivechat?.uploadImage(this.selectedFileImage);
 
-            const template: Template = {
-                id: this.templateList.length + 1,
-                type: this.selectedTemplate,
-                platform: this.platform,
-                name: this.name,
-                elements: {
-                    title: this.titleUserInput,
-                    message: this.textUserInput,
-                    picture: image_url,
-                    buttons: []
-                    
-                }
-                ,
-            };
-            this.templateList.push(template)
+            if (image_url){
+
+                const template: Template = {
+                    id: this.templateList.length + 1,
+                    type: this.selectedTemplate,
+                    platform: this.platform,
+                    name: this.name,
+                    elements: {
+                        title: this.titleUserInput,
+                        message: this.textUserInput,
+                        picture: image_url,
+                        buttons: []
+                        
+                    }
+                };
+                this.templateList.push(template)
+            } else {
+                console.log("no image_url !!")
+            }
             this.reset();
         },
         showButtonCreateTemplate() {
