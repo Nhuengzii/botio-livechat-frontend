@@ -5,4 +5,12 @@ type ShopInformation = {
   }[]
 }
 
-export type { ShopInformation };
+type ShopConfig = {
+  shop_id: string,
+  templates: {
+    id: string,
+    payload: string
+  }[]
+}
+
+export type { ShopInformation, ShopConfig };

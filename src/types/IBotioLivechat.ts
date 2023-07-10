@@ -1,7 +1,7 @@
 import type { Conversation } from "./conversation"
 import type { AttachmentForSending, Message } from "./message"
 import type { PageInformation, AllPageInformation } from "./pageInformation"
-import type { ShopInformation } from "./ShopInformation"
+import type { ShopConfig, ShopInformation } from "./ShopInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
@@ -17,6 +17,7 @@ interface IBotioLivechat {
   sendAttachmentMessage: (platform: string, conversationID: string, pageID: string, psid: string, attachment: AttachmentForSending) => Promise<void>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
+  getShopConfig: () => Promise<ShopConfig>
   getAllPageInformation: () => Promise<AllPageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
   searchConversationByMessage: (platform: string, pageID: string, message: string) => Promise<Conversation[]>
