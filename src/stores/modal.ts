@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { useLivechatStore } from '@/stores/livechat';
-const livechatstore = useLivechatStore()
+import { BotioLivechat } from "@/lib/BotioLivechat";
 
 type ModalState = {
     name: string;
@@ -25,25 +24,12 @@ type Button = {
     url: string;
 }
 
-// type GenericForm = {
-//     pictureFile: File,
-//     title: string,
-//     text: string,                                                           
-// }
-
-// type ButtonForm = {
-//     pictureFile: File;
-//     title: string;
-//     text: string;
-//     buttonList: Button[];
-// }
 
 type Template = {
     id: number
     type: string
     platform: string
     name: string;
-    // elements: GenericForm | ButtonForm
     elements: {
         title: string;
         message: string;
@@ -94,29 +80,22 @@ export const useModalStore = defineStore("modal", {
             }
 
         },
-        async actionsCreateTemplate() {
-            console.log("pre uploadImage")
-            const image_url = await livechatstore.botioLivechat?.uploadImage(this.selectedFileImage);
+        async actionsCreateTemplate(image_url: string) {
 
-            if (image_url){
+            const template: Template = {
+                id: this.templateList.length + 1,
+                type: this.selectedTemplate,
+                platform: this.platform,
+                name: this.name,
+                elements: {
+                    title: this.titleUserInput,
+                    message: this.textUserInput,
+                    picture: image_url,
+                    buttons: []
 
-                const template: Template = {
-                    id: this.templateList.length + 1,
-                    type: this.selectedTemplate,
-                    platform: this.platform,
-                    name: this.name,
-                    elements: {
-                        title: this.titleUserInput,
-                        message: this.textUserInput,
-                        picture: image_url,
-                        buttons: []
-                        
-                    }
-                };
-                this.templateList.push(template)
-            } else {
-                console.log("no image_url !!")
-            }
+                }
+            };
+            this.templateList.push(template)
             this.reset();
         },
         showButtonCreateTemplate() {
@@ -145,7 +124,7 @@ export const useModalStore = defineStore("modal", {
             this.imagePreview = "";
             this.textUserInput = "";
             this.titleUserInput = "";
-            this.selectedFileImage = new File([], "");
+            this.selectedFileImage = {} as File;
             this.button.title = "";
             this.button.url = "";
             this.name = "";
