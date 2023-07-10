@@ -174,7 +174,7 @@
 
       <!-- send Message&Image create TemplateMessage -->
       <template v-if="currentChat?.conversation.participants[0].username">
-        <MessageSender :platform="currentChat.conversation.platform" />
+        <MessageSender :platform="currentChat.conversation.platform" :converstion="currentChat.conversation" />
       </template>
 
     </div>
