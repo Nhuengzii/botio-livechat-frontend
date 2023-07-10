@@ -5,7 +5,7 @@ import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
-import type { ShopInformation } from "@/types/ShopInformation";
+import type { ShopConfig, ShopInformation } from "@/types/ShopInformation";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -37,7 +37,7 @@ class BotioLivechat implements IBotioLivechat {
       console.log('websocket connected');
     }
     this.websocketClient.onclose = () => {
-      alert("websocket disconnected with duration: " + `${(Date.now() - this._startTimestamp) / 1000} seconds`)
+      // alert("websocket disconnected with duration: " + `${(Date.now() - this._startTimestamp) / 1000} seconds`)
       console.log('websocket disconnected');
       // reconnect
       this.connect(onmessageCallback);
@@ -59,6 +59,15 @@ class BotioLivechat implements IBotioLivechat {
     } catch (error) {
       throw new Error("Error fetching platform information");
     }
+  }
+  async getShopConfig() {
+    const res: ShopConfig = {
+      shop_id: this.shopID,
+      templates: []
+    }
+    return res;
+  }
+  async saveTemplate(templateID: string, payload: string) {
   }
   async getAllPageInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
