@@ -248,6 +248,9 @@ const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 
 const handleButtonCreateTemplate = () => {
+  modalStore.platform = props.platform
+  console.log(modalStore.platform)
+  
   modalStore.actionsCreateTemplate();
   uiStore.finishCreateTemplate();
 }
@@ -280,15 +283,15 @@ const handleFileSelect = (event: Event) => {
     const reader = new FileReader();
     reader.onload = () => {
       modalStore.imagePreview = reader.result as string;
-      modalStore.selectedFile = file;
+      modalStore.selectedFileImage = file;
     };
     reader.readAsDataURL(file);
   }
 }
 
 const getImageFilename = () => {
-  if (modalStore.imagePreview && modalStore.selectedFile) {
-    return modalStore.selectedFile.name;
+  if (modalStore.imagePreview && modalStore.selectedFileImage) {
+    return modalStore.selectedFileImage.name;
   }
   return '';
 }

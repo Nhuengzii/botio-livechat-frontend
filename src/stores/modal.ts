@@ -134,7 +134,7 @@ export const useModalStore = defineStore("modal", {
                 )
             }
         },
-        findTemplate(templateId: number) {
+        findTemplateWithId(templateId: number) {
             const clickedTemplate = this.templateList.find(template => template.id === templateId)
             return clickedTemplate
         },
