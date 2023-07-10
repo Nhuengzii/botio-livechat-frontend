@@ -76,11 +76,11 @@ const modalStore = useModalStore()
 
 const handleSendTemplate = async (index: number, platform: string) => {
     const clickedTemplate = modalStore.templateList[index]
-    console.log(clickedTemplate.elements)
+    console.log(JSON.stringify(clickedTemplate.elements, null, 2))
     //const isButtonForm = 'buttonList' in clickedTemplate.elements;
     // send Template
     const attachment: AttachmentForSending = {
-        type: 'fb-template-generic',
+        type: 'facebook-template-generic',
         payload: {
             fb_template_generic: [
                 {
@@ -88,9 +88,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     message: clickedTemplate.elements.message,
                     picture: clickedTemplate.elements.picture,
                     buttons: [],
-                    default_action: {
-                        url: ""
-                    }
+                    
                 }
             ]
         },
