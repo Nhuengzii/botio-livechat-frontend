@@ -248,16 +248,23 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 
-const handleButtonCreateTemplate = () => {
+
+
+// action create Template
+const handleButtonCreateTemplate = async () => {
   modalStore.platform = props.platform
   console.log(modalStore.platform)
  
-  modalStore.actionsCreateTemplate();
-  uiStore.finishCreateTemplate();
+  const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
+  if (image_url){
+    modalStore.actionsCreateTemplate(image_url);
+    uiStore.finishCreateTemplate();
+  }
 }
 
 const buttonCount = computed(() => modalStore.buttonList.length)
 
+// dynamic area textarea input-messager
 const calculateTextareaRows = computed(() => {
   const lineHeight = 20; // Adjust this value based on your font size and line height
   const maxRows = 5; // Set the maximum number of rows you want to show before enabling scrolling
@@ -332,6 +339,7 @@ const sendMessage = async () => {
 };
 
 
+// allow key-enter to send message
 const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) => {
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
@@ -351,7 +359,7 @@ const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) 
 };
 
 
-
+// if typing show button to sendMessage | image
 const handleTyping = () => {
   clearTimeout(typingTimeout); // Clear the previous typing timeout
 
