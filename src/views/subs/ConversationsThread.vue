@@ -27,8 +27,6 @@ import Thread from '@/components/Thread.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useVirtualList } from '@vueuse/core';
-import { computed } from '@vue/reactivity';
 import ThreadSkeleton from '@/components/ThreadSkeleton.vue';
 const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
@@ -67,20 +65,6 @@ async function loadmore($state: {
   console.log('load more done')
 }
 
-
-
-
-
-const conversationsForVirtualList = computed(() => {
-  const currentPlatform = route.query.platform as string;
-  return conversations.value(currentPlatform, conversationsThreadMode.value === 'searching')
-})
-const { list, containerProps, wrapperProps } = useVirtualList(
-  conversationsForVirtualList,
-  {
-    itemHeight: 88
-  }
-)
 
 watch(route, async () => {
   isLoading.value = true;
