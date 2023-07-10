@@ -44,7 +44,7 @@ type FacebookTemplateGeneric = {
       url: string,
       title: string,
     }[]
-    default_action: {
+    default_action?: {
       url: string
     }
   }[]
