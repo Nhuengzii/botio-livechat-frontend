@@ -134,11 +134,16 @@ export const useModalStore = defineStore("modal", {
                 )
             }
         },
+        findTemplate(templateId: number) {
+            const clickedTemplate = this.templateList.find(template => template.id === templateId)
+            return clickedTemplate
+        },
 
         reset() {
             this.imagePreview = "";
             this.textUserInput = "";
             this.titleUserInput = "";
+            this.selectedFileImage = new File([], "");
             this.button.title = "";
             this.button.url = "";
             this.name = "";
