@@ -227,8 +227,8 @@ import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
-defineProps<{
-  platform: String
+const props = defineProps<{
+  platform: string
   converstion: Conversation
 }>()
 
@@ -250,7 +250,7 @@ const isShowEmojiPicker = ref(false)
 const handleButtonCreateTemplate = () => {
   modalStore.platform = props.platform
   console.log(modalStore.platform)
-  
+
   modalStore.actionsCreateTemplate();
   uiStore.finishCreateTemplate();
 }

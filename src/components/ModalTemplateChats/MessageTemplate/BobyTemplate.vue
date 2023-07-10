@@ -70,18 +70,30 @@ import { useLivechatStore } from '@/stores/livechat';
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
-const handleSendTemplate = async () => {
+
+    
+
+const handleSendTemplate = async (templateId:number) => {
+    // find template
+    const clickedTemplateId = modalStore.findTemplate(templateId)
     // uploadImage
-    const image_url = await livechatstore.botioLivechat?.uploadImage(modalStore.selectedFile)
+    const image_url = await livechatstore.botioLivechat?.uploadImage(modalStore.templateList[0].elements.picture)
     // send Template
     const attachment: FacebookTemplateGeneric = {
-        templateGenneric: [
+        fb_template_generic: [
             {
-                
+            title: modalStore.templateList[0].elements.title,
+            message: modalStore.templateList[0].elements.text,
+            picture: image_url,
+            button:[],
+            default_action: {
+                url:""
+                }
             }
         ]
     }
-    livechatstore.sendAttachmentMessage(conversation)
+    livechatstore.sendAttachmentMessage(conversation, attachment)
+
 
 }
 </script>
