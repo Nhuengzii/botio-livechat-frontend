@@ -98,23 +98,8 @@ export const useModalStore = defineStore("modal", {
             this.templateList.push(template)
             this.reset();
         },
-        showButtonCreateTemplate() {
-            if (this.selectedTemplate === 'ImageText') {
-                return (
-                    this.imagePreview !== "" &&
-                    this.titleUserInput !== "" &&
-                    this.textUserInput !== ""
-                )
-            } else if (this.selectedTemplate === 'Button') {
-                return (
-                    this.imagePreview !== "" &&
-                    this.titleUserInput !== "" &&
-                    this.textUserInput !== "" &&
-                    this.button.url !== "" &&
-                    this.button.title !== ""
-                )
-            }
-        },
+
+        // not use now
         findTemplateWithId(templateId: number) {
             const clickedTemplate = this.templateList.find(template => template.id === templateId)
             return clickedTemplate
