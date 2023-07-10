@@ -26,7 +26,8 @@
 
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
-                        <p>{{ template.name }}</p>
+                        <p>{{ template.name }} {{ index }}</p>
+                        <p>{{ template.elements.title }}</p>
                     </div>
                 </div>
 
@@ -67,7 +68,6 @@ import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
 
-
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
@@ -76,10 +76,8 @@ const modalStore = useModalStore()
 
 const handleSendTemplate = async (index: number, platform: string) => {
     const clickedTemplate = modalStore.templateList[index]
-    // uploadImage
-    const fileUpload = clickedTemplate.elements.picture
-    // const image_url:string | undefined = await livechatstore.botioLivechat?.uploadImage(fileUpload)
-    const image_url: string | undefined = await livechatstore.botioLivechat?.uploadImage(fileUpload);
+    console.log(clickedTemplate.elements)
+    //const isButtonForm = 'buttonList' in clickedTemplate.elements;
     // send Template
     const attachment: AttachmentForSending = {
         type: 'fb-template-generic',
@@ -87,8 +85,8 @@ const handleSendTemplate = async (index: number, platform: string) => {
             fb_template_generic: [
                 {
                     title: clickedTemplate.elements.title,
-                    message: clickedTemplate.elements.text,
-                    picture: image_url || "",
+                    message: clickedTemplate.elements.message,
+                    picture: clickedTemplate.elements.picture,
                     buttons: [],
                     default_action: {
                         url: ""
@@ -96,10 +94,10 @@ const handleSendTemplate = async (index: number, platform: string) => {
                 }
             ]
         },
-
     }
-    livechatstore.sendAttachmentMessage(props.conversation, attachment)
+    livechatstore.sendAttachmentMessage(props.conversation, attachment)    
 }
+
 </script>
 
 <style scoped>
