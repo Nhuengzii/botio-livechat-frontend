@@ -23,31 +23,40 @@ type Button = {
     url: string;
 }
 
-type GenericForm = {
-    picture: File,
-    title: string,
-    text: string,
-}
+// type GenericForm = {
+//     pictureFile: File,
+//     title: string,
+//     text: string,                                                           
+// }
 
-type ButtonForm = {
-    picture: File;
-    title: string;
-    text: string;
-    buttonList: Button[];
-}
+// type ButtonForm = {
+//     pictureFile: File;
+//     title: string;
+//     text: string;
+//     buttonList: Button[];
+// }
 
 type Template = {
     id: number
+    type: string
     platform: string
     name: string;
-    elements: GenericForm | ButtonForm
+    // elements: GenericForm | ButtonForm
+    elements: {
+        title: string;
+        message: string;
+        pictureFile: File;
+        buttons: Button[]
+
+
+    }
 }
 
 export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
         name: "",
         selectedTemplate: "",
-        selectedFileImage: new File([], ""),
+        selectedFileImage: {} as File,
         imagePreview: "",
         textUserInput: "",
         titleUserInput: "",
@@ -86,34 +95,18 @@ export const useModalStore = defineStore("modal", {
         actionsCreateTemplate() {
             const template: Template = {
                 id: this.templateList.length + 1,
+                type: this.selectedTemplate,
                 platform: this.platform,
                 name: this.name,
-                elements: {} as GenericForm | ButtonForm
+                elements: {
+                    title: this.titleUserInput,
+                    message: this.textUserInput,
+                    pictureFile: this.selectedFileImage,
+                    buttons: []
+                    
+                }
                 ,
             };
-
-            if (this.selectedTemplate === 'ImageText') {
-                // for ImageText template type, set elemets as GenericForm
-                const genericForm: GenericForm = {
-                    picture: this.selectedFileImage,
-                    title: this.titleUserInput,
-                    text: this.textUserInput
-                };
-                template.elements = genericForm
-
-
-            } else if (this.selectedTemplate === "Button") {
-                // for Button template type, set elements as ButtonForm
-                const buttonForm: ButtonForm = {
-                    picture: this.selectedFileImage,
-                    title: this.titleUserInput,
-                    text: this.textUserInput,
-                    buttonList: this.buttonList,
-                }
-                template.elements = buttonForm
-            }
-
-
             this.templateList.push(template)
             this.reset();
         },
