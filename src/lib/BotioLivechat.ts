@@ -67,6 +67,8 @@ class BotioLivechat implements IBotioLivechat {
     }
     return res;
   }
+  async saveTemplate(templateID: string, payload: string) {
+  }
   async getAllPageInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
     try {
