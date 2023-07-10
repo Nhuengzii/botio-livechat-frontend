@@ -126,6 +126,7 @@
                             <button @click="selecImage"
                               class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
                             <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
+                            <p>{{ modalStore.selectedFileImage }}</p>
                             </p>
                           </div>
 
@@ -146,7 +147,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="converstion" />
+                  <BodyTemplate :conversation="props.converstion" />
                 </template>
 
               </template>
@@ -155,7 +156,7 @@
               <template #footer>
                 <template v-if="uiStore.is_createTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="uiStore.activeEditTemplateMessage"
+                    <button @click="uiStore.activeEditTemplateMessage" v-if="modalStore.selectedTemplate"
                       class="py-3 px-8 rounded-3xl text-xl bg-[#00ABB3] text-white">ถัดไป</button>
                   </div>
                 </template>
@@ -250,12 +251,12 @@ const isShowEmojiPicker = ref(false)
 const handleButtonCreateTemplate = () => {
   modalStore.platform = props.platform
   console.log(modalStore.platform)
-
+ 
   modalStore.actionsCreateTemplate();
   uiStore.finishCreateTemplate();
 }
 
-const buttonCOunt = computed(() => modalStore.buttonList.length)
+const buttonCount = computed(() => modalStore.buttonList.length)
 
 const calculateTextareaRows = computed(() => {
   const lineHeight = 20; // Adjust this value based on your font size and line height
@@ -279,20 +280,25 @@ const selecImage = () => {
 
 const handleFileSelect = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
+  
   if (file) {
+    modalStore.selectedFileImage = file;
+    //console.log(modalStore.selectedFileImage)
     const reader = new FileReader();
     reader.onload = () => {
       modalStore.imagePreview = reader.result as string;
-      modalStore.selectedFileImage = file;
+      
     };
     reader.readAsDataURL(file);
   }
 }
 
 const getImageFilename = () => {
+  console.log(`selectedFileImage if: ${modalStore.selectedFileImage}`)
   if (modalStore.imagePreview && modalStore.selectedFileImage) {
     return modalStore.selectedFileImage.name;
   }
+  
   return '';
 }
 
