@@ -162,8 +162,11 @@
                 </template>
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
-                    <button @click="handleButtonCreateTemplate" v-show="modalStore.showButtonCreateTemplate"
-                      class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">สร้างเทมเพลต</button>
+                    <!-- button create template -->
+                    <button v-if="canCreateTemplate" @click="handleButtonCreateTemplate"
+                      class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">
+                      สร้างเทมเพลต
+                    </button>
                   </div>
                 </template>
               </template>
@@ -249,16 +252,26 @@ const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 
 
+const canCreateTemplate = computed(() => {
+  return (
+    modalStore.titleUserInput &&
+    modalStore.textUserInput &&
+    modalStore.imagePreview
+  );
+});
+
 
 // action create Template
 const handleButtonCreateTemplate = async () => {
-  modalStore.platform = props.platform
-  console.log(modalStore.platform)
- 
-  const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
-  if (image_url){
-    modalStore.actionsCreateTemplate(image_url);
-    uiStore.finishCreateTemplate();
+  if (canCreateTemplate) {
+    modalStore.platform = props.platform
+    console.log(modalStore.platform)
+  
+    const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
+    if (image_url) {
+      modalStore.actionsCreateTemplate(image_url);
+      uiStore.finishCreateTemplate();
+    }
   }
 }
 
@@ -287,25 +300,25 @@ const selecImage = () => {
 
 const handleFileSelect = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
-  
+
   if (file) {
     modalStore.selectedFileImage = file;
     //console.log(modalStore.selectedFileImage)
     const reader = new FileReader();
     reader.onload = () => {
       modalStore.imagePreview = reader.result as string;
-      
+
     };
     reader.readAsDataURL(file);
   }
 }
 
 const getImageFilename = () => {
-  console.log(`selectedFileImage if: ${modalStore.selectedFileImage}`)
+  //console.log(`selectedFileImage if: ${modalStore.selectedFileImage}`)
   if (modalStore.imagePreview && modalStore.selectedFileImage) {
     return modalStore.selectedFileImage.name;
   }
-  
+
   return '';
 }
 
