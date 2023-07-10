@@ -130,6 +130,7 @@ export const useModalStore = defineStore("modal", {
             this.name = "";
             this.platform = "";
             this.buttonList = [];
+            this.selectedTemplate = "";
         },
     },
 });
