@@ -26,8 +26,7 @@
 
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
-                        <p>{{ template.name }} {{ index }}</p>
-                        <p>{{ template.elements.title }}</p>
+                        <p>{{ template.name }}</p>
                     </div>
                 </div>
 
