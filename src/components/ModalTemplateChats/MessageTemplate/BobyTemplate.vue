@@ -21,17 +21,18 @@
     </div>
     <div class="background-d9-250 flex flex-wrap">
 
-        <template v-for="{ elements, name, platform } in modalStore.templateList">
+        <template v-for="(template, index) in modalStore.templateList">
             <div class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
 
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
-                        <p>{{ name }}</p>
+                        <p>{{ template.name }}</p>
                     </div>
                 </div>
 
                 <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
-                    <button @click="" class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
+                    <button @click="handleSendTemplate(index, template.platform)"
+                        class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
                         <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
@@ -56,11 +57,11 @@
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-defineProps<{
+const props = defineProps<{
     conversation: Conversation
 }>()
 
-import type { FacebookTemplateGeneric } from '@/types/message'
+import type { AttachmentForSending, FacebookTemplateGeneric } from '@/types/message'
 
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
@@ -71,30 +72,33 @@ const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
 
-    
 
-const handleSendTemplate = async (templateId:number) => {
-    // find template
-    const clickedTemplateId = modalStore.findTemplate(templateId)
+
+const handleSendTemplate = async (index: number, platform: string) => {
+    const clickedTemplate = modalStore.templateList[index]
     // uploadImage
-    const image_url = await livechatstore.botioLivechat?.uploadImage(modalStore.templateList[0].elements.picture)
+    const fileUpload = clickedTemplate.elements.picture
+    // const image_url:string | undefined = await livechatstore.botioLivechat?.uploadImage(fileUpload)
+    const image_url: string | undefined = await livechatstore.botioLivechat?.uploadImage(fileUpload);
     // send Template
-    const attachment: FacebookTemplateGeneric = {
-        fb_template_generic: [
-            {
-            title: modalStore.templateList[0].elements.title,
-            message: modalStore.templateList[0].elements.text,
-            picture: image_url,
-            button:[],
-            default_action: {
-                url:""
+    const attachment: AttachmentForSending = {
+        type: 'fb-template-generic',
+        payload: {
+            fb_template_generic: [
+                {
+                    title: clickedTemplate.elements.title,
+                    message: clickedTemplate.elements.text,
+                    picture: image_url || "",
+                    buttons: [],
+                    default_action: {
+                        url: ""
+                    }
                 }
-            }
-        ]
+            ]
+        },
+
     }
-    livechatstore.sendAttachmentMessage(conversation, attachment)
-
-
+    livechatstore.sendAttachmentMessage(props.conversation, attachment)
 }
 </script>
 
