@@ -49,7 +49,7 @@
               <!--BODY-->
               <template #body>
                 <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
-                  <BodyCreateMessage />
+                  <BodyCreateMessage :conversation="converstion"/>
                 </template>
                 <template v-else-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center h-full">
