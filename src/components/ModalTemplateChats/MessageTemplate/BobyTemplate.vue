@@ -10,7 +10,7 @@
             class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
             <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
             <div class="rounded-2xl px-2 py-1">
-                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความ</p>
+                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ {{conversation.platform}}</p>
             </div>
         </button>
         <!-- end create chat template -->
@@ -26,6 +26,7 @@
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
                         <p>{{ template.name }}</p>
+                        <p>{{ template.platform }}</p>
                     </div>
                 </div>
 
@@ -36,7 +37,7 @@
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
                 </div>
-                
+
                 <!-- (To Do !!!) icon click to edit template -->
                 <div class="flex-[1] px-1 items-center justify-center">
                     <button @click="uiStore.activeEditTemplateMessage" class="flex">
@@ -103,43 +104,60 @@ const handleSendTemplate = async (index: number, platform: string) => {
             console.log('Error sending attachment:', error);
         }
     } else if (platform == 'line') {
-        const attachmentLine: AttachmentForSending = {
-            type: 'line-template-buttons',
-            payload: {
-                line_template_buttons: [
-                    {
-                        altText: clickedTemplate.elements[0].title,
-                        thumbnailImageUrl: clickedTemplate.elements[0].picture,
-                        title: clickedTemplate.elements[0].title,
-                        text: clickedTemplate.elements[0].message,
-                        defaultAction: null,
-                        actions: [
-                            {
-                                label: clickedTemplate.elements[0].buttons[0].title,
-                                url: clickedTemplate.elements[0].buttons[0].url
-                            }
-                        ],
-                    }
-                ]
-            },
-        }
-        livechatstore.sendAttachmentMessage(props.conversation, attachmentLine)
-    } else if (platform == 'instagram') {
-        // const attachmentInstagram: AttachmentForSending = {
-        //     type: 'instagram-template-generic',
-        //     payload: {
-        //         instagram_template_generic: [
-        //             {
-        //                 title: clickedTemplate.elements.title,
-        //                 message: clickedTemplate.elements.message,
-        //                 picture: clickedTemplate.elements.picture,
-        //                 buttons: [],
 
-        //             }
-        //         ]
-        //     },
-        // }
-        // livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
+        if (modalStore.selectedTemplate === 'Button') {
+            try {
+                const attachmentLineButton: AttachmentForSending = {
+                    
+                    type: 'line-template-buttons',
+                    payload: {
+                        line_template_buttons:
+                        {
+                            altText: clickedTemplate.elements[0].title,
+                            thumbnailImageUrl: clickedTemplate.elements[0].picture,
+                            title: clickedTemplate.elements[0].title,
+                            text: clickedTemplate.elements[0].message,
+                            actions: [
+                                {
+                                    label: clickedTemplate.elements[0].buttons[0].title,
+                                    uri: clickedTemplate.elements[0].buttons[0].url
+                                }
+                            ],
+                        }
+                    },
+                }
+                livechatstore.sendAttachmentMessage(props.conversation, attachmentLineButton)
+
+            } catch (error) {
+                console.log('Error sending attachment:', error);
+            }
+        } else if (modalStore.selectedTemplate === 'TextImage') {
+            try {
+
+            } catch (error) {
+
+            }
+        }
+    } else if (platform == 'instagram') {
+        try {
+            const attachmentInstagram: AttachmentForSending = {
+                type: 'instagram-template-generic',
+                payload: {
+                    instagram_template_generic: clickedTemplate.elements.map((element) =>({
+                        title: element.title,
+                        message: element.message,
+                        picture: element.picture,
+                        buttons: element.buttons.map((button) => ({
+                            url: button.url,
+                            title: button.title,
+                        }))
+                    }))                                            
+                },
+            }
+            livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
+        } catch (error) {
+            console.log('Error sending attachment:', error);
+        }   
     }
 
 }
