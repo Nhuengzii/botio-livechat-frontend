@@ -23,7 +23,6 @@
 
         <template v-for="(template, index) in modalStore.templateList">
             <div class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
-
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
                         <p>{{ template.name }}</p>
@@ -61,7 +60,7 @@ const props = defineProps<{
     conversation: Conversation
 }>()
 
-import type { AttachmentForSending, FacebookTemplateGeneric } from '@/types/message'
+import type { AttachmentForSending, } from '@/types/message'
 
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
@@ -78,21 +77,63 @@ const handleSendTemplate = async (index: number, platform: string) => {
     console.log(JSON.stringify(clickedTemplate.elements, null, 2))
     //const isButtonForm = 'buttonList' in clickedTemplate.elements;
     // send Template
-    const attachment: AttachmentForSending = {
-        type: 'facebook-template-generic',
-        payload: {
-            fb_template_generic: [
-                {
-                    title: clickedTemplate.elements.title,
-                    message: clickedTemplate.elements.message,
-                    picture: clickedTemplate.elements.picture,
-                    buttons: [],
-                    
-                }
-            ]
-        },
+    if (platform === 'facebook') {
+
+
+        const attachmentFacebook: AttachmentForSending = {
+            type: 'facebook-template-generic',
+            payload: {
+                fb_template_generic: clickedTemplate.elements.map((element) => ({
+                    title: element.title,
+                    message: element.message,
+                    picture: element.picture,
+                    buttons: element.buttons,
+                })),
+            },
+        }
+ 
+
+        livechatstore.sendAttachmentMessage(props.conversation, attachmentFacebook)
+    } else if (platform == 'line') {
+        const attachmentLine: AttachmentForSending = {
+            type: 'line-template-buttons',
+            payload: {
+                line_template_buttons: [
+                    {
+                        altText: clickedTemplate.elements[0].title,
+                        thumbnailImageUrl: clickedTemplate.elements[0].picture,
+                        title: clickedTemplate.elements[0].title,
+                        text: clickedTemplate.elements[0].message,
+                        defaultAction: null,
+                        actions: [
+                            {
+                                label: clickedTemplate.elements[0].buttons[0].title,
+                                url: clickedTemplate.elements[0].buttons[0].url
+                            }
+                        ],
+                    }
+                ]
+            },
+        }
+        livechatstore.sendAttachmentMessage(props.conversation, attachmentLine)
+    } else if (platform == 'instagram') {
+        // const attachmentInstagram: AttachmentForSending = {
+        //     type: 'instagram-template-generic',
+        //     payload: {
+        //         instagram_template_generic: [
+        //             {
+        //                 title: clickedTemplate.elements.title,
+        //                 message: clickedTemplate.elements.message,
+        //                 picture: clickedTemplate.elements.picture,
+        //                 buttons: [],
+
+        //             }
+        //         ]
+        //     },
+        // }
+        // livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
     }
-    livechatstore.sendAttachmentMessage(props.conversation, attachment)    
+
 }
 
 </script>
