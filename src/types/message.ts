@@ -111,7 +111,7 @@ type LineTemplateCarosel = {
 }
 
 type InstagramTemplateGeneric = {
-  instagram_template_generic: {
+  ig_template_generic: {
     title: string,
     message: string,
     picture: string,
