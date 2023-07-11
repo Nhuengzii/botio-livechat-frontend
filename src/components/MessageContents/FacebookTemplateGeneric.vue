@@ -13,7 +13,7 @@
             <p class="break-all text-gray-400 pt-1 pb-2">{{ template.elements[0].default_action.url }}</p>
             
             <h1 class="font-bold break-all truncate">{{ template.elements[0].title }}</h1>
-            <p class="break-all text-ellipsis">{{ template.elements[0].subtitle }}</p>
+            <p class="break-all text-ellipsis pr-2">{{ template.elements[0].subtitle }}</p>
           </div>
           <div class="flex col justify-center bg-white py-4 border-b-2 hover:bg-gray-100"
             v-for="button, index in template.elements[0].buttons" :key="index">
