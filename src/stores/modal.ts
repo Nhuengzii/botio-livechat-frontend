@@ -15,6 +15,8 @@ type ModalState = {
     };
     buttonList: Button[];
     templateList: Template[];
+    isShowButtonCreate: boolean;
+    amountButton: number;
 };
 
 
@@ -52,14 +54,17 @@ export const useModalStore = defineStore("modal", {
             url: "",
         },
         buttonList: [],
-        templateList: []
+        templateList: [],
+        isShowButtonCreate: false,
+        amountButton: 1,
+        
     }),
     actions: {
         selectTemplate(template: string) {
             this.selectedTemplate = template;
         },
 
-        actionAddButton() {
+        actionSaveButton() {
             if (this.buttonList.length >= 3) {
                 return;
             }
@@ -69,14 +74,16 @@ export const useModalStore = defineStore("modal", {
                 id: Date.now()
             };
             this.buttonList.push(newButton);
+            console.log(JSON.stringify(this.buttonList, null, 2));
             this.button.url = "",
-                this.button.title = ""
+            this.button.title = ""
         },
         clickToAddButton() {
-            if (this.buttonList.length >= 3) {
+            if (this.buttonList.length >= 3 && this.amountButton >= 3) {
                 return;
-            }
-
+            } else {
+                this.amountButton += 1;
+            } 
         },
         async actionsCreateTemplate(image_url: string) {
             // let elmentsList = [],
@@ -91,7 +98,11 @@ export const useModalStore = defineStore("modal", {
                         title: this.titleUserInput,
                         message: this.textUserInput,
                         picture: image_url,
-                        buttons: []
+                        buttons: this.buttonList.map((button) => ({
+                            id: button.id,
+                            title: button.title,
+                            url: button.url,
+                        }))
                     }
                 ]
                 
@@ -117,6 +128,10 @@ export const useModalStore = defineStore("modal", {
             this.platform = "";
             this.buttonList = [];
             this.selectedTemplate = "";
+            this.isShowButtonCreate = false;
+            this.amountButton = 1;
         },
     },
 });
+
+export type { Template }
