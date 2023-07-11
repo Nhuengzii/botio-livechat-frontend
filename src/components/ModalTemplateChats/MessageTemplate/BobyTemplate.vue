@@ -80,20 +80,27 @@ const handleSendTemplate = async (index: number, platform: string) => {
     if (platform === 'facebook') {
 
 
-        const attachmentFacebook: AttachmentForSending = {
-            type: 'facebook-template-generic',
-            payload: {
-                fb_template_generic: clickedTemplate.elements.map((element) => ({
-                    title: element.title,
-                    message: element.message,
-                    picture: element.picture,
-                    buttons: element.buttons,
-                })),
-            },
-        }
- 
+        try {
+            const attachmentFacebook = {
+                type: 'facebook-template-generic',
+                payload: {
+                    fb_template_generic: clickedTemplate.elements.map((element) => ({
+                        title: element.title,
+                        message: element.message,
+                        picture: element.picture,
+                        buttons: element.buttons.map((button) => ({
+                            url: button.url,
+                            title: button.title,
+                        })),
+                    })),
+                },
+            };
 
-        livechatstore.sendAttachmentMessage(props.conversation, attachmentFacebook)
+            await livechatstore.sendAttachmentMessage(props.conversation, attachmentFacebook);
+        } catch (error) {
+            // Handle the error
+            console.log('Error sending attachment:', error);
+        }
     } else if (platform == 'line') {
         const attachmentLine: AttachmentForSending = {
             type: 'line-template-buttons',
