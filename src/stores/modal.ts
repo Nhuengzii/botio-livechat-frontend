@@ -35,9 +35,7 @@ type Template = {
         message: string;
         picture: string;
         buttons: Button[]
-
-
-    }
+    }[]
 }
 
 export const useModalStore = defineStore("modal", {
@@ -81,19 +79,22 @@ export const useModalStore = defineStore("modal", {
 
         },
         async actionsCreateTemplate(image_url: string) {
-
+            // let elmentsList = [],
+            
             const template: Template = {
                 id: Date.now(),
                 type: this.selectedTemplate,
                 platform: this.platform,
                 name: this.name,
-                elements: {
-                    title: this.titleUserInput,
-                    message: this.textUserInput,
-                    picture: image_url,
-                    buttons: []
-
-                }
+                elements: [
+                    {
+                        title: this.titleUserInput,
+                        message: this.textUserInput,
+                        picture: image_url,
+                        buttons: []
+                    }
+                ]
+                
             };
             this.templateList.push(template)
             this.reset();
