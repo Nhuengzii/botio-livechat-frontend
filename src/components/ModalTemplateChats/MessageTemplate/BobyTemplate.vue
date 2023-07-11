@@ -36,13 +36,15 @@
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
                 </div>
-
+                
+                <!-- (To Do !!!) icon click to edit template -->
                 <div class="flex-[1] px-1 items-center justify-center">
                     <button @click="uiStore.activeEditTemplateMessage" class="flex">
                         <font-awesome-icon :icon="['fas', 'pen']" />
                     </button>
                 </div>
 
+                <!-- (To DO !!!) icon click to delete template -->
                 <div class="flex-[1] px-1 items-center justify-center">
                     <button class="flex">
                         <font-awesome-icon :icon="['fas', 'trash-can']" />
@@ -71,12 +73,11 @@ const uiStore = useUIStore()
 const modalStore = useModalStore()
 
 
-
+// function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
     const clickedTemplate = modalStore.templateList[index]
     console.log(JSON.stringify(clickedTemplate.elements, null, 2))
-    //const isButtonForm = 'buttonList' in clickedTemplate.elements;
-    // send Template
+
     if (platform === 'facebook') {
 
 
