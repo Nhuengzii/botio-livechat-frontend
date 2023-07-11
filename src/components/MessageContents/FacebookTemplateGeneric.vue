@@ -19,9 +19,7 @@
             v-for="button, index in template.elements[0].buttons" :key="index">
             <a :href="button.url" target="_blank" class="text-blue-500 font-bold text-base">{{ button.title }}</a>
           </div>
-          <div class="h-2">
-
-          </div>
+          <div class="h-2"></div>
         </div>
       </div>
     </button>
@@ -55,6 +53,7 @@
                 v-for="button, index in element.buttons" :key="index">
                 <a :href="button.url" target="_blank" class="text-blue-500 font-bold text-base">{{ button.title }}</a>
               </div>
+              <div class="h-2"></div>
             </div>
           </div>
         </button>
