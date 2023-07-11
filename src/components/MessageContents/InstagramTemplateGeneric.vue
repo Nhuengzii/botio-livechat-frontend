@@ -1,20 +1,17 @@
 
 <template>
-  <!-- <template v-if="message.source.userType === 'admin'">
-    <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-  </template> -->
   <template v-if="template.elements.length == 1">
     <div v-for="element in template.elements" class="">
-      <div class="mx-2 border-2 rounded-xl flex flex-col">
-        <div class="rounded-t-xl min-h-44 max-h-56 w-72 overflow-hidden">
-          <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
+      <div class="mx-2 border-2 rounded-xl">
+        <div class="rounded-t-xl h-48 w-80 overflow-hidden">
+          <img :src="element.image_url" class="object-cover " alt="">
         </div>
-        <div class="rounded-b-xl bg-white pb-2 pt-1">
-          <div class="pb-2 border-b-2 px-4">
-            <h1 class="font-bold break-all">{{ element.title }}</h1>
-            <h2 class="break-all">{{ element.subtitle }}</h2>
+        <div class="rounded-b-xl bg-white pt-1">
+          <div class="flex flex-col justify-center items-start pb-2 pl-4 min-w-[120px] max-w-[320px]">
+            <h1 class="font-bold break-all truncate">{{ element.title }}</h1>
+            <h2 class="break-all text-ellipsis pr-2">{{ element.subtitle }}</h2>
           </div>
-          <div class="flex justify-center bg-white border-b-2 py-4 hover:bg-gray-100"
+          <div class="flex justify-center bg-white py-4 hover:bg-gray-100"
             v-for="button, index in element.buttons" :key="index">
             <a :href="button.url" target="_blank" class="text-blue-500">{{ button.title }}</a>
           </div>
@@ -30,7 +27,7 @@
           <div class="rounded-t-xl  h-48  overflow-hidden bg-gray-100">
             <img :src="element.image_url" class="object-cover rounded-t-xl" alt="">
           </div>
-          <div class="rounded-b-xl bg-white pb-2 pt-1">
+          <div class="rounded-b-xl bg-white mb-2 mt-1">
             <div class="pb-2 border-b-2 flex flex-col items-center justify-start">
               <h1 class="font-bold break-all self-start pl-10">{{ element.title }}</h1>
               <h2 class="break-all self-start pl-10">{{ element.subtitle }}</h2>
@@ -48,9 +45,6 @@
       </template>
     </Carousel>
   </template>
-  <!-- <template v-if="message.source.userType === 'user'">
-    <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-  </template> -->
 </template>
 
 <script setup lang="ts">
