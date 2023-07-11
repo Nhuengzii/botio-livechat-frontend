@@ -231,6 +231,8 @@ import type { Conversation } from '@/types/conversation';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
+
+
 const props = defineProps<{
   platform: string
   converstion: Conversation
@@ -250,6 +252,7 @@ const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
+const isLoading = ref(false)
 
 
 const canCreateTemplate = computed(() => {
@@ -263,14 +266,23 @@ const canCreateTemplate = computed(() => {
 
 // action create Template
 const handleButtonCreateTemplate = async () => {
-  if (canCreateTemplate) {
+  if (canCreateTemplate && !isLoading.value) {
+
+    isLoading.value = true;
+
+
     modalStore.platform = props.platform
     console.log(modalStore.platform)
   
-    const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
-    if (image_url) {
-      modalStore.actionsCreateTemplate(image_url);
-      uiStore.finishCreateTemplate();
+    try {
+
+      const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
+      if (image_url) {
+        modalStore.actionsCreateTemplate(image_url);
+        uiStore.finishCreateTemplate();
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }
