@@ -22,7 +22,7 @@
     <div class="background-d9-250 flex flex-wrap">
 
         <template v-for="(template, index) in modalStore.templateList">
-            <div class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
+            <div v-if="template.platform === conversation.platform" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
                 <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
                         <p>{{ template.name }}</p>
@@ -143,7 +143,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
             const attachmentInstagram: AttachmentForSending = {
                 type: 'instagram-template-generic',
                 payload: {
-                    instagram_template_generic: clickedTemplate.elements.map((element) =>({
+                    ig_template_generic: clickedTemplate.elements.map((element) =>({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
