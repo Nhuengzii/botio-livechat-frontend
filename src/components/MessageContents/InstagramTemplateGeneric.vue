@@ -1,8 +1,8 @@
 
 <template>
-  <template v-if="message.source.userType === 'admin'">
+  <!-- <template v-if="message.source.userType === 'admin'">
     <p class="self-end pl-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-  </template>
+  </template> -->
   <template v-if="template.elements.length == 1">
     <div v-for="element in template.elements" class="">
       <div class="mx-2 border-2 rounded-xl flex flex-col">
@@ -48,9 +48,9 @@
       </template>
     </Carousel>
   </template>
-  <template v-if="message.source.userType === 'user'">
+  <!-- <template v-if="message.source.userType === 'user'">
     <p class="self-end pr-2 pb-1 text-sm text-[#B2B2B2]">{{ formatTimestamp(message.timestamp) }}</p>
-  </template>
+  </template> -->
 </template>
 
 <script setup lang="ts">
