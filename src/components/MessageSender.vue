@@ -55,15 +55,18 @@
                   <div class="flex items-center h-full">
 
                     <template v-if="modalStore.selectedTemplate === 'Button'">
-                      <div class="flex-1 shrink-0 flex h-full justify-center items-center">
-                        <TemplateButton class="self-start" />
+                      <div class="flex h-full">
+                        <div class="flex-1 shrink-0 flex h-full justify-center items-center">
+                          <TemplateButton class="self-start sticky top-0" />
+                        </div>
                       </div>
 
-                      <div class="h-full flex-[3] bg-gray-100 pl-6 pb-3 rounded-xl">
-                        <div class="flex flex-col">
+                      <div class="flex-[3] bg-gray-200 pl-6 pt-4 rounded-xl">
+                        <div class="flex flex-col h-full">
 
                           <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
-                          <input type="text" v-model="modalStore.name" class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
+                          <input type="text" v-model="modalStore.name" placeholder="เทมเพลต"
+                            class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
 
                           <div class="flex items-center">
                             <button @click="selecImage"
@@ -72,42 +75,38 @@
                             </p>
                           </div>
 
-
-                          <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-96">
+                            <p class="text-base font-semibold pt-4">หัวข้อ</p>
+                            <p class="text-sm font-normal pt-4">0/150</p>
+                          </div>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
-                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 150 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-[70%]">
+                            <p class="mt-2 text-base font-semibold">ข้อความ</p>
+                            <p class="text-sm font-normal mt-2">0/150</p>
+                          </div>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
                             class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="150" />
                         </div>
 
 
-
-                        <div v-if="modalStore.buttonList.length < 1" class="flex pt-4 pl-2">
-                          <p class="px-2">ระบุชื่อของในปุ่มที่ 1</p>
-                          <input type="text" v-model="modalStore.button.title">
-                          <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
-                          <input type="text" v-model="modalStore.button.url">
-                        </div>
-
-                        <template v-if="modalStore.buttonList.length > 1">
-                          <div v-for="index in modalStore.buttonList.length - 1" class="flex pt-4 pl-2">
-                            <p class="px-2">ระบุชื่อของในปุ่มที่ {{ index + 1 }}</p>
-                            <input type="text" v-model="modalStore.button.title">
-                            <p class="px-2">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
-                            <input type="text" v-model="modalStore.button.url">
+                        <!-- add button in template -->
+                        <p class="text-base font-semibold pt-4">ปุ่มในเทมเพลต</p>
+                        <div v-for="index in modalStore.amountButton" class="flex flex-col justify-center pt-4 pb-6">
+                          <div class="flex my-1">
+                            <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่มที่ {{ index }}</p>
+                            <input type="text" v-model="modalStore.button.title" class="py-1">
                           </div>
-                        </template>
-
-
-
-                        <button @click="modalStore.actionAddButton" class="mt-2 ml-2 bg-gray-200 shadow-lg px-4 py-1">
-                          <span class="py-1 px-2">เพิ่มปุ่ม</span>
-                        </button>
+                          <div class="flex my-1">
+                            <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                            <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
+                          </div>
+                          <button @click="modalStore.actionSaveButton" class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
+                            <span class="py-1 px-2">บันทึกปุ่ม</span>
+                          </button>
+                        </div>
+                        <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton" :disabled="modalStore.amountButton >= 3">add Button</button>           
                       </div>
-
-
-
                     </template>
 
                     <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
@@ -130,8 +129,8 @@
                             </p>
                           </div>
 
-
-                          <p class="text-base font-semibold pt-4 ">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <!-- input detail in button -->
+                          <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
                           <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 175 ตัวอักษร)</p>
@@ -163,8 +162,8 @@
                 <template v-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center justify-center">
                     <!-- button create template -->
-                    <button v-if="canCreateTemplate" @click="handleButtonCreateTemplate"
-                      class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">
+                    <button v-show="canCreateTemplate && !isLoading" @click="handleButtonCreateTemplate"
+                      :disabled="isLoading" class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">
                       สร้างเทมเพลต
                     </button>
                   </div>
@@ -254,40 +253,62 @@ const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isLoading = ref(false)
 
-
 const canCreateTemplate = computed(() => {
-  return (
-    modalStore.titleUserInput &&
-    modalStore.textUserInput &&
-    modalStore.imagePreview
-  );
+  const { selectedTemplate, titleUserInput, textUserInput, imagePreview, buttonList } = modalStore;
+
+  switch (selectedTemplate) {
+    case 'TextImage':
+      return titleUserInput && textUserInput && imagePreview;
+
+    case 'Button':
+      return titleUserInput && textUserInput && imagePreview && buttonList.length >= 1;
+
+    default:
+      return false;
+  }
 });
 
 
+
+// watch( () => modalStore.textUserInput, (newValue, oldValue) => {
+//   console.log(`text: ${newValue}, ${oldValue}`);
+// })
+
+// watch( () => modalStore.titleUserInput, (newValue, oldValue) => {
+//   console.log(`title: ${newValue}, ${oldValue}`);
+
+// })
+
+// watch(canCreateTemplate, (newValue, oldValue) => {
+//   console.log(`canCreateTemplate: ${newValue}, ${oldValue}`);
+//   if (newValue != oldValue) {
+
+//   }
+// })
 // action create Template
 const handleButtonCreateTemplate = async () => {
-  if (canCreateTemplate && !isLoading.value) {
-
+  if (canCreateTemplate.value && !isLoading.value) {
     isLoading.value = true;
 
+    modalStore.platform = props.platform;
+    console.log(modalStore.platform);
 
-    modalStore.platform = props.platform
-    console.log(modalStore.platform)
-  
     try {
-
-      const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage)
+      const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
       if (image_url) {
-        modalStore.actionsCreateTemplate(image_url);
+        await modalStore.actionsCreateTemplate(image_url);
         uiStore.finishCreateTemplate();
       }
     } catch (error) {
       console.log(error);
+
+    } finally {
+      isLoading.value = false;
     }
   }
-}
+};
 
-const buttonCount = computed(() => modalStore.buttonList.length)
+
 
 // dynamic area textarea input-messager
 const calculateTextareaRows = computed(() => {
