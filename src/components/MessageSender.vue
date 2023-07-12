@@ -92,44 +92,66 @@
 
                         <!-- add button in template -->
                         <p class="text-base font-semibold pt-4">ปุ่มในเทมเพลต</p>
-                        <div v-for="index in modalStore.amountButton" class="flex flex-col justify-center pt-4 pb-6">
 
-                          <template v-if="modalStore.isSaveButton">
+                        <template v-if="modalStore.buttonList.length > 0">
+                          <div v-for="index in modalStore.buttonList.length"
+                            class="flex flex-col justify-center pt-4 pb-6">
                             <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
                             <div class="flex my-1">
                               <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
-                              <p class="px-4 py-1">{{ modalStore.buttonList[index].title }}</p>
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index - 1].title }}</p>
                             </div>
                             <div class="flex my-1">
                               <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
-                              <p class="px-4 py-1">{{ modalStore.buttonList[index].url }}</p>
-
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index - 1].url }}</p>
                             </div>
-                          </template>
+                            <button @click="modalStore.actionDeleteButton(index - 1)"
+                              class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
+                              <span class="py-1 px-2">ลบปุ่ม</span>
+                            </button>
 
-                          <template v-else>
-                            <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
+                          </div>
+                        </template>
+
+                        <template v-if="modalStore.buttonList.length <= 0 || modalStore.isAddButton && modalStore.buttonList.length <= 3">
+                          <div class="flex flex-col justify-center pt-4 pb-6">
+                            <p class="text-base font-semibold">ปุ่มที่ {{1 + modalStore.buttonList.length}}</p>
                             <div class="flex my-1">
-                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{1 + modalStore.buttonList.length}}</p>
                               <input type="text" v-model="modalStore.button.title" class="py-1">
                             </div>
                             <div class="flex my-1">
                               <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
                               <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
                             </div>
-                          </template>
+                            <button @click="modalStore.actionSaveButton"
+                              class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
+                              <span class="py-1 px-2">บันทึกปุ่ม</span>
+                            </button>
+                            <button @click="modalStore.actionDeleteButton(0)"
+                              class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
+                              <span class="py-1 px-2">ลบปุ่ม</span>
+                            </button>
+                          </div>
+                        </template>
 
-                          <button @click="modalStore.actionSaveButton"
-                            class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
-                            <span class="py-1 px-2">บันทึกปุ่ม</span>
-                          </button>
-                          <button @click="modalStore.actionDeleteButton(index)"
-                            class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
-                            <span class="py-1 px-2">ลบปุ่ม</span>
-                          </button>
+                        <template v-else>
+
+                            <!-- <template v-if="modalStore.isAddButton">
+                              <div>
+                                
+                              </div>
+                            </template> -->
+                          
+                            <template v-if="modalStore.buttonList.length >= 1">
+                              <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
+                                :disabled="modalStore.amountButton >= 3" class="rounded-full bg-gray-300 p-3">+
+                                button</button>
+                            </template>
+                          
+                        </template>
+                        <div>
                         </div>
-                        <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
-                          :disabled="modalStore.amountButton >= 3">add Button</button>
                       </div>
                     </template>
 
@@ -170,7 +192,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="props.converstion" />
+                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" />
                 </template>
 
               </template>
@@ -220,7 +242,7 @@
           </div>
         </button>
         <button v-show="!showSendMessageButton && images.length == 0" type="button" id="show-modal"
-          @click="uiStore.activeTemplateMessage" class="flex">
+          @click="handleClickActiveTemplate" class="flex">
           <div class="text-gray-500">
             <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
           </div>
@@ -252,6 +274,7 @@ import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal';
 import type { Conversation } from '@/types/conversation';
 import type { Template } from '@/stores/modal';
+import type { ShopConfig } from '@/types/ShopInformation';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
@@ -262,10 +285,6 @@ const props = defineProps<{
   converstion: Conversation
 }>()
 
-const onSelectEmoji = (emoji: any) => {
-  console.log(emoji);
-  newMessage.value += emoji.i;
-}
 
 const modalStore = useModalStore()
 const uiStore = useUIStore()
@@ -277,6 +296,47 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isLoading = ref(false)
+
+
+const shopconfig_data = ref<ShopConfig>();
+const template_data = ref<Template>();
+
+const handleClickActiveTemplate = async () => {
+  try {
+    uiStore.activeTemplateMessage();
+    shopconfig_data.value = await loadTemplate();
+    console.log(JSON.stringify(shopconfig_data.value, null, 2));
+
+    // Additional logic to handle the retrieved data
+    // handleShopConfigData(shopconfig_data.value);
+  } catch (error) {
+    console.error("Error occurred while loading template:", error);
+    // Handle the error gracefully, show an error message, etc.
+  }
+};
+
+const loadTemplate = async () => {
+  try {
+    const shopconfig: ShopConfig | undefined = await livechatStore.botioLivechat?.getShopConfig();
+
+    if (shopconfig) {
+      console.log(shopconfig)
+      return shopconfig;
+    } else {
+      throw new Error("ShopConfig is undefined");
+    }
+  } catch (error) {
+    console.error("Error occurred while loading template:", error);
+    throw error; // Rethrow the error to propagate it to the caller
+  }
+};
+
+const onSelectEmoji = (emoji: any) => {
+  console.log(emoji);
+  newMessage.value += emoji.i;
+}
+
+
 
 
 const actionsCreateTemplate = async (image_url: string) => {
@@ -294,6 +354,7 @@ const actionsCreateTemplate = async (image_url: string) => {
           id: button.id,
           title: button.title,
           url: button.url,
+          isSave: button.isSave
         }))
       }
     ]
@@ -326,22 +387,6 @@ watch(() => modalStore.amountButton, (newValue, oldValue) => {
 })
 
 
-
-// watch( () => modalStore.textUserInput, (newValue, oldValue) => {
-//   console.log(`text: ${newValue}, ${oldValue}`);
-// })
-
-// watch( () => modalStore.titleUserInput, (newValue, oldValue) => {
-//   console.log(`title: ${newValue}, ${oldValue}`);
-
-// })
-
-// watch(canCreateTemplate, (newValue, oldValue) => {
-//   console.log(`canCreateTemplate: ${newValue}, ${oldValue}`);
-//   if (newValue != oldValue) {
-
-//   }
-// })
 // action create Template
 const handleButtonCreateTemplate = async () => {
   if (canCreateTemplate.value && !isLoading.value) {
