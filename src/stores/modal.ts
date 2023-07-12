@@ -17,6 +17,7 @@ type ModalState = {
     templateList: Template[];
     isShowButtonCreate: boolean;
     amountButton: number;
+    isSaveButton: boolean;
 };
 
 
@@ -57,6 +58,7 @@ export const useModalStore = defineStore("modal", {
         templateList: [],
         isShowButtonCreate: false,
         amountButton: 1,
+        isSaveButton: false
         
     }),
     actions: {
@@ -64,20 +66,6 @@ export const useModalStore = defineStore("modal", {
             this.selectedTemplate = template;
         },
 
-        // actionSaveButton() {
-        //     if (this.buttonList.length >= 3) {
-        //         return;
-        //     }
-        //     const newButton: Button = {
-        //         title: this.button.title,
-        //         url: this.button.url,
-        //         id: Date.now()
-        //     };
-        //     this.buttonList.push(newButton);
-        //     console.log(JSON.stringify(this.buttonList, null, 2));
-        //     this.button.url = "",
-        //     this.button.title = ""
-        // },
         actionSaveButton() {
             if (this.buttonList.length >= 3) {
                 return;
@@ -95,13 +83,16 @@ export const useModalStore = defineStore("modal", {
         
             if (existingButton) {
                 console.log("Button already saved:", existingButton);
+                console.log(`isSaveButton: ${this.isSaveButton}`)
                 return;
             }
-        
+            
+            this.isSaveButton = true;
             this.buttonList.push(newButton);
             console.log("Button saved:", newButton);
             this.button.url = "";
             this.button.title = "";
+            console.log(`isSaveButton: ${this.isSaveButton}`)
         },
         actionDeleteButton(index:number):void {
             if (this.amountButton > 1){
