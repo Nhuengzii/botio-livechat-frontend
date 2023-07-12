@@ -20,37 +20,38 @@
         <!-- space -->
     </div>
     <div class="background-d9-250 flex flex-wrap">
-
-        <template v-for="(template, index) in modalStore.templateList">
-            <div v-if="template.platform === conversation.platform" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
-                <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
+        
+        <p>{{ shopconfig }}</p>
+        <template v-if="shopconfig">
+            <div v-for="template, index in shopconfig.templates" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
+                <p>11111</p>
+                <!-- <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
-                        <p>{{ template.name }}</p>
-                        <p>{{ template.platform }}</p>
+                       
                     </div>
-                </div>
+                </div> -->
 
-                <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
+                <!-- <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
                     <button @click="handleSendTemplate(index, template.platform)"
                         class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
                         <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
                         <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- (To Do !!!) icon click to edit template -->
-                <div class="flex-[1] px-1 items-center justify-center">
+                <!-- <div class="flex-[1] px-1 items-center justify-center">
                     <button @click="uiStore.activeEditTemplateMessage" class="flex">
                         <font-awesome-icon :icon="['fas', 'pen']" />
                     </button>
-                </div>
+                </div> -->
 
                 <!-- (To DO !!!) icon click to delete template -->
-                <div class="flex-[1] px-1 items-center justify-center">
+                <!-- <div class="flex-[1] px-1 items-center justify-center">
                     <button class="flex">
                         <font-awesome-icon :icon="['fas', 'trash-can']" />
                     </button>
-                </div>
+                </div> -->
 
             </div>
         </template>
@@ -59,8 +60,10 @@
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
+import type { ShopConfig } from '@/types/ShopInformation';
 const props = defineProps<{
     conversation: Conversation
+    shopconfig: ShopConfig | undefined
 }>()
 
 import type { AttachmentForSending, } from '@/types/message'
@@ -72,6 +75,7 @@ import { useLivechatStore } from '@/stores/livechat';
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
+
 
 
 // function send template message to livechat
