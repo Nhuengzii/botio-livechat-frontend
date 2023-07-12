@@ -12,7 +12,7 @@ type ShopTemplate = {
 
 type ShopConfig = {
   shopID: string,
-  Templates: ShopTemplate[]
+  templates: ShopTemplate[]
 }
 
 export type { ShopInformation, ShopConfig, ShopTemplate };
