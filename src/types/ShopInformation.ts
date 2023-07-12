@@ -6,7 +6,7 @@ type ShopInformation = {
 }
 
 type ShopConfig = {
-  shop_id: string,
+  shopID: string,
   templates: {
     id: string,
     payload: string
