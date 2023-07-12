@@ -61,14 +61,17 @@ class BotioLivechat implements IBotioLivechat {
     }
   }
   async getShopConfig() {
-    const res: ShopConfig = {
-      shop_id: this.shopID,
-      templates: []
-    }
-    return res;
+    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config`
+    const res = await axios.get<ShopConfig>(url)
+    return res.data
   }
-  async saveTemplate(templateID: string, payload: string) {
-    return "id"
+  async saveTemplate(payload: string) {
+    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config`
+    const body = {
+      templatePayload: payload
+    }
+    const res = await axios.patch<{ templateID: string }>(url, body)
+    return res.data.templateID
   }
   async getAllPageInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
