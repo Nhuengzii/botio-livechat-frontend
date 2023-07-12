@@ -5,7 +5,7 @@ import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
-import type { ShopConfig, ShopInformation } from "@/types/ShopInformation";
+import type { ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -72,6 +72,15 @@ class BotioLivechat implements IBotioLivechat {
     }
     const res = await axios.patch<{ templateID: string }>(url, body)
     return res.data.templateID
+  }
+  async listTemplates() {
+    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates`
+    const res = await axios.get<{ templates: ShopTemplate[] }>(url)
+    return res.data
+  }
+  async deleteTemplate(templateID: string) {
+    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates/${templateID}`
+    const res = await axios.delete(url)
   }
   async getAllPageInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
