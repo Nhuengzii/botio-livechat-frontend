@@ -14,35 +14,35 @@
               'h-52': amountImage >= 7 && amountImage < 13, 
               'h-40' : amountImage >= 13 
               }">
-
+  
             <template v-if="index == 0 && amountImage <= 3">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl rounded-bl-xl" />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
             <template v-else-if="index == (amountImage - 1) && amountImage <= 3">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl rounded-br-xl" />
             </template>
             <template v-else-if="index == 2 && amountImage > 3 && amountImage != 4">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png' " alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432' " alt=""
               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-tr-xl " />
             </template>
             <template v-else-if="index == 0 && amountImage > 3">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
               @load="handleImageLoad"  class="absolute inset-0 object-cover w-full h-full rounded-tl-xl" />
             </template>
 
             <template v-else-if="index == (amountImage - 1) && amountImage > 3">
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
                 @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full rounded-br-xl" />
             </template>
             <template v-else>
-              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
-               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full" />
+              <img :src="(StatusLoadImg)? message.attachments[index].payload.src:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
+               @load="handleImageLoad" class="absolute inset-0 object-cover w-full h-full " />
             </template>
           </div>
         </template>
@@ -52,8 +52,8 @@
   <!-- User send 1 image in one time-->
   <template v-else>
     <div class="max-h-80 max-w-24">
-      <img :src="(StatusLoadImg)? message.attachments[0].payload.src :'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png'" alt=""
-      @load="handleImageLoad" class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover " />
+      <img :src="(StatusLoadImg)? message.attachments[0].payload.src :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432'" alt=""
+      @load="handleImageLoad" class="self-center max-h-80 max-w-20 shadow rounded-2xl object-cover  " />
     </div>
   </template>
 </template>
