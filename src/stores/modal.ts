@@ -21,6 +21,7 @@ type ModalState = {
     isShowButtonCreate: boolean;
     amountButton: number;
     isSaveButton: boolean;
+    isAddButton: boolean;
 };
 
 
@@ -67,14 +68,17 @@ export const useModalStore = defineStore("modal", {
         templateList: [],
         isShowButtonCreate: false,
         amountButton: 1,
-        isSaveButton: false
+        isSaveButton: false,
+        isAddButton: false
 
     }),
     actions: {
+        // what select template ? button or TextImage
         selectTemplate(template: string) {
             this.selectedTemplate = template;
         },
 
+        // save value button in list
         actionSaveButton() {
             if (this.buttonList.length >= 3) {
                 return;
@@ -93,6 +97,8 @@ export const useModalStore = defineStore("modal", {
             console.log("Button saved:", newButton);
             this.button.url = "";
             this.button.title = "";
+            // increase num button
+            this.amountButton++;
             console.log(`isSaveButton: ${this.isSaveButton}`)
         },
         actionDeleteButton(index: number): void {
@@ -108,10 +114,12 @@ export const useModalStore = defineStore("modal", {
 
         clickToAddButton() {
             if (this.buttonList.length >= 3 || this.amountButton >= 3) {
+                this.isAddButton = false;
                 return;
             }
 
             this.amountButton++;
+            this.isAddButton = true;
         },
         // not use now
         findTemplateWithId(templateId: number) {
@@ -119,6 +127,7 @@ export const useModalStore = defineStore("modal", {
             return clickedTemplate
         },
 
+        // reset state value
         reset() {
             this.imagePreview = "";
             this.textUserInput = "";
