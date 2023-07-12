@@ -1,7 +1,7 @@
 import type { Conversation } from "./conversation"
 import type { AttachmentForSending, Message } from "./message"
 import type { PageInformation, AllPageInformation } from "./pageInformation"
-import type { ShopConfig, ShopInformation } from "./ShopInformation"
+import type { ShopConfig, ShopInformation, ShopTemplate } from "./ShopInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
@@ -19,6 +19,8 @@ interface IBotioLivechat {
   getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
   getShopConfig: () => Promise<ShopConfig>
   saveTemplate: (payload: string) => Promise<string>
+  listTemplates: () => Promise<{ templates: ShopTemplate[] }>
+  deleteTemplate: (templateID: string) => Promise<void>
   getAllPageInformation: () => Promise<AllPageInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
   searchConversationByMessage: (platform: string, pageID: string, message: string) => Promise<Conversation[]>

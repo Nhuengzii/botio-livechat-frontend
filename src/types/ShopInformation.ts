@@ -5,12 +5,14 @@ type ShopInformation = {
   }[]
 }
 
-type ShopConfig = {
-  shopID: string,
-  templates: {
-    id: string,
-    payload: string
-  }[]
+type ShopTemplate = {
+  id: string,
+  payload: string
 }
 
-export type { ShopInformation, ShopConfig };
+type ShopConfig = {
+  shopID: string,
+  templates: ShopTemplate[]
+}
+
+export type { ShopInformation, ShopConfig, ShopTemplate };
