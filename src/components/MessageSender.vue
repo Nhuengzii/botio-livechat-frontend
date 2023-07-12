@@ -49,7 +49,7 @@
               <!--BODY-->
               <template #body>
                 <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
-                  <BodyCreateMessage :conversation="converstion"/>
+                  <BodyCreateMessage :conversation="converstion" />
                 </template>
                 <template v-else-if="uiStore.is_editTemplateMessage">
                   <div class="flex items-center h-full">
@@ -61,8 +61,8 @@
                         </div>
                       </div>
 
-                      <div class="flex-[3] bg-gray-200 pl-6 pt-4 rounded-xl">
-                        <div class="flex flex-col h-full">
+                      <div class="h-full flex-[3] bg-gray-200 pl-6 pt-4 rounded-xl overflow-auto">
+                        <div class="flex flex-col">
 
                           <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
                           <input type="text" v-model="modalStore.name" placeholder="เทมเพลต"
@@ -93,19 +93,26 @@
                         <!-- add button in template -->
                         <p class="text-base font-semibold pt-4">ปุ่มในเทมเพลต</p>
                         <div v-for="index in modalStore.amountButton" class="flex flex-col justify-center pt-4 pb-6">
+                          <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
                           <div class="flex my-1">
-                            <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่มที่ {{ index }}</p>
+                            <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
                             <input type="text" v-model="modalStore.button.title" class="py-1">
                           </div>
                           <div class="flex my-1">
                             <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
                             <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
                           </div>
-                          <button @click="modalStore.actionSaveButton" class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
+                          <button @click="modalStore.actionSaveButton"
+                            class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
                             <span class="py-1 px-2">บันทึกปุ่ม</span>
                           </button>
+                          <button  @click="modalStore.actionDeleteButton(index)"
+                            class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
+                            <span class="py-1 px-2">ลบปุ่ม</span>
+                          </button>
                         </div>
-                        <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton" :disabled="modalStore.amountButton >= 3">add Button</button>           
+                        <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
+                          :disabled="modalStore.amountButton >= 3">add Button</button>
                       </div>
                     </template>
 
@@ -267,6 +274,10 @@ const canCreateTemplate = computed(() => {
       return false;
   }
 });
+
+watch(() => modalStore.amountButton, (newValue, oldValue) => {
+  console.log(`amountButton: ${newValue}, ${oldValue}`);
+})
 
 
 
@@ -507,5 +518,4 @@ textarea[type='text'] {
 
 .image-item {
   margin: 10px;
-}
-</style>
+}</style>

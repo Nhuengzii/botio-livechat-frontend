@@ -55,8 +55,8 @@ type LineTemplateButtons = {
     altText: string,
     thumbnailImageUrl?: string,
     title?: string,
-    text?: string,
-    defaultAction?: {
+    text: string,
+    defaultAction: {
       label: string,
       uri: string
     },

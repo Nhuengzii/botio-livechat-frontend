@@ -64,20 +64,56 @@ export const useModalStore = defineStore("modal", {
             this.selectedTemplate = template;
         },
 
+        // actionSaveButton() {
+        //     if (this.buttonList.length >= 3) {
+        //         return;
+        //     }
+        //     const newButton: Button = {
+        //         title: this.button.title,
+        //         url: this.button.url,
+        //         id: Date.now()
+        //     };
+        //     this.buttonList.push(newButton);
+        //     console.log(JSON.stringify(this.buttonList, null, 2));
+        //     this.button.url = "",
+        //     this.button.title = ""
+        // },
         actionSaveButton() {
             if (this.buttonList.length >= 3) {
                 return;
             }
-            const newButton: Button = {
+            const newButton = {
                 title: this.button.title,
                 url: this.button.url,
                 id: Date.now()
             };
+        
+            // Check if the button already exists in the buttonList
+            const existingButton = this.buttonList.find(button => 
+                button.title === newButton.title && button.url === newButton.url
+            );
+        
+            if (existingButton) {
+                console.log("Button already saved:", existingButton);
+                return;
+            }
+        
             this.buttonList.push(newButton);
-            console.log(JSON.stringify(this.buttonList, null, 2));
-            this.button.url = "",
-            this.button.title = ""
+            console.log("Button saved:", newButton);
+            this.button.url = "";
+            this.button.title = "";
         },
+        actionDeleteButton(index:number):void {
+            if (this.amountButton > 1){
+
+                this.buttonList.slice(index,1)
+                this.amountButton--;
+            }
+            console.log("delete button")
+            console.log(JSON.stringify(this.buttonList, null, 2));
+        },
+   
+
         clickToAddButton() {
             if (this.buttonList.length >= 3 && this.amountButton >= 3) {
                 return;
@@ -110,7 +146,7 @@ export const useModalStore = defineStore("modal", {
             this.templateList.push(template)
             this.reset();
         },
-
+        
         // not use now
         findTemplateWithId(templateId: number) {
             const clickedTemplate = this.templateList.find(template => template.id === templateId)
