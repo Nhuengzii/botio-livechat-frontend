@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { BotioLivechat } from "@/lib/BotioLivechat";
+
 
 type ModalState = {
     name: string;
@@ -10,9 +10,12 @@ type ModalState = {
     titleUserInput: string;
     platform: string
     button: {
-        title: string;
-        url: string;
-    };
+        title: string
+        url: string
+    }
+    button1: Button,
+    button2?: Button,
+    button3?: Button
     buttonList: Button[];
     templateList: Template[];
     isShowButtonCreate: boolean;
@@ -22,9 +25,12 @@ type ModalState = {
 
 
 type Button = {
+
     id: number
     title: string;
     url: string;
+    isSave: boolean
+
 }
 
 
@@ -52,14 +58,17 @@ export const useModalStore = defineStore("modal", {
         platform: "",
         button: {
             title: "",
-            url: "",
+            url: ""
         },
+        button1: {} as Button,
+        button2: {} as Button,
+        button3: {} as Button,
         buttonList: [],
         templateList: [],
         isShowButtonCreate: false,
         amountButton: 1,
         isSaveButton: false
-        
+
     }),
     actions: {
         selectTemplate(template: string) {
@@ -73,20 +82,12 @@ export const useModalStore = defineStore("modal", {
             const newButton = {
                 title: this.button.title,
                 url: this.button.url,
-                id: Date.now()
+                id: Date.now(),
+                isSave: true
+
             };
-        
+
             // Check if the button already exists in the buttonList
-            const existingButton = this.buttonList.find(button => 
-                button.title === newButton.title && button.url === newButton.url
-            );
-        
-            if (existingButton) {
-                console.log("Button already saved:", existingButton);
-                console.log(`isSaveButton: ${this.isSaveButton}`)
-                return;
-            }
-            
             this.isSaveButton = true;
             this.buttonList.push(newButton);
             console.log("Button saved:", newButton);
@@ -94,50 +95,24 @@ export const useModalStore = defineStore("modal", {
             this.button.title = "";
             console.log(`isSaveButton: ${this.isSaveButton}`)
         },
-        actionDeleteButton(index:number):void {
-            if (this.amountButton > 1){
+        actionDeleteButton(index: number): void {
+            if (this.amountButton >= 0) {
 
-                this.buttonList.slice(index,1)
+                this.buttonList.slice(index, 1)
                 this.amountButton--;
             }
             console.log("delete button")
             console.log(JSON.stringify(this.buttonList, null, 2));
         },
-   
+
 
         clickToAddButton() {
-            if (this.buttonList.length >= 3 && this.amountButton >= 3) {
+            if (this.buttonList.length >= 3 || this.amountButton >= 3) {
                 return;
-            } else {
-                this.amountButton += 1;
-            } 
+            }
+
+            this.amountButton++;
         },
-        async actionsCreateTemplate(image_url: string) {
-            // let elmentsList = [],
-            
-            const template: Template = {
-                id: Date.now(),
-                type: this.selectedTemplate,
-                platform: this.platform,
-                name: this.name,
-                elements: [
-                    {
-                        title: this.titleUserInput,
-                        message: this.textUserInput,
-                        picture: image_url,
-                        buttons: this.buttonList.map((button) => ({
-                            id: button.id,
-                            title: button.title,
-                            url: button.url,
-                        }))
-                    }
-                ]
-                
-            };
-            this.templateList.push(template)
-            this.reset();
-        },
-        
         // not use now
         findTemplateWithId(templateId: number) {
             const clickedTemplate = this.templateList.find(template => template.id === templateId)
