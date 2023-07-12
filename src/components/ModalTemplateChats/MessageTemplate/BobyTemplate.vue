@@ -21,9 +21,9 @@
     </div>
     <div class="background-d9-250 flex flex-wrap">
         
-        <p>{{ shopconfig }}</p>
+        <p>{{  }}</p>
         <template v-if="shopconfig">
-            <div v-for="template, index in shopconfig.templates" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
+            <div v-for="template, index in shopconfig.Templates" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
                 <p>11111</p>
                 <!-- <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
@@ -75,8 +75,6 @@ import { useLivechatStore } from '@/stores/livechat';
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
-
-
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
