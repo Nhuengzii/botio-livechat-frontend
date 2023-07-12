@@ -113,42 +113,35 @@
                           </div>
                         </template>
 
-                        <template v-if="modalStore.buttonList.length <= 0 || modalStore.isAddButton && modalStore.buttonList.length <= 3">
+                        <template
+                          v-if="modalStore.buttonList.length <= 0 || modalStore.isAddButton && modalStore.buttonList.length <= 3">
                           <div class="flex flex-col justify-center pt-4 pb-6">
-                            <p class="text-base font-semibold">ปุ่มที่ {{1 + modalStore.buttonList.length}}</p>
+                            <p class="text-base font-semibold">ปุ่มที่ {{ 1 + modalStore.buttonList.length }}</p>
                             <div class="flex my-1">
-                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{1 + modalStore.buttonList.length}}</p>
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ 1 + modalStore.buttonList.length }}</p>
                               <input type="text" v-model="modalStore.button.title" class="py-1">
                             </div>
                             <div class="flex my-1">
                               <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
                               <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
                             </div>
+
                             <button @click="modalStore.actionSaveButton"
                               class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
                               <span class="py-1 px-2">บันทึกปุ่ม</span>
                             </button>
-                            <button @click="modalStore.actionDeleteButton(0)"
-                              class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
-                              <span class="py-1 px-2">ลบปุ่ม</span>
-                            </button>
                           </div>
                         </template>
 
+                        <!--if button is not have more 3 buttons can click to add button-->
                         <template v-else>
 
-                            <!-- <template v-if="modalStore.isAddButton">
-                              <div>
-                                
-                              </div>
-                            </template> -->
-                          
-                            <template v-if="modalStore.buttonList.length >= 1">
-                              <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
-                                :disabled="modalStore.amountButton >= 3" class="rounded-full bg-gray-300 p-3">+
-                                button</button>
-                            </template>
-                          
+                          <template v-if="modalStore.buttonList.length >= 1">
+                            <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
+                              :disabled="modalStore.amountButton >= 3" class="rounded-full bg-gray-300 p-3">+
+                              button</button>
+                          </template>
+
                         </template>
                         <div>
                         </div>
@@ -301,21 +294,29 @@ const isLoading = ref(false)
 const shopconfig_data = ref<ShopConfig>();
 const template_data = ref<Template>();
 
+import Swal from 'sweetalert2';
+
+const showAlert = () => {
+  Swal.fire('Success!', 'This is a success message', 'success');
+};
+
+
 const handleClickActiveTemplate = async () => {
   try {
     uiStore.activeTemplateMessage();
-    shopconfig_data.value = await loadTemplate();
+    // fetch dataBase template
+    shopconfig_data.value = await fetchDataTemplate();
+    // shopconfig_data.value =  shopconfig_data.value
     console.log(JSON.stringify(shopconfig_data.value, null, 2));
 
-    // Additional logic to handle the retrieved data
-    // handleShopConfigData(shopconfig_data.value);
+
   } catch (error) {
     console.error("Error occurred while loading template:", error);
     // Handle the error gracefully, show an error message, etc.
   }
 };
 
-const loadTemplate = async () => {
+const fetchDataTemplate = async () => {
   try {
     const shopconfig: ShopConfig | undefined = await livechatStore.botioLivechat?.getShopConfig();
 
@@ -340,30 +341,48 @@ const onSelectEmoji = (emoji: any) => {
 
 
 const actionsCreateTemplate = async (image_url: string) => {
-  const template: Template = {
-    id: Date.now(),
-    type: modalStore.selectedTemplate,
-    platform: modalStore.platform,
-    name: modalStore.name,
-    elements: [
-      {
-        title: modalStore.titleUserInput,
-        message: modalStore.textUserInput,
-        picture: image_url,
-        buttons: modalStore.buttonList.map((button) => ({
-          id: button.id,
-          title: button.title,
-          url: button.url,
-          isSave: button.isSave
-        }))
-      }
-    ]
+  Swal.fire({
+    title: 'Saving Template',
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    willOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  try {
+    const template: Template = {
+      id: Date.now(),
+      type: modalStore.selectedTemplate,
+      platform: modalStore.platform,
+      name: modalStore.name,
+      elements: [
+        {
+          title: modalStore.titleUserInput,
+          message: modalStore.textUserInput,
+          picture: image_url,
+          buttons: modalStore.buttonList.map((button) => ({
+            id: button.id,
+            title: button.title,
+            url: button.url,
+          })),
+        },
+      ],
+    };
+
+    const template_str = JSON.stringify(template);
+    const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
+
+    Swal.fire('Success', 'Template saved successfully', 'success');
+    console.log(`template_id save : ${template_id}`);
+    modalStore.reset();
+  } catch (error) {
+    Swal.fire('Error', 'Failed to save template', 'error');
+    console.error('Error saving template:', error);
+  } finally {
+    Swal.close();
   }
-  const template_str = JSON.stringify(template)
-  const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str)
-  console.log(`template_id save : ${template_id}`)
-  modalStore.reset()
-}
+};
 
 
 
