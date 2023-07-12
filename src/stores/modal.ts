@@ -13,9 +13,7 @@ type ModalState = {
         title: string
         url: string
     }
-    button1: Button,
-    button2?: Button,
-    button3?: Button
+
     buttonList: Button[];
     templateList: Template[];
     isShowButtonCreate: boolean;
@@ -44,7 +42,11 @@ type Template = {
         title: string;
         message: string;
         picture: string;
-        buttons: Button[]
+        buttons: {
+            id: number
+            title: string
+            url: string
+        }[]
     }[]
 }
 
@@ -61,9 +63,6 @@ export const useModalStore = defineStore("modal", {
             title: "",
             url: ""
         },
-        button1: {} as Button,
-        button2: {} as Button,
-        button3: {} as Button,
         buttonList: [],
         templateList: [],
         isShowButtonCreate: false,
