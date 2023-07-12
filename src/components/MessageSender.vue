@@ -77,13 +77,13 @@
 
                           <div class="flex items-center justify-between w-96">
                             <p class="text-base font-semibold pt-4">หัวข้อ</p>
-                            <p class="text-sm font-normal pt-4">0/150</p>
+                            <p class="text-sm font-normal pt-4">{{ modalStore.titleUserInput.length }}/50</p>
                           </div>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
                           <div class="flex items-center justify-between w-[70%]">
                             <p class="mt-2 text-base font-semibold">ข้อความ</p>
-                            <p class="text-sm font-normal mt-2">0/150</p>
+                            <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/150</p>
                           </div>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
                             class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="150" />
@@ -93,20 +93,37 @@
                         <!-- add button in template -->
                         <p class="text-base font-semibold pt-4">ปุ่มในเทมเพลต</p>
                         <div v-for="index in modalStore.amountButton" class="flex flex-col justify-center pt-4 pb-6">
-                          <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
-                          <div class="flex my-1">
-                            <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
-                            <input type="text" v-model="modalStore.button.title" class="py-1">
-                          </div>
-                          <div class="flex my-1">
-                            <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
-                            <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
-                          </div>
+
+                          <template v-if="modalStore.isSaveButton">
+                            <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index].title }}</p>
+                            </div>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index].url }}</p>
+
+                            </div>
+                          </template>
+
+                          <template v-else>
+                            <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
+                              <input type="text" v-model="modalStore.button.title" class="py-1">
+                            </div>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                              <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
+                            </div>
+                          </template>
+
                           <button @click="modalStore.actionSaveButton"
                             class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
                             <span class="py-1 px-2">บันทึกปุ่ม</span>
                           </button>
-                          <button  @click="modalStore.actionDeleteButton(index)"
+                          <button @click="modalStore.actionDeleteButton(index)"
                             class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
                             <span class="py-1 px-2">ลบปุ่ม</span>
                           </button>
@@ -234,6 +251,7 @@ import TemplateButton from './ModalTemplateChats/TemplateType/TemplateButton.vue
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal';
 import type { Conversation } from '@/types/conversation';
+import type { Template } from '@/stores/modal';
 import { storeToRefs } from 'pinia';
 import { ref, watch, type Ref, computed } from 'vue'
 
@@ -259,6 +277,34 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isLoading = ref(false)
+
+
+const actionsCreateTemplate = async (image_url: string) => {
+  const template: Template = {
+    id: Date.now(),
+    type: modalStore.selectedTemplate,
+    platform: modalStore.platform,
+    name: modalStore.name,
+    elements: [
+      {
+        title: modalStore.titleUserInput,
+        message: modalStore.textUserInput,
+        picture: image_url,
+        buttons: modalStore.buttonList.map((button) => ({
+          id: button.id,
+          title: button.title,
+          url: button.url,
+        }))
+      }
+    ]
+  }
+  const template_str = JSON.stringify(template)
+  const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str)
+  console.log(`template_id save : ${template_id}`)
+  modalStore.reset()
+}
+
+
 
 const canCreateTemplate = computed(() => {
   const { selectedTemplate, titleUserInput, textUserInput, imagePreview, buttonList } = modalStore;
@@ -307,7 +353,7 @@ const handleButtonCreateTemplate = async () => {
     try {
       const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
       if (image_url) {
-        await modalStore.actionsCreateTemplate(image_url);
+        await actionsCreateTemplate(image_url);
         uiStore.finishCreateTemplate();
       }
     } catch (error) {
@@ -518,4 +564,5 @@ textarea[type='text'] {
 
 .image-item {
   margin: 10px;
-}</style>
+}
+</style>
