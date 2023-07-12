@@ -80,9 +80,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
     console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
-
-
-        try {
+        try {  
             const attachmentFacebook = {
                 type: 'facebook-template-generic',
                 payload: {
@@ -104,11 +102,9 @@ const handleSendTemplate = async (index: number, platform: string) => {
             console.log('Error sending attachment:', error);
         }
     } else if (platform == 'line') {
-
-        if (modalStore.selectedTemplate === 'Button') {
+        if (clickedTemplate.type === 'Button') {
             try {
-                const attachmentLineButton: AttachmentForSending = {
-                    
+                const attachmentLineButton: AttachmentForSending = {   
                     type: 'line-template-buttons',
                     payload: {
                         line_template_buttons:
@@ -117,12 +113,15 @@ const handleSendTemplate = async (index: number, platform: string) => {
                             thumbnailImageUrl: clickedTemplate.elements[0].picture,
                             title: clickedTemplate.elements[0].title,
                             text: clickedTemplate.elements[0].message,
-                            actions: [
-                                {
-                                    label: clickedTemplate.elements[0].buttons[0].title,
-                                    uri: clickedTemplate.elements[0].buttons[0].url
-                                }
-                            ],
+                            defaultAction: {
+                                label: clickedTemplate.elements[0].buttons[0].title,
+                                uri: clickedTemplate.elements[0].buttons[0].url
+                            },
+                            actions: clickedTemplate.elements[0].buttons.map((button) => ({
+                                label: button.title,
+                                uri: button.url
+                            }))
+                            
                         }
                     },
                 }
@@ -130,13 +129,10 @@ const handleSendTemplate = async (index: number, platform: string) => {
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
+                console.log('yeeeeeeeeeeeeeeeeeeeeeeee')
             }
-        } else if (modalStore.selectedTemplate === 'TextImage') {
-            try {
-
-            } catch (error) {
-
-            }
+        } else if (clickedTemplate.type === 'TextImage') {
+            console.log('this type not supported')
         }
     } else if (platform == 'instagram') {
         try {
