@@ -21,7 +21,7 @@
                 </p>
             </div>
             <div v-for="( button, index )  in modalStore.buttonList" :key="button.id" class="flex flex-col">
-                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">{{ button.title }} {{ index }}</button>
+                <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">{{ button.title }}</button>
             </div>
         </div>
     </div>
