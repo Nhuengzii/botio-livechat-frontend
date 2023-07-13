@@ -323,24 +323,6 @@ const handleClickActiveTemplate = async () => {
   }
 };
 
-// const fetchDataTemplate = async () => {
-//   try {
-//     isFetchTemplate.value = false
-//     const shopconfig = await livechatStore.botioLivechat?.getShopConfig();
-
-//     if (typeof shopconfig !== 'undefined') {
-//       console.log(shopconfig);
-//       isFetchTemplate.value = true
-//       return shopconfig;
-//     } else {
-//       throw new Error("ShopConfig is undefined");
-//     }
-//   } catch (error) {
-//     console.log('error in fetchDataTemplate')
-//     console.error("Error occurred while loading template:", error);
-//     throw error; // Rethrow the error to propagate it to the caller
-//   }
-// };
 
 const fetchDataTemplate = async () => {
   try {
