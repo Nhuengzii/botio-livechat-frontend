@@ -185,7 +185,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" />
+                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" :is-fetch-template="isFetchTemplate" />
                 </template>
 
               </template>
@@ -279,6 +279,7 @@ const props = defineProps<{
 }>()
 
 
+
 const modalStore = useModalStore()
 const uiStore = useUIStore()
 const newMessage = ref('');
@@ -289,44 +290,77 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isLoading = ref(false)
+const isFetchTemplate = ref(false)
 
 
 const shopconfig_data = ref<ShopConfig>();
-const template_data = ref<Template>();
+
 
 import Swal from 'sweetalert2';
 
-const showAlert = () => {
-  Swal.fire('Success!', 'This is a success message', 'success');
-};
+type FetchDataTemplateResponse = {
+  isFetchTemplate: boolean;
+  shopconfig: ShopConfig | undefined;
+}
 
 
 const handleClickActiveTemplate = async () => {
   try {
     uiStore.activeTemplateMessage();
     // fetch dataBase template
-    shopconfig_data.value = await fetchDataTemplate();
-    // shopconfig_data.value =  shopconfig_data.value
-    console.log(JSON.stringify(shopconfig_data.value, null, 2));
+    const response = await fetchDataTemplate();
+    console.log("fetchDataTemplate");
+    console.log(JSON.stringify(response.shopconfig, null, 2));
 
+    if (response.isFetchTemplate) {
+      shopconfig_data.value = response.shopconfig;
+    }
 
   } catch (error) {
+    console.log("error in handleClickActiveTemplate");
     console.error("Error occurred while loading template:", error);
     // Handle the error gracefully, show an error message, etc.
   }
 };
 
+// const fetchDataTemplate = async () => {
+//   try {
+//     isFetchTemplate.value = false
+//     const shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+
+//     if (typeof shopconfig !== 'undefined') {
+//       console.log(shopconfig);
+//       isFetchTemplate.value = true
+//       return shopconfig;
+//     } else {
+//       throw new Error("ShopConfig is undefined");
+//     }
+//   } catch (error) {
+//     console.log('error in fetchDataTemplate')
+//     console.error("Error occurred while loading template:", error);
+//     throw error; // Rethrow the error to propagate it to the caller
+//   }
+// };
+
 const fetchDataTemplate = async () => {
   try {
-    const shopconfig: ShopConfig | undefined = await livechatStore.botioLivechat?.getShopConfig();
+    const response = {
+      isFetchTemplate: false,
+      shopconfig: null as unknown as ShopConfig | undefined
+    };
 
-    if (shopconfig) {
-      console.log(shopconfig)
-      return shopconfig;
+    response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+
+    if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
+      console.log(response.shopconfig);
+      response.isFetchTemplate = true;
     } else {
       throw new Error("ShopConfig is undefined");
     }
+
+    return response;
   } catch (error) {
+    console.log('error in fetchDataTemplate');
     console.error("Error occurred while loading template:", error);
     throw error; // Rethrow the error to propagate it to the caller
   }
@@ -336,53 +370,6 @@ const onSelectEmoji = (emoji: any) => {
   console.log(emoji);
   newMessage.value += emoji.i;
 }
-
-
-
-
-const actionsCreateTemplate = async (image_url: string) => {
-  Swal.fire({
-    title: 'Saving Template',
-    allowOutsideClick: false,
-    showConfirmButton: false,
-    willOpen: () => {
-      Swal.showLoading();
-    },
-  });
-
-  try {
-    const template: Template = {
-      id: Date.now(),
-      type: modalStore.selectedTemplate,
-      platform: modalStore.platform,
-      name: modalStore.name,
-      elements: [
-        {
-          title: modalStore.titleUserInput,
-          message: modalStore.textUserInput,
-          picture: image_url,
-          buttons: modalStore.buttonList.map((button) => ({
-            id: button.id,
-            title: button.title,
-            url: button.url,
-          })),
-        },
-      ],
-    };
-
-    const template_str = JSON.stringify(template);
-    const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
-
-    Swal.fire('Success', 'Template saved successfully', 'success');
-    console.log(`template_id save : ${template_id}`);
-    modalStore.reset();
-  } catch (error) {
-    Swal.fire('Error', 'Failed to save template', 'error');
-    console.error('Error saving template:', error);
-  } finally {
-    Swal.close();
-  }
-};
 
 
 
@@ -407,6 +394,7 @@ watch(() => modalStore.amountButton, (newValue, oldValue) => {
 
 
 // action create Template
+
 const handleButtonCreateTemplate = async () => {
   if (canCreateTemplate.value && !isLoading.value) {
     isLoading.value = true;
@@ -417,12 +405,52 @@ const handleButtonCreateTemplate = async () => {
     try {
       const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
       if (image_url) {
-        await actionsCreateTemplate(image_url);
-        uiStore.finishCreateTemplate();
+        Swal.fire({
+          title: 'Saving Template',
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        const template: Template = {
+          id: Date.now(),
+          type: modalStore.selectedTemplate,
+          platform: modalStore.platform,
+          name: modalStore.name,
+          elements: [
+            {
+              title: modalStore.titleUserInput,
+              message: modalStore.textUserInput,
+              picture: image_url,
+              buttons: modalStore.buttonList.map((button) => ({
+                id: button.id,
+                title: button.title,
+                url: button.url,
+              })),
+            },
+          ],
+        };
+
+        const template_str = JSON.stringify(template);
+        const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
+
+        Swal.close();
+
+        if (template_id) {
+          Swal.fire('Success', 'Template saved successfully', 'success');
+          console.log(`template_id save : ${template_id}`);
+          modalStore.reset();
+          uiStore.finishCreateTemplate();
+        } else {
+          Swal.fire('Error', 'Failed to save template', 'error');
+          console.log('Failed to save template');
+        }
       }
     } catch (error) {
-      console.log(error);
-
+      Swal.fire('Error', 'Failed to save template', 'error');
+      console.error('Error saving template:', error);
     } finally {
       isLoading.value = false;
     }
@@ -572,6 +600,8 @@ const handleFileChange = (event: Event) => {
 const removeImage = (index: number) => {
   images.value.splice(index, 1);
 };
+
+export type { FetchDataTemplateResponse }
 
 </script>
 

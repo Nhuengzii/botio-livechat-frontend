@@ -32,6 +32,12 @@ type Button = {
 
 }
 
+type Buttons = {
+    id: number
+    title: string
+    url: string
+}
+
 
 type Template = {
     id: number
@@ -42,13 +48,10 @@ type Template = {
         title: string;
         message: string;
         picture: string;
-        buttons: {
-            id: number
-            title: string
-            url: string
-        }[]
+        buttons: Buttons[]
     }[]
 }
+
 
 export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
@@ -144,4 +147,4 @@ export const useModalStore = defineStore("modal", {
     },
 });
 
-export type { Template }
+export type { Template , Buttons}
