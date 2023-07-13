@@ -44,12 +44,14 @@
                         </button>
                     </div>
     
+                    <!-- edit template -->
                     <div class="flex-[1] px-1 items-center justify-center">
                         <button @click="uiStore.activeEditTemplateMessage" class="flex">
                             <font-awesome-icon :icon="['fas', 'pen']" />
                         </button>
                     </div>
     
+                    <!-- delete template-->
                     <div class="flex-[1] px-1 items-center justify-center">
                         <button class="flex">
                             <font-awesome-icon :icon="['fas', 'trash-can']" />
@@ -67,10 +69,12 @@
 import type { Conversation } from '@/types/conversation';
 import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
 import type { Template, Buttons } from '@/stores/modal';
+import Swal from 'sweetalert2';
 
 const props = defineProps<{
     conversation: Conversation
     shopconfig: ShopConfig | undefined
+    isFetchTemplate: boolean
 }>()
 
 import type { AttachmentForSending, } from '@/types/message'
@@ -78,7 +82,7 @@ import type { AttachmentForSending, } from '@/types/message'
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
@@ -89,44 +93,70 @@ const templateList = ref<Template[]>([]);
 
 
 const loadShopConfig = computed(() => {
-    return (shopConfig?: ShopConfig) => {
-        if (shopConfig) {
-            shopConfig.templates.forEach((template) => {
-                const parsedPayload = JSON.parse(template.payload);
-                const templateData: Template = {
-                    id: parsedPayload.id,
-                    type: parsedPayload.type,
-                    platform: parsedPayload.platform,
-                    name: parsedPayload.name,
-                    elements: parsedPayload.elements.map((element: any) => {
-                        return {
-                            title: element.title,
-                            message: element.message,
-                            picture: element.picture,
-                            buttons: element.buttons.map((button: any) => {
-                                return {
-                                    id: button.id,
-                                    title: button.title,
-                                    url: button.url,
-                                    isSave: button.isSave,
-                                };
-                            }),
-                        };
-                    }),
-                };
-                templateList.value.push(templateData);
-            });
-        }
-    };
+  return (shopConfig?: ShopConfig) => {
+    if (shopConfig && !props.isFetchTemplate) {
+      try {
+        shopConfig.templates.forEach((template) => {
+          const parsedPayload = JSON.parse(template.payload);
+          const templateData: Template = {
+            id: parsedPayload.id,
+            type: parsedPayload.type,
+            platform: parsedPayload.platform,
+            name: parsedPayload.name,
+            elements: parsedPayload.elements.map((element: any) => {
+              return {
+                title: element.title,
+                message: element.message,
+                picture: element.picture,
+                buttons: element.buttons.map((button: any) => {
+                  return {
+                    id: button.id,
+                    title: button.title,
+                    url: button.url,
+                    isSave: button.isSave,
+                  };
+                }),
+              };
+            }),
+          };
+          templateList.value.push(templateData);
+        });
+
+        // Hide the SweetAlert loading dialog
+        Swal.close();
+      } catch (error) {
+        console.error('Error loading data templates:', error);
+        // Show an alert or notification indicating the error using SweetAlert2
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data templates',
+        });
+      }
+    } else {
+      // Show the SweetAlert loading dialog
+      Swal.fire({
+        title: 'Loading Template',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
+  };
 });
 
 
 loadShopConfig.value(props.shopconfig);
 
-const findButtonIndex = (buttonList: Buttons[], buttonID: number): number => {
-  const index = buttonList.findIndex(button => button.id === buttonID);
-  return index;
-};
+watch(
+  () => props.shopconfig, // Watch the shopConfig value
+  (newValue,oldValue) => {
+    console.log(newValue?.templates.length, oldValue?.templates.length)
+    loadShopConfig.value(newValue); // Call the loadShopConfig computed function
+  }
+);
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
