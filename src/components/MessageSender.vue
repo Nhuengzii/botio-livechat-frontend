@@ -41,7 +41,7 @@
                 </template>
 
                 <template v-else> <!-- Header Modal chat template-->
-                  <HeaderTemplate />
+                  <HeaderTemplate :platform="platform"/>
                 </template>
               </template>
               <!--END HEADER-->

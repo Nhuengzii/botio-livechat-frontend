@@ -1,8 +1,17 @@
 <template>
     <div class="flex flex-col">
         <header class="flex justify-between items-center " id="headerModal">
-            <div class="bg-blue-dark py-4 px-12 rounded-xl">
-                <h3 class="text-white text-lg font-semibold">เทมเพลตข้อความ</h3>
+            <div class="bg-blue-dark py-2.5 px-8 flex items-center rounded-xl">
+                <h3 class="text-lg text-white font-semibold pr-4">เทมเพลตข้อความสำหรับ</h3>
+                <div class="flex bg-white rounded-full w-8 h-8 items-center justify-center">
+                    <font-awesome-icon v-if="props.platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;"
+                        size="xl" />
+                    <font-awesome-icon v-if="props.platform === 'instagram'" :icon="['fab', 'instagram']" style="color: #DF2E38;"
+                        size="xl" />
+                    <font-awesome-icon v-if="props.platform === 'line'" :icon="['fab', 'line']" style="color: #38E54D;"
+                        size="xl" />
+                    <!-- <font-awesome-icon :icon="['fab', 'facebook']" style="color: #2F58CD;" size="xl" /> -->
+                </div>
             </div>
         </header>
     </div>
@@ -11,6 +20,10 @@
 <script setup lang="ts">
 import { useUIStore } from '@/stores/UI';
 const uiStore = useUIStore()
+const props = defineProps<{
+  platform: string
+}>()
+
 </script>
 
 <style scoped>
