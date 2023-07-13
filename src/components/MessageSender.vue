@@ -169,12 +169,18 @@
                           </div>
 
                           <!-- input detail in button -->
-                          <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-96">
+                            <p class="text-base font-semibold pt-4">หัวข้อ</p>
+                            <p class="text-sm font-normal pt-4">{{ modalStore.titleUserInput.length }}/50</p>
+                          </div>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
-                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 175 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-[70%]">
+                            <p class="mt-2 text-base font-semibold">ข้อความ</p>
+                            <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/200</p>
+                          </div>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="175" />
+                          class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="200" />
 
                         </div>
                       </div>
@@ -370,10 +376,6 @@ const canCreateTemplate = computed(() => {
   }
 });
 
-watch(() => modalStore.amountButton, (newValue, oldValue) => {
-  console.log(`amountButton: ${newValue}, ${oldValue}`);
-})
-
 
 // action create Template
 
@@ -417,6 +419,8 @@ const handleButtonCreateTemplate = async () => {
 
         const template_str = JSON.stringify(template);
         const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
+        const newResponse = await fetchDataTemplate()
+        shopconfig_data.value = newResponse.shopconfig
 
         Swal.close();
 
