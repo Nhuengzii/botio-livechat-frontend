@@ -9,7 +9,7 @@
         <button @click="uiStore.activeCreateTemplateMessage"
             class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
             <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
-            <div class="rounded-2xl px-2 py-1">
+            <div class="rounded-2xl px-2 py-1 ">
                 <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ {{conversation.platform}}</p>
             </div>
         </button>

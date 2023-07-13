@@ -4,7 +4,7 @@
 
             <div class="flex items-center justify-center w-72 h-44 bg-blue-700 rounded-t-lg">
                 <img :src="modalStore.imagePreview" alt="" class="object-cover h-full w-full rounded-t-lg overflow-hidden" v-if="modalStore.imagePreview">
-                <p class="text-white" v-else>image</p>
+                <p class="text-white" v-else>รูป</p>
                 
             </div>
 
