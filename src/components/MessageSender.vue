@@ -185,7 +185,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" />
+                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" :is-fetch-template="isFetchTemplate" />
                 </template>
 
               </template>
@@ -290,7 +290,7 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isLoading = ref(false)
-
+const isFetchTemplate = ref(false)
 
 
 const shopconfig_data = ref<ShopConfig>();
@@ -298,39 +298,69 @@ const shopconfig_data = ref<ShopConfig>();
 
 import Swal from 'sweetalert2';
 
-
+type FetchDataTemplateResponse = {
+  isFetchTemplate: boolean;
+  shopconfig: ShopConfig | undefined;
+}
 
 
 const handleClickActiveTemplate = async () => {
   try {
     uiStore.activeTemplateMessage();
     // fetch dataBase template
-    shopconfig_data.value = await fetchDataTemplate();
-    console.log("fetchDataTemplate")
-    // shopconfig_data.value =  shopconfig_data.value
-    console.log(JSON.stringify(shopconfig_data.value, null, 2));
+    const response = await fetchDataTemplate();
+    console.log("fetchDataTemplate");
+    console.log(JSON.stringify(response.shopconfig, null, 2));
 
+    if (response.isFetchTemplate) {
+      shopconfig_data.value = response.shopconfig;
+    }
 
   } catch (error) {
-    console.log("error in handleClickActiveTemplate")
+    console.log("error in handleClickActiveTemplate");
     console.error("Error occurred while loading template:", error);
     // Handle the error gracefully, show an error message, etc.
   }
 };
 
+// const fetchDataTemplate = async () => {
+//   try {
+//     isFetchTemplate.value = false
+//     const shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+
+//     if (typeof shopconfig !== 'undefined') {
+//       console.log(shopconfig);
+//       isFetchTemplate.value = true
+//       return shopconfig;
+//     } else {
+//       throw new Error("ShopConfig is undefined");
+//     }
+//   } catch (error) {
+//     console.log('error in fetchDataTemplate')
+//     console.error("Error occurred while loading template:", error);
+//     throw error; // Rethrow the error to propagate it to the caller
+//   }
+// };
 
 const fetchDataTemplate = async () => {
   try {
-    const shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+    const response = {
+      isFetchTemplate: false,
+      shopconfig: null as unknown as ShopConfig | undefined
+    };
 
-    if (typeof shopconfig !== 'undefined') {
-      console.log(shopconfig);
-      return shopconfig;
+    response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+
+    if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
+      console.log(response.shopconfig);
+      response.isFetchTemplate = true;
     } else {
       throw new Error("ShopConfig is undefined");
     }
+
+    return response;
   } catch (error) {
-    console.log('error in fetchDataTemplate')
+    console.log('error in fetchDataTemplate');
     console.error("Error occurred while loading template:", error);
     throw error; // Rethrow the error to propagate it to the caller
   }
@@ -570,6 +600,8 @@ const handleFileChange = (event: Event) => {
 const removeImage = (index: number) => {
   images.value.splice(index, 1);
 };
+
+export type { FetchDataTemplateResponse }
 
 </script>
 
