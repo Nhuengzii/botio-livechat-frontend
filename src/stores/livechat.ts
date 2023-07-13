@@ -149,6 +149,16 @@ export const useLivechatStore = defineStore("livechat", () => {
       conversation.unread = 0;
       if (message.source.userType === 'user') {
         currentChat.value.messages.push(message);
+      } else if (message.source.userType === 'admin') {
+        await (new Promise((resolve) => setTimeout(resolve, 200)));
+        const fakeMessage: number = currentChat.value.messages.findIndex((m) => m.messageID === undefined);
+        // remove fakeMessage
+        if (fakeMessage !== -1) {
+          currentChat.value.messages.splice(fakeMessage, 1);
+        }
+        if (!(currentChat.value.messages.find((m) => m.messageID === message.messageID))) {
+          currentChat.value.messages.push(message);
+        }
       }
       markAsReadEventBus.value.emit(conversation.conversationID);
     }

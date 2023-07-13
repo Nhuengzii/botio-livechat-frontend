@@ -9,9 +9,11 @@
         <button @click="uiStore.activeCreateTemplateMessage"
             class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
             <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
-            <div class="rounded-2xl px-2 py-1 ">
-                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ {{conversation.platform}}</p>
-            </div>
+
+            <div class="rounded-2xl px-2 py-1">
+                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ {{ conversation.platform }}</p>
+   
+            </div>s
         </button>
         <!-- end create chat template -->
 
@@ -20,10 +22,10 @@
         <!-- space -->
     </div>
     <div class="background-d9-250 flex flex-wrap">
-        
-        <p>{{  }}</p>
+
         <template v-if="shopconfig">
-            <div v-for="template, index in shopconfig.Templates" class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
+            <div v-for="template, index in shopconfig.templates"
+                class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
                 <p>11111</p>
                 <!-- <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
                     <div class="flex jusitfy-center items-center">
@@ -82,7 +84,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
     console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
-        try {  
+        try {
             const attachmentFacebook = {
                 type: 'facebook-template-generic',
                 payload: {
@@ -106,7 +108,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
     } else if (platform == 'line') {
         if (clickedTemplate.type === 'Button') {
             try {
-                const attachmentLineButton: AttachmentForSending = {   
+                const attachmentLineButton: AttachmentForSending = {
                     type: 'line-template-buttons',
                     payload: {
                         line_template_buttons:
@@ -123,7 +125,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                                 label: button.title,
                                 uri: button.url
                             }))
-                            
+
                         }
                     },
                 }
@@ -141,7 +143,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
             const attachmentInstagram: AttachmentForSending = {
                 type: 'instagram-template-generic',
                 payload: {
-                    ig_template_generic: clickedTemplate.elements.map((element) =>({
+                    ig_template_generic: clickedTemplate.elements.map((element) => ({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
@@ -149,13 +151,13 @@ const handleSendTemplate = async (index: number, platform: string) => {
                             url: button.url,
                             title: button.title,
                         }))
-                    }))                                            
+                    }))
                 },
             }
             livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
         } catch (error) {
             console.log('Error sending attachment:', error);
-        }   
+        }
     }
 
 }
