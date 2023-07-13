@@ -11,7 +11,7 @@
                 <div class="flex mx-2 my-4 px-4">
                     <div class="bg-white  border-2 rounded-lg">
                         <div class="flex items-center justify-center w-52 h-32 bg-blue-700 rounded-t-lg">
-                            <p class="text-white">image</p>
+                            <p class="text-white">รูป</p>
                             <img src="" alt="">
                         </div>
                         <div class="border-b-2 flex flex-col items-start">
@@ -35,7 +35,7 @@
                     <div class="flex mx-2 my-4 px-4">
                         <div class="bg-white  border-2 rounded-lg">
                             <div class="flex items-center justify-center w-52 h-44 bg-blue-700 rounded-t-lg">
-                                <p class="text-white">image</p>
+                                <p class="text-white">รูป</p>
                                 <img src="" alt="">
                             </div>
                             <div class="border-b-2 flex flex-col items-start">

@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-center">
         <header class="flex">
-            <div class="bg-blue-dark py-4 px-12 flex items-center">
+            <div class="bg-blue-dark py-2.5 px-8 flex items-center rounded-xl">
                 <h3 class="text-lg text-white font-semibold pr-4">สร้างเทมเพลตข้อความสำหรับ</h3>
                 <div class="flex bg-white rounded-full w-8 h-8 items-center justify-center">
                     <font-awesome-icon v-if="platform === 'facebook'" :icon="['fab', 'facebook']" style="color: #2F58CD;"

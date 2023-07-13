@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
-        <header class="flex justify-between items-center" id="headerModal">
-            <div class="bg-blue-dark py-4 px-12">
+        <header class="flex justify-between items-center " id="headerModal">
+            <div class="bg-blue-dark py-4 px-12 rounded-xl">
                 <h3 class="text-white text-lg font-semibold">เทมเพลตข้อความ</h3>
             </div>
         </header>
