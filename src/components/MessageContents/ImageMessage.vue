@@ -65,6 +65,9 @@ import { ref } from "vue";
 const { message } = defineProps<{
   message: Message
 }>()
+defineProps<{
+    platform: String
+}>()
 const imageUrl = ref(message.attachments[0].payload.src)
 const amountImage = ref(message.attachments.length)
 
@@ -76,6 +79,7 @@ const handleImageLoad=()=> {
       StatusLoadImg.value=true;
       console.log('Image has finished loading');
     }
+    
 
 </script>
 
