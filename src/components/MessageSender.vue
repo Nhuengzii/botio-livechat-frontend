@@ -28,7 +28,7 @@
 
           <!-- show Modal Chat Message Template -->
           <Teleport to="body">
-            <ModalTemplateChat v-if="uiStore.is_activeTemplateMessage">
+            <ModalTemplateChat v-if="uiStore.is_activeTemplateMessage" :platform="platform">
 
               <!--HEADER-->
               <template #header>

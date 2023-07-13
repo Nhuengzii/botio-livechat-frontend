@@ -1,30 +1,28 @@
 <template>
     <Transition name="modal">
-        <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask">
-            <div class="flex flex-col modal-container">
-                <div class="flex mb-4" :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
-                    <template v-if="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
+        <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask ">
+            <div class="flex flex-col modal-container ">
+                <div class="flex mb-2 " :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
+                    <template v-show="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
                         <button class="" @click="handleButtonClickBack">
-                            <div class="flex items-center">
+                            <div class="flex items-center ">
                                 <div class="flex items-center justify-center rounded-full w-8 h-8 bg-[#394867]">
                                     <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" size="lg" />
                                 </div>
-                                <p class="text-lg pl-2">ย้อนกลับ</p>
+                                <p class="text-lg pl-2 ">ย้อนกลับ</p>
                             </div>
                         </button>
                     </template>
-                    <template v-else>
-                        <div class="w-5 h-5"></div>
-                    </template>
-                    <button @click="handleButtonClickToClose" class="w-10 h-10 rounded-full font-bold bg-red-400">
+
+                    <div class="modal-header flex-[1]  justify-between p-4  " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-[#068FFF] ml-20':'bg-[#068FFF]':(props.platform=='instagram')? 'bg-[#FA7070]':'bg-[#38E54D]'">
+                        <slot name="header">default header</slot>
+                    </div>
+                    <div class="mt-4 mr-2">
+                    <button @click="handleButtonClickToClose" class="w-8 h-8 rounded-full font-bold bg-red-400">
                         <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                     </button>
+                    </div>
                 </div>
-                
-                <div class="modal-header flex-[1] justify-between">
-                    <slot name="header">default header</slot>
-                </div>
-
                 <div class="modal-body  flex-[8] overflow-x-hidden  no-scrollbar justify-center">
                     <slot name="body">default body</slot>
                 </div>
@@ -45,7 +43,9 @@ import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal';
 const uiStore = useUIStore()
 const modalStore = useModalStore()
-
+const props = defineProps<{
+  platform: string
+}>()
 const handleButtonClickBack = () => {
     uiStore.activeCreateTemplateMessage();
     modalStore.reset();
