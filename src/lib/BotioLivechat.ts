@@ -62,17 +62,9 @@ class BotioLivechat implements IBotioLivechat {
   }
   async getShopConfig() {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config`
-    const res = await axios.get<{ shopConfig: { ShopID: string, Templates: { ID: string, Payload: string }[] } }>(url)
-    return {
-      shopID: res.data.shopConfig.ShopID,
-      templates: res.data.shopConfig.Templates.map((template) => {
-        return {
-          id: template.ID,
-          payload: template.Payload
-        }
-      })
-
-    }
+    console.log(url)
+    const res = await axios.get<{ shopConfig: ShopConfig }>(url)
+    return res.data.shopConfig
   }
   async saveTemplate(payload: string) {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config`
