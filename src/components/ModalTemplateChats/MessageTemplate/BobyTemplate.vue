@@ -11,9 +11,9 @@
             <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
 
             <div class="rounded-2xl px-2 py-1">
-                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ {{ conversation.platform }}</p>
-   
-            </div>s
+                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ</p>
+
+            </div>
         </button>
         <!-- end create chat template -->
 
@@ -24,45 +24,50 @@
     <div class="background-d9-250 flex flex-wrap">
 
         <template v-if="shopconfig">
-            <div v-for="template, index in shopconfig.templates"
+            
+            <div v-for="template, index in templateList" :key="template.id"
                 class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
-                <p>11111</p>
-                <!-- <div class="flex flex-[10] basis-auto  py-2 jusitfy-center items-center">
-                    <div class="flex jusitfy-center items-center">
-                       
+
+                <template v-if="template.platform === conversation.platform">
+
+                    <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
+                        <div class="flex justify-center items-center">
+                            <p>{{ template.name }}</p>
+                        </div>
                     </div>
-                </div> -->
+    
+                    <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
+                        <button @click="handleSendTemplate(index, template.platform)"
+                            class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
+                            <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
+                            <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
+                        </button>
+                    </div>
+    
+                    <div class="flex-[1] px-1 items-center justify-center">
+                        <button @click="uiStore.activeEditTemplateMessage" class="flex">
+                            <font-awesome-icon :icon="['fas', 'pen']" />
+                        </button>
+                    </div>
+    
+                    <div class="flex-[1] px-1 items-center justify-center">
+                        <button class="flex">
+                            <font-awesome-icon :icon="['fas', 'trash-can']" />
+                        </button>
+                    </div>
 
-                <!-- <div class="flex flex-[2] basis-auto  mx-1 jusitfy-center items-center">
-                    <button @click="handleSendTemplate(index, template.platform)"
-                        class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
-                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
-                        <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
-                    </button>
-                </div> -->
-
-                <!-- (To Do !!!) icon click to edit template -->
-                <!-- <div class="flex-[1] px-1 items-center justify-center">
-                    <button @click="uiStore.activeEditTemplateMessage" class="flex">
-                        <font-awesome-icon :icon="['fas', 'pen']" />
-                    </button>
-                </div> -->
-
-                <!-- (To DO !!!) icon click to delete template -->
-                <!-- <div class="flex-[1] px-1 items-center justify-center">
-                    <button class="flex">
-                        <font-awesome-icon :icon="['fas', 'trash-can']" />
-                    </button>
-                </div> -->
-
+                </template>
             </div>
         </template>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-import type { ShopConfig } from '@/types/ShopInformation';
+import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
+import type { Template, Buttons } from '@/stores/modal';
+
 const props = defineProps<{
     conversation: Conversation
     shopconfig: ShopConfig | undefined
@@ -73,14 +78,60 @@ import type { AttachmentForSending, } from '@/types/message'
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
+import { computed, ref } from 'vue';
 
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
 const modalStore = useModalStore()
 
+
+const templateList = ref<Template[]>([]);
+
+
+const loadShopConfig = computed(() => {
+    return (shopConfig?: ShopConfig) => {
+        if (shopConfig) {
+            shopConfig.templates.forEach((template) => {
+                const parsedPayload = JSON.parse(template.payload);
+                const templateData: Template = {
+                    id: parsedPayload.id,
+                    type: parsedPayload.type,
+                    platform: parsedPayload.platform,
+                    name: parsedPayload.name,
+                    elements: parsedPayload.elements.map((element: any) => {
+                        return {
+                            title: element.title,
+                            message: element.message,
+                            picture: element.picture,
+                            buttons: element.buttons.map((button: any) => {
+                                return {
+                                    id: button.id,
+                                    title: button.title,
+                                    url: button.url,
+                                    isSave: button.isSave,
+                                };
+                            }),
+                        };
+                    }),
+                };
+                templateList.value.push(templateData);
+            });
+        }
+    };
+});
+
+
+loadShopConfig.value(props.shopconfig);
+
+const findButtonIndex = (buttonList: Buttons[], buttonID: number): number => {
+  const index = buttonList.findIndex(button => button.id === buttonID);
+  return index;
+};
+
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
-    const clickedTemplate = modalStore.templateList[index]
+    //const indexButton = findButtonIndex()
+    const clickedTemplate = templateList.value[index]
     console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
