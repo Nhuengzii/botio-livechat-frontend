@@ -22,9 +22,7 @@
         <!-- space -->
     </div>
     <div class="background-d9-250 flex flex-wrap">
-
         <template v-if="shopconfig">
-
             <div v-for="template, index in templateList" :key="template.id"
                 class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
 
@@ -32,7 +30,7 @@
 
                     <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
                         <div class="flex justify-center items-center">
-                            <p>{{ template.name }} {{ index}}</p>
+                            <p>{{ template.name }}</p>
                         </div>
                     </div>
 
@@ -82,7 +80,7 @@ import type { AttachmentForSending, } from '@/types/message'
 import { useUIStore } from '@/stores/UI';
 import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
-import { computed, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
@@ -91,6 +89,32 @@ const modalStore = useModalStore()
 
 const templateList = ref<Template[]>([]);
 const listTemplateId = ref<string[]>([]);
+const isDelete = ref(false);
+
+const updatedTemplateList = reactive<Template[]>([]);
+
+
+// watch(
+//     templateList,
+//     (newValue, oldValue) => {
+//         // Iterate over the old list and find deleted items
+//         const deletedItems = oldValue.filter(
+//             (oldItem) => !newValue.some((newItem) => newItem.id === oldItem.id)
+//         );
+
+//         // Remove deleted items from the updatedTemplateList
+//         deletedItems.forEach((deletedItem) => {
+//             const index = updatedTemplateList.findIndex(
+//                 (item) => item.id === deletedItem.id
+//             );
+//             if (index !== -1) {
+//                 updatedTemplateList.splice(index, 1);
+//                 templateList.value = updatedTemplateList
+//             }
+//         });
+//     },
+//     { deep: true }
+// );
 
 // loadind shopconfig & parsePayload in showconfig-data
 const loadShopConfig = computed(() => {
@@ -98,30 +122,36 @@ const loadShopConfig = computed(() => {
         if (shopConfig && !props.isFetchTemplate) {
             try {
                 shopConfig.templates.forEach((template) => {
-                    listTemplateId.value.push(template.id);
-                    const parsedPayload = JSON.parse(template.payload);
-                    const templateData: Template = {
-                        id: parsedPayload.id,
-                        type: parsedPayload.type,
-                        platform: parsedPayload.platform,
-                        name: parsedPayload.name,
-                        elements: parsedPayload.elements.map((element: any) => {
-                            return {
-                                title: element.title,
-                                message: element.message,
-                                picture: element.picture,
-                                buttons: element.buttons.map((button: any) => {
-                                    return {
-                                        id: button.id,
-                                        title: button.title,
-                                        url: button.url,
-                                        isSave: button.isSave,
-                                    };
-                                }),
-                            };
-                        }),
-                    };
-                    templateList.value.push(templateData);
+                    const existingTemplate = listTemplateId.value.find(
+                        (item) => item === template.id
+                    );
+                    if (!existingTemplate) {
+                        listTemplateId.value.push(template.id);
+                        const parsedPayload = JSON.parse(template.payload);
+                        const templateData: Template = {
+                            id: parsedPayload.id,
+                            type: parsedPayload.type,
+                            platform: parsedPayload.platform,
+                            name: parsedPayload.name,
+                            elements: parsedPayload.elements.map((element: any) => {
+                                return {
+                                    title: element.title,
+                                    message: element.message,
+                                    picture: element.picture,
+                                    buttons: element.buttons.map((button: any) => {
+                                        return {
+                                            id: button.id,
+                                            title: button.title,
+                                            url: button.url,
+                                            isSave: button.isSave,
+                                        };
+                                    }),
+                                };
+                            }),
+                        };
+                        // template list for virtualization
+                        templateList.value.push(templateData);
+                    }
                 });
 
                 // Hide the SweetAlert loading dialog
@@ -149,7 +179,6 @@ const loadShopConfig = computed(() => {
     };
 });
 
-
 loadShopConfig.value(props.shopconfig);
 
 
@@ -158,16 +187,41 @@ watch(
     () => props.shopconfig, // Watch the shopConfig value
     (newValue, oldValue) => {
         console.log(newValue?.templates.length, oldValue?.templates.length)
+        templateList.value = []
         loadShopConfig.value(newValue); // Call the loadShopConfig computed function
     }
 );
 
+const fetchDataTemplate = async () => {
+    try {
+        const response = {
+            isFetchTemplate: false,
+            shopconfig: null as unknown as ShopConfig | undefined
+        };
 
-const deleteTemplatebyIndex = async (index:number): Promise<void> => {
+        response.shopconfig = await livechatstore.botioLivechat?.getShopConfig();
+
+        if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
+            console.log(response.shopconfig);
+            response.isFetchTemplate = true;
+        } else {
+            throw new Error("ShopConfig is undefined");
+        }
+
+        return response;
+    } catch (error) {
+        console.log('error in fetchDataTemplate');
+        console.error("Error occurred while loading template:", error);
+        throw error; // Rethrow the error to propagate it to the caller
+    }
+};
+
+const deleteTemplatebyIndex = async (index: number): Promise<void> => {
     try {
         const templateID = listTemplateId.value[index];
         console.log(`delete template index : ${index}`)
         // Show the loading dialog
+
         Swal.fire({
             title: 'Deleting Template',
             allowOutsideClick: false,
@@ -177,16 +231,25 @@ const deleteTemplatebyIndex = async (index:number): Promise<void> => {
             },
         });
 
+
         // Perform the template deletion
+        isDelete.value = false
         await livechatstore.botioLivechat?.deleteTemplate(templateID)
-       
+
+        // remove in template virtualization
+        templateList.value.splice(index, 1)
+        console.log(`templateList length : ${templateList.value.length}`)
+
 
         // Show the success message
-        Swal.fire({
-            icon: 'success',
-            title: 'Template Deleted',
-            text: 'The template has been successfully deleted.',
-        });
+        if (isDelete) {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Template Deleted',
+                text: 'The template has been successfully deleted.',
+            });
+        }
     } catch (error) {
         console.error('Error deleting template:', error);
         // Show an error message using SweetAlert2
@@ -197,6 +260,7 @@ const deleteTemplatebyIndex = async (index:number): Promise<void> => {
         });
     }
 }
+
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
