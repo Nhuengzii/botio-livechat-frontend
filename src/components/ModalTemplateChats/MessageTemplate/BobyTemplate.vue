@@ -24,7 +24,7 @@
     <div class="background-d9-250 flex flex-wrap">
 
         <template v-if="shopconfig">
-            
+
             <div v-for="template, index in templateList" :key="template.id"
                 class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
 
@@ -32,10 +32,10 @@
 
                     <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
                         <div class="flex justify-center items-center">
-                            <p>{{ template.name }}</p>
+                            <p>{{ template.name }} {{ index}}</p>
                         </div>
                     </div>
-    
+
                     <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
                         <button @click="handleSendTemplate(index, template.platform)"
                             class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
@@ -43,17 +43,17 @@
                             <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                         </button>
                     </div>
-    
+
                     <!-- edit template -->
-                    <div class="flex-[1] px-1 items-center justify-center">
-                        <button @click="uiStore.activeEditTemplateMessage" class="flex">
+                    <!-- <div class="flex-[1] px-1 items-center justify-center">
+                        <button @click="" class="flex">
                             <font-awesome-icon :icon="['fas', 'pen']" />
                         </button>
-                    </div>
-    
+                    </div> -->
+
                     <!-- delete template-->
                     <div class="flex-[1] px-1 items-center justify-center">
-                        <button class="flex">
+                        <button class="flex" @click="deleteTemplatebyIndex(index)">
                             <font-awesome-icon :icon="['fas', 'trash-can']" />
                         </button>
                     </div>
@@ -90,73 +90,113 @@ const modalStore = useModalStore()
 
 
 const templateList = ref<Template[]>([]);
+const listTemplateId = ref<string[]>([]);
 
-
+// loadind shopconfig & parsePayload in showconfig-data
 const loadShopConfig = computed(() => {
-  return (shopConfig?: ShopConfig) => {
-    if (shopConfig && !props.isFetchTemplate) {
-      try {
-        shopConfig.templates.forEach((template) => {
-          const parsedPayload = JSON.parse(template.payload);
-          const templateData: Template = {
-            id: parsedPayload.id,
-            type: parsedPayload.type,
-            platform: parsedPayload.platform,
-            name: parsedPayload.name,
-            elements: parsedPayload.elements.map((element: any) => {
-              return {
-                title: element.title,
-                message: element.message,
-                picture: element.picture,
-                buttons: element.buttons.map((button: any) => {
-                  return {
-                    id: button.id,
-                    title: button.title,
-                    url: button.url,
-                    isSave: button.isSave,
-                  };
-                }),
-              };
-            }),
-          };
-          templateList.value.push(templateData);
-        });
+    return (shopConfig?: ShopConfig) => {
+        if (shopConfig && !props.isFetchTemplate) {
+            try {
+                shopConfig.templates.forEach((template) => {
+                    listTemplateId.value.push(template.id);
+                    const parsedPayload = JSON.parse(template.payload);
+                    const templateData: Template = {
+                        id: parsedPayload.id,
+                        type: parsedPayload.type,
+                        platform: parsedPayload.platform,
+                        name: parsedPayload.name,
+                        elements: parsedPayload.elements.map((element: any) => {
+                            return {
+                                title: element.title,
+                                message: element.message,
+                                picture: element.picture,
+                                buttons: element.buttons.map((button: any) => {
+                                    return {
+                                        id: button.id,
+                                        title: button.title,
+                                        url: button.url,
+                                        isSave: button.isSave,
+                                    };
+                                }),
+                            };
+                        }),
+                    };
+                    templateList.value.push(templateData);
+                });
 
-        // Hide the SweetAlert loading dialog
-        Swal.close();
-      } catch (error) {
-        console.error('Error loading data templates:', error);
-        // Show an alert or notification indicating the error using SweetAlert2
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load data templates',
-        });
-      }
-    } else {
-      // Show the SweetAlert loading dialog
-      Swal.fire({
-        title: 'Loading Template',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        willOpen: () => {
-          Swal.showLoading();
-        },
-      });
-    }
-  };
+                // Hide the SweetAlert loading dialog
+                Swal.close();
+            } catch (error) {
+                console.error('Error loading data templates:', error);
+                // Show an alert or notification indicating the error using SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load data templates',
+                });
+            }
+        } else {
+            // Show the SweetAlert loading dialog
+            Swal.fire({
+                title: 'Loading Template',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        }
+    };
 });
 
 
 loadShopConfig.value(props.shopconfig);
 
+
+
 watch(
-  () => props.shopconfig, // Watch the shopConfig value
-  (newValue,oldValue) => {
-    console.log(newValue?.templates.length, oldValue?.templates.length)
-    loadShopConfig.value(newValue); // Call the loadShopConfig computed function
-  }
+    () => props.shopconfig, // Watch the shopConfig value
+    (newValue, oldValue) => {
+        console.log(newValue?.templates.length, oldValue?.templates.length)
+        loadShopConfig.value(newValue); // Call the loadShopConfig computed function
+    }
 );
+
+
+const deleteTemplatebyIndex = async (index:number): Promise<void> => {
+    try {
+        const templateID = listTemplateId.value[index];
+        console.log(`delete template index : ${index}`)
+        // Show the loading dialog
+        Swal.fire({
+            title: 'Deleting Template',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        // Perform the template deletion
+        await livechatstore.botioLivechat?.deleteTemplate(templateID)
+       
+
+        // Show the success message
+        Swal.fire({
+            icon: 'success',
+            title: 'Template Deleted',
+            text: 'The template has been successfully deleted.',
+        });
+    } catch (error) {
+        console.error('Error deleting template:', error);
+        // Show an error message using SweetAlert2
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to delete the template.',
+        });
+    }
+}
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
