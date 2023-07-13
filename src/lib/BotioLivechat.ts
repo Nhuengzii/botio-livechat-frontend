@@ -247,7 +247,7 @@ class BotioLivechat implements IBotioLivechat {
     const body = {
       attachment: attachment
     }
-    console.log(JSON.stringify(body, null, 2))
+    //console.log(JSON.stringify(body, null, 2))
     try {
       await axios.post(url, body);
     } catch (error) {

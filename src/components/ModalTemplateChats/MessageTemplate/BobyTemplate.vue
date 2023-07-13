@@ -99,7 +99,7 @@ const fetchNewDataTemplate = async () => {
         const shopconfig = await livechatstore.botioLivechat?.getShopConfig();
         isFetchingTemplate.value = false
         if (typeof shopconfig !== 'undefined' && shopconfig !== null) {
-            console.log(shopconfig);
+            //console.log(shopconfig);
             return shopconfig;
         } else {
             throw new Error("ShopConfig is undefined");
@@ -143,7 +143,7 @@ const platformLoadTemplate = async () => {
 // loadind shopconfig & parsePayload in showconfig-data
 const loadShopConfig = computed(() => {
     return (shopConfig?: ShopConfig, platform?: string) => {
-        console.log(isFetchingTemplate.value)
+        //console.log(isFetchingTemplate.value)
         if (shopConfig && !isFetchingTemplate.value) {
             try {
 
@@ -268,7 +268,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
     const clickedTemplate = templateList.value[index]
-    console.log(JSON.stringify(clickedTemplate.elements, null, 2))
+    //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
         try {
@@ -320,7 +320,6 @@ const handleSendTemplate = async (index: number, platform: string) => {
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
-                console.log('yeeeeeeeeeeeeeeeeeeeeeeee')
             }
         } else if (clickedTemplate.type === 'TextImage') {
             console.log('this type not supported')

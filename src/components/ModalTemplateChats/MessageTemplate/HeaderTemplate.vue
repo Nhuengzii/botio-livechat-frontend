@@ -21,7 +21,7 @@
 import { useUIStore } from '@/stores/UI';
 const uiStore = useUIStore()
 const props = defineProps<{
-  platform: string
+    platform: string
 }>()
 
 </script>
