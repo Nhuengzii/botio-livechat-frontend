@@ -3,22 +3,23 @@
         <div v-if="uiStore.is_activeTemplateMessage" class="modal-mask ">
             <div class="flex flex-col modal-container ">
                 <div class="flex mb-2 " :class="{'justify-between' : uiStore.is_activeTemplateMessage, 'justify-end' : !uiStore.is_activeTemplateMessage }">
-                    <template v-show="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
+                    
+                    <template v-if="uiStore.is_createTemplateMessage || uiStore.is_editTemplateMessage">
                         <button class="" @click="handleButtonClickBack">
                             <div class="flex items-center ">
-                                <div class="flex items-center justify-center rounded-full w-8 h-8 bg-[#394867]">
-                                    <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" size="lg" />
+                                <div class="flex items-center justify-center rounded-full w-[30px] h-[30px] bg-[#394867]">
+                                    <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;" size="30px" />
                                 </div>
-                                <p class="text-lg pl-2 ">ย้อนกลับ</p>
+                                <p class="text-[17px] pl-2">ย้อนกลับ</p>
                             </div>
                         </button>
                     </template>
 
-                    <div class="modal-header flex-[1]  justify-between p-4  " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-blue-400 rounded-xl mr-7 drop-shadow-xl ml-20':'bg-blue-400 rounded-xl mr-7 drop-shadow-xl':(props.platform=='instagram')? 'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl':'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
+                    <div class="modal-header flex-[1]  justify-between p-4 " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-blue-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-blue-400 rounded-xl mr-7 drop-shadow-xl':(props.platform=='instagram')? (uiStore.is_createTemplateMessage)? 'bg-red-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl':(uiStore.is_createTemplateMessage)?  'bg-green-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
                         <slot name="header">default header</slot>
                     </div>
                     <div class="mt-4 mr-2">
-                    <button @click="handleButtonClickToClose" class="w-8 h-8 rounded-full font-bold bg-red-400">
+                    <button @click="handleButtonClickToClose" class="w-8 h-8 rounded-full font-bold hover:bg-gray-100">
                         <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                     </button>
                     </div>

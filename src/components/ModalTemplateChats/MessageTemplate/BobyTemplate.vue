@@ -1,8 +1,8 @@
 <template>
     <div class="py-10 flex items-center">
         <!-- search chat template -->
-        <div class="flex-[8] basis-auto bg-ea py-4 mr-3 rounded-2xl">
-            <p class="px-8 color-d9">ค้นหาด้วย ชื่อ หรือรายละเอียดข้อความ</p>
+        <div class="flex-[8] basis-auto bg-white py-4 mr-3 rounded-2xl shadow-sm">
+            <p class="px-8 color-gray-100">ค้นหาด้วย ชื่อ หรือรายละเอียดข้อความ</p>
         </div>
 
         <!-- create chat template -->
@@ -21,11 +21,11 @@
         <div class="flex-[5]"></div>
         <!-- space -->
     </div>
-    <div class="background-d9-250 flex flex-wrap">
+    <div class="background-d9-250  flex flex-wrap">
         <template v-if="shopconfig">
 
             <div v-for="template, index in templateList" :key="template.id"
-                class="flex basis-auto w-96 bg-ea-80 mx-2 my-2 py-2 px-4 items-center">
+                class="flex basis-auto w-96 bg-white rounded-xl mx-2 my-2 py-1 px-4 items-center">
 
                 <template v-if="template.platform === conversation.platform">
 
@@ -37,7 +37,7 @@
 
                     <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
                         <button @click="handleSendTemplate(index, template.platform)"
-                            class="flex py-2 px-1 rounded-2xl bg-blue-dark items-center justify-center">
+                            class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
                             <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
                             <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
                         </button>
