@@ -67,11 +67,11 @@ class BotioLivechat implements IBotioLivechat {
     return res.data.shopConfig
   }
   async saveTemplate(payload: string) {
-    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config`
+    const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates`
     const body = {
       templatePayload: payload
     }
-    const res = await axios.patch<{ templateID: string }>(url, body)
+    const res = await axios.post<{ templateID: string }>(url, body)
     return res.data.templateID
   }
   async listTemplates() {
