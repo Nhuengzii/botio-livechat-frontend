@@ -164,7 +164,6 @@
                             <button @click="selecImage"
                               class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
                             <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
-                            <p>{{ modalStore.selectedFileImage }}</p>
                             </p>
                           </div>
 
@@ -340,7 +339,7 @@ const fetchDataTemplate = async () => {
     response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
 
     if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
-      console.log(response.shopconfig);
+      //console.log(response.shopconfig);
       response.isFetchTemplate = true;
     } else {
       throw new Error("ShopConfig is undefined");
@@ -384,7 +383,7 @@ const handleButtonCreateTemplate = async () => {
     isLoading.value = true;
 
     modalStore.platform = props.platform;
-    console.log(modalStore.platform);
+    //console.log(modalStore.platform);
 
     try {
       const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
@@ -426,12 +425,12 @@ const handleButtonCreateTemplate = async () => {
 
         if (template_id) {
           Swal.fire('Success', 'Template saved successfully', 'success');
-          console.log(`template_id save : ${template_id}`);
+          //console.log(`template_id save : ${template_id}`);
           modalStore.reset();
           uiStore.finishCreateTemplate();
         } else {
           Swal.fire('Error', 'Failed to save template', 'error');
-          console.log('Failed to save template');
+          //console.log('Failed to save template');
         }
       }
     } catch (error) {
