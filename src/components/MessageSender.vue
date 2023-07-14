@@ -164,17 +164,22 @@
                             <button @click="selecImage"
                               class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
                             <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
-                            <p>{{ modalStore.selectedFileImage }}</p>
                             </p>
                           </div>
 
                           <!-- input detail in button -->
-                          <p class="text-base font-semibold pt-4">หัวข้อ (สูงสุดไม่เกิน 50 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-96">
+                            <p class="text-base font-semibold pt-4">หัวข้อ</p>
+                            <p class="text-sm font-normal pt-4">{{ modalStore.titleUserInput.length }}/50</p>
+                          </div>
                           <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
                             class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
-                          <p class="mt-2 text-sm font-semibold">ข้อความ (สูงสุดไม่เกิน 175 ตัวอักษร)</p>
+                          <div class="flex items-center justify-between w-[70%]">
+                            <p class="mt-2 text-base font-semibold">ข้อความ</p>
+                            <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/200</p>
+                          </div>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                            class="h-44 w-[70%] px-2 py-1 mt-2 shadow-lg rounded-lg" maxlength="175" />
+                          class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="200" />
 
                         </div>
                       </div>
@@ -334,7 +339,7 @@ const fetchDataTemplate = async () => {
     response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
 
     if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
-      console.log(response.shopconfig);
+      //console.log(response.shopconfig);
       response.isFetchTemplate = true;
     } else {
       throw new Error("ShopConfig is undefined");
@@ -370,10 +375,6 @@ const canCreateTemplate = computed(() => {
   }
 });
 
-watch(() => modalStore.amountButton, (newValue, oldValue) => {
-  console.log(`amountButton: ${newValue}, ${oldValue}`);
-})
-
 
 // action create Template
 
@@ -382,7 +383,7 @@ const handleButtonCreateTemplate = async () => {
     isLoading.value = true;
 
     modalStore.platform = props.platform;
-    console.log(modalStore.platform);
+    //console.log(modalStore.platform);
 
     try {
       const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
@@ -417,17 +418,19 @@ const handleButtonCreateTemplate = async () => {
 
         const template_str = JSON.stringify(template);
         const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
+        const newResponse = await fetchDataTemplate()
+        shopconfig_data.value = newResponse.shopconfig
 
         Swal.close();
 
         if (template_id) {
           Swal.fire('Success', 'Template saved successfully', 'success');
-          console.log(`template_id save : ${template_id}`);
+          //console.log(`template_id save : ${template_id}`);
           modalStore.reset();
           uiStore.finishCreateTemplate();
         } else {
           Swal.fire('Error', 'Failed to save template', 'error');
-          console.log('Failed to save template');
+          //console.log('Failed to save template');
         }
       }
     } catch (error) {

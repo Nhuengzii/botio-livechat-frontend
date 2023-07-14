@@ -22,7 +22,6 @@
         <!-- space -->
     </div>
     <div class="background-d9-250 flex flex-wrap">
-
         <template v-if="shopconfig">
 
             <div v-for="template, index in templateList" :key="template.id"
@@ -32,7 +31,7 @@
 
                     <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
                         <div class="flex justify-center items-center">
-                            <p>{{ template.name }} {{ index}}</p>
+                            <p>{{ template.name }}</p>
                         </div>
                     </div>
 
@@ -80,48 +79,111 @@ const props = defineProps<{
 import type { AttachmentForSending, } from '@/types/message'
 
 import { useUIStore } from '@/stores/UI';
-import { useModalStore } from '@/stores/modal'
 import { useLivechatStore } from '@/stores/livechat';
-import { computed, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
-const modalStore = useModalStore()
 
 
 const templateList = ref<Template[]>([]);
 const listTemplateId = ref<string[]>([]);
+const isDelete = ref(false);
+const shopConfig = ref<ShopConfig>()
+const isFetchingTemplate = ref(false)
+//shopConfig.value = props.shopconfig
+
+const fetchNewDataTemplate = async () => {
+    try {
+        //isFetchingTemplate.value = true
+        const shopconfig = await livechatstore.botioLivechat?.getShopConfig();
+        isFetchingTemplate.value = false
+        if (typeof shopconfig !== 'undefined' && shopconfig !== null) {
+            //console.log(shopconfig);
+            return shopconfig;
+        } else {
+            throw new Error("ShopConfig is undefined");
+        }
+
+    } catch (error) {
+        console.log('error in fetchDataTemplate');
+        console.error("Error occurred while loading template:", error);
+        throw error; // Rethrow the error to propagate it to the caller
+    }
+};
+
+
+const platformLoadTemplate = async () => {
+    templateList.value = []
+    listTemplateId.value = []
+    isFetchingTemplate.value = true
+    if (isFetchingTemplate.value){
+        Swal.fire({
+                title: 'Loading Template',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+    }
+    shopConfig.value = await fetchNewDataTemplate();
+    
+    if (props.conversation.platform === "facebook") {
+        loadShopConfig.value(shopConfig.value, "facebook");
+    } else if (props.conversation.platform === "line") {
+        loadShopConfig.value(shopConfig.value, "line");
+    } else if (props.conversation.platform === "instagram") {
+        loadShopConfig.value(shopConfig.value, "instagram");
+    }
+}
+
+
 
 // loadind shopconfig & parsePayload in showconfig-data
 const loadShopConfig = computed(() => {
-    return (shopConfig?: ShopConfig) => {
-        if (shopConfig && !props.isFetchTemplate) {
+    return (shopConfig?: ShopConfig, platform?: string) => {
+        //console.log(isFetchingTemplate.value)
+        if (shopConfig && !isFetchingTemplate.value) {
             try {
+
                 shopConfig.templates.forEach((template) => {
-                    listTemplateId.value.push(template.id);
-                    const parsedPayload = JSON.parse(template.payload);
-                    const templateData: Template = {
-                        id: parsedPayload.id,
-                        type: parsedPayload.type,
-                        platform: parsedPayload.platform,
-                        name: parsedPayload.name,
-                        elements: parsedPayload.elements.map((element: any) => {
-                            return {
-                                title: element.title,
-                                message: element.message,
-                                picture: element.picture,
-                                buttons: element.buttons.map((button: any) => {
+                    const existingTemplate = listTemplateId.value.find(
+                        (item) => item === template.id
+                    );
+                    if (!existingTemplate) {
+
+                        const parsedPayload = JSON.parse(template.payload);
+
+                        if (parsedPayload.platform === platform) {
+                            listTemplateId.value.push(template.id);
+
+                            const templateData: Template = {
+                                id: parsedPayload.id,
+                                type: parsedPayload.type,
+                                platform: parsedPayload.platform,
+                                name: parsedPayload.name,
+                                elements: parsedPayload.elements.map((element: any) => {
                                     return {
-                                        id: button.id,
-                                        title: button.title,
-                                        url: button.url,
-                                        isSave: button.isSave,
+                                        title: element.title,
+                                        message: element.message,
+                                        picture: element.picture,
+                                        buttons: element.buttons.map((button: any) => {
+                                            return {
+                                                id: button.id,
+                                                title: button.title,
+                                                url: button.url,
+                                                isSave: button.isSave,
+                                            };
+                                        }),
                                     };
                                 }),
                             };
-                        }),
-                    };
-                    templateList.value.push(templateData);
+                            // template list for virtualization
+                            templateList.value.push(templateData);
+                        }
+                    }
+
                 });
 
                 // Hide the SweetAlert loading dialog
@@ -135,39 +197,30 @@ const loadShopConfig = computed(() => {
                     text: 'Failed to load data templates',
                 });
             }
-        } else {
-            // Show the SweetAlert loading dialog
-            Swal.fire({
-                title: 'Loading Template',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                },
-            });
         }
     };
 });
-
-
-loadShopConfig.value(props.shopconfig);
+platformLoadTemplate()
 
 
 
-watch(
-    () => props.shopconfig, // Watch the shopConfig value
-    (newValue, oldValue) => {
-        console.log(newValue?.templates.length, oldValue?.templates.length)
-        loadShopConfig.value(newValue); // Call the loadShopConfig computed function
-    }
-);
+// watch(
+//     () => props.shopconfig, // Watch the shopConfig value
+//     async (newValue, oldValue) => {
+//         console.log(newValue?.templates.length, oldValue?.templates.length)
+//         templateList.value = []
+//         listTemplateId.value = []
+//         await fetchDataTemplate() // Call the loadShopConfig computed function
+//     }
+// );
 
 
-const deleteTemplatebyIndex = async (index:number): Promise<void> => {
+const deleteTemplatebyIndex = async (index: number): Promise<void> => {
     try {
         const templateID = listTemplateId.value[index];
         console.log(`delete template index : ${index}`)
         // Show the loading dialog
+
         Swal.fire({
             title: 'Deleting Template',
             allowOutsideClick: false,
@@ -177,16 +230,29 @@ const deleteTemplatebyIndex = async (index:number): Promise<void> => {
             },
         });
 
+
         // Perform the template deletion
+        isDelete.value = false
         await livechatstore.botioLivechat?.deleteTemplate(templateID)
-       
+
+        // remove in template virtualization
+        templateList.value.splice(index, 1)
+        console.log(`templateList : ${templateList}`)
+        console.log(`templateList length : ${templateList.value.length}`)
+
+        await fetchNewDataTemplate()
+        isDelete.value = true
+
 
         // Show the success message
-        Swal.fire({
-            icon: 'success',
-            title: 'Template Deleted',
-            text: 'The template has been successfully deleted.',
-        });
+        if (isDelete) {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Template Deleted',
+                text: 'The template has been successfully deleted.',
+            });
+        }
     } catch (error) {
         console.error('Error deleting template:', error);
         // Show an error message using SweetAlert2
@@ -198,11 +264,11 @@ const deleteTemplatebyIndex = async (index:number): Promise<void> => {
     }
 }
 
+
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
-    //const indexButton = findButtonIndex()
     const clickedTemplate = templateList.value[index]
-    console.log(JSON.stringify(clickedTemplate.elements, null, 2))
+    //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
         try {
@@ -254,7 +320,6 @@ const handleSendTemplate = async (index: number, platform: string) => {
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
-                console.log('yeeeeeeeeeeeeeeeeeeeeeeee')
             }
         } else if (clickedTemplate.type === 'TextImage') {
             console.log('this type not supported')
