@@ -14,7 +14,7 @@
                         </button>
                     </template>
 
-                    <div class="modal-header flex-[1]  justify-between p-4  " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-[#068FFF] ml-20':'bg-[#068FFF]':(props.platform=='instagram')? 'bg-[#FA7070]':'bg-[#38E54D]'">
+                    <div class="modal-header flex-[1]  justify-between p-4  " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-blue-400 rounded-xl mr-7 drop-shadow-xl ml-20':'bg-blue-400 rounded-xl mr-7 drop-shadow-xl':(props.platform=='instagram')? 'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl':'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
                         <slot name="header">default header</slot>
                     </div>
                     <div class="mt-4 mr-2">
@@ -23,7 +23,7 @@
                     </button>
                     </div>
                 </div>
-                <div class="modal-body  flex-[8] overflow-x-hidden  no-scrollbar justify-center">
+                <div class="modal-body  flex-[10] overflow-x-hidden  no-scrollbar justify-center px-10 rounded-xl shadow-sm p-5" :class="(props.platform=='facebook')? 'bg-blue-100':(props.platform=='instagram')? 'bg-red-100':'bg-green-200'">
                     <slot name="body">default body</slot>
                 </div>
 
