@@ -23,6 +23,7 @@ export const useMessageStore = defineStore("message", {
       const { shopID, pageID, platform, conversationID } = conversation
       const botioLivechat = new BotioLivechat(shopID);
       const messages = await botioLivechat.listMessage(platform, pageID, conversationID, 0, 30)
+      botioLivechat.markAsRead(platform, pageID, conversationID)
       this.currentChat.messages = messages
       this.currentChat.isFetching = false
     },
