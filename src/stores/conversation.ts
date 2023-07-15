@@ -3,7 +3,7 @@ import BotioLivechat from "@/lib/BotioLivechat2";
 import type { Conversation } from "@/types/conversation";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import { defineStore } from "pinia";
-import { useShopStore } from "./shopStore";
+import { useShopStore } from "./shop";
 type ConversationMap = Map<string, Conversation>;
 
 interface IConversationStore {
@@ -17,6 +17,9 @@ export const useConversationStore = defineStore("conversation", {
   getters: {
     conversations: (state) => ((platform: string) => {
       return conversationsMap2SortedArray(state.conversationsRaw, platform);
+    }),
+    conversation: (state) => ((platform: string, conversationID: string) => {
+      return state.conversationsRaw.get(conversationID)
     })
   },
   actions: {

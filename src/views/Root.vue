@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { useShopStore } from '@/stores/shopStore';
+import { useShopStore } from '@/stores/shop';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 const shopStore = useShopStore()

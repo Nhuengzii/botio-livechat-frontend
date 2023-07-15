@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import PlatformIcon from '@/components/PlatformIcon.vue'
-import { useShopStore } from '@/stores/shopStore';
+import { useShopStore } from '@/stores/shop';
 import { storeToRefs } from 'pinia';
 const shopStore = useShopStore()
 

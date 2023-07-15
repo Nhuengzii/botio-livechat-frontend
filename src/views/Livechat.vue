@@ -16,7 +16,7 @@ import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
 import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useShopStore } from '@/stores/shopStore';
+import { useShopStore } from '@/stores/shop';
 const shopStore = useShopStore()
 const router = useRouter()
 const ready = ref(false)

@@ -55,7 +55,7 @@ import { useLivechatStore } from '@/stores/livechat';
 import { useRoute } from 'vue-router';
 import Thread from './Thread.vue';
 import type { Conversation } from '@/types/conversation';
-import { useShopStore } from '@/stores/shopStore';
+import { useShopStore } from '@/stores/shop';
 const uiStore = useUIStore();
 const shopStore = useShopStore();
 const searchResult = ref([] as Conversation[])

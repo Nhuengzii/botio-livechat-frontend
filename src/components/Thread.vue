@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white px-3 py-3 hover:bg-gray-50"
-    @click="() => { livechatStore.openChat(conversation.platform, conversation.conversationID); conversation.unread = 0; }"
-    :class="currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-gray-300' : ''">
+    @click="() => { messageStore.openChatEventBus.emit(conversation); conversation.unread = 0; }"
+    :class="messageStore.currentChat?.conversation.conversationID == conversation.conversationID ? 'bg-gray-300' : ''">
     <ThreadNormal v-if="mode === 'normal'" :conversation="conversation" :show-platform="$route.query.platform === 'all'"
       :update-time-status="updateTimeStatus" />
     <ThreadSearched v-if="mode === 'searching'" :conversation="conversation"
@@ -14,9 +14,10 @@ import type { Conversation } from '@/types/conversation';
 import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import ThreadNormal from '@/components/ThreadVariants/ThreadNormal.vue'
 import ThreadSearched from './ThreadVariants/ThreadSearched.vue';
-import { useLivechatStore } from '@/stores/livechat';
 import { storeToRefs } from 'pinia';
 import { useUIStore } from '@/stores/UI';
+import { useConversationStore } from '@/stores/conversation';
+import { useMessageStore } from '@/stores/message';
 
 const UIStore = useUIStore();
 
@@ -25,15 +26,15 @@ const { conversation, mode } = defineProps<{
   mode: string
   showPlatform: boolean
 }>()
-
-const livechatStore = useLivechatStore()
-const { currentChat } = storeToRefs(livechatStore)
-livechatStore.markAsReadEventBus.on((readedConversationID) => {
-  if (conversation.conversationID === readedConversationID) {
-    livechatStore.markAsRead(conversation.platform, conversation.conversationID);
-    conversation.unread = 0;
-  }
-})
+const conversationStore = useConversationStore()
+const messageStore = useMessageStore()
+// const { currentChat } = storeToRefs(livechatStore)
+// livechatStore.markAsReadEventBus.on((readedConversationID) => {
+//   if (conversation.conversationID === readedConversationID) {
+//     livechatStore.markAsRead(conversation.platform, conversation.conversationID);
+//     conversation.unread = 0;
+//   }
+// })
 
 const updateTimeStatus = computed(() => {
   return getLastActivity(conversation.updatedTime)
