@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, } from 'vue-router'
 import Livechat from '../views/Livechat.vue'
 import Empty from '../views/Empty.vue'
+import Root from '../views/Root.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/start'
+      component: () => Root
     },
     {
       path: '/start',

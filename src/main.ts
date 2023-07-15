@@ -4,6 +4,11 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+/* import the fontawesome core */
+
+/* add icons to the library */
+library.add(faPaperPlane)
+
 import './assets/main.css'
 
 /* import the fontawesome core */
@@ -17,18 +22,45 @@ import {
     faFaceSmile,
     faImage,
     faCommentDots,
-    faPaperPlane
+    faPaperPlane,
+    faCirclePlus,
+    faPen,
+    faTrashCan,
+    faChevronDown,
+    faCircleInfo,
+    faMagnifyingGlass,
+    faArrowLeft,
+    faXmark,
+    faEllipsisVertical,
+    faArrowLeftLong
+    
     
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+    faFacebook,
+    faLine,
+    faInstagram
+} from '@fortawesome/free-brands-svg-icons'
 
 /* add icons to the library */
 library.add(faFaceSmile)
 library.add(faImage)
 library.add(faCommentDots)
 library.add(faPaperPlane)
-
-
-
+library.add(faCirclePlus)
+library.add(faFacebook)
+library.add(faLine)
+library.add(faPen)
+library.add(faTrashCan)
+library.add(faChevronDown)
+library.add(faInstagram)
+library.add(faCircleInfo)
+library.add(faMagnifyingGlass)
+library.add(faArrowLeft)
+library.add(faXmark)
+library.add(faEllipsisVertical)
+ library.add(faArrowLeftLong)
 const app = createApp(App)
 
 app.use(createPinia())

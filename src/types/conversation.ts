@@ -9,7 +9,7 @@ type Conversation = {
     src: string
   },
   lastActivity: string,
-  isRead: boolean,
+  unread: number,
 }
 
 type Participant = {

@@ -1,0 +1,301 @@
+.vue3-tabs-chrome {
+	padding-top: 10px;
+	background-color: #dee1e6;
+	position: relative
+}
+
+.vue3-tabs-chrome .tabs-content {
+	height: 34px;
+	position: relative;
+	overflow: hidden
+}
+
+.vue3-tabs-chrome .tabs-divider {
+	left: 0;
+	top: 50%;
+	width: 1px;
+	height: 20px;
+	background-color: #a9adb0;
+	position: absolute;
+	transform: translateY(-50%)
+}
+
+.vue3-tabs-chrome .tabs-item {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	box-sizing: border-box;
+	position: absolute
+}
+
+.vue3-tabs-chrome .tabs-item:hover {
+	z-index: 1
+}
+
+.vue3-tabs-chrome .tabs-item:hover .tabs-background-divider {
+	display: none
+}
+
+.vue3-tabs-chrome .tabs-item:hover .tabs-background-content {
+	background-color: #f2f3f5
+}
+
+.vue3-tabs-chrome .tabs-item:hover .tabs-background-after,
+.vue3-tabs-chrome .tabs-item:hover .tabs-background-before {
+	fill: #f2f3f5
+}
+
+.vue3-tabs-chrome .tabs-item.move {
+	transition: .15s
+}
+
+.vue3-tabs-chrome .tabs-item.is-dragging {
+	z-index: 3
+}
+
+.vue3-tabs-chrome .tabs-item.is-dragging .tabs-background-content {
+	background-color: #f2f3f5
+}
+
+.vue3-tabs-chrome .tabs-item.is-dragging .tabs-background-divider {
+	display: none
+}
+
+.vue3-tabs-chrome .tabs-item.is-dragging .tabs-background-after,
+.vue3-tabs-chrome .tabs-item.is-dragging .tabs-background-before {
+	fill: #f2f3f5
+}
+
+.vue3-tabs-chrome .tabs-item.active {
+	z-index: 2
+}
+
+.vue3-tabs-chrome .tabs-item.active .tabs-close {
+	background-color: #fff
+}
+
+.vue3-tabs-chrome .tabs-item.active .tabs-background-divider {
+	display: none
+}
+
+.vue3-tabs-chrome .tabs-item.active .tabs-background-content {
+	background-color: #fff
+}
+
+.vue3-tabs-chrome .tabs-item.active .tabs-background-after,
+.vue3-tabs-chrome .tabs-item.active .tabs-background-before {
+	fill: #fff
+}
+
+.vue3-tabs-chrome .tabs-item:first-of-type .tabs-background-divider:before {
+	display: none
+}
+
+.vue3-tabs-chrome .tabs-main {
+	height: 100%;
+	left: 0;
+	right: 0;
+	margin: 0 14px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	transition: .15s;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	box-sizing: border-box;
+	overflow: hidden
+}
+
+.vue3-tabs-chrome .tabs-close {
+	top: 50%;
+	right: 14px;
+	width: 16px;
+	height: 16px;
+	z-index: 1;
+	position: absolute;
+	transform: translateY(-50%)
+}
+
+.vue3-tabs-chrome .tabs-close-icon {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%
+}
+
+.vue3-tabs-chrome .tabs-close-icon:hover {
+	stroke: #000;
+	background-color: #e8eaed
+}
+
+.vue3-tabs-chrome .tabs-favico {
+	height: 20px;
+	margin-left: 3%;
+	display: flex;
+	align-items: center;
+	overflow: hidden
+}
+
+.vue3-tabs-chrome .tabs-favico img {
+	height: 100%;
+	border-radius: 100%;
+}
+
+.vue3-tabs-chrome .tabs-label {
+	flex: 1;
+	margin-left: 5%;
+	margin-right: 16px;
+	box-sizing: border-box;
+	overflow: hidden;
+	white-space: nowrap;
+	position: relative
+}
+
+.vue3-tabs-chrome .tabs-label.no-close {
+	margin-right: 0
+}
+
+.vue3-tabs-chrome .tabs-label.no-icon {
+	margin-left: 0
+}
+
+.vue3-tabs-chrome .tabs-background {
+	width: 100%;
+	height: 100%;
+	padding: 0 6px;
+	position: absolute;
+	box-sizing: border-box
+}
+
+.vue3-tabs-chrome .tabs-background-divider {
+	left: 0;
+	width: calc(100% - 14px);
+	height: 100%;
+	margin: 0 7px;
+	position: absolute
+}
+
+.vue3-tabs-chrome .tabs-background-divider:before {
+	content: "";
+	top: 20%;
+	right: 100%;
+	width: 1px;
+	height: 60%;
+	background-color: #81878c;
+	position: absolute
+}
+
+.vue3-tabs-chrome .tabs-background-divider:after {
+	content: "";
+	top: 20%;
+	left: calc(100% - 1px);
+	width: 1px;
+	height: 60%;
+	background-color: #81878c;
+	position: absolute
+}
+
+.vue3-tabs-chrome .tabs-background-content {
+	height: 100%;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	transition: .15s
+}
+
+.vue3-tabs-chrome .tabs-background-after,
+.vue3-tabs-chrome .tabs-background-before {
+	bottom: -1px;
+	position: absolute;
+	fill: transparent;
+	transition: .15s
+}
+
+.vue3-tabs-chrome .tabs-background-before {
+	left: -1px
+}
+
+.vue3-tabs-chrome .tabs-background-after {
+	right: -1px
+}
+
+.vue3-tabs-chrome .tabs-footer {
+	height: 4px;
+	background-color: #fff
+}
+
+.vue3-tabs-chrome .tabs-after {
+	top: 50%;
+	display: flex;
+	position: absolute;
+	overflow: hidden;
+	transform: translateY(-50%)
+}
+
+@-webkit-keyframes tab-show {
+	0% {
+		transform: scaleX(0)
+	}
+
+	to {
+		transform: scaleX(1)
+	}
+}
+
+@keyframes tab-show {
+	0% {
+		transform: scaleX(0)
+	}
+
+	to {
+		transform: scaleX(1)
+	}
+}
+
+.theme-dark {
+	color: #999;
+	background-color: #1d1e21
+}
+
+.theme-dark .tabs-item:hover .tabs-background-content {
+	background-color: #212529
+}
+
+.theme-dark .tabs-item:hover .tabs-background-after,
+.theme-dark .tabs-item:hover .tabs-background-before {
+	fill: #212529
+}
+
+.theme-dark .tabs-item.active {
+	color: #fff
+}
+
+.theme-dark .tabs-item.active .tabs-background-content {
+	background-color: #2f2f33
+}
+
+.theme-dark .tabs-item.active .tabs-background-after,
+.theme-dark .tabs-item.active .tabs-background-before {
+	fill: #2f2f33
+}
+
+.theme-dark .tabs-item.active .tabs-close {
+	background-color: #2f2f33
+}
+
+.theme-dark .tabs-item.active .tabs-close-icon,
+.theme-dark .tabs-item.active .tabs-close-icon:hover {
+	stroke: #fff
+}
+
+.theme-dark .tabs-item .tabs-close-icon:hover {
+	stroke: #bbb;
+	background-color: #4b4b4e
+}
+
+.theme-dark .tabs-item .tabs-background-divider:after,
+.theme-dark .tabs-item .tabs-background-divider:before {
+	background-color: #535458
+}

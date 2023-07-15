@@ -1,7 +1,7 @@
 <template>
-    <div v-for="n in numSkeletons" class="flex-col px-4 justify-center w-full .pulse-background min-w-[380px]">
-        <div class="flex px-[14px] pt-[20px] pb-[1.25rem] pulse-background my-1 rounded-[20px] animate-pulse">
-            <div class="grow-1 shrink-0 w-[45px] h-[45px] mr-[20px]">
+    <div v-for="n in numSkeletons" class="flex-col justify-center w-full .pulse-background">
+        <div class="flex px-[14px] py-[4px] pb-[1.25rem] pulse-background my-1 rounded-lg animate-pulse">
+            <div class="grow-1 shrink-0 w-[45px] h-[20px] mr-[20px]">
                 <div class="w-[50px] h-[50px] bg-slate-200 rounded-full"></div>
             </div>
             <div class="grow-2 pb-2 mb-2">
@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 const { numSkeletons } = defineProps({
     numSkeletons: {
         type: Number,

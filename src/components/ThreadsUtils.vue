@@ -1,68 +1,48 @@
 <template >
-  <template v-if="mode == 'normal' || mode == 'searching'">
-    <div class="mx-6 bg-[#EAEAEA] min-w-[320px] duration-500" :class="[querying ? 'h-32' : 'h-40']">
-      <div class="bg-white h-36 my-4">
-        <div v-if="mode == 'normal'" class="flex pt-5 mx-8 justify-between">
-          <div class="flex">ข้อความทั้งหมด <div class=" px-2  bg-[#D9D9D9] rounded-full ml-3 font-bold text-base">999+
-            </div>
-          </div>
-          <div class="flex ">
-            <button @click="uiStore.conversationsThreadMode = 'collapse'">
-              <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
-                <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
-              </svg>
-            </button>
-          </div>
+  <template v-if="mode == 'normal'" class="duration-300">
+    <div class="bg-white rounded-t-3xl py-5 px-5">
+      <div class="flex">
+        <h1 class="text-slate-800">ข้อความทั้งหมด</h1>
+        <h1 class="ml-5 bg-[#F94A2999] rounded-full px-2 font-semibold text-[#394867]">
+          {{ uiStore.pageInformation(platform)?.allConversations }} </h1>
+      </div>
+      <div class="relative w-full mr-4 mt-4">
+        <div class="absolute inset-y-0  left-0 flex items-center pl-4 pointer-events-none"
+          :class="[querying ? '' : 'z-50']">
+          <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
         </div>
-        <div class=" flex  justify-around py-[1rem] px-2" :class="querying ? '' : 'pl-5 '">
-          <div v-if="querying" :class="[querying ? 'mt-1.5 ' : '']">
-            <button type="button"
-              @click="{ querying = false; uiStore.conversationsThreadMode = 'normal'; query = '' }"
-              class="text-white   hover:bg-gray-100  p-2 rounded-full inline-flex items-center  ml-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 448 512">
-                <path
-                  d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-              </svg>
-              <span class="sr-only">Icon description</span>
-            </button>
-          </div>
-          <div class="relative w-full mr-4 duration-500" :class="[querying ? 'mt-2' : 'mt-2']">
-            <div v-if="!querying"
-              class="flex absolute  rounded-full z-10 inset-y-0 left-0 items-center pl-3 pointer-events-none ml-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </div>
-            <input type="text" @click="{ querying = true; uiStore.conversationsThreadMode = 'searching'; }"
-              :class="querying ? '' : ' rounded-full'"
-              class="ml-2 bg-[#D9D9D9]  border border-gray-300 text-gray-900  outline-none   block w-full pl-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              :placeholder="querying ? 'ค้นหา' : ' ค้นหาจากชื่อ หรือ แท็ก'" v-model="query">
-
-          </div>
-        </div>
+        <input type="text" :class="querying ? '' : ' rounded-full z-0'"
+          class="bg-[#D9D9D9]  border border-gray-300 text-gray-900  outline-none   block w-full pl-9 p-1  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          :placeholder="querying ? 'ค้นหา' : ' ค้นหาจากชื่อ หรือ แท็ก'" v-model="query"
+          @click="() => { uiStore.conversationsThreadMode = 'searching' }">
       </div>
     </div>
   </template>
-  <template v-else-if="mode == 'collapse'">
-    <div>
-      <div>
-        <button @click="uiStore.conversationsThreadMode = 'normal'" class="p-5 ml-6 mb-1 ">
-          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
-            <path
-              d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
-          </svg>
-        </button>
+  <template v-else-if="mode == 'searching'" class="duration-300">
+    <div class="bg-white  mx-2 mt-2">
+      <div class="flex items-center">
+        <div class="pl-8 pt-5" @click="() => { uiStore.conversationsThreadMode = 'normal' }">
+          <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
+        </div>
+        <div class="flex items-center w-full pr-4 pl-2 mr-1 mt-5">
+          <input type="text"
+            class="ml-2 bg-[#D9D9D9]  border border-gray-300 text-gray-900  outline-none   block w-full pl-2 p-1   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="ค้นหา" v-model="query">
+          <div class="ml-2" @click="() => { query = '' }" :class="[querying ? '' : 'z-50']">
+            <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+          </div>
+        </div>
       </div>
-      <div>
-        <button @click="uiStore.conversationsThreadMode = 'searching'" class="p-4 ml-6 mb-3 bg-gray-300 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-        </button>
+      <div class="flex   px-4 py-2">
+        <button class="mr-5" @click="() => { searchMode = 'by-message' }">แชทข้อความ</button>
+        <button @click="() => { searchMode = 'by-name' }">ชื่อสนทนา</button>
+
+      </div>
+      <div class=" bg-[#27374D] duration-300 h-1.5 w-[80px]"
+        :class="searchMode == 'by-message' ? 'ml-[15px]' : 'ml-[100px]'"></div>
+
+      <div v-for="conversation in searchResult" :key="conversation.conversationID">
+        <Thread :conversation="conversation" :show-platform="platform == 'all'" mode="searching" />
       </div>
     </div>
   </template>
@@ -73,21 +53,36 @@ import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
 import { useLivechatStore } from '@/stores/livechat';
 import { useRoute } from 'vue-router';
+import Thread from './Thread.vue';
+import type { Conversation } from '@/types/conversation';
 const uiStore = useUIStore();
 const livechatStore = useLivechatStore()
+const searchResult = ref([] as Conversation[])
+const searchMode = ref('by-name')
 const query = ref("");
-const querying = ref(false);
-const route = useRoute()
-defineProps<{
-  mode: string
+const { platform, mode } = defineProps<{
+  mode: string,
+  platform: string,
 }>()
+const querying = ref(false)
 
-watch(query, (value) => {
-  console.log(value)
-  const currentPlatform = route.query.platform as string
-  livechatStore.searchConversations(currentPlatform, value).then((res) => {
-    console.log(`searching of platform ${currentPlatform} is done with result ${res.length}`)
-  })
+watch([query, searchMode], ([newQuery, newSearchMode], [prevQuery, prevSearchMode]) => {
+  if (newQuery.length > 0) {
+    if (newSearchMode === 'by-name') {
+      console.log('by-name')
+      livechatStore.searchConversationByName(platform, query.value).then((result) => {
+        searchResult.value = result
+      })
+    } else if (newSearchMode === 'by-message') {
+      console.log('by-message')
+      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+        searchResult.value = result
+      })
+    }
+  } else {
+    querying.value = false
+    searchResult.value = []
+  }
 })
 
 </script>

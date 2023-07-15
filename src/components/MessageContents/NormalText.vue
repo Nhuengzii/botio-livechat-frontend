@@ -1,40 +1,41 @@
 <template>
-  
-
-  <!-- user send message-->
-  <template v-if="message.source.userType === 'user'">
-    <div class="flex h-12 w-12 rounded-full bg-indigo-800 flex-shrink-0">
-      <img :src="conversation.participants[0].profilePic.src" alt="" class="object-cover h-12 w-12 rounded-full">
+  <div>
+    <div v-if="message.source.userType === 'user'"
+      class="self-center  py-2 px-3 shadow rounded-xl  ml-2 text-sm font-medium bg-white break-all overflow-hidden border-2 border-[#D9D9D9]">
+      <p>{{ message.message }}</p>
     </div>
-
-    <div class="self-center relative py-2 px-4 shadow rounded-xl ml-4 text-sm bg-white">
-      <p class="break-words">{{ message.message }}</p>
+    <div v-if="message.source.userType === 'admin'"
+      class="self-center relative py-2 px-3 shadow rounded-xl mr-4 text-sm font-medium bg-[#30A2FF] break-all text-white overflow-hidden">
+      <p>{{ message.message }}</p>
     </div>
-  </template>
-  <!-- end user send message -->
-
-  <!-- admin send message-->
-  <template v-else>
-    <div class="self-center relative py-2 px-4 shadow rounded-xl mr-5 text-sm bg-message-admin text-white">
-      <p class="break-words">{{ message.message }}</p>
-    </div>
-  </template>
-  <!-- end admin send message-->
-  
-  
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { Message } from "@/types/message";
-import type { Conversation } from "@/types/conversation";
 defineProps<{
   message: Message
-  conversation: Conversation
 }>()
+
+function highlight(text: string, query: string) {
+  var regex = new RegExp(query, 'gi');
+  text = text.replace(/(<mark class="highlight">|<\/mark>)/gim, '');
+  var newText = text.replace(regex, '<mark class="highlight">$&</mark>');
+  return newText
+
+}
+
+
+
+
 </script>
 
 <style scoped>
 .bg-message-admin {
   background-color: #394867;
+}
+
+.highlightText {
+  background: yellow;
 }
 </style>

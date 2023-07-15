@@ -1,47 +1,251 @@
 <template>
-  <div class="flex flex-[1]  py-4 items-center bg-white mx-3">
+  <div class="flex static mx-3">
 
-    <!-- space -->
-    <div class="flex-[1]">
-      <button>
-        <div class="pl-4 mr-8 text-gray-500">
-          <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
-        </div>
-      </button>
-    </div>
-    <!-- end space-->
-
-    <div class="flex-[6] flex-col">
-      <div class="flex bg-stone-300 rounded-[20px] justify-around items-center text-gray-500 py-4">
-
-        <textarea type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage" @keydown.enter="sendMessageOnEnter"
-          @input="handleTyping" class="inline-flex bg-stone-300 w-full h-4 ml-8 break-words outline-none" />
-
-        <div class="inline-flex">
-          <button>
-            <div class="pl-2 mr-4">
-              <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
+    <div class="w-full mx-1 ">
+      <div class="flex rounded-lg justify-around items-center text-gray-500 ">
+        <div class="relative w-full">
+          <div class=" w-full h-full rounded-lg self-center border-2  pt-1 mt-1">
+            <textarea v-show="images.length == 0" type="text" placeholder="พิมพ์ข้อความ" v-model="newMessage"
+              @keydown.enter="sendMessageOnEnter" @input="handleTyping" :rows="calculateTextareaRows" class="inline-flex px-2  mb-6 w-full h-auto 
+            text-black break-words outline-none resize-none max-h-64" />
+            <div class="mb-10 flex">
+              <button v-if="images.length > 0" @click="openImageDialog"
+                class="flex items-center justify-center h-16 w-16 mt-5 ml-3 bg-gray-200 hover:bg-gray-300">+</button>
+              <div v-for="(image, index) in images" :key="index" class="image-item ">
+                <div class="static">
+                  <img :src="image.url" class="h-24 my-2 rounded-xl" />
+                  <div class="absolute top-3 right-1 ">
+                    <button class="flex w-[15px] h-[15px] items-center justify-center rounded-full bg-red-300 text-[10px]"
+                      @click="removeImage(index)">x</button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </button>
+          </div>
+        </div>
+        <div class="inline-flex">
+
+
+          <!-- show Modal Chat Message Template -->
+          <Teleport to="body">
+            <ModalTemplateChat v-if="uiStore.is_activeTemplateMessage" :platform="platform">
+
+              <!--HEADER-->
+              <template #header>
+                <template v-if="uiStore.is_createTemplateMessage"> <!-- Header Modal create chat template-->
+                  <HeaderCreateMessage :platform="platform" />
+                </template>
+
+                <template v-else-if="uiStore.is_editTemplateMessage"> <!-- Header Modal edit chat template-->
+                  <p class="flex justify-center">{{ modalStore.selectedTemplate }}</p>
+                </template>
+
+                <template v-else> <!-- Header Modal chat template-->
+                  <HeaderTemplate :platform="platform"/>
+                </template>
+              </template>
+              <!--END HEADER-->
+
+              <!--BODY-->
+              <template #body>
+                <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
+                  <BodyCreateMessage :conversation="converstion" />
+                </template>
+                <template v-else-if="uiStore.is_editTemplateMessage">
+                  <div class="flex items-center h-full">
+
+                    <template v-if="modalStore.selectedTemplate === 'Button'">
+                      <div class="flex h-full">
+                        <div class="flex-1 shrink-0 flex h-full justify-center items-center">
+                          <TemplateButton class="self-start sticky top-0" />
+                        </div>
+                      </div>
+
+                      <div class="h-full flex-[3] bg-gray-200 pl-6 pt-4 rounded-xl overflow-auto">
+                        <div class="flex flex-col">
+
+                          <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
+                          <input type="text" v-model="modalStore.name" placeholder="เทมเพลต"
+                            class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
+
+                          <div class="flex items-center">
+                            <button @click="selecImage"
+                              class="my-4 rounded-lg self-start px-3 py-2 shadow-lg">เลือกรูปภาพ</button>
+                            <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
+                            </p>
+                          </div>
+
+                          <div class="flex items-center justify-between w-96">
+                            <p class="text-base font-semibold pt-4">หัวข้อ</p>
+                            <p class="text-sm font-normal pt-4">{{ modalStore.titleUserInput.length }}/50</p>
+                          </div>
+                          <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
+                            class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
+                          <div class="flex items-center justify-between w-[70%]">
+                            <p class="mt-2 text-base font-semibold">ข้อความ</p>
+                            <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/150</p>
+                          </div>
+                          <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
+                            class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="150" />
+                        </div>
+
+
+                        <!-- add button in template -->
+                        <p class="text-base font-semibold pt-4">ปุ่มในเทมเพลต</p>
+
+                        <template v-if="modalStore.buttonList.length > 0">
+                          <div v-for="index in modalStore.buttonList.length"
+                            class="flex flex-col justify-center pt-4 pb-6">
+                            <p class="text-base font-semibold">ปุ่มที่ {{ index }}</p>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ index }}</p>
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index - 1].title }}</p>
+                            </div>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                              <p class="px-4 py-1">{{ modalStore.buttonList[index - 1].url }}</p>
+                            </div>
+                            <button @click="modalStore.actionDeleteButton(index - 1)"
+                              class="mt-2 ml-2 bg-red-500 shadow-lg px-4 py-1 self-start">
+                              <span class="py-1 px-2">ลบปุ่ม</span>
+                            </button>
+
+                          </div>
+                        </template>
+
+                        <template
+                          v-if="modalStore.buttonList.length <= 0 || modalStore.isAddButton && modalStore.buttonList.length <= 3">
+                          <div class="flex flex-col justify-center pt-4 pb-6">
+                            <p class="text-base font-semibold">ปุ่มที่ {{ 1 + modalStore.buttonList.length }}</p>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุชื่อของในปุ่ม {{ 1 + modalStore.buttonList.length }}</p>
+                              <input type="text" v-model="modalStore.button.title" class="py-1">
+                            </div>
+                            <div class="flex my-1">
+                              <p class="px-4 py-1 w-48">ระบุ url ที่จะไปเมื่อกดปุ่มนี้</p>
+                              <input type="text" v-model="modalStore.button.url" class="py-1 w-[60%]">
+                            </div>
+
+                            <button @click="modalStore.actionSaveButton"
+                              class="mt-2 ml-2  bg-gray-300 shadow-lg px-4 py-1 self-start">
+                              <span class="py-1 px-2">บันทึกปุ่ม</span>
+                            </button>
+                          </div>
+                        </template>
+
+                        <!--if button is not have more 3 buttons can click to add button-->
+                        <template v-else>
+
+                          <template v-if="modalStore.buttonList.length >= 1">
+                            <button v-show="modalStore.amountButton < 3" @click="modalStore.clickToAddButton"
+                              :disabled="modalStore.amountButton >= 3" class="rounded-full bg-gray-300 p-3">+
+                              button</button>
+                          </template>
+
+                        </template>
+                        <div>
+                        </div>
+                      </div>
+                    </template>
+
+                    <template v-else-if="modalStore.selectedTemplate === 'TextImage'">
+                      <div class="flex-[1] shrink-0 flex h-full justify-center items-center">
+                        <TemplateTextImage class="self-start" />
+                      </div>
+
+                      <div class="h-full flex-[3] bg-gray-100 pl-6 pb-3 rounded-xl">
+                        <div class="flex flex-col pl-2">
+
+                          <p class="text-base font-semibold pt-4">ชื่อของเทมเพลต</p>
+                          <input type="text" v-model="modalStore.name" class="h-8 my-2 px-2 w-[50%] shadow-lg rounded-lg">
+
+                          <!-- button select image-->
+                          <div class="flex items-center">
+                            <button @click="selecImage"
+                              class="my-4 bg-gray-50 rounded-lg self-start px-3 py-2 shadow-lg hover:bg-green-100">เลือกรูปภาพ</button>
+                            <p v-if="modalStore.imagePreview" class="text-sm px-3 py-2 ml-1 w-48">{{ getImageFilename() }}
+                            </p>
+                          </div>
+
+                          <!-- input detail in button -->
+                          <div class="flex items-center justify-between w-96">
+                            <p class="text-base font-semibold pt-4">หัวข้อ</p>
+                            <p class="text-sm font-normal pt-4">{{ modalStore.titleUserInput.length }}/50</p>
+                          </div>
+                          <input type="text" placeholder="ชื่อหัวข้อ" v-model="modalStore.titleUserInput"
+                            class="h-8 my-2 w-96 px-2 shadow-lg rounded-lg" maxlength="50">
+                          <div class="flex items-center justify-between w-[70%]">
+                            <p class="mt-2 text-base font-semibold">ข้อความ</p>
+                            <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/200</p>
+                          </div>
+                          <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
+                          class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="200" />
+
+                        </div>
+                      </div>
+                    </template>
+
+
+                  </div>
+                </template>
+
+                <template v-else-if="uiStore.is_activeTemplateMessage">
+                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" :is-fetch-template="isFetchTemplate" />
+                </template>
+
+              </template>
+
+              <!--END BODY-->
+              <template #footer>
+                <template v-if="uiStore.is_createTemplateMessage">
+                  <div class="flex items-center justify-center">
+                    <button @click="uiStore.activeEditTemplateMessage" v-if="modalStore.selectedTemplate"
+                      class="py-3 px-8 rounded-3xl text-xl bg-[#00ABB3] text-white">ถัดไป</button>
+                  </div>
+                </template>
+                <template v-if="uiStore.is_editTemplateMessage">
+                  <div class="flex items-center justify-center">
+                    <!-- button create template -->
+                    <button v-show="canCreateTemplate && !isLoading" @click="handleButtonCreateTemplate"
+                      :disabled="isLoading" class="py-3 px-4 rounded-2xl bg-[#00ABB3] text-white text-xl">
+                      สร้างเทมเพลต
+                    </button>
+                  </div>
+                </template>
+              </template>
+            </ModalTemplateChat>
+          </Teleport>
         </div>
       </div>
     </div>
 
     <!-- space -->
-    <div class="pl-3 flex-[1]">
-      <button @click="sendMessage" class="flex">
-        <template v-if="showSendMessageButton">
-          <div class="flex rounded-full bg-[#394867]">
-            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" class="p-2" />
+    <div class="flex absolute bottom-2 right-7">
+
+      <button>
+        <EmojiPicker class="absolute bottom-10 right-0" v-show="isShowEmojiPicker" @select="onSelectEmoji" />
+        <div @click="isShowEmojiPicker = !isShowEmojiPicker">
+          <font-awesome-icon :icon="['fas', 'face-smile']" style="color: #394867;" size="xl" />
+        </div>
+      </button>
+      <button @click="openImageDialog">
+        <div class="px-3 ">
+          <font-awesome-icon :icon="['fas', 'image']" style="color: #394867;" size="xl" />
+        </div>
+      </button>
+      <div class="w-[22px] h-[22px] duration-500">
+        <button @click="sendMessage" v-show="showSendMessageButton || images.length > 0" class="flex ">
+          <div class="rounded-full bg-white">
+            <font-awesome-icon :icon="['fas', 'paper-plane']" style="color: #00ABB3;" size="xl" />
           </div>
-        </template>
-        <template v-else>
-          <div class="pl-2  text-gray-500">
+        </button>
+        <button v-show="!showSendMessageButton && images.length == 0" type="button" id="show-modal"
+          @click="handleClickActiveTemplate" class="flex">
+          <div class="text-gray-500">
             <font-awesome-icon :icon="['fas', 'comment-dots']" style="color: #394867;" size="xl" />
           </div>
-        </template>
-
-      </button>
+        </button>
+      </div>
     </div>
     <!-- end space-->
 
@@ -50,48 +254,292 @@
 
 <script setup lang="ts">
 import { useLivechatStore } from '@/stores/livechat';
+
+import EmojiPicker from 'vue3-emoji-picker'
+import 'vue3-emoji-picker/css'
+
+
+
+import ModalTemplateChat from '@/components/ModalTemplateChats/ModalTemplateChat.vue'
+import HeaderTemplate from '@/components/ModalTemplateChats/MessageTemplate/HeaderTemplate.vue'
+import BodyTemplate from '@/components/ModalTemplateChats/MessageTemplate/BobyTemplate.vue'
+import HeaderCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/HeaderCreateMessage.vue'
+import BodyCreateMessage from '@/components/ModalTemplateChats/CreateMessageTemplate/BodyCreateMessage.vue'
+
+import TemplateTextImage from './ModalTemplateChats/TemplateType/TemplateTextImage.vue';
+import TemplateButton from './ModalTemplateChats/TemplateType/TemplateButton.vue';
 import { useUIStore } from '@/stores/UI';
+import { useModalStore } from '@/stores/modal';
 import type { Conversation } from '@/types/conversation';
+import type { Template } from '@/stores/modal';
+import type { ShopConfig } from '@/types/ShopInformation';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue'
+import { ref, watch, type Ref, computed } from 'vue'
 
 
-/// use value from store ///
 
+const props = defineProps<{
+  platform: string
+  converstion: Conversation
+}>()
+
+
+
+const modalStore = useModalStore()
 const uiStore = useUIStore()
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
 const livechatStore = useLivechatStore()
 const { currentChat } = storeToRefs(livechatStore)
 let typingTimeout: number | undefined = undefined;
+const isTyping = ref(false)
+const isShowEmojiPicker = ref(false)
+const isLoading = ref(false)
+const isFetchTemplate = ref(false)
 
-///////////////////////////
 
-/// move to store
-const sendMessage = () => {
-  if (newMessage.value.trim() !== '') {
+const shopconfig_data = ref<ShopConfig>();
+
+
+import Swal from 'sweetalert2';
+
+type FetchDataTemplateResponse = {
+  isFetchTemplate: boolean;
+  shopconfig: ShopConfig | undefined;
+}
+
+
+const handleClickActiveTemplate = async () => {
+  try {
+    uiStore.activeTemplateMessage();
+    // fetch dataBase template
+    const response = await fetchDataTemplate();
+    console.log("fetchDataTemplate");
+    console.log(JSON.stringify(response.shopconfig, null, 2));
+
+    if (response.isFetchTemplate) {
+      shopconfig_data.value = response.shopconfig;
+    }
+
+  } catch (error) {
+    console.log("error in handleClickActiveTemplate");
+    console.error("Error occurred while loading template:", error);
+    // Handle the error gracefully, show an error message, etc.
+  }
+};
+
+
+const fetchDataTemplate = async () => {
+  try {
+    const response = {
+      isFetchTemplate: false,
+      shopconfig: null as unknown as ShopConfig | undefined
+    };
+
+    response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
+
+    if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
+      //console.log(response.shopconfig);
+      response.isFetchTemplate = true;
+    } else {
+      throw new Error("ShopConfig is undefined");
+    }
+
+    return response;
+  } catch (error) {
+    console.log('error in fetchDataTemplate');
+    console.error("Error occurred while loading template:", error);
+    throw error; // Rethrow the error to propagate it to the caller
+  }
+};
+
+const onSelectEmoji = (emoji: any) => {
+  console.log(emoji);
+  newMessage.value += emoji.i;
+}
+
+
+
+const canCreateTemplate = computed(() => {
+  const { selectedTemplate, titleUserInput, textUserInput, imagePreview, buttonList } = modalStore;
+
+  switch (selectedTemplate) {
+    case 'TextImage':
+      return titleUserInput && textUserInput && imagePreview;
+
+    case 'Button':
+      return titleUserInput && textUserInput && imagePreview && buttonList.length >= 1;
+
+    default:
+      return false;
+  }
+});
+
+
+// action create Template
+
+const handleButtonCreateTemplate = async () => {
+  if (canCreateTemplate.value && !isLoading.value) {
+    isLoading.value = true;
+
+    modalStore.platform = props.platform;
+    //console.log(modalStore.platform);
+
+    try {
+      const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
+      if (image_url) {
+        Swal.fire({
+          title: 'Saving Template',
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        const template: Template = {
+          id: Date.now(),
+          type: modalStore.selectedTemplate,
+          platform: modalStore.platform,
+          name: modalStore.name,
+          elements: [
+            {
+              title: modalStore.titleUserInput,
+              message: modalStore.textUserInput,
+              picture: image_url,
+              buttons: modalStore.buttonList.map((button) => ({
+                id: button.id,
+                title: button.title,
+                url: button.url,
+              })),
+            },
+          ],
+        };
+
+        const template_str = JSON.stringify(template);
+        const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
+        const newResponse = await fetchDataTemplate()
+        shopconfig_data.value = newResponse.shopconfig
+
+        Swal.close();
+
+        if (template_id) {
+          Swal.fire('Success', 'Template saved successfully', 'success');
+          //console.log(`template_id save : ${template_id}`);
+          modalStore.reset();
+          uiStore.finishCreateTemplate();
+        } else {
+          Swal.fire('Error', 'Failed to save template', 'error');
+          //console.log('Failed to save template');
+        }
+      }
+    } catch (error) {
+      Swal.fire('Error', 'Failed to save template', 'error');
+      console.error('Error saving template:', error);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+};
+
+
+
+// dynamic area textarea input-messager
+const calculateTextareaRows = computed(() => {
+  const lineHeight = 20; // Adjust this value based on your font size and line height
+  const maxRows = 5; // Set the maximum number of rows you want to show before enabling scrolling
+  const numRows = Math.min(Math.ceil(newMessage.value.length / 50), maxRows); // Adjust the division value to control the number of characters per row
+  const calculatedRows = numRows > 1 ? numRows : 2; // Ensure a minimum of 2 rows to display when there's no text or very little text
+
+  return calculatedRows;
+});
+
+//mix use in Modal
+const selecImage = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.click();
+  input.addEventListener('change', (event) => {
+    handleFileSelect(event);
+  });
+}
+
+const handleFileSelect = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+
+  if (file) {
+    modalStore.selectedFileImage = file;
+    //console.log(modalStore.selectedFileImage)
+    const reader = new FileReader();
+    reader.onload = () => {
+      modalStore.imagePreview = reader.result as string;
+
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+const getImageFilename = () => {
+  //console.log(`selectedFileImage if: ${modalStore.selectedFileImage}`)
+  if (modalStore.imagePreview && modalStore.selectedFileImage) {
+    return modalStore.selectedFileImage.name;
+  }
+
+  return '';
+}
+
+// boom use in MessageSender
+const openImageDialog = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = (event) => handleFileChange(event);
+  input.click();
+};
+
+
+const sendMessage = async () => {
+  if (images.value.length > 0) {
+    let a = currentChat.value?.conversation!
+    for (let i = 0; i < images.value.length; i++) {
+      await livechatStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      console.log('sended')
+    }
+    images.value = []
+  }
+  else if (newMessage.value.trim() !== '') {
     // Handle sending the message here
     console.log('Sending message:', newMessage.value);
     let a = currentChat.value?.conversation!
     livechatStore.sendTextMessage(currentChat.value!.conversation, newMessage.value)
-
     newMessage.value = ''; // Reset the input field after sending the message
     uiStore.is_typing = false;
   }
 };
-////////////////////////////
 
-/// move to store
+
+// allow key-enter to send message
 const sendMessageOnEnter = (event: { key: string; preventDefault: () => void }) => {
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default behavior of the Enter key
 
-    sendMessage(); // Call the sendMessage function to send the message
+    if (images.value.length > 0) {
+      // Send the message and image
+      //sendTextMessageWithImage();
+      for (let i = 0; i < images.value.length; i++) {
+        console.log(images.value[i])
+        alert(images.value[i])
+      }
+    } else {
+      // Send only the message
+      sendMessage();
+    } // Call the sendMessage function to send the message
   }
 };
-////////////////////////////
 
-/// move to store
+
+// if typing show button to sendMessage | image
 const handleTyping = () => {
   clearTimeout(typingTimeout); // Clear the previous typing timeout
 
@@ -100,14 +548,14 @@ const handleTyping = () => {
     typingTimeout = setTimeout(() => {
       // Handle typing finished logic here
       showSendMessageButton.value = true;
+      isTyping.value = true;
     }, 100); // Set the typing timeout duration according to your needs
   } else {
     // If the message is empty, hide the send message button
     showSendMessageButton.value = false;
+    isTyping.value = false;
   }
 };
-////////////////////////////
-
 
 
 watch(newMessage, () => {
@@ -115,11 +563,85 @@ watch(newMessage, () => {
 });
 
 
+interface Image {
+  url: string;
+  file: File;
+}
+const images = ref<Image[]>([]);
+
+const handleFileChange = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const fileList = inputElement.files;
+
+  if (fileList) {
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i];
+      const imageUrl = URL.createObjectURL(file);
+      images.value.push({ url: imageUrl, file });
+    }
+  }
+};
+
+const removeImage = (index: number) => {
+  images.value.splice(index, 1);
+};
+
+export type { FetchDataTemplateResponse }
+
 </script>
 
 <style scoped>
-.background-d9 {
-  background-color: rgba(217, 217, 217, 0.3);
+.resize-none {
+  resize: none;
+}
 
+.hidden {
+  display: none;
+}
+
+textarea::-webkit-scrollbar {
+  width: 0.5em;
+  /* Adjust the width as needed */
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.textarea-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.textarea-container textarea::placeholder {
+  text-align: center;
+}
+
+textarea[type='text'] {
+  font-size: 16px;
+  font-family: monospace;
+}
+
+.image-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.image-item {
+  margin: 10px;
 }
 </style>
