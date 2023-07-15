@@ -1,5 +1,5 @@
 <template>
-    <main class="flex h-[calc(100vh-24px)]">
+    <main class="flex h-[calc(100vh-24px)]" v-if="ready">
         <LeftPanel />
         <Chats />
 
@@ -8,39 +8,27 @@
         <!--end customer view -->
 
     </main>
+    <h1 v-if="!ready">YAYYAYAYAY</h1>
 </template>
 
 <script setup lang="ts">
 import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
-import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated } from 'vue';
-import { useLivechatStore } from '@/stores/livechat';
-import { useUIStore } from '@/stores/UI';
+import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import { useRouter } from 'vue-router';
-const livechatStore = useLivechatStore()
-const uiStore = useUIStore();
+import { useShopStore } from '@/stores/shopStore';
+const shopStore = useShopStore()
 const router = useRouter()
+const ready = ref(false)
+
 onBeforeMount(async () => {
-    if (livechatStore.botioLivechat === null) {
-        console.log('from beforemount botioLivechat is null so redirect to /')
+    const shop_id = shopStore.shop_id
+    if (shop_id === '-1') {
         router.replace('/')
     }
-    const availablePages = await livechatStore.getShopInformation()
-    for (const page of availablePages.available_pages) {
-        livechatStore.pageIDMap.set(page.platform_name, page.page_id)
-    }
-    const allPageInformation = await livechatStore.getAllPageInformation()
-    allPageInformation.statuses.forEach((status => {
-        uiStore.addAvailablePlatform(status.platform, { unreadConversations: status.unreadConversations, allConversations: status.allConversations })
-    }))
-})
-onBeforeUpdate(() => {
-    if (livechatStore.botioLivechat === null) {
-        console.log('from beforeupdate botioLivechat is null so redirect to /')
-        router.replace('/')
-    }
-})
-onMounted(async () => {
+    await shopStore.fetchShopInformation()
+    await shopStore.fetchPlatformInformation()
+    ready.value = true
 })
 </script>
 

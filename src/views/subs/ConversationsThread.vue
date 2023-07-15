@@ -2,7 +2,7 @@
   <div>
     <ThreadSkeleton :num-skeletons="6" v-if="isLoading" />
     <TransitionGroup name="fade" tag="ul">
-      <div v-for="(conversation, index) in conversations($route.query.platform as string)"
+      <div v-for="(conversation, index) in conversationStore.conversations($route.query.platform as string)"
         :key="conversation.conversationID" v-show="!isLoading">
         <Thread :conversation="conversation" :show-platform="$route.query.platform == 'all'"
           :mode="conversationsThreadMode" />
@@ -28,9 +28,8 @@ import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import ThreadSkeleton from '@/components/ThreadSkeleton.vue';
-const livechatStore = useLivechatStore();
 const uiStore = useUIStore();
-const { conversations } = storeToRefs(livechatStore);
+const conversationStore = useConversationStore()
 const { conversationsThreadMode } = storeToRefs(uiStore)
 const isLoading = ref(false);
 const isFetchingMore = ref(false);
@@ -40,6 +39,7 @@ const route = useRoute()
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 import type { Conversation } from '@/types/conversation';
+import { useConversationStore } from '@/stores/conversation';
 
 async function loadmore($state: {
   loaded: () => void,
@@ -54,9 +54,10 @@ async function loadmore($state: {
       resolve(null);
     }, 1000);
   });
-  const skip = conversations.value(route.query.platform as string).length
+  const skip = conversationStore.conversations(route.query.platform as string).length
   isFetchingMore.value = false;
-  const olderConversation: Conversation[] = await livechatStore.fetchConversations(route.query.platform as string, skip, 3)
+  const olderConversation: Conversation[] = await conversationStore.fetchConversations(route.query.platform as string, skip + 1, 3)
+  console.log(olderConversation)
   $state.loaded()
   if (olderConversation.length === 0) {
     console.log('no more conversation')
@@ -68,13 +69,13 @@ async function loadmore($state: {
 
 watch(route, async () => {
   isLoading.value = true;
-  await livechatStore.fetchConversations(route.query.platform as string)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 5)
   isLoading.value = false;
 });
 
 onMounted(async () => {
   isLoading.value = true;
-  await livechatStore.fetchConversations(route.query.platform as string)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 5)
   isLoading.value = false;
 });
 

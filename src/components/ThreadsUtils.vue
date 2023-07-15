@@ -4,7 +4,7 @@
       <div class="flex">
         <h1 class="text-slate-800">ข้อความทั้งหมด</h1>
         <h1 class="ml-5 bg-[#F94A2999] rounded-full px-2 font-semibold text-[#394867]">
-          {{ uiStore.pageInformation(platform)?.allConversations }} </h1>
+          {{ shopStore.platformInformation(platform)?.all_conversations }} </h1>
       </div>
       <div class="relative w-full mr-4 mt-4">
         <div class="absolute inset-y-0  left-0 flex items-center pl-4 pointer-events-none"
@@ -55,8 +55,9 @@ import { useLivechatStore } from '@/stores/livechat';
 import { useRoute } from 'vue-router';
 import Thread from './Thread.vue';
 import type { Conversation } from '@/types/conversation';
+import { useShopStore } from '@/stores/shopStore';
 const uiStore = useUIStore();
-const livechatStore = useLivechatStore()
+const shopStore = useShopStore();
 const searchResult = ref([] as Conversation[])
 const searchMode = ref('by-name')
 const query = ref("");
@@ -67,6 +68,7 @@ const { platform, mode } = defineProps<{
 const querying = ref(false)
 
 watch([query, searchMode], ([newQuery, newSearchMode], [prevQuery, prevSearchMode]) => {
+  return
   if (newQuery.length > 0) {
     if (newSearchMode === 'by-name') {
       console.log('by-name')

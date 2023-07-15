@@ -1,8 +1,15 @@
 type ShopInformation = {
-  available_pages: {
-    platform_name: string,
-    page_id: string
-  }[]
+  available_platforms: Platform[]
+}
+
+type Platform = {
+  platform_name: string,
+  page_id: string
+}
+
+type PlatformInformation = {
+  unread_conversations: number,
+  all_conversations: number,
 }
 
 type ShopTemplate = {
@@ -11,8 +18,16 @@ type ShopTemplate = {
 }
 
 type ShopConfig = {
-  shopID: string,
-  templates: ShopTemplate[]
+  shop_id: string,
+  tshopIDemplates: ShopTemplate[]
 }
 
-export type { ShopInformation, ShopConfig, ShopTemplate };
+type AllPlatformInformation = {
+  statuses: {
+    platform: string,
+    unreadConversations: number,
+    allConversations: number
+  }[]
+}
+
+export type { ShopInformation, ShopConfig, ShopTemplate, PlatformInformation, Platform, AllPlatformInformation };
