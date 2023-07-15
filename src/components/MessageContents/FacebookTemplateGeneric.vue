@@ -4,8 +4,8 @@
     <button @click="uiStore.onClickTemplate(template.elements[0].default_action.url)">
       <div class="rounded-xl pt-8 pr-3">
         <template v-if="template.elements[0].image_url">
-          <div class="rounded-t-xl w-80 overflow-hidden">
-            <img :src="template.elements[0].image_url" class="object-cover w-full" alt="" @error="handleImageError(template.elements[0].image_url)">
+          <div class="rounded-t-xl w-80 h-56 overflow-hidden">
+            <img :src="template.elements[0].image_url" class="h-56 object-cover w-full" alt="" @error="handleImageError(template.elements[0].image_url)">
           </div>
         </template>
         <div class="rounded-b-xl bg-gray-100 pt-4">
@@ -36,7 +36,7 @@
             <!-- Image Section -->
             <template v-if="element.image_url">   
               <div class="rounded-t-xl h-48 w-80 overflow-hidden">
-                <img :src="element.image_url" class="object-cover" alt="" @error="handleImageError(element.image_url)">
+                <img :src="element.image_url" class="h-48 object-cover" alt="" @error="handleImageError(element.image_url)">
               </div>
             </template>
 
