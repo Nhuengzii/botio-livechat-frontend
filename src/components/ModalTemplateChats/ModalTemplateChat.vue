@@ -19,7 +19,7 @@
                         <slot name="header">default header</slot>
                     </div>
                     <div class="mt-4 mr-2">
-                    <button @click="handleButtonClickToClose" class="w-8 h-8 rounded-full font-bold hover:bg-gray-100">
+                    <button @click="handleButtonClickToClose" class="w-8 h-8 rounded-full font-bold bg-red-400 hover:bg-red-300">
                         <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                     </button>
                     </div>
