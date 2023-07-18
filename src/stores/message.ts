@@ -3,6 +3,7 @@ import type { Conversation } from "@/types/conversation";
 import type { Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 import { defineStore } from "pinia";
+import { useUIStore } from "./UI";
 type Chat = { conversation: Conversation, messages: Message[], isFetching: boolean };
 
 interface IMessageStore {
@@ -48,6 +49,11 @@ export const useMessageStore = defineStore("message", {
     closeChat(conversationID: string) {
       if (this.currentChat?.conversation.conversationID === conversationID) {
         this.currentChat = undefined;
+      }
+    },
+    addMessage(message: Message) {
+      if (this.currentChat?.conversation.conversationID === message.conversationID) {
+        this.currentChat.messages.push(message);
       }
     }
   }

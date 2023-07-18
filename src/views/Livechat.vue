@@ -14,10 +14,12 @@
 <script setup lang="ts">
 import LeftPanel from './subs/LeftPanel.vue';
 import Chats from './subs/Chats.vue';
-import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useShopStore } from '@/stores/shop';
+import { useWebsocketStore } from '@/stores/websocket';
 const shopStore = useShopStore()
+const websocketStore = useWebsocketStore()
 const router = useRouter()
 const ready = ref(false)
 
@@ -30,6 +32,15 @@ onBeforeMount(async () => {
     await shopStore.fetchPlatformInformation()
     ready.value = true
 })
+onMounted(() => {
+    const shopID = shopStore.shop_id
+    websocketStore.connect(shopID)
+})
+
+onUnmounted(() => {
+    websocketStore.disconnect()
+})
+
 </script>
 
 <style scoped></style>

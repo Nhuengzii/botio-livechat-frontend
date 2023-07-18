@@ -251,6 +251,7 @@ import '@/assets/vue3-tabs-chrome.css'
 import { onBeforeRouteUpdate } from "vue-router";
 import { useMessageStore } from "@/stores/message";
 import { useConversationStore } from "@/stores/conversation";
+import type { Message } from "@/types/message";
 defineComponent({
   components: {
     Vue3TabsChrome
@@ -326,7 +327,19 @@ function openChat(conversation: Conversation) {
     }
   }, 1000)
 }
+
+function receiveMessage(message: Message) {
+  for (const tab of tabs) {
+    const [platform, conversationID] = tab.key.split("-");
+    if (conversationID === message.conversationID) {
+      messageStore.addMessage(message)
+    }
+  }
+}
 messageStore.openChatEventBus.on(openChat)
+conversationStore.receiveMessageEventBus.on(receiveMessage)
+
+
 
 onBeforeRouteUpdate((to, from, next) => {
   console.log("before route update")

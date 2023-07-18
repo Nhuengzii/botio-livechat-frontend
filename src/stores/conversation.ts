@@ -4,15 +4,19 @@ import type { Conversation } from "@/types/conversation";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import { defineStore } from "pinia";
 import { useShopStore } from "./shop";
+import type { Message } from "@/types/message";
+import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 type ConversationMap = Map<string, Conversation>;
 
 interface IConversationStore {
   conversationsRaw: ConversationMap,
+  receiveMessageEventBus: UseEventBusReturn<Message, any>
 }
-
+export type ConversationStore = ReturnType<typeof useConversationStore>;
 export const useConversationStore = defineStore("conversation", {
   state: (): IConversationStore => ({
     conversationsRaw: new Map() as ConversationMap,
+    receiveMessageEventBus: useEventBus<Message>('receiveMessage')
   }),
   getters: {
     conversations: (state) => ((platform: string) => {
@@ -42,6 +46,37 @@ export const useConversationStore = defineStore("conversation", {
         console.error(`cannot fetch conversations of platform: ${platform} pageID: ${page_id} shopID: ${shopID}`, error)
         return []
       }
+    },
+    async addReceivedMessage(message: Message) {
+      const shopStore = useShopStore();
+      const { platform, conversationID, shopID, pageID } = message;
+      const botioLivechatClient: IBotioLivechat = new BotioLivechat(shopID)
+      if (message.isDeleted) {
+        return;
+      }
+      let conversation: Conversation | undefined = this.conversation(platform, conversationID)
+      for (let i = 0; i < 3; i++) {
+        if (conversation === undefined) {
+          conversation = await botioLivechatClient.getConversation(platform, pageID, conversationID) ?? undefined
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        break;
+      }
+      if (conversation === undefined) {
+        return;
+      }
+      botioLivechatClient.getAllPlatformInformation().then((info) => {
+        for (let i = 0; i < info.statuses.length; i++) {
+          shopStore.platform_informations.set(info.statuses[i].platform, {
+            unread_conversations: info.statuses[i].unreadConversations,
+            all_conversations: info.statuses[i].allConversations,
+          })
+        }
+      }).catch((err) => {
+        console.error("error when fetching platform information", err)
+      })
+      this.conversationsRaw.set(conversationID, conversation)
+      this.receiveMessageEventBus.emit(message)
     }
   }
 })
