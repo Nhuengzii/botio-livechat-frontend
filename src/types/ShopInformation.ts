@@ -14,6 +14,7 @@ type PlatformInformation = {
 
 type ShopTemplate = {
   id: string,
+  templateID: string,
   payload: string
 }
 
