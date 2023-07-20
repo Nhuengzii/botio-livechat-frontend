@@ -88,7 +88,7 @@ class BotioLivechat implements IBotioLivechat {
   async listTemplates() {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates`
     const res = await axios.get<{ templates: ShopTemplate[] }>(url)
-    return res.data
+    return res.data.templates
   }
   async deleteTemplate(templateID: string) {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates/${templateID}`

@@ -1,6 +1,6 @@
 import BotioLivechat from "@/lib/BotioLivechat2";
 import type { Conversation } from "@/types/conversation";
-import type { Message } from "@/types/message";
+import type { AttachmentForSending, Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { useUIStore } from "./UI";
@@ -55,6 +55,93 @@ export const useMessageStore = defineStore("message", {
       if (this.currentChat?.conversation.conversationID === message.conversationID) {
         this.currentChat.messages.push(message);
       }
-    }
+    },
+    async sendTextMessage(conversation: Conversation, text: string) {
+      const botioLivechat = new BotioLivechat(conversation.shopID)
+      if (this.currentChat?.conversation.conversationID == conversation.conversationID) {
+        const tempMid = `temp-${Date.now()}`;
+        const tempMessage: Message = {
+          shopID: conversation.shopID,
+          platform: conversation.platform,
+          pageID: conversation.pageID,
+          conversationID: conversation.conversationID,
+          messageID: tempMid,
+          timestamp: Date.now(),
+          source: {
+            userType: "admin",
+            userID: "ADMIN",
+          },
+          message: text,
+          isDeleted: false,
+          attachments: []
+        }
+        this.currentChat.messages.push(tempMessage)
+        try {
+
+          const newMessage = await botioLivechat.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, text)
+          const idx = this.currentChat.messages.findIndex((message) => message.messageID === tempMid);
+          if (idx != -1) {
+            console.log('replace temp message')
+            this.currentChat.messages[idx] = newMessage;
+          }
+        } catch (err) {
+          console.log(err)
+          const idx = this.currentChat.messages.findIndex((message) => message.messageID === tempMid);
+          if (idx != -1) {
+            // remove temp message
+            this.currentChat.messages.splice(idx, 1);
+          }
+        }
+      }
+      else {
+        const newMessage = await botioLivechat.sendTextMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, text)
+      }
+    },
+    async sendImageMessage(conversation: Conversation, imageFile: File) {
+      const botioLivechat = new BotioLivechat(conversation.shopID)
+      if (this.currentChat?.conversation.conversationID == conversation.conversationID) {
+        const tempMid = `temp-${Date.now()}`;
+        const tempMessage: Message = {
+          shopID: conversation.shopID,
+          platform: conversation.platform,
+          pageID: conversation.pageID,
+          conversationID: conversation.conversationID,
+          messageID: tempMid,
+          timestamp: Date.now(),
+          source: {
+            userType: "admin",
+            userID: "ADMIN",
+          },
+          message: '',
+          isDeleted: false,
+          attachments: [{
+            attachmentType: 'image',
+            payload: {
+              src: URL.createObjectURL(imageFile),
+            }
+          }]
+        }
+        this.currentChat.messages.push(tempMessage)
+        try {
+          const newMessage = await botioLivechat.sendImageMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, imageFile)
+          const idx = this.currentChat.messages.findIndex((message) => message.messageID === tempMid);
+          if (idx != -1) {
+            console.log('replace temp message')
+            this.currentChat.messages[idx] = newMessage;
+          }
+        } catch (error) {
+          console.log(error)
+          const idx = this.currentChat.messages.findIndex((message) => message.messageID === tempMid);
+          if (idx != -1) {
+            // delete temp message from array
+            this.currentChat.messages.splice(idx, 1);
+          }
+        }
+      }
+    },
+    async sendAttachmentMessage(conversation: Conversation, attachment: AttachmentForSending) {
+      const botioLivechat = new BotioLivechat(conversation.shopID)
+      await botioLivechat.sendAttachmentMessage(conversation.platform, conversation.conversationID, conversation.pageID, conversation.participants[0].userID, attachment)
+    },
   }
 })

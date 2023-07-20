@@ -41,7 +41,7 @@
                 </template>
 
                 <template v-else> <!-- Header Modal chat template-->
-                  <HeaderTemplate :platform="platform"/>
+                  <HeaderTemplate :platform="platform" />
                 </template>
               </template>
               <!--END HEADER-->
@@ -179,7 +179,7 @@
                             <p class="text-sm font-normal mt-2">{{ modalStore.textUserInput.length }}/200</p>
                           </div>
                           <textarea type="text" placeholder="ข้อความ..." v-model="modalStore.textUserInput"
-                          class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="200" />
+                            class="h-44 w-[70%] px-2 py-1 mt-2  shadow-lg rounded-lg" maxlength="200" />
 
                         </div>
                       </div>
@@ -190,7 +190,7 @@
                 </template>
 
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="props.converstion" :shopconfig="shopconfig_data" :is-fetch-template="isFetchTemplate" />
+                  <BodyTemplate :conversation="converstion" :is-fetch-template="isFetchTemplate" />
                 </template>
 
               </template>
@@ -253,8 +253,6 @@
 </template>
 
 <script setup lang="ts">
-import { useLivechatStore } from '@/stores/livechat';
-
 import EmojiPicker from 'vue3-emoji-picker'
 import 'vue3-emoji-picker/css'
 
@@ -278,7 +276,7 @@ import { ref, watch, type Ref, computed } from 'vue'
 
 
 
-const props = defineProps<{
+const { platform, converstion } = defineProps<{
   platform: string
   converstion: Conversation
 }>()
@@ -289,8 +287,10 @@ const modalStore = useModalStore()
 const uiStore = useUIStore()
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
-const livechatStore = useLivechatStore()
-const { currentChat } = storeToRefs(livechatStore)
+const messateStore = useMessageStore()
+const conversationStore = useConversationStore()
+const shopStore = useShopStore()
+const { currentChat } = storeToRefs(messateStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
@@ -302,6 +302,10 @@ const shopconfig_data = ref<ShopConfig>();
 
 
 import Swal from 'sweetalert2';
+import { useMessageStore } from '@/stores/message'
+import { useConversationStore } from '@/stores/conversation'
+import BotioLivechat from '@/lib/BotioLivechat2'
+import { useShopStore } from '@/stores/shop'
 
 type FetchDataTemplateResponse = {
   isFetchTemplate: boolean;
@@ -312,15 +316,6 @@ type FetchDataTemplateResponse = {
 const handleClickActiveTemplate = async () => {
   try {
     uiStore.activeTemplateMessage();
-    // fetch dataBase template
-    const response = await fetchDataTemplate();
-    console.log("fetchDataTemplate");
-    console.log(JSON.stringify(response.shopconfig, null, 2));
-
-    if (response.isFetchTemplate) {
-      shopconfig_data.value = response.shopconfig;
-    }
-
   } catch (error) {
     console.log("error in handleClickActiveTemplate");
     console.error("Error occurred while loading template:", error);
@@ -328,30 +323,6 @@ const handleClickActiveTemplate = async () => {
   }
 };
 
-
-const fetchDataTemplate = async () => {
-  try {
-    const response = {
-      isFetchTemplate: false,
-      shopconfig: null as unknown as ShopConfig | undefined
-    };
-
-    response.shopconfig = await livechatStore.botioLivechat?.getShopConfig();
-
-    if (typeof response.shopconfig !== 'undefined' && response.shopconfig !== null) {
-      //console.log(response.shopconfig);
-      response.isFetchTemplate = true;
-    } else {
-      throw new Error("ShopConfig is undefined");
-    }
-
-    return response;
-  } catch (error) {
-    console.log('error in fetchDataTemplate');
-    console.error("Error occurred while loading template:", error);
-    throw error; // Rethrow the error to propagate it to the caller
-  }
-};
 
 const onSelectEmoji = (emoji: any) => {
   console.log(emoji);
@@ -382,11 +353,12 @@ const handleButtonCreateTemplate = async () => {
   if (canCreateTemplate.value && !isLoading.value) {
     isLoading.value = true;
 
-    modalStore.platform = props.platform;
+    modalStore.platform = platform;
+    const botioLivechat = new BotioLivechat(shopStore.shop_id)
     //console.log(modalStore.platform);
 
     try {
-      const image_url = await livechatStore.botioLivechat?.uploadImage(modalStore.selectedFileImage);
+      const image_url = await botioLivechat?.uploadImage(modalStore.selectedFileImage);
       if (image_url) {
         Swal.fire({
           title: 'Saving Template',
@@ -417,9 +389,7 @@ const handleButtonCreateTemplate = async () => {
         };
 
         const template_str = JSON.stringify(template);
-        const template_id = await livechatStore.botioLivechat?.saveTemplate(template_str);
-        const newResponse = await fetchDataTemplate()
-        shopconfig_data.value = newResponse.shopconfig
+        const template_id = await botioLivechat.saveTemplate(template_str);
 
         Swal.close();
 
@@ -500,10 +470,14 @@ const openImageDialog = () => {
 
 
 const sendMessage = async () => {
+  if (!currentChat?.value) {
+    return;
+  }
+  const botioLivechat = new BotioLivechat(shopStore.shop_id)
   if (images.value.length > 0) {
-    let a = currentChat.value?.conversation!
+    let a = currentChat.value?.conversation
     for (let i = 0; i < images.value.length; i++) {
-      await livechatStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      await messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
       console.log('sended')
     }
     images.value = []
@@ -512,7 +486,7 @@ const sendMessage = async () => {
     // Handle sending the message here
     console.log('Sending message:', newMessage.value);
     let a = currentChat.value?.conversation!
-    livechatStore.sendTextMessage(currentChat.value!.conversation, newMessage.value)
+    messateStore.sendTextMessage(currentChat.value!.conversation, newMessage.value)
     newMessage.value = ''; // Reset the input field after sending the message
     uiStore.is_typing = false;
   }

@@ -16,7 +16,7 @@ interface IBotioLivechat {
   getPlatformInformation: (platform: string, pageID: string) => Promise<PlatformInformation>
   getShopConfig: () => Promise<ShopConfig>
   saveTemplate: (payload: string) => Promise<string>
-  listTemplates: () => Promise<{ templates: ShopTemplate[] }>
+  listTemplates: () => Promise<ShopTemplate[]>
   deleteTemplate: (templateID: string) => Promise<void>
   getAllPlatformInformation: () => Promise<AllPlatformInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>

@@ -19,7 +19,6 @@ type ShopTemplate = {
 
 type ShopConfig = {
   shop_id: string,
-  tshopIDemplates: ShopTemplate[]
 }
 
 type AllPlatformInformation = {

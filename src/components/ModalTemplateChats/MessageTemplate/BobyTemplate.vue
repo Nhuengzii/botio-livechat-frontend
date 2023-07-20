@@ -22,44 +22,41 @@
         <!-- space -->
     </div>
     <div class="background-d9-250  flex flex-wrap">
-        <template v-if="shopconfig">
+        <div v-for="template, index in templateList" :key="template.id"
+            class="flex basis-auto w-96 bg-white rounded-xl mx-2 my-2 py-1 px-4 items-center">
 
-            <div v-for="template, index in templateList" :key="template.id"
-                class="flex basis-auto w-96 bg-white rounded-xl mx-2 my-2 py-1 px-4 items-center">
+            <template v-if="template.platform === conversation.platform">
 
-                <template v-if="template.platform === conversation.platform">
-
-                    <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
-                        <div class="flex justify-center items-center">
-                            <p>{{ template.name }}</p>
-                        </div>
+                <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
+                    <div class="flex justify-center items-center">
+                        <p>{{ template.name }}</p>
                     </div>
+                </div>
 
-                    <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
-                        <button @click="handleSendTemplate(index, template.platform)"
-                            class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
-                            <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
-                            <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
-                        </button>
-                    </div>
+                <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
+                    <button @click="handleSendTemplate(index, template.platform)"
+                        class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
+                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
+                        <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
+                    </button>
+                </div>
 
-                    <!-- edit template -->
-                    <!-- <div class="flex-[1] px-1 items-center justify-center">
+                <!-- edit template -->
+                <!-- <div class="flex-[1] px-1 items-center justify-center">
                         <button @click="" class="flex">
                             <font-awesome-icon :icon="['fas', 'pen']" />
                         </button>
                     </div> -->
 
-                    <!-- delete template-->
-                    <div class="flex-[1] px-1 items-center justify-center">
-                        <button class="flex" @click="deleteTemplatebyIndex(index)">
-                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                        </button>
-                    </div>
+                <!-- delete template-->
+                <div class="flex-[1] px-1 items-center justify-center">
+                    <button class="flex" @click="deleteTemplatebyIndex(index)">
+                        <font-awesome-icon :icon="['fas', 'trash-can']" />
+                    </button>
+                </div>
 
-                </template>
-            </div>
-        </template>
+            </template>
+        </div>
 
     </div>
 </template>
@@ -70,21 +67,24 @@ import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
 import type { Template, Buttons } from '@/stores/modal';
 import Swal from 'sweetalert2';
 
-const props = defineProps<{
+const { conversation, isFetchTemplate } = defineProps<{
     conversation: Conversation
-    shopconfig: ShopConfig | undefined
     isFetchTemplate: boolean
 }>()
+const shopTemplates = ref<ShopTemplate[]>([])
 
 import type { AttachmentForSending, } from '@/types/message'
 
 import { useUIStore } from '@/stores/UI';
-import { useLivechatStore } from '@/stores/livechat';
 import { computed, reactive, ref, watch } from 'vue';
+import BotioLivechat from '@/lib/BotioLivechat2';
+import { useMessageStore } from '@/stores/message';
+import { useConversationStore } from '@/stores/conversation';
+import { storeToRefs } from 'pinia';
 
-const livechatstore = useLivechatStore()
 const uiStore = useUIStore()
-
+const messageStore = useMessageStore()
+const conversationStore = useConversationStore()
 
 const templateList = ref<Template[]>([]);
 const listTemplateId = ref<string[]>([]);
@@ -96,15 +96,11 @@ const isFetchingTemplate = ref(false)
 const fetchNewDataTemplate = async () => {
     try {
         //isFetchingTemplate.value = true
-        const shopconfig = await livechatstore.botioLivechat?.getShopConfig();
+        const botioLivechat = new BotioLivechat(conversation.shopID)
+        const templates = await botioLivechat.listTemplates();
+        console.log(JSON.stringify(templates, null, 2))
         isFetchingTemplate.value = false
-        if (typeof shopconfig !== 'undefined' && shopconfig !== null) {
-            //console.log(shopconfig);
-            return shopconfig;
-        } else {
-            throw new Error("ShopConfig is undefined");
-        }
-
+        return templates;
     } catch (error) {
         console.log('error in fetchDataTemplate');
         console.error("Error occurred while loading template:", error);
@@ -116,24 +112,23 @@ const fetchNewDataTemplate = async () => {
 const platformLoadTemplate = async () => {
     templateList.value = []
     listTemplateId.value = []
-    isFetchingTemplate.value = true
-    if (isFetchingTemplate.value){
+    if (isFetchingTemplate.value) {
         Swal.fire({
-                title: 'Loading Template',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            title: 'Loading Template',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
     }
-    shopConfig.value = await fetchNewDataTemplate();
-    
-    if (props.conversation.platform === "facebook") {
+    shopTemplates.value.push(...(await fetchNewDataTemplate()));
+
+    if (conversation.platform === "facebook") {
         loadShopConfig.value(shopConfig.value, "facebook");
-    } else if (props.conversation.platform === "line") {
+    } else if (conversation.platform === "line") {
         loadShopConfig.value(shopConfig.value, "line");
-    } else if (props.conversation.platform === "instagram") {
+    } else if (conversation.platform === "instagram") {
         loadShopConfig.value(shopConfig.value, "instagram");
     }
 }
@@ -147,7 +142,7 @@ const loadShopConfig = computed(() => {
         if (shopConfig && !isFetchingTemplate.value) {
             try {
 
-                shopConfig.templates.forEach((template) => {
+                shopTemplates.value.forEach((template) => {
                     const existingTemplate = listTemplateId.value.find(
                         (item) => item === template.id
                     );
@@ -233,7 +228,8 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 
         // Perform the template deletion
         isDelete.value = false
-        await livechatstore.botioLivechat?.deleteTemplate(templateID)
+        const botioLivechat = new BotioLivechat(conversation.shopID)
+        await botioLivechat.deleteTemplate(templateID)
 
         // remove in template virtualization
         templateList.value.splice(index, 1)
@@ -286,8 +282,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     })),
                 },
             };
-
-            await livechatstore.sendAttachmentMessage(props.conversation, attachmentFacebook);
+            await messageStore.sendAttachmentMessage(conversation, attachmentFacebook);
         } catch (error) {
             // Handle the error
             console.log('Error sending attachment:', error);
@@ -316,7 +311,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                         }
                     },
                 }
-                livechatstore.sendAttachmentMessage(props.conversation, attachmentLineButton)
+                messageStore.sendAttachmentMessage(conversation, attachmentLineButton)
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
@@ -340,7 +335,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     }))
                 },
             }
-            livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
+            messageStore.sendAttachmentMessage(conversation, attachmentInstagram)
         } catch (error) {
             console.log('Error sending attachment:', error);
         }

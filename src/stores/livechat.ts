@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
-import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
