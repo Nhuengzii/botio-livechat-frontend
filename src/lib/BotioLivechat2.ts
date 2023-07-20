@@ -5,7 +5,7 @@ import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
-import type { ShopInformationResponse } from "@/types/BotioLivechat/BotioLivechatResponse";
+import type { ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -26,7 +26,12 @@ class BotioLivechat implements IBotioLivechat {
     try {
       const res = await axios.get<ShopInformationResponse>(`${this.botioRestApiUrl}/shops/${shopID}`)
       const shopInformation: ShopInformation = {
-        available_platforms: res.data.available_pages
+        available_platforms: res.data.availablePages.map((page) => {
+          return {
+            platform_name: page.platformName,
+            page_id: page.pageID
+          }
+        })
       }
       return shopInformation
     } catch (error) {
