@@ -15,7 +15,7 @@
                         </button>
                     </template>
 
-                    <div class="modal-header flex-[1]  justify-between p-4 " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage)? 'bg-blue-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-blue-400 rounded-xl mr-7 drop-shadow-xl':(props.platform=='instagram')? (uiStore.is_createTemplateMessage)? 'bg-red-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl':(uiStore.is_createTemplateMessage)?  'bg-green-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
+                    <div class="modal-header flex-[1]  justify-between p-4 " :class="(props.platform=='facebook')? (uiStore.is_createTemplateMessage||uiStore.is_editTemplateMessage)? 'bg-blue-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-blue-400 rounded-xl mr-7 drop-shadow-xl':(props.platform=='instagram')? (uiStore.is_createTemplateMessage||uiStore.is_editTemplateMessage)? 'bg-red-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl':(uiStore.is_createTemplateMessage||uiStore.is_editTemplateMessage)?  'bg-green-400 rounded-xl mr-7 drop-shadow-xl ml-5':'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
                         <slot name="header">default header</slot>
                     </div>
                     <div class="mt-4 mr-2">
