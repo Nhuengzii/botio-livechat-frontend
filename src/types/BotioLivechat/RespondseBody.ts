@@ -1,7 +1,7 @@
 type ShopInformationResponse = {
-  available_pages: {
-    platform_name: string,
-    page_id: string
+  availablePages: {
+    platformName: string,
+    pageID: string
   }[]
 }
 
