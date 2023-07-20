@@ -10,7 +10,7 @@
     </main>
     <div v-if="!ready" class="w-full h-full">
         <div id="loading-wrapper">  
-            <div id="loading-text">LOADING</div>
+            <div id="loading-text">กำลังโหลด</div>
             <div id="loading-content"></div>
         </div>
     </div>
@@ -37,6 +37,11 @@ onBeforeMount(async () => {
     }
     await shopStore.fetchShopInformation()
     await shopStore.fetchPlatformInformation()
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true)
+        }, 2000)
+    })
     ready.value = true
 })
 
