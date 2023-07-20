@@ -21,12 +21,20 @@
         <div class="flex-[5]"></div>
         <!-- space -->
     </div>
-    <div class="background-d9-250  flex flex-wrap">
-        <div v-for="template, index in templateList" :key="template.id"
-            class="flex basis-auto w-96 bg-white rounded-xl mx-2 my-2 py-1 px-4 items-center">
-
+    <div class="flex flex-wrap">
+        <div v-for="template, index in modalStore.convertTemplates" :key="template.id"
+            class="flex flex-cols basis-auto w-96 bg-white rounded-xl mx-2 my-2  items-center">
+            
             <template v-if="template.platform === conversation.platform">
-
+                
+                
+                <template v-if="template.type === 'Button'">
+                    <TemplateButton/>
+                </template>
+                <template v-else-if="template.type === 'TextImage'">
+                    <TemplateTextImage/>
+                </template>
+                
                 <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
                     <div class="flex justify-center items-center">
                         <p>{{ template.name }}</p>
@@ -64,155 +72,39 @@
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
 import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
-import type { Template, Buttons } from '@/stores/modal';
+import { type Template, type Buttons, useModalStore } from '@/stores/modal';
+//import { TemplateButton } from '@/components/ModalTemplateChats/TemplateType/TemplateButton.vue'
+import TemplateButton from "@/components/ModalTemplateChats/TemplateType/TemplateButton.vue"
+import TemplateTextImage from '@/components/ModalTemplateChats/TemplateType/TemplateTextImage.vue'
+
 import Swal from 'sweetalert2';
 
 const { conversation, isFetchTemplate } = defineProps<{
     conversation: Conversation
     isFetchTemplate: boolean
 }>()
-const shopTemplates = ref<ShopTemplate[]>([])
 
 import type { AttachmentForSending, } from '@/types/message'
-
 import { useUIStore } from '@/stores/UI';
-import { computed, reactive, ref, watch } from 'vue';
 import BotioLivechat from '@/lib/BotioLivechat2';
 import { useMessageStore } from '@/stores/message';
-import { useConversationStore } from '@/stores/conversation';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
 const uiStore = useUIStore()
 const messageStore = useMessageStore()
-const conversationStore = useConversationStore()
-
+const modalStore = useModalStore()
 const templateList = ref<Template[]>([]);
-const listTemplateId = ref<string[]>([]);
 const isDelete = ref(false);
-const shopConfig = ref<ShopConfig>()
-const isFetchingTemplate = ref(false)
+
 //shopConfig.value = props.shopconfig
 
-const fetchNewDataTemplate = async () => {
-    try {
-        //isFetchingTemplate.value = true
-        const botioLivechat = new BotioLivechat(conversation.shopID)
-        const templates = await botioLivechat.listTemplates();
-        console.log(JSON.stringify(templates, null, 2))
-        isFetchingTemplate.value = false
-        return templates;
-    } catch (error) {
-        console.log('error in fetchDataTemplate');
-        console.error("Error occurred while loading template:", error);
-        throw error; // Rethrow the error to propagate it to the caller
-    }
-};
 
 
-const platformLoadTemplate = async () => {
-    templateList.value = []
-    listTemplateId.value = []
-    if (isFetchingTemplate.value) {
-        Swal.fire({
-            title: 'Loading Template',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            },
-        });
-    }
-    shopTemplates.value.push(...(await fetchNewDataTemplate()));
-
-    if (conversation.platform === "facebook") {
-        loadShopConfig.value(shopConfig.value, "facebook");
-    } else if (conversation.platform === "line") {
-        loadShopConfig.value(shopConfig.value, "line");
-    } else if (conversation.platform === "instagram") {
-        loadShopConfig.value(shopConfig.value, "instagram");
-    }
-}
-
-
-
-// loadind shopconfig & parsePayload in showconfig-data
-const loadShopConfig = computed(() => {
-    return (shopConfig?: ShopConfig, platform?: string) => {
-        //console.log(isFetchingTemplate.value)
-        if (shopConfig && !isFetchingTemplate.value) {
-            try {
-
-                shopTemplates.value.forEach((template) => {
-                    const existingTemplate = listTemplateId.value.find(
-                        (item) => item === template.id
-                    );
-                    if (!existingTemplate) {
-
-                        const parsedPayload = JSON.parse(template.payload);
-
-                        if (parsedPayload.platform === platform) {
-                            listTemplateId.value.push(template.id);
-
-                            const templateData: Template = {
-                                id: parsedPayload.id,
-                                type: parsedPayload.type,
-                                platform: parsedPayload.platform,
-                                name: parsedPayload.name,
-                                elements: parsedPayload.elements.map((element: any) => {
-                                    return {
-                                        title: element.title,
-                                        message: element.message,
-                                        picture: element.picture,
-                                        buttons: element.buttons.map((button: any) => {
-                                            return {
-                                                id: button.id,
-                                                title: button.title,
-                                                url: button.url,
-                                                isSave: button.isSave,
-                                            };
-                                        }),
-                                    };
-                                }),
-                            };
-                            // template list for virtualization
-                            templateList.value.push(templateData);
-                        }
-                    }
-
-                });
-
-                // Hide the SweetAlert loading dialog
-                Swal.close();
-            } catch (error) {
-                console.error('Error loading data templates:', error);
-                // Show an alert or notification indicating the error using SweetAlert2
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load data templates',
-                });
-            }
-        }
-    };
-});
-platformLoadTemplate()
-
-
-
-// watch(
-//     () => props.shopconfig, // Watch the shopConfig value
-//     async (newValue, oldValue) => {
-//         console.log(newValue?.templates.length, oldValue?.templates.length)
-//         templateList.value = []
-//         listTemplateId.value = []
-//         await fetchDataTemplate() // Call the loadShopConfig computed function
-//     }
-// );
 
 
 const deleteTemplatebyIndex = async (index: number): Promise<void> => {
     try {
-        const templateID = listTemplateId.value[index];
         console.log(`delete template index : ${index}`)
         // Show the loading dialog
 
@@ -233,10 +125,11 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 
         // remove in template virtualization
         templateList.value.splice(index, 1)
+        //const idx = templateList.value.findIndex 
         console.log(`templateList : ${templateList}`)
         console.log(`templateList length : ${templateList.value.length}`)
 
-        await fetchNewDataTemplate()
+        //await fetchNewDataTemplate()
         isDelete.value = true
 
 
