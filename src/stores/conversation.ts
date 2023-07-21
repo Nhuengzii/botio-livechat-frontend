@@ -6,6 +6,7 @@ import { defineStore } from "pinia";
 import { useShopStore } from "./shop";
 import type { Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
+import { messageToActivity } from "@/lib/utils";
 type ConversationMap = Map<string, Conversation>;
 
 interface IConversationStore {
@@ -75,6 +76,7 @@ export const useConversationStore = defineStore("conversation", {
       }).catch((err) => {
         console.error("error when fetching platform information", err)
       })
+      conversation.lastActivity = messageToActivity(message)
       this.conversationsRaw.set(conversationID, conversation)
       this.receiveMessageEventBus.emit(message)
     }

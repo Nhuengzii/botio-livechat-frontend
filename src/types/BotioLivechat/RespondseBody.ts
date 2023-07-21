@@ -5,4 +5,10 @@ type ShopInformationResponse = {
   }[]
 }
 
-export type { ShopInformationResponse }
+type SendMessageResponse = {
+  messageID: string,
+  recipientID: string,
+  timestamp: number,
+}
+
+export type { ShopInformationResponse, SendMessageResponse }

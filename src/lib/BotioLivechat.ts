@@ -1,11 +1,9 @@
-import type { useLivechatStore } from "@/stores/livechat";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
-import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
-import type { ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
+import type { SendMessageResponse, ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -213,7 +211,7 @@ class BotioLivechat implements IBotioLivechat {
 
   async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
-    const imageUrl = await this.uploadImage(imageFile);
+    const imageUrl = await this.uploadImage(imageFile, true);
     const body: { attachment: { type: string, payload: { src: string } } } = {
       attachment: {
         type: "image",
@@ -223,14 +221,15 @@ class BotioLivechat implements IBotioLivechat {
       }
     }
     try {
-      const response = await axios.post(url, body);
+      const response = await axios.post<SendMessageResponse>(url, body);
+      const { data } = response
       const message: Message = {
         shopID: this.shopID,
         pageID: pageID,
         platform: platform,
         conversationID: conversationID,
-        messageID: response.data.message_id,
-        timestamp: response.data.timestamp ?? Date.now(),
+        messageID: data.messageID,
+        timestamp: data.timestamp ?? Date.now(),
         message: "",
         source: {
           userID: psid,
@@ -269,18 +268,18 @@ class BotioLivechat implements IBotioLivechat {
 
   async searchConversationByName(platform: string, pageID: string, name: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withParticipantsUsername: name }) } })
     return res.data.conversations
   }
   async searchConversationByMessage(platform: string, pageID: string, message: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_message: message }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withMessage: message }) } })
     return res.data.conversations
   }
 
-  async uploadImage(imageFile: File) {
+  async uploadImage(imageFile: File, temporary: boolean = false) {
     const url: string = `${this.botioRestApiUrl}/upload_url`
-    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: false } })
+    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: temporary } })
     const presignedURL = res.data.presignedURL
     const uploadRes = await axios.put(presignedURL, imageFile, { headers: { 'Content-Type': imageFile.type } })
     const imageUrl = presignedURL.split("?")[0]
@@ -290,7 +289,7 @@ class BotioLivechat implements IBotioLivechat {
   async searchMessageByText(conversation: Conversation, text: string) {
     const { conversationID, pageID, platform } = conversation
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`
-    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ with_message: text }) } })
+    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ withMessage: text }) } })
     return res.data.messages
   }
 

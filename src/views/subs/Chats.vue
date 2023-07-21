@@ -121,10 +121,9 @@
 
               <!-- show animation fetch old message-->
               <template #spinner>
-                <div class="flex justify-center pt-5 pb-3" v-if="isLoading">
+                <div class="flex justify-center pt-5 pb-3">
                   <span class="loader"></span>
                 </div>
-                <span v-else></span>
               </template>
 
               <!-- if not no more data message show profile -->
@@ -194,7 +193,6 @@ import MessageSender from "@/components/MessageSender.vue";
 import MessageSearchResult from "@/components/MessageSearchResult.vue";
 import { getFormattedDate } from "@/lib/Time"
 const messageStore = useMessageStore()
-const isLoading = ref(false)
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
@@ -209,10 +207,8 @@ const conversationStore = useConversationStore()
 
 
 async function loadmore($state: any) {
-  if (isLoading.value) return;
   if (messageStore.currentChat === undefined) return;
   if (isFetchingMore.value) return;
-  console.log('load more')
   isFetchingMore.value = true;
   await new Promise((resolve) => {
     setTimeout(() => {
@@ -224,8 +220,6 @@ async function loadmore($state: any) {
   if (!currentSize) return;
   const olderMessage = await messageStore.fetchMoreMessages();
   $state.loaded()
-
-
   const lastMid = messageStore.currentChat.messages[olderMessage?.length ?? 1 - 1].messageID;
   if (!lastMid) {
     return
@@ -241,7 +235,6 @@ async function loadmore($state: any) {
     $state.complete();
 
   }
-  console.log('load more done')
 }
 
 
@@ -317,7 +310,7 @@ watch(tabKey, (newTab, oldTab) => {
 
 
 function openChat(conversation: Conversation) {
-  isLoading.value = true
+  // isLoading.value = true
   handleAdd(conversation)
   setTimeout(() => {
     // scroll to bottom
