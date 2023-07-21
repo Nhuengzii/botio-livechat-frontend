@@ -1,11 +1,11 @@
 import type { useLivechatStore } from "@/stores/livechat";
-import type IBotioLivechat from "@/types/IBotioLivechat";
+import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
-import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
-import type { ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
+import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
+import type { ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -13,16 +13,27 @@ class BotioLivechat implements IBotioLivechat {
   shopID: string;
   websocketClient: WebSocket | null = null;
   _startTimestamp: number = 0;
-  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string, onmessageCallbacks: (data: MessageEvent<string>) => void) {
-    this.botioRestApiUrl = botioRestApiUrl;
-    this.botioWebsocketApiUrl = botioWebsocketApiUrl;
+  constructor(shopID: string) {
+    const rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID
+    if (!rest_api_id) {
+      throw new Error("Cannot find VITE_BOTIO_WEBSOCKET_API_ID in .env");
+    }
+    this.botioRestApiUrl = `https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`;
+    this.botioWebsocketApiUrl = "";
     this.shopID = shopID;
-    this.connect(onmessageCallbacks);
   }
   async getShopInformation(shopID: string) {
     try {
-      const shopInformation: ShopInformation = (await axios.get(`${this.botioRestApiUrl}/shops/${shopID}`)).data
-      return shopInformation;
+      const res = await axios.get<ShopInformationResponse>(`${this.botioRestApiUrl}/shops/${shopID}`)
+      const shopInformation: ShopInformation = {
+        available_platforms: res.data.availablePages.map((page) => {
+          return {
+            platform_name: page.platformName,
+            page_id: page.pageID
+          }
+        })
+      }
+      return shopInformation
     } catch (error) {
       throw new Error("Error fetching shop information");
     }
@@ -50,11 +61,11 @@ class BotioLivechat implements IBotioLivechat {
     * @param pageID - ID of the page
     * @returns PageInformation of the page with given platform and pageID
     */
-  async getPageInformation(platform: string, pageID: string) {
+  async getPlatformInformation(platform: string, pageID: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}`;
     try {
       const response = await axios.get(url);
-      const information: PageInformation = response.data;
+      const information: PlatformInformation = response.data;
       return information;
     } catch (error) {
       throw new Error("Error fetching platform information");
@@ -77,17 +88,17 @@ class BotioLivechat implements IBotioLivechat {
   async listTemplates() {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates`
     const res = await axios.get<{ templates: ShopTemplate[] }>(url)
-    return res.data
+    return res.data.templates
   }
   async deleteTemplate(templateID: string) {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates/${templateID}`
     const res = await axios.delete(url)
   }
-  async getAllPageInformation() {
+  async getAllPlatformInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
     try {
       const response = await axios.get(url);
-      const informations: AllPageInformation = response.data;
+      const informations: AllPlatformInformation = response.data;
       return informations;
     } catch (error) {
       throw new Error("Error fetching all platform information");
@@ -303,4 +314,4 @@ class BotioLivechat implements IBotioLivechat {
   }
 }
 
-export { BotioLivechat };
+export default BotioLivechat
