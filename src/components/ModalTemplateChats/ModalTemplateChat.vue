@@ -20,7 +20,7 @@
                         : (props.platform == 'instagram') ? (uiStore.is_createTemplateMessage) ? 'bg-red-400 rounded-xl mr-7 drop-shadow-xl ml-5'
                             : 'bg-[#FA7070] rounded-xl mr-7 drop-shadow-xl' : (uiStore.is_createTemplateMessage) ? 'bg-green-400 rounded-xl mr-7 drop-shadow-xl ml-5'
                             : 'bg-[#38E54D] rounded-xl mr-7 drop-shadow-xl'">
-                        <slot name="header">default header</slot>
+                        <slot name="header"></slot>
                     </div>
 
                     <div class="mt-4 mr-2">
@@ -49,7 +49,7 @@
                 
                 <div
                     class="modal-body  flex-[10] overflow-x-hidden  no-scrollbar justify-center px-10 rounded-xl shadow-sm p-5 bg-gray-100">
-                    <slot name="body">default body</slot>
+                    <slot name="body"></slot>
                 </div>
 
                 <div class="modal-footer bg-white flex-[1]">
@@ -72,8 +72,11 @@ const props = defineProps<{
     platform: string
 }>()
 const handleButtonClickBack = () => {
+    uiStore.activeTemplateMessage();
     uiStore.activeCreateTemplateMessage();
     modalStore.reset();
+    modalStore.fetchDataTemplates()
+
 }
 
 const handleButtonClickToClose = () => {
