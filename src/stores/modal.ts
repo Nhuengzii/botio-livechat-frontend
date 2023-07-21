@@ -136,26 +136,26 @@ export const useModalStore = defineStore("modal", {
             }
         },
 
-        async loadTemplate() {
-            this.templateList = [];
-            this.listTemplateId = [];
-            if (this.isFetchingTemplate) {
-                Swal.fire({
-                    title: "Loading Template",
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
-            }
-            const fetchedTemplates = await this.fetchDataTemplates();
-            this.templateList.push(...fetchedTemplates);
-            if (this.platform === "facebook") {
-            } else if (this.platform === "line") {
-            } else if (this.platform === "instagram") {
-            }
-        },
+        // async loadTemplate() {
+        //     this.templateList = [];
+        //     this.listTemplateId = [];
+        //     if (this.isFetchingTemplate) {
+        //         Swal.fire({
+        //             title: "Loading Template",
+        //             allowOutsideClick: false,
+        //             showConfirmButton: false,
+        //             willOpen: () => {
+        //                 Swal.showLoading();
+        //             },
+        //         });
+        //     }
+        //     const fetchedTemplates = await this.fetchDataTemplates();
+        //     this.templateList.push(...fetchedTemplates);
+        //     if (this.platform === "facebook") {
+        //     } else if (this.platform === "line") {
+        //     } else if (this.platform === "instagram") {
+        //     }
+        // },
 
         // what select template ? button or TextImage
         selectTemplate(template: string) {
@@ -201,13 +201,6 @@ export const useModalStore = defineStore("modal", {
 
             this.amountButton++;
             this.isAddButton = true;
-        },
-        // not use now
-        findTemplateWithId(templateId: number) {
-            const clickedTemplate = this.templateList.find(
-                (template) => template.id === templateId
-            );
-            return clickedTemplate;
         },
 
         // reset state value
