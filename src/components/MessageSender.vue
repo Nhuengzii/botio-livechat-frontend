@@ -304,7 +304,7 @@ const shopconfig_data = ref<ShopConfig>();
 import Swal from 'sweetalert2';
 import { useMessageStore } from '@/stores/message'
 import { useConversationStore } from '@/stores/conversation'
-import BotioLivechat from '@/lib/BotioLivechat2'
+import BotioLivechat from '@/lib/BotioLivechat'
 import { useShopStore } from '@/stores/shop'
 
 type FetchDataTemplateResponse = {

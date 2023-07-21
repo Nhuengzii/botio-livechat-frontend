@@ -1,5 +1,5 @@
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
-import BotioLivechat from "@/lib/BotioLivechat2";
+import BotioLivechat from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import { defineStore } from "pinia";

@@ -1,4 +1,4 @@
-import BotioLivechat from "@/lib/BotioLivechat2";
+import BotioLivechat from "@/lib/BotioLivechat";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import type { Platform, PlatformInformation, ShopInformation } from "@/types/ShopInformation";
 import { defineStore } from "pinia";

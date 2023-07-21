@@ -24,17 +24,17 @@
     <div class="flex flex-wrap">
         <div v-for="template, index in modalStore.convertTemplates" :key="template.id"
             class="flex flex-cols basis-auto w-96 bg-white rounded-xl mx-2 my-2  items-center">
-            
+
             <template v-if="template.platform === conversation.platform">
-                
-                
+
+
                 <template v-if="template.type === 'Button'">
-                    <TemplateButton/>
+                    <TemplateButton />
                 </template>
                 <template v-else-if="template.type === 'TextImage'">
-                    <TemplateTextImage/>
+                    <TemplateTextImage />
                 </template>
-                
+
                 <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
                     <div class="flex justify-center items-center">
                         <p>{{ template.name }}</p>
@@ -86,7 +86,7 @@ const { conversation, isFetchTemplate } = defineProps<{
 
 import type { AttachmentForSending, } from '@/types/message'
 import { useUIStore } from '@/stores/UI';
-import BotioLivechat from '@/lib/BotioLivechat2';
+import BotioLivechat from '@/lib/BotioLivechat';
 import { useMessageStore } from '@/stores/message';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';

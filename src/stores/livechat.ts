@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";

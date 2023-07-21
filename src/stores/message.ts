@@ -1,4 +1,4 @@
-import BotioLivechat from "@/lib/BotioLivechat2";
+import BotioLivechat from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";

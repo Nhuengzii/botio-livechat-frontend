@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import { useLivechatStore } from "./livechat";
-import BotioLivechat from "@/lib/BotioLivechat2";
-import { useConversationStore } from "@/stores/conversation";
+import BotioLivechat from "@/lib/BotioLivechat";
 import type { ShopTemplate } from "@/types/ShopInformation";
 import { useShopStore } from "./shop";
 import Swal from "sweetalert2";
@@ -123,7 +121,7 @@ export const useModalStore = defineStore("modal", {
         // fetch templates in shopconfig
         async fetchDataTemplates() {
             try {
-                
+
                 const shopStore = useShopStore();
                 const botioLivechat = new BotioLivechat(shopStore.shop_id);
                 const templateRaw = await botioLivechat.listTemplates();
