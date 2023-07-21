@@ -40,7 +40,6 @@ export const useMessageStore = defineStore("message", {
         const exitst = this.currentChat?.messages.find((m) => m.messageID === message.messageID);
         return !exitst;
       })));
-      console.log('fetching done')
       return newMessages;
     },
     closeAllChat() {
