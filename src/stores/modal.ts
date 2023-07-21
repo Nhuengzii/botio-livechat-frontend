@@ -79,47 +79,57 @@ export const useModalStore = defineStore("modal", {
     }),
     getters: {
         getTemplates: (state) => {
-            const convertTemplates: Template[] = [];
-            const templates = state.templateListRaw;
-            templates.forEach((template) => {
-                const parsedPayload = JSON.parse(template.payload);
-                console.log(state.platform);
-                if (parsedPayload.platform === state.platform) {
-                    const templateData: Template = {
-                        id: template.templateID,
-                        type: parsedPayload.type,
-                        platform: parsedPayload.platform,
-                        name: parsedPayload.name,
-                        elements: [],
-                    };
+            try {
+                const convertTemplates: Template[] = [];
+                const templates = state.templateListRaw;
+                templates.forEach((template) => {
+                    const parsedPayload = JSON.parse(template.payload);
+                    console.log(state.platform);
+                    if (parsedPayload.platform === state.platform) {
+                        const templateData: Template = {
+                            id: template.templateID,
+                            type: parsedPayload.type,
+                            platform: parsedPayload.platform,
+                            name: parsedPayload.name,
+                            elements: [],
+                        };
 
-                    if (Array.isArray(parsedPayload.elements)) {
-                        templateData.elements = parsedPayload.elements.map(
-                            (element: any) => {
-                                return {
-                                    title: element.title,
-                                    message: element.message,
-                                    picture: element.picture,
-                                    buttons: Array.isArray(element.buttons)
-                                        ? element.buttons.map((button: any) => {
-                                            return {
-                                                id: button.id,
-                                                title: button.title,
-                                                url: button.url,
-                                                isSave: button.isSave,
-                                            };
-                                        })
-                                        : [],
-                                };
-                            }
-                        );
+                        if (Array.isArray(parsedPayload.elements)) {
+                            templateData.elements = parsedPayload.elements.map(
+                                (element: any) => {
+                                    return {
+                                        title: element.title,
+                                        message: element.message,
+                                        picture: element.picture,
+                                        buttons: Array.isArray(element.buttons)
+                                            ? element.buttons.map((button: any) => {
+                                                return {
+                                                    id: button.id,
+                                                    title: button.title,
+                                                    url: button.url,
+                                                    isSave: button.isSave,
+                                                };
+                                            })
+                                            : [],
+                                    };
+                                }
+                            );
+                        }
+
+                        convertTemplates.push(templateData);
                     }
+                });
+                console.log(convertTemplates);
+                
+                return convertTemplates;
+            } catch (error) {
+                console.error("Error in convertTemplates getter:", error);
+                
 
-                    convertTemplates.push(templateData);
-                }
-            });
-            console.log(convertTemplates);
-            return convertTemplates;
+                
+                
+                return [];
+            }
         },
     },
 
@@ -127,9 +137,34 @@ export const useModalStore = defineStore("modal", {
         // fetch templates in shopconfig
         async fetchDataTemplates() {
             try {
+                // Swal.showLoading();
+                Swal.fire({
+                    title: 'กำลังโหลดข้อมูลเทมเพลต',
+                    html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
                 const shopStore = useShopStore();
                 const botioLivechat = new BotioLivechat(shopStore.shop_id);
+
+                const loadingDelay = 400; // Adjust the delay time as needed
+                await new Promise((resolve) => setTimeout(resolve, loadingDelay));
+
                 const templateRaw = await botioLivechat.listTemplates();
+                //Swal.hideLoading();
+                Swal.close();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'โหลดเทมเพลตสำเร็จ',
+                    text: 'Templates have been fetched successfully!',
+                    timer: 1000,
+                    timerProgressBar: true,
+                });
+
                 this.templateListRaw.splice(0, this.templateListRaw.length);
                 this.templateListRaw.push(...templateRaw);
                 console.log(templateRaw);
@@ -137,6 +172,12 @@ export const useModalStore = defineStore("modal", {
             } catch (error) {
                 console.log("error in fetchDataTemplate");
                 console.error("Error occurred while loading template:", error);
+                Swal.close();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาดขณะโหลดเทมเพลต โปรดลองอีกครั้ง',
+                });
                 throw error; // Rethrow the error to propagate it to the caller
             }
         },
@@ -203,6 +244,7 @@ export const useModalStore = defineStore("modal", {
             this.amountButton = 1;
         },
     },
+    
 });
 
 export type { Template, Buttons };
