@@ -1,9 +1,7 @@
-import type { useLivechatStore } from "@/stores/livechat";
 import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
-import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
 import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
 import type { ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
@@ -269,12 +267,12 @@ class BotioLivechat implements IBotioLivechat {
 
   async searchConversationByName(platform: string, pageID: string, name: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withParticipantsUsername: name }) } })
     return res.data.conversations
   }
   async searchConversationByMessage(platform: string, pageID: string, message: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_message: message }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withMessage: message }) } })
     return res.data.conversations
   }
 

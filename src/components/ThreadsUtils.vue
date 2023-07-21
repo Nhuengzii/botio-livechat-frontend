@@ -51,11 +51,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
-import { useLivechatStore } from '@/stores/livechat';
-import { useRoute } from 'vue-router';
 import Thread from './Thread.vue';
 import type { Conversation } from '@/types/conversation';
 import { useShopStore } from '@/stores/shop';
+import type IBotioLivechat from '@/types/BotioLivechat/IBotioLivechat';
+import BotioLivechat from '@/lib/BotioLivechat';
 const uiStore = useUIStore();
 const shopStore = useShopStore();
 const searchResult = ref([] as Conversation[])
@@ -66,18 +66,23 @@ const { platform, mode } = defineProps<{
   platform: string,
 }>()
 const querying = ref(false)
+const botioLivechat: IBotioLivechat = new BotioLivechat(shopStore.shop_id)
 
 watch([query, searchMode], ([newQuery, newSearchMode], [prevQuery, prevSearchMode]) => {
-  return
   if (newQuery.length > 0) {
+    const pageID = shopStore.pageID(platform)
+    if (pageID === undefined) return
     if (newSearchMode === 'by-name') {
       console.log('by-name')
-      livechatStore.searchConversationByName(platform, query.value).then((result) => {
+      botioLivechat.searchConversationByName(platform, pageID, query.value).then((result) => {
+        if (result === undefined || result.length === 0) return;
+        console.log(result)
         searchResult.value = result
       })
     } else if (newSearchMode === 'by-message') {
       console.log('by-message')
-      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+      botioLivechat.searchConversationByMessage(platform, pageID, query.value).then((result) => {
+        if (result === undefined || result.length === 0) return;
         searchResult.value = result
       })
     }
