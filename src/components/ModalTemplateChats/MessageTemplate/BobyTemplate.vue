@@ -1,71 +1,84 @@
 <template>
-    <div class="py-10 flex items-center">
-        <!-- search chat template -->
-        <div class="flex-[8] basis-auto bg-white py-4 mr-3 rounded-2xl shadow-sm">
-            <p class="px-8 color-gray-100">ค้นหาด้วย ชื่อ หรือรายละเอียดข้อความ</p>
-        </div>
-
-        <!-- create chat template -->
-        <button @click="uiStore.activeCreateTemplateMessage"
-            class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
-            <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
-
-            <div class="rounded-2xl px-2 py-1">
-                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ</p>
-
-            </div>
-        </button>
-        <!-- end create chat template -->
-
-        <!-- space -->
-        <div class="flex-[5]"></div>
-        <!-- space -->
-    </div>
+    
     <div class="flex flex-wrap">
-        <div v-for="template, index in modalStore.convertTemplates" :key="template.id"
-            class="flex flex-cols basis-auto w-96 bg-white rounded-xl mx-2 my-2  items-center">
-
-            <template v-if="template.platform === conversation.platform">
-
-
-                <template v-if="template.type === 'Button'">
-                    <TemplateButton />
-                </template>
-                <template v-else-if="template.type === 'TextImage'">
-                    <TemplateTextImage />
-                </template>
-
-                <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
-                    <div class="flex justify-center items-center">
-                        <p>{{ template.name }}</p>
+        <div v-for="template, index in modalStore.getTemplates" :key="template.id"
+            class="flex flex-col w-80 bg-white rounded-xl mx-2 my-2  items-center">
+            <template v-if="template && template.elements && template.elements[0]">
+                <p class="pt-2">{{ template.name }}</p>
+                <template v-if="template.platform === conversation.platform">
+                    <template v-if="template.type === 'Button'">
+                        <div class="flex mx-2 my-4 px-4">
+                            <div class="bg-white  border-2 rounded-lg w-full">
+                                <div class="flex items-center justify-center w-72 h-40 bg-blue-700 rounded-t-lg">
+                                    <img :src="template.elements[0].picture" alt=""
+                                        class="object-cover h-full w-full overflow-hidden" v-if="template.elements[0].picture">
+                                    <p class="text-white" v-else> error cannot load image</p>
+                                </div>
+                                <div class="border-b-2 flex flex-col w-72 items-start px-3">
+                                    <h1 class="break-all  py-2 max-h-20  font-semibold text-ellipsis"
+                                        v-if="template.elements[0].title">
+                                        {{ template.elements[0].title }}
+                                    </h1>
+                                    
+                                    <p class="break-all  pb-4 max-h-32 text-ellipsis overflow-hidden"
+                                        v-if="template.elements[0].message">
+                                        {{ template.elements[0].message }}
+                                    </p>
+                                </div>
+                                <div v-for="( button, index )  in template.elements[0].buttons" :key="button.id"
+                                    class="flex flex-col">
+                                    <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">{{ button.title
+                                    }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="template.type === 'TextImage'">
+                        <div class="flex mx-2 my-4 px-4">
+                            <div class="bg-white  border-2 rounded-lg">
+                                <div class="flex items-center justify-center w-56 h-44 bg-blue-700 rounded-t-lg">
+                                    <img :src="template.elements[0].picture" alt=""
+                                        class="object-cover h-full w-full rounded-t-lg overflow-hidden">
+                                </div>
+                                <div class="border-b-2 flex flex-col items-start w-56">
+                                    <h1 class="break-all px-3 py-2 max-h-20  font-semibold text-ellipsis">
+                                        {{ template.elements[0].title }}
+                                    </h1>
+                                    <p class="break-all px-3 pb-4 min-h-32 max-h-48 text-ellipsis overflow-hidden">
+                                        {{ template.elements[0].message }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class="flex items-center justify-between w-full">
+                        <div class="items-center">
+                            <button @click="handleSendTemplate(index, template.platform)"
+                                class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
+                                <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
+                                <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
+                            </button>
+                        </div>
+                        <!-- edit template -->
+                        <!-- <div class="flex-[1] px-1 items-center justify-center">
+                                <button @click="" class="flex">
+                                    <font-awesome-icon :icon="['fas', 'pen']" />
+                                </button>
+                            </div> -->
+                        <!-- delete template-->
+                        <div class="px-1 items-center">
+                            <button class="flex" @click="deleteTemplatebyIndex(index)">
+                                <font-awesome-icon :icon="['fas', 'trash-can']" />
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
-                    <button @click="handleSendTemplate(index, template.platform)"
-                        class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
-                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
-                        <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
-                    </button>
-                </div>
-
-                <!-- edit template -->
-                <!-- <div class="flex-[1] px-1 items-center justify-center">
-                        <button @click="" class="flex">
-                            <font-awesome-icon :icon="['fas', 'pen']" />
-                        </button>
-                    </div> -->
-
-                <!-- delete template-->
-                <div class="flex-[1] px-1 items-center justify-center">
-                    <button class="flex" @click="deleteTemplatebyIndex(index)">
-                        <font-awesome-icon :icon="['fas', 'trash-can']" />
-                    </button>
-                </div>
-
+                </template>
+            </template>
+            <template v-else>
+                <!-- Handle the case when template or its elements are undefined -->
+                <p>Template data is not available or has an incorrect format.</p>
             </template>
         </div>
-
     </div>
 </template>
 
@@ -121,7 +134,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
         // Perform the template deletion
         isDelete.value = false
         const botioLivechat = new BotioLivechat(conversation.shopID)
-        await botioLivechat.deleteTemplate(templateID)
+        //await botioLivechat.deleteTemplate()
 
         // remove in template virtualization
         templateList.value.splice(index, 1)
