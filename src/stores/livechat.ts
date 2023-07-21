@@ -20,6 +20,7 @@ if (websocket_api_id === undefined) {
 }
 
 
+
 export const useLivechatStore = defineStore("livechat", () => {
 
   function _onmessageCallbacks(event: MessageEvent<any>) {
