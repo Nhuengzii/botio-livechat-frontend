@@ -84,11 +84,9 @@
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
 import { type Template, type Buttons, useModalStore } from '@/stores/modal';
 //import { TemplateButton } from '@/components/ModalTemplateChats/TemplateType/TemplateButton.vue'
-import TemplateButton from "@/components/ModalTemplateChats/TemplateType/TemplateButton.vue"
-import TemplateTextImage from '@/components/ModalTemplateChats/TemplateType/TemplateTextImage.vue'
+
 
 import Swal from 'sweetalert2';
 
@@ -169,7 +167,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
-    const clickedTemplate = templateList.value[index]
+    const clickedTemplate =  modalStore.getTemplates[index]
     //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
