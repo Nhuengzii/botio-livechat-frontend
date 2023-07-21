@@ -51,7 +51,7 @@ type Template = {
         message: string;
         picture: string;
         buttons: Buttons[];
-    };
+    }[];
 };
 
 export const useModalStore = defineStore("modal", {
@@ -78,41 +78,47 @@ export const useModalStore = defineStore("modal", {
         isFetchingTemplate: false,
     }),
     getters: {
-        convertTemplates: (state) => {
+        getTemplates: (state) => {
             const convertTemplates: Template[] = [];
             const templates = state.templateListRaw;
-            //console.log(templates)
             templates.forEach((template) => {
                 const parsedPayload = JSON.parse(template.payload);
-                console.log(state.platform)
+                console.log(state.platform);
                 if (parsedPayload.platform === state.platform) {
-                    //state.listTemplateId.push(template.id);
-
                     const templateData: Template = {
                         id: template.templateID,
                         type: parsedPayload.type,
                         platform: parsedPayload.platform,
                         name: parsedPayload.name,
-                        elements: parsedPayload.elements.map((element: any) => {
-                            return {
-                                title: element.title,
-                                message: element.message,
-                                picture: element.picture,
-                                buttons: element.buttons.map((button: any) => {
-                                    return {
-                                        id: button.id,
-                                        title: button.title,
-                                        url: button.url,
-                                        isSave: button.isSave,
-                                    };
-                                }),
-                            };
-                        }),
+                        elements: [],
                     };
+
+                    if (Array.isArray(parsedPayload.elements)) {
+                        templateData.elements = parsedPayload.elements.map(
+                            (element: any) => {
+                                return {
+                                    title: element.title,
+                                    message: element.message,
+                                    picture: element.picture,
+                                    buttons: Array.isArray(element.buttons)
+                                        ? element.buttons.map((button: any) => {
+                                            return {
+                                                id: button.id,
+                                                title: button.title,
+                                                url: button.url,
+                                                isSave: button.isSave,
+                                            };
+                                        })
+                                        : [],
+                                };
+                            }
+                        );
+                    }
+
                     convertTemplates.push(templateData);
                 }
             });
-            console.log(convertTemplates)
+            console.log(convertTemplates);
             return convertTemplates;
         },
     },
@@ -121,13 +127,12 @@ export const useModalStore = defineStore("modal", {
         // fetch templates in shopconfig
         async fetchDataTemplates() {
             try {
-
                 const shopStore = useShopStore();
                 const botioLivechat = new BotioLivechat(shopStore.shop_id);
                 const templateRaw = await botioLivechat.listTemplates();
-                this.templateListRaw.splice(0, this.templateListRaw.length)
-                this.templateListRaw.push(...templateRaw)
-                console.log(templateRaw)
+                this.templateListRaw.splice(0, this.templateListRaw.length);
+                this.templateListRaw.push(...templateRaw);
+                console.log(templateRaw);
                 //return templatesRaw;
             } catch (error) {
                 console.log("error in fetchDataTemplate");
@@ -135,27 +140,6 @@ export const useModalStore = defineStore("modal", {
                 throw error; // Rethrow the error to propagate it to the caller
             }
         },
-
-        // async loadTemplate() {
-        //     this.templateList = [];
-        //     this.listTemplateId = [];
-        //     if (this.isFetchingTemplate) {
-        //         Swal.fire({
-        //             title: "Loading Template",
-        //             allowOutsideClick: false,
-        //             showConfirmButton: false,
-        //             willOpen: () => {
-        //                 Swal.showLoading();
-        //             },
-        //         });
-        //     }
-        //     const fetchedTemplates = await this.fetchDataTemplates();
-        //     this.templateList.push(...fetchedTemplates);
-        //     if (this.platform === "facebook") {
-        //     } else if (this.platform === "line") {
-        //     } else if (this.platform === "instagram") {
-        //     }
-        // },
 
         // what select template ? button or TextImage
         selectTemplate(template: string) {
