@@ -288,7 +288,7 @@ class BotioLivechat implements IBotioLivechat {
   async searchMessageByText(conversation: Conversation, text: string) {
     const { conversationID, pageID, platform } = conversation
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`
-    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ with_message: text }) } })
+    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ withMessage: text }) } })
     return res.data.messages
   }
 
