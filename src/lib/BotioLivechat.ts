@@ -3,7 +3,7 @@ import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
 import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
-import type { ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
+import type { SendMessageResponse, ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -211,7 +211,7 @@ class BotioLivechat implements IBotioLivechat {
 
   async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
-    const imageUrl = await this.uploadImage(imageFile);
+    const imageUrl = await this.uploadImage(imageFile, true);
     const body: { attachment: { type: string, payload: { src: string } } } = {
       attachment: {
         type: "image",
@@ -221,14 +221,15 @@ class BotioLivechat implements IBotioLivechat {
       }
     }
     try {
-      const response = await axios.post(url, body);
+      const response = await axios.post<SendMessageResponse>(url, body);
+      const { data } = response
       const message: Message = {
         shopID: this.shopID,
         pageID: pageID,
         platform: platform,
         conversationID: conversationID,
-        messageID: response.data.message_id,
-        timestamp: response.data.timestamp ?? Date.now(),
+        messageID: data.messageID,
+        timestamp: data.timestamp ?? Date.now(),
         message: "",
         source: {
           userID: psid,
@@ -276,9 +277,9 @@ class BotioLivechat implements IBotioLivechat {
     return res.data.conversations
   }
 
-  async uploadImage(imageFile: File) {
+  async uploadImage(imageFile: File, temporary: boolean = false) {
     const url: string = `${this.botioRestApiUrl}/upload_url`
-    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: false } })
+    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: temporary } })
     const presignedURL = res.data.presignedURL
     const uploadRes = await axios.put(presignedURL, imageFile, { headers: { 'Content-Type': imageFile.type } })
     const imageUrl = presignedURL.split("?")[0]

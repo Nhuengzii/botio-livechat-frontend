@@ -25,7 +25,7 @@ interface IBotioLivechat {
   connect: (onmessageCallback: (event: MessageEvent<any>) => void) => void
   markAsRead: (platform: string, pageID: string, conversationID: string) => Promise<void>
   getShopInformation: (shopID: string) => Promise<ShopInformation>
-  uploadImage: (imageFile: File) => Promise<string>
+  uploadImage: (imageFile: File, temporary: boolean) => Promise<string>
 }
 
 export default IBotioLivechat;
