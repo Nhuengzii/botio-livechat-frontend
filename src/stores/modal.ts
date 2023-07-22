@@ -124,10 +124,6 @@ export const useModalStore = defineStore("modal", {
                 return convertTemplates;
             } catch (error) {
                 console.error("Error in convertTemplates getter:", error);
-                
-
-                
-                
                 return [];
             }
         },
