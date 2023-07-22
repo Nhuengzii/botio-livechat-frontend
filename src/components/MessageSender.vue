@@ -221,7 +221,7 @@ const sendMessage = async () => {
   if (images.value.length > 0) {
     let a = currentChat.value?.conversation
     for (let i = 0; i < images.value.length; i++) {
-      await messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file).then()
       console.log('sended')
     }
     images.value = []
