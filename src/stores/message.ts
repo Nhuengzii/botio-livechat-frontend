@@ -3,6 +3,7 @@ import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 import { defineStore } from "pinia";
+import { useShopStore } from "./shop";
 import { useUIStore } from "./UI";
 type Chat = { conversation: Conversation, messages: Message[], isFetching: boolean };
 
@@ -20,11 +21,14 @@ export const useMessageStore = defineStore("message", {
       if (this.currentChat?.isFetching && this.currentChat.conversation.conversationID === conversation.conversationID) {
         return
       }
+      const shopStore = useShopStore()
       this.currentChat = { conversation, messages: [], isFetching: true };
       const { shopID, pageID, platform, conversationID } = conversation
       const botioLivechat = new BotioLivechat(shopID);
       const messages = await botioLivechat.listMessage(platform, pageID, conversationID, 0, 30)
-      botioLivechat.markAsRead(platform, pageID, conversationID)
+      botioLivechat.markAsRead(platform, pageID, conversationID).then(() => {
+        shopStore.fetchPlatformInformation()
+      })
       this.currentChat.messages = messages
       this.currentChat.isFetching = false
     },
