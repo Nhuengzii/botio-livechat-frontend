@@ -3,7 +3,8 @@ import { defineStore, type Store } from "pinia";
 import { useConversationStore, type ConversationStore } from "./conversation";
 
 interface IWebsocketStore {
-  socket: WebSocket | null;
+  socket: WebSocket | null,
+  available: boolean
 }
 
 const websocket_api_id = import.meta.env.VITE_BOTIO_WEBSOCKET_API_ID;
@@ -12,10 +13,13 @@ if (websocket_api_id === undefined) {
 }
 export const useWebsocketStore = defineStore("websocket", {
   state: (): IWebsocketStore => ({
-    socket: null
+    socket: null,
+    available: true
   }),
   actions: {
     connect(shopID: string) {
+      if (!this.available) return;
+      this.available = false;
       const url = `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev?shopID=${shopID}`
       const socket = new WebSocket(url);
       const conversationStore = useConversationStore()
@@ -24,6 +28,7 @@ export const useWebsocketStore = defineStore("websocket", {
       }
 
       socket.onopen = () => {
+        this.available = true;
         console.log("websocket connected")
       }
       socket.onclose = () => {
