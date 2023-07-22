@@ -153,7 +153,7 @@
 
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
-                <div v-if="messageStore.currentChat" class="col-start-1 col-end-8 max-w-full">
+                <div v-if="messageStore.currentChat" class="col-start-1 col-end-8 max-w-full" :id="message.messageID">
                   <MessageBlock :message="message" :conversation="messageStore.currentChat.conversation"
                     :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
@@ -161,7 +161,7 @@
 
               <!-- Render the message content from admin -->
               <template v-else>
-                <div v-if="messageStore.currentChat" class="col-start-6 col-end-13">
+                <div v-if="messageStore.currentChat" class="col-start-6 col-end-13" :id="message.messageID">
                   <MessageBlock :message="message" :conversation="messageStore.currentChat.conversation"
                     :is-show-profile="false" />
                 </div>
@@ -228,7 +228,7 @@ async function loadmore($state: any) {
   const el = document.getElementById(lastMid);
   if (el) {
     nextTick(() => {
-      el.scrollIntoView({ behavior: "auto" });
+      el.scrollIntoView({});
     });
   };
   if (olderMessage?.length === 0) {
@@ -305,7 +305,9 @@ watch(tabKey, (newTab, oldTab) => {
     console.warn(`conversation ${newTab} not found`)
     return;
   }
-  messageStore.openChat(conversation);
+  messageStore.openChat(conversation).then(() => {
+    scrollToLastMessage()
+  });
 })
 
 
@@ -404,17 +406,6 @@ const scrollToLastMessage = () => {
     });
   });
 };
-
-
-
-onMounted(() => {
-  scrollToLastMessage();
-})
-
-
-onUpdated(() => {
-  scrollToLastMessage();
-})
 
 watch([query], ([newQuery], [prevQuery]) => {
   //TODO
