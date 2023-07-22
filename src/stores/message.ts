@@ -51,9 +51,14 @@ export const useMessageStore = defineStore("message", {
       }
     },
     addMessage(message: Message) {
-      if (this.currentChat?.conversation.conversationID === message.conversationID) {
-        this.currentChat.messages.push(message);
+      if (this.currentChat?.conversation.conversationID !== message.conversationID) {
+        return;
       }
+      const exitst = this.currentChat?.messages.find((m) => m.messageID === message.messageID);
+      if (exitst) {
+        return;
+      }
+      this.currentChat.messages.push(message)
     },
     async sendTextMessage(conversation: Conversation, text: string) {
       const botioLivechat = new BotioLivechat(conversation.shopID)

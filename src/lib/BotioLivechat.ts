@@ -192,7 +192,7 @@ class BotioLivechat implements IBotioLivechat {
         pageID: pageID,
         platform: platform,
         conversationID: conversationID,
-        messageID: response.data.message_id,
+        messageID: response.data.messageID,
         timestamp: response.data.timestamp ?? Date.now(),
         message: text,
         source: {
