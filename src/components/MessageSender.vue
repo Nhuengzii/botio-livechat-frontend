@@ -144,6 +144,7 @@ import { useMessageStore } from '@/stores/message'
 import BotioLivechat from '@/lib/BotioLivechat'
 import { useShopStore } from '@/stores/shop'
 import Swal from 'sweetalert2'
+import { icon } from '@fortawesome/fontawesome-svg-core'
 
 
 // click icon "chat-dot" to open createTemplate
@@ -221,7 +222,16 @@ const sendMessage = async () => {
   if (images.value.length > 0) {
     let a = currentChat.value?.conversation
     for (let i = 0; i < images.value.length; i++) {
-      await messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file)
+      .then()
+      .catch((err)=>{
+        Swal.fire({
+          icon:'error',
+          title:'เกิดข้อผิดพลาดระหว่างการส่ง',
+          text:'ไม่สามรถส่งรูปภาพได้'
+        })
+        
+      })
       console.log('sended')
     }
     images.value = []
