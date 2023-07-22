@@ -1,12 +1,12 @@
 <template>
   <div :class="{
-    'flex flex-row-reverse py-1' : message.source.userType === 'admin',
+    'flex flex-row-reverse py-1': message.source.userType === 'admin',
     'flex flex-row': message.source.userType !== 'admin',
-    'py-0.5' : !isShowProfile,
-    'pt-6' : isShowProfile
+    'py-0.5': !isShowProfile,
+    'pt-6': isShowProfile
   }" class="items-start">
     <ImageProfileConversation :conversation="conversation" v-if="message.source.userType === 'user' && isShowProfile" />
-    <NotshowImageProfile v-if="message.source.userType === 'user' && !isShowProfile"/>
+    <NotshowImageProfile v-if="message.source.userType === 'user' && !isShowProfile" />
     <AudioMessage :message="message" v-if="messageType === 'AudioMessage'" />
     <DeletedMessage :message="message" v-else-if="messageType === 'DeletedMessage'" />
     <FacebookTemplateButton :message="message" v-else-if="messageType === 'FacebookTemplateButton'" />
@@ -18,10 +18,11 @@
     <LineTemplateConfirm :message="message" v-else-if="messageType === 'LineTemplatConfirm'" />
     <LineTemplateCarousel :message="message" v-else-if="messageType === 'LineTemplateCarousel'" />
     <LineTemplateImageCarousel :message="message" v-else-if="messageType === 'LineTemplateImageCarousel'" />
-    <NormalText :message="message"  v-else-if="messageType === 'NormalText'" />
+    <NormalText :message="message" v-else-if="messageType === 'NormalText'" />
     <VideoMessage :message="message" v-else-if="messageType === 'VideoMessage'" />
     <UnsupportMessage :message="message" v-else />
-    <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2] self-end">{{ formatTimestamp(message.timestamp) }}</div>
+    <div v-if="message.source.userType === 'user'" class="ml-3 text-sm text-[#B2B2B2] self-end">{{
+      formatTimestamp(message.timestamp) }}</div>
     <div v-else class="mr-3 align-bottom text-sm text-[#B2B2B2] self-end">{{ formatTimestamp(message.timestamp) }}</div>
   </div>
 </template>
@@ -70,21 +71,21 @@ if (message.message.length > 0 && message.attachments.length == 0) {
   messageType.value = 'AudioMessage'
 } else if (message.attachments[0].attachmentType == 'video') {
   messageType.value = 'VideoMessage'
-} else if (message.attachments[0].attachmentType == 'facebook-template-generic') {
+} else if (message.attachments[0].attachmentType == 'facebookTemplateGeneric') {
   messageType.value = 'FacebookTemplateGeneric'
-} else if (message.attachments[0].attachmentType == 'line-template-buttons') {
+} else if (message.attachments[0].attachmentType == 'lineTemplateButtons') {
   messageType.value = 'LineTemplatButtons'
-} else if (message.attachments[0].attachmentType == 'line-template-image-carousel') {
+} else if (message.attachments[0].attachmentType == 'lineTemplateImageCarousel') {
   messageType.value = 'LineTemplateImageCarousel'
-} else if (message.attachments[0].attachmentType == 'line-template-confirm') {
+} else if (message.attachments[0].attachmentType == 'lineTemplateConfirm') {
   messageType.value = 'LineTemplatConfirm'
-} else if (message.attachments[0].attachmentType == 'line-template-carousel') {
+} else if (message.attachments[0].attachmentType == 'lineTemplateCarousel') {
   messageType.value = 'LineTemplateCarousel'
-} else if (message.attachments[0].attachmentType == 'instagram-template-generic') {
+} else if (message.attachments[0].attachmentType == 'instagramTemplateGeneric') {
   messageType.value = 'InstagramTemplateGeneric'
-} else if (message.attachments[0].attachmentType == 'instagram-template-product') {
+} else if (message.attachments[0].attachmentType == 'instagramTemplateProduct') {
   messageType.value = 'InstagramTemplateProduct'
-} else if (message.attachments[0].attachmentType == 'facebook-template-button') {
+} else if (message.attachments[0].attachmentType == 'facebookTemplateButton') {
   messageType.value = 'FacebookTemplateButton'
 } else if (message.attachments[0].attachmentType) {
   messageType.value = 'Unsupport'

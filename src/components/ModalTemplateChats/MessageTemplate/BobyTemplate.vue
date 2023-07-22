@@ -1,5 +1,4 @@
 <template>
-    
     <div class="flex flex-wrap">
         <div v-for="template, index in modalStore.getTemplates" :key="template.id"
             class="flex flex-col w-80 bg-white rounded-xl mx-2 my-2  items-center">
@@ -11,7 +10,8 @@
                             <div class="bg-white  border-2 rounded-lg w-full">
                                 <div class="flex items-center justify-center w-72 h-40 bg-blue-700 rounded-t-lg">
                                     <img :src="template.elements[0].picture" alt=""
-                                        class="object-cover h-full w-full overflow-hidden" v-if="template.elements[0].picture">
+                                        class="object-cover h-full w-full overflow-hidden"
+                                        v-if="template.elements[0].picture">
                                     <p class="text-white" v-else> error cannot load image</p>
                                 </div>
                                 <div class="border-b-2 flex flex-col w-72 items-start px-3">
@@ -19,7 +19,7 @@
                                         v-if="template.elements[0].title">
                                         {{ template.elements[0].title }}
                                     </h1>
-                                    
+
                                     <p class="break-all  pb-4 max-h-32 text-ellipsis overflow-hidden"
                                         v-if="template.elements[0].message">
                                         {{ template.elements[0].message }}
@@ -167,15 +167,15 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
-    const clickedTemplate =  modalStore.getTemplates[index]
+    const clickedTemplate = modalStore.getTemplates[index]
     //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
 
     if (platform === 'facebook') {
         try {
-            const attachmentFacebook = {
-                type: 'facebook-template-generic',
+            const attachmentFacebook: AttachmentForSending = {
+                type: 'facebookTemplateGeneric',
                 payload: {
-                    fb_template_generic: clickedTemplate.elements.map((element) => ({
+                    facebookTemplateGeneric: clickedTemplate.elements.map((element) => ({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
@@ -195,9 +195,9 @@ const handleSendTemplate = async (index: number, platform: string) => {
         if (clickedTemplate.type === 'Button') {
             try {
                 const attachmentLineButton: AttachmentForSending = {
-                    type: 'line-template-buttons',
+                    type: 'lineTemplateButtons',
                     payload: {
-                        line_template_buttons:
+                        lineTemplateButtons:
                         {
                             altText: clickedTemplate.elements[0].title,
                             thumbnailImageUrl: clickedTemplate.elements[0].picture,
@@ -215,6 +215,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                         }
                     },
                 }
+                console.log(JSON.stringify(attachmentLineButton, null, 2))
                 messageStore.sendAttachmentMessage(conversation, attachmentLineButton)
 
             } catch (error) {
@@ -226,9 +227,9 @@ const handleSendTemplate = async (index: number, platform: string) => {
     } else if (platform == 'instagram') {
         try {
             const attachmentInstagram: AttachmentForSending = {
-                type: 'instagram-template-generic',
+                type: 'instagramTemplateGeneric',
                 payload: {
-                    ig_template_generic: clickedTemplate.elements.map((element) => ({
+                    instagramTemplateGeneric: clickedTemplate.elements.map((element) => ({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
