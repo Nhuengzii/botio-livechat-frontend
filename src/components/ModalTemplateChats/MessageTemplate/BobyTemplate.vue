@@ -131,7 +131,7 @@ const modalStoreRef = storeToRefs(modalStore)
 
 const handleDeletetemplate = async (id: string) => {
     Swal.fire({
-        title: 'กำลังโหลดข้อมูลเทมเพลต',
+        title: `กำลังลบเทมเพลต`,
         html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
         allowOutsideClick: false,
         showConfirmButton: false,
