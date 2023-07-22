@@ -130,7 +130,7 @@ export const useModalStore = defineStore("modal", {
     },
 
     actions: {
-        // fetch templates in shopconfig
+        // fetch new templates if has add or delete template
         async updatedDataTemplate() {
             try {
                 const shopStore = useShopStore();
