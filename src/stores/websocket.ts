@@ -18,6 +18,7 @@ export const useWebsocketStore = defineStore("websocket", {
   }),
   actions: {
     connect(shopID: string) {
+      if (shopID === "-1") return;
       if (!this.available) return;
       this.available = false;
       const url = `wss://${websocket_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev?shopID=${shopID}`
