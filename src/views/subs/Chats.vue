@@ -118,11 +118,11 @@
           <template v-if="messageStore.currentChat !== undefined">
             <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
               :identifier="messageStore.currentChat?.conversation.conversationID">
-
+              
               <!-- show animation fetch old message-->
               <template #spinner>
                 <div class="flex justify-center pt-5 pb-3">
-                  <span class="loader"></span>
+                  <span v-if="messageStore.currentChat?.messages.length > 10" class="loader"></span>
                 </div>
               </template>
 

@@ -8,6 +8,7 @@ import type { Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 import { messageToActivity } from "@/lib/utils";
 import { useUIStore } from "./UI";
+import { useMessageStore } from "./message";
 type ConversationMap = Map<string, Conversation>;
 
 interface IConversationStore {
@@ -51,6 +52,7 @@ export const useConversationStore = defineStore("conversation", {
     },
     async addReceivedMessage(message: Message) {
       const shopStore = useShopStore();
+      const messageStore = useMessageStore();
       const uiStore = useUIStore();
       if (message.source.userType === "user" && !uiStore.is_window_focus) {
         window.document.title = "ได้รับข้อความใหม่"
@@ -81,7 +83,7 @@ export const useConversationStore = defineStore("conversation", {
       }).catch((err) => {
         console.error("error when fetching platform information", err)
       })
-      if (message.source.userType === "user") {
+      if (message.source.userType === "user" && messageStore.currentChat?.conversation.conversationID !== message.conversationID ) {
         conversation.unread = conversation.unread + 1;
       }
       conversation.lastActivity = messageToActivity(message)

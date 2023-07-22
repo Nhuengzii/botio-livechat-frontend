@@ -69,13 +69,13 @@ async function loadmore($state: {
 
 watch(route, async () => {
   isLoading.value = true;
-  await conversationStore.fetchConversations(route.query.platform as string, 0, 5)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 10)
   isLoading.value = false;
 });
 
 onMounted(async () => {
   isLoading.value = true;
-  await conversationStore.fetchConversations(route.query.platform as string, 0, 5)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 10)
   isLoading.value = false;
 });
 
