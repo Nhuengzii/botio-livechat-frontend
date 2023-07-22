@@ -9,7 +9,7 @@
                             <div class="flex items-center">
                                 <div class="flex items-center justify-center rounded-full w-[30px] h-[30px] bg-[#394867]">
                                     <font-awesome-icon :icon="['fas', 'arrow-left-long']" style="color: #ffffff;"
-                                        size="30px" />
+                                        size="xl" />
                                 </div>
                                 <p class="text-[17px] pl-2">ย้อนกลับ</p>
                             </div>
@@ -74,8 +74,8 @@ const props = defineProps<{
 const handleButtonClickBack = () => {
     uiStore.activeTemplateMessage();
     uiStore.activeCreateTemplateMessage();
+   // modalStore.fetchDataTemplates()
     modalStore.reset();
-    modalStore.fetchDataTemplates()
 
 }
 
