@@ -166,14 +166,16 @@ const handleClickActiveTemplate = async () => {
     try {
       modalStore.platform = messateStore.currentChat.conversation.platform
       await modalStore.fetchDataTemplates();
-      Swal.fire({
-        icon: 'success',
-        title: 'โหลดเทมเพลตสำเร็จ',
-        text: 'โหลดเทมเพลตสำเร็จ',
-        timer: 1000,
-        timerProgressBar: true,
-      });
+      Swal.close()
     } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่สามรถโหลดข้อมูลเทมเพลตได้',
+        timerProgressBar: true,
+        allowOutsideClick: true,
+        showConfirmButton: true,
+      });
       console.log("error in handleClickActiveTemplate");
       console.error("Error occurred while loading template:", error);
       // Handle the error gracefully, show an error message, etc.
