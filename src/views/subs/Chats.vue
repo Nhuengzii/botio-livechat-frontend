@@ -328,6 +328,7 @@ function receiveMessage(message: Message) {
     const [platform, conversationID] = tab.key.split("-");
     if (conversationID === message.conversationID) {
       messageStore.addMessage(message)
+      scrollToLastMessage()
     }
   }
 }
