@@ -76,6 +76,9 @@ export const useConversationStore = defineStore("conversation", {
       }).catch((err) => {
         console.error("error when fetching platform information", err)
       })
+      if (message.source.userType === "user") {
+        conversation.unread = conversation.unread + 1;
+      }
       conversation.lastActivity = messageToActivity(message)
       this.conversationsRaw.set(conversationID, conversation)
       this.receiveMessageEventBus.emit(message)
