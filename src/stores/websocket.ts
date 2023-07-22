@@ -34,6 +34,7 @@ export const useWebsocketStore = defineStore("websocket", {
       }
       socket.onclose = () => {
         console.log("websocket disconnected")
+        this.connect(shopID)
       }
     },
     disconnect() {
