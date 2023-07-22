@@ -51,7 +51,7 @@
                   <BodyEditMessage />
                 </template>
                 <template v-else-if="uiStore.is_activeTemplateMessage">
-                  <BodyTemplate :conversation="converstion" :is-fetch-template="isFetchTemplate" />
+                  <BodyTemplate :conversation="converstion"/>
                 </template>
               </template>
               <!--END BODY-->
@@ -127,6 +127,7 @@ const { platform, converstion } = defineProps<{
 
 
 const modalStore = useModalStore()
+const modalStoreRef = storeToRefs(modalStore)
 const uiStore = useUIStore()
 const newMessage = ref('');
 const showSendMessageButton = ref(false);
@@ -136,8 +137,10 @@ const { currentChat } = storeToRefs(messateStore)
 let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
-const isFetchTemplate = ref(false)
+const doFetchTemplate = ref(false)
 const countClick = ref(0);
+const lastPlatform = ref("");
+const firstClick = ref(false);
 
 
 import { useMessageStore } from '@/stores/message'
@@ -145,19 +148,34 @@ import BotioLivechat from '@/lib/BotioLivechat'
 import { useShopStore } from '@/stores/shop'
 import Swal from 'sweetalert2'
 import { icon } from '@fortawesome/fontawesome-svg-core'
+import { faL } from '@fortawesome/free-solid-svg-icons'
 
 
 // click icon "chat-dot" to open createTemplate
 const handleClickActiveTemplate = async () => {
-  countClick.value++;
+  console.log(modalStoreRef.platform.value)
   uiStore.activeTemplateMessage();
-  if (countClick.value === 1) {
+  if (lastPlatform.value === ""){
+    firstClick.value = true
+    lastPlatform.value = modalStoreRef.platform.value
+  } else {
+    firstClick.value = false
+  }
+
+  if (modalStoreRef.platform.value !== lastPlatform.value){
+    doFetchTemplate.value = true
+  } else {
+    doFetchTemplate.value = false
+  }
+
+  
+  if (firstClick && doFetchTemplate ) {
     if (messateStore.currentChat === undefined) {
       return;
     }
     Swal.fire({
       title: 'กำลังโหลดข้อมูลเทมเพลต',
-      html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+      // html: '<div class="d-flex justify-center items-center"><img src="https://media0.giphy.com/media/TvLuZ00OIADoQ/giphy.gif?cid=ecf05e47v87h6ikks9xkj55l7ak6pv3x7ihmwoe604pruuah&ep=v1_gifs_related&rid=giphy.gif&ct=g" alt="Loading Icon" class="mr-2"/></div>',
       allowOutsideClick: false,
       showConfirmButton: false,
       willOpen: () => {
