@@ -42,7 +42,9 @@
         :class="searchMode == 'by-message' ? 'ml-[15px]' : 'ml-[100px]'"></div>
 
       <div v-for="conversation in searchResult" :key="conversation.conversationID">
-        <Thread :conversation="conversation" :show-platform="platform == 'all'" mode="searching" />
+        <Thread :conversation="conversation" :show-platform="platform == 'all'" mode="searching" @click="() => {
+          messageStore.openChatEventBus.emit(conversation)
+        }" />
       </div>
     </div>
   </template>
@@ -56,8 +58,10 @@ import type { Conversation } from '@/types/conversation';
 import { useShopStore } from '@/stores/shop';
 import type IBotioLivechat from '@/types/BotioLivechat/IBotioLivechat';
 import BotioLivechat from '@/lib/BotioLivechat';
+import { useMessageStore } from '@/stores/message';
 const uiStore = useUIStore();
 const shopStore = useShopStore();
+const messageStore = useMessageStore()
 const searchResult = ref([] as Conversation[])
 const searchMode = ref('by-name')
 const query = ref("");
