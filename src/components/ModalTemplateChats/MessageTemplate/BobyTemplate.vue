@@ -3,7 +3,7 @@
         <div v-for="template, index in modalStore.getTemplates" :key="template.id"
             class="flex flex-col w-80 bg-white rounded-xl mx-2 my-2  items-center">
             <template v-if="template && template.elements && template.elements[0]">
-                <p class="pt-2">{{ template.name }}</p>
+                <p class="text-center pt-2 text-base font-medium bg-gray-200 w-full">{{ template.name }}</p>
                 <template v-if="template.platform === conversation.platform">
                     <template v-if="template.type === 'Button'">
                         <div class="flex mx-2 my-4 px-4">
@@ -27,7 +27,7 @@
                                 </div>
                                 <div v-for="( button, index )  in template.elements[0].buttons" :key="button.id"
                                     class="flex flex-col">
-                                    <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2">{{ button.title
+                                    <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2 cursor-default">{{ button.title
                                     }}</button>
                                 </div>
                             </div>
@@ -51,8 +51,8 @@
                             </div>
                         </div>
                     </template>
-                    <div class="flex items-center justify-between w-full">
-                        <div class="items-center">
+                    <div class="flex items-center justify-center w-full">
+                        <div class="items-center justify-center">
                             <button @click="handleSendTemplate(index, template.platform)"
                                 class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
                                 <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
@@ -65,12 +65,11 @@
                                     <font-awesome-icon :icon="['fas', 'pen']" />
                                 </button>
                             </div> -->
-                        <!-- delete template-->
-                        <div class="px-1 items-center">
-                            <button class="flex" @click="deleteTemplatebyIndex(index)">
-                                <font-awesome-icon :icon="['fas', 'trash-can']" />
-                            </button>
-                        </div>
+                    </div>
+                    <div class="flex px-2 pb-4 items-center justify-end w-full">
+                        <button class="flex" @click="deleteTemplatebyIndex(index)">
+                            <font-awesome-icon :icon="['fas', 'trash-can']" />
+                        </button>
                     </div>
                 </template>
             </template>
@@ -105,12 +104,11 @@ import { ref } from 'vue';
 const uiStore = useUIStore()
 const messageStore = useMessageStore()
 const modalStore = useModalStore()
+const modalStoreRef = storeToRefs(modalStore)
 const templateList = ref<Template[]>([]);
 const isDelete = ref(false);
 
 //shopConfig.value = props.shopconfig
-
-
 
 
 
@@ -120,7 +118,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
         // Show the loading dialog
 
         Swal.fire({
-            title: 'Deleting Template',
+            title: `กำลังทำการลบเทมเพลต`,
             allowOutsideClick: false,
             showConfirmButton: false,
             willOpen: () => {
@@ -132,7 +130,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
         // Perform the template deletion
         isDelete.value = false
         const botioLivechat = new BotioLivechat(conversation.shopID)
-        //await botioLivechat.deleteTemplate()
+        await botioLivechat.deleteTemplate(modalStore.getTemplates[index].id)
 
         // remove in template virtualization
         templateList.value.splice(index, 1)
@@ -149,8 +147,9 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Template Deleted',
-                text: 'The template has been successfully deleted.',
+                title: 'เทมเพลตถูกลบแล้ว',
+                text: 'ทำการลบเทมเพลตสำเร็จ',
+                timer: 1000
             });
         }
     } catch (error) {
