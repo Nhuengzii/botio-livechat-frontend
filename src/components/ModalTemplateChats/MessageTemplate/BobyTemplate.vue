@@ -6,17 +6,17 @@
             <template v-if="template && template.elements && template.elements[0]">
                 <template v-if="template.platform === conversation.platform">
                     <template v-if="template.type === 'Button'">
-                        <div class="my-4 px-4 bg-gray-200 w-full">
+                        <div class="my-4 px-4 bg-gray-200">
                             <p class="justify-self-start text-center p-2 text-base font-medium bg-gray-200 w-full">{{
                                 template.name }}</p>
-                            <div class="bg-white border-2 rounded-lg w-full">
-                                <div class="flex items-center justify-center w-72 h-40 bg-blue-700 rounded-t-lg">
+                            <div class="bg-white border-2 rounded-lg">
+                                <div class="flex items-center justify-centerw-56 h-44 bg-blue-700 rounded-t-lg">
                                     <img :src="template.elements[0].picture" alt=""
-                                        class="object-cover h-full w-full overflow-hidden"
+                                        class="object-cover w-56 h-44 overflow-hidden"
                                         v-if="template.elements[0].picture">
                                     <p class="text-white" v-else> error cannot load image</p>
                                 </div>
-                                <div class="border-b-2 flex flex-col w-72 items-start px-3">
+                                <div class="border-b-2 flex flex-col w-56 items-start px-3">
                                     <h1 class="break-all  py-2 max-h-20  font-semibold text-ellipsis"
                                         v-if="template.elements[0].title">
                                         {{ template.elements[0].title }}
