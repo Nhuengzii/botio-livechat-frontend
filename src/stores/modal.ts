@@ -156,7 +156,7 @@ export const useModalStore = defineStore("modal", {
                 Swal.fire({
                     icon: 'success',
                     title: 'โหลดเทมเพลตสำเร็จ',
-                    text: 'Templates have been fetched successfully!',
+                    text: 'โหลดเทมเพลตสำเร็จ',
                     timer: 1000,
                     timerProgressBar: true,
                 });
@@ -244,6 +244,4 @@ export const useModalStore = defineStore("modal", {
 });
 
 export type { Template, Buttons };
-function fetchDataTemplate() {
-    throw new Error("Function not implemented.");
-}
+
