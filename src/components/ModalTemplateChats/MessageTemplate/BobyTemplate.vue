@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-wrap">
-        <div v-for="template, index in  modalStore.getTemplates" :key="template.id"
+        <div v-for="template, index in  modalStoreRef.getTemplates.value" :key="template.id"
             class="flex flex-col w-72 rounded-xl mx-2 my-2  items-center justify-items-center">
 
             <template v-if="template && template.elements && template.elements[0]">
@@ -50,7 +50,7 @@
                             </div> -->
                             </div>
                             <div class="flex px-2 pb-4 items-center justify-end w-full">
-                                <button class="flex" @click="deleteTemplatebyIndex(index)">
+                                <button class="flex" @click="handleDeletetemplate(template.id)">
                                     <font-awesome-icon :icon="['fas', 'trash-can']" />
                                 </button>
                             </div>
@@ -90,7 +90,7 @@
                             </div> -->
                             </div>
                             <div class="flex px-2 pb-4 items-center justify-end w-full">
-                                <button class="flex" @click="deleteTemplatebyIndex(index)">
+                                <button class="flex" @click="handleDeletetemplate(template.id)">
                                     <font-awesome-icon :icon="['fas', 'trash-can']" />
                                 </button>
                             </div>
@@ -104,7 +104,7 @@
                 <!-- Handle the case when template or its elements are undefined -->
                 <p>Template data is not available or has an incorrect format.</p>
                 <div class="flex px-2 pb-4 items-center justify-end w-full">
-                    <button class="flex" @click="deleteTemplatebyIndex(index)">
+                    <button class="flex" @click="">
                         <font-awesome-icon :icon="['fas', 'trash-can']" />
                     </button>
                 </div>
@@ -118,80 +118,53 @@ import type { Conversation } from '@/types/conversation';
 import { useModalStore } from '@/stores/modal';
 import Swal from 'sweetalert2';
 
-const { conversation, isFetchTemplate } = defineProps<{
+const { conversation } = defineProps<{
     conversation: Conversation
-    isFetchTemplate: boolean
 }>()
 
 import type { AttachmentForSending, } from '@/types/message'
-import BotioLivechat from '@/lib/BotioLivechat';
 import { useMessageStore } from '@/stores/message';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue';
 const messageStore = useMessageStore()
 const modalStore = useModalStore()
 const modalStoreRef = storeToRefs(modalStore)
-const isDelete = ref(false);
 
-//shopConfig.value = props.shopconfig
-
-
-
-
-
-const deleteTemplatebyIndex = async (index: number) => {
-    try {
-        Swal.fire({
-            title: `กำลังทำการลบเทมเพลต`,
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            },
-        });
-
-
-        // Perform the template deletion
-        isDelete.value = false
-        const botioLivechat = new BotioLivechat(conversation.shopID)
-        await botioLivechat.deleteTemplate(modalStore.getTemplates[index].id)
-        await modalStore.updatedDataTemplate();
-
-        // remove in template virtualization
-        modalStore.getTemplates.splice(index, 1)
-        console.log(`getTtmplates: ${modalStoreRef.getTemplates.value.length}`)
-        //const idx = templateList.value.findIndex 
-        //console.log(`templateList : ${templateList}`)
-        //console.log(`templateList length : ${templateList.value.length}`)
-
-        isDelete.value = true
-
-        // Show the success message
-        if (isDelete) {
-            Swal.fire({
-                icon: 'success',
-                title: 'เทมเพลตถูกลบแล้ว',
-                text: 'ทำการลบเทมเพลตสำเร็จ',
-                timer: 1000
-            });
-        }
-    } catch (error) {
-        console.error('Error deleting template:', error);
-        // Show an error message using SweetAlert2
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to delete the template.',
-        });
-    }
+const handleDeletetemplate = async (id: string) => {
+    Swal.fire({
+        title: 'กำลังโหลดข้อมูลเทมเพลต',
+        html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    await modalStore.deleteTemplatebyID(id)
+    Swal.close();
+    Swal.fire({
+        icon: 'success',
+        title: 'ลบเทมเพลตสำเร็จ',
+        text: 'ลบเทมเพลตสำเร็จ',
+        timer: 1000,
+        timerProgressBar: true,
+    });
 }
+
+
 
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
+    Swal.fire({
+        title: 'กำลังส่งเทมเพลต',
+        html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        },
+    });
     const clickedTemplate = modalStore.getTemplates[index]
-    //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
-
     if (platform === 'facebook') {
         try {
             const attachmentFacebook: AttachmentForSending = {
@@ -237,8 +210,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                         }
                     },
                 }
-                console.log(JSON.stringify(attachmentLineButton, null, 2))
-                messageStore.sendAttachmentMessage(conversation, attachmentLineButton)
+                await messageStore.sendAttachmentMessage(conversation, attachmentLineButton)
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
@@ -262,11 +234,19 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     }))
                 },
             }
-            messageStore.sendAttachmentMessage(conversation, attachmentInstagram)
+            await messageStore.sendAttachmentMessage(conversation, attachmentInstagram)
         } catch (error) {
             console.log('Error sending attachment:', error);
         }
     }
+    Swal.close();
+    Swal.fire({
+        icon: 'success',
+        title: 'สร้างเทมเพลตสำเร็จ',
+        text: 'สร้างเทมเพลตสำเร็จ',
+        timer: 1000,
+        timerProgressBar: true,
+    });
 
 }
 
