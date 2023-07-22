@@ -30,7 +30,7 @@ export const useUIStore = defineStore('ui', {
             this.is_activeConversation = !this.is_activeConversation
         },
         activeTemplateMessage() {
-            this.is_activeTemplateMessage = !this.is_activeTemplateMessage
+            this.is_activeTemplateMessage = true
         },
         activeChagePage() {
             this.is_changePage = !this.is_changePage
