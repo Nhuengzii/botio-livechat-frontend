@@ -3,7 +3,7 @@
         <div v-for="template, index in modalStore.getTemplates" :key="template.id"
             class="flex flex-col w-80 bg-white rounded-xl mx-2 my-2  items-center">
             <template v-if="template && template.elements && template.elements[0]">
-                <p class="text-center pt-2 text-base font-medium bg-gray-200 w-full">{{ template.name }}</p>
+                <p class="items-center text-center p-2 text-base font-medium bg-gray-200 w-full">{{ template.name }}</p>
                 <template v-if="template.platform === conversation.platform">
                     <template v-if="template.type === 'Button'">
                         <div class="flex mx-2 my-4 px-4">
@@ -76,6 +76,11 @@
             <template v-else>
                 <!-- Handle the case when template or its elements are undefined -->
                 <p>Template data is not available or has an incorrect format.</p>
+                <div class="flex px-2 pb-4 items-center justify-end w-full">
+                        <button class="flex" @click="deleteTemplatebyIndex(index)">
+                            <font-awesome-icon :icon="['fas', 'trash-can']" />
+                        </button>
+                    </div>
             </template>
         </div>
     </div>
@@ -133,7 +138,7 @@ const deleteTemplatebyIndex = async (index: number): Promise<void> => {
         await botioLivechat.deleteTemplate(modalStore.getTemplates[index].id)
 
         // remove in template virtualization
-        templateList.value.splice(index, 1)
+        //templateList.value.splice(index, 1)
         //const idx = templateList.value.findIndex 
         console.log(`templateList : ${templateList}`)
         console.log(`templateList length : ${templateList.value.length}`)
