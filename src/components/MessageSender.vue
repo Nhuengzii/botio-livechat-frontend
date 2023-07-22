@@ -33,7 +33,7 @@
                   <HeaderCreateMessage :platform="platform" />
                 </template>
                 <template v-else-if="uiStore.is_editTemplateMessage"> <!-- Header Modal edit chat template-->
-                  
+
                 </template>
                 <template v-else> <!-- Header Modal chat template-->
                   <HeaderTemplate :platform="platform" />
@@ -46,9 +46,9 @@
                 <template v-if="uiStore.is_createTemplateMessage"> <!-- Body Modal create chat template-->
                   <BodyCreateMessage :conversation="converstion" />
                 </template>
-                
+
                 <template v-else-if="uiStore.is_editTemplateMessage">
-                  <BodyEditMessage/>
+                  <BodyEditMessage />
                 </template>
                 <template v-else-if="uiStore.is_activeTemplateMessage">
                   <BodyTemplate :conversation="converstion" :is-fetch-template="isFetchTemplate" />
@@ -56,7 +56,7 @@
               </template>
               <!--END BODY-->
               <template #footer>
-                <FooterModalTemplateChat :platform="platform"/>
+                <FooterModalTemplateChat :platform="platform" />
               </template>
             </ModalTemplateChat>
           </Teleport>
@@ -137,26 +137,47 @@ let typingTimeout: number | undefined = undefined;
 const isTyping = ref(false)
 const isShowEmojiPicker = ref(false)
 const isFetchTemplate = ref(false)
+const countClick = ref(0);
 
 
 import { useMessageStore } from '@/stores/message'
 import BotioLivechat from '@/lib/BotioLivechat'
 import { useShopStore } from '@/stores/shop'
+import Swal from 'sweetalert2'
 
 
 // click icon "chat-dot" to open createTemplate
 const handleClickActiveTemplate = async () => {
-  if (messateStore.currentChat === undefined){
-    return;
-  }
-  try {
-    modalStore.platform = messateStore.currentChat.conversation.platform
-    uiStore.activeTemplateMessage();
-    modalStore.fetchDataTemplates();
-  } catch (error) {
-    console.log("error in handleClickActiveTemplate");
-    console.error("Error occurred while loading template:", error);
-    // Handle the error gracefully, show an error message, etc.
+  countClick.value++;
+  uiStore.activeTemplateMessage();
+  if (countClick.value === 1) {
+    if (messateStore.currentChat === undefined) {
+      return;
+    }
+    Swal.fire({
+      title: 'กำลังโหลดข้อมูลเทมเพลต',
+      html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    try {
+      modalStore.platform = messateStore.currentChat.conversation.platform
+      await modalStore.fetchDataTemplates();
+      Swal.fire({
+        icon: 'success',
+        title: 'โหลดเทมเพลตสำเร็จ',
+        text: 'โหลดเทมเพลตสำเร็จ',
+        timer: 1000,
+        timerProgressBar: true,
+      });
+    } catch (error) {
+      console.log("error in handleClickActiveTemplate");
+      console.error("Error occurred while loading template:", error);
+      // Handle the error gracefully, show an error message, etc.
+    }
   }
 };
 
