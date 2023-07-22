@@ -69,12 +69,7 @@ const isButtonValid = computed(() => {
 })
 
 
-
-
-
-
 const canCreateTemplate = computed(() => {
-
     switch (selectedTemplate.value) {
         case 'TextImage':
             return titleUserInput.value && textUserInput.value && imagePreview.value && name.value ;
@@ -125,10 +120,13 @@ const handleButtonCreateTemplate = async () => {
                 const template_str = JSON.stringify(template);
                 const template_id = await botioLivechat.saveTemplate(template_str);
 
+                // change real id
+                template.id = template_id
+                modalStoreRef.getTemplates.value.push(template)
                 Swal.close();
 
                 if (template_id) {
-                    await modalStore.updatedDataTemplate();
+                    //await modalStore.updatedDataTemplate();
                     Swal.fire('สำเร็จ', 'สร้างเทมเพลตสำเร็จ', 'success');
                     //console.log(`template_id save : ${template_id}`);
                     modalStore.reset();
