@@ -91,7 +91,7 @@ const handleButtonCreateTemplate = async () => {
             const image_url = await botioLivechat?.uploadImage(selectedFileImage.value);
             if (image_url) {
                 Swal.fire({
-                    title: 'Saving Template',
+                    title: 'กำลังบันทึกเทมเพลต',
                     allowOutsideClick: false,
                     showConfirmButton: false,
                     willOpen: () => {
@@ -127,13 +127,13 @@ const handleButtonCreateTemplate = async () => {
 
                 if (template_id) {
                     //await modalStore.updatedDataTemplate();
-                    Swal.fire('สำเร็จ', 'สร้างเทมเพลตสำเร็จ', 'success');
                     //console.log(`template_id save : ${template_id}`);
                     modalStore.reset();
                     uiStore.finishCreateTemplate();
                     
                 } else {
                     Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามรถสร้างเทมเพลตได้', 'error');
+                    
                     //console.log('Failed to save template');
                 }
             }
