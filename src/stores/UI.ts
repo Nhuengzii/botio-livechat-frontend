@@ -15,6 +15,7 @@ export const useUIStore = defineStore('ui', {
         is_selectTemplate: false,
         is_finishCreateTemplate: false,
         showEditModal: false,
+        is_window_focus: true
 
     }),
     getters: {

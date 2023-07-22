@@ -7,6 +7,7 @@ import { useShopStore } from "./shop";
 import type { Message } from "@/types/message";
 import { useEventBus, type UseEventBusReturn } from "@vueuse/core";
 import { messageToActivity } from "@/lib/utils";
+import { useUIStore } from "./UI";
 type ConversationMap = Map<string, Conversation>;
 
 interface IConversationStore {
@@ -50,6 +51,10 @@ export const useConversationStore = defineStore("conversation", {
     },
     async addReceivedMessage(message: Message) {
       const shopStore = useShopStore();
+      const uiStore = useUIStore();
+      if (message.source.userType === "user" && !uiStore.is_window_focus) {
+        window.document.title = "ได้รับข้อความใหม่"
+      }
       const { platform, conversationID, shopID, pageID } = message;
       const botioLivechatClient: IBotioLivechat = new BotioLivechat(shopID)
       if (message.isDeleted) {
