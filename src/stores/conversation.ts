@@ -85,6 +85,7 @@ export const useConversationStore = defineStore("conversation", {
         conversation.unread = conversation.unread + 1;
       }
       conversation.lastActivity = messageToActivity(message)
+      conversation.updatedTime = message.timestamp
       this.conversationsRaw.set(conversationID, conversation)
       this.receiveMessageEventBus.emit(message)
     }
