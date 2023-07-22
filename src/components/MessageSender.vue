@@ -232,9 +232,6 @@ const sendMessage = async () => {
         })
         
       })
-
-      messateStore.sendImageMessage(currentChat.value!.conversation, images.value[i].file).then()
-
       console.log('sended')
     }
     images.value = []
