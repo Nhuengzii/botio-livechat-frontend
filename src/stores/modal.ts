@@ -119,8 +119,6 @@ export const useModalStore = defineStore("modal", {
                         convertTemplates.push(templateData);
                     }
                 });
-                //console.log(convertTemplates);
-                
                 return convertTemplates;
             } catch (error) {
                 console.error("Error in convertTemplates getter:", error);
@@ -141,65 +139,54 @@ export const useModalStore = defineStore("modal", {
                 const templateRaw = await botioLivechat.listTemplates();
                 this.templateListRaw.splice(0, this.templateListRaw.length);
                 this.templateListRaw.push(...templateRaw);
-                
+
             } catch (error) {
                 console.log("error in fetchDataTemplate");
                 console.error("Error occurred while loading template:", error);
-                Swal.close();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: 'เกิดข้อผิดพลาดขณะอัพเดตเทมเพลต โปรดลองอีกครั้ง',
-                });
                 throw error; // Rethrow the error to propagate it to the caller
+            }
+        },
+        async deleteTemplatebyID(id: string) {
+            console.log(this.templateListRaw)
+            const idx = this.templateListRaw.findIndex((template) => {
+                return template.templateID === id
+            })
+            if (idx === -1){
+                console.log("ssdsadsad")
+                return;
+            }
+            try {
+                // Perform the template deletion
+                const botioLivechat = new BotioLivechat(useShopStore().shop_id)
+                await botioLivechat.deleteTemplate(id)
+                //await modalStore.updatedDataTemplate();
+
+                // remove in template virtualization
+                this.templateListRaw.splice(idx, 1)
+                console.log(`getTtmplates: ${this.getTemplates.length}`)
+                // Show the success message
+            } catch (error) {
+                console.error('Error deleting template:', error);
+                // Show an error message using SweetAlert2
             }
         },
 
         async fetchDataTemplates() {
             try {
                 // Swal.showLoading();
-                Swal.fire({
-                    title: 'กำลังโหลดข้อมูลเทมเพลต',
-                    html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
+                
                 const shopStore = useShopStore();
                 const botioLivechat = new BotioLivechat(shopStore.shop_id);
-
                 const loadingDelay = 400; // Adjust the delay time as needed
                 await new Promise((resolve) => setTimeout(resolve, loadingDelay));
-
                 const templateRaw = await botioLivechat.listTemplates();
-                console.log(templateRaw)
-                //Swal.hideLoading();
-                Swal.close();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'โหลดเทมเพลตสำเร็จ',
-                    text: 'โหลดเทมเพลตสำเร็จ',
-                    timer: 1000,
-                    timerProgressBar: true,
-                });
-
+                
                 this.templateListRaw.splice(0, this.templateListRaw.length);
                 this.templateListRaw.push(...templateRaw);
-                //console.log(templateRaw);
-                //return templatesRaw;
+
             } catch (error) {
                 console.log("error in fetchDataTemplate");
                 console.error("Error occurred while loading template:", error);
-                Swal.close();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: 'เกิดข้อผิดพลาดขณะโหลดเทมเพลต โปรดลองอีกครั้ง',
-                });
-                throw error; // Rethrow the error to propagate it to the caller
             }
         },
         // what select template ? button or TextImage
@@ -222,7 +209,7 @@ export const useModalStore = defineStore("modal", {
             this.amountButton = 1;
         },
     },
-    
+
 });
 
 export type { Template, Buttons };
