@@ -39,11 +39,6 @@ onBeforeMount(async () => {
   }
   await shopStore.fetchShopInformation()
   await shopStore.fetchPlatformInformation()
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, 2000)
-  })
   ready.value = true
 })
 

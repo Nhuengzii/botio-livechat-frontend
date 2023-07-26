@@ -8,12 +8,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      component: () => Root
+      component: Root
     },
     {
       path: '/livechat',
       name: 'livechat',
-      component: () => Livechat,
+      component: Livechat,
     },
   ]
 })
