@@ -56,7 +56,7 @@ async function loadmore($state: {
   });
   const skip = conversationStore.conversations(route.query.platform as string).length
   isFetchingMore.value = false;
-  const olderConversation: Conversation[] = await conversationStore.fetchConversations(route.query.platform as string, skip + 1, 3)
+  const olderConversation: Conversation[] = await conversationStore.fetchConversations(route.query.platform as string, skip + 1, 20)
   console.log(olderConversation)
   $state.loaded()
   if (olderConversation.length === 0) {
@@ -69,13 +69,13 @@ async function loadmore($state: {
 
 watch(route, async () => {
   isLoading.value = true;
-  await conversationStore.fetchConversations(route.query.platform as string, 0, 10)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 20)
   isLoading.value = false;
 });
 
 onMounted(async () => {
   isLoading.value = true;
-  await conversationStore.fetchConversations(route.query.platform as string, 0, 10)
+  await conversationStore.fetchConversations(route.query.platform as string, 0, 20)
   isLoading.value = false;
 });
 
