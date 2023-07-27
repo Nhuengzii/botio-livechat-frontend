@@ -1,11 +1,9 @@
-import type { useLivechatStore } from "@/stores/livechat";
-import type IBotioLivechat from "@/types/IBotioLivechat";
+import type IBotioLivechat from "@/types/BotioLivechat/IBotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
 import axios from "axios";
-import { conversationsMap2SortedArray, type ConversationsMap } from "./ConversationsMap";
-import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
-import type { ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
+import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation";
+import type { SendMessageResponse, ShopInformationResponse } from "@/types/BotioLivechat/RespondseBody";
 
 class BotioLivechat implements IBotioLivechat {
   botioRestApiUrl: string;
@@ -13,16 +11,27 @@ class BotioLivechat implements IBotioLivechat {
   shopID: string;
   websocketClient: WebSocket | null = null;
   _startTimestamp: number = 0;
-  constructor(botioRestApiUrl: string, botioWebsocketApiUrl: string, shopID: string, onmessageCallbacks: (data: MessageEvent<string>) => void) {
-    this.botioRestApiUrl = botioRestApiUrl;
-    this.botioWebsocketApiUrl = botioWebsocketApiUrl;
+  constructor(shopID: string) {
+    const rest_api_id = import.meta.env.VITE_BOTIO_REST_API_ID
+    if (!rest_api_id) {
+      throw new Error("Cannot find VITE_BOTIO_WEBSOCKET_API_ID in .env");
+    }
+    this.botioRestApiUrl = `https://${rest_api_id}.execute-api.ap-southeast-1.amazonaws.com/dev`;
+    this.botioWebsocketApiUrl = "";
     this.shopID = shopID;
-    this.connect(onmessageCallbacks);
   }
   async getShopInformation(shopID: string) {
     try {
-      const shopInformation: ShopInformation = (await axios.get(`${this.botioRestApiUrl}/shops/${shopID}`)).data
-      return shopInformation;
+      const res = await axios.get<ShopInformationResponse>(`${this.botioRestApiUrl}/shops/${shopID}`)
+      const shopInformation: ShopInformation = {
+        available_platforms: res.data.availablePages.map((page) => {
+          return {
+            platform_name: page.platformName,
+            page_id: page.pageID
+          }
+        })
+      }
+      return shopInformation
     } catch (error) {
       throw new Error("Error fetching shop information");
     }
@@ -50,11 +59,11 @@ class BotioLivechat implements IBotioLivechat {
     * @param pageID - ID of the page
     * @returns PageInformation of the page with given platform and pageID
     */
-  async getPageInformation(platform: string, pageID: string) {
+  async getPlatformInformation(platform: string, pageID: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}`;
     try {
       const response = await axios.get(url);
-      const information: PageInformation = response.data;
+      const information: PlatformInformation = response.data;
       return information;
     } catch (error) {
       throw new Error("Error fetching platform information");
@@ -77,17 +86,17 @@ class BotioLivechat implements IBotioLivechat {
   async listTemplates() {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates`
     const res = await axios.get<{ templates: ShopTemplate[] }>(url)
-    return res.data
+    return res.data.templates
   }
   async deleteTemplate(templateID: string) {
     const url = `${this.botioRestApiUrl}/shops/${this.shopID}/config/templates/${templateID}`
     const res = await axios.delete(url)
   }
-  async getAllPageInformation() {
+  async getAllPlatformInformation() {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/all`;
     try {
       const response = await axios.get(url);
-      const informations: AllPageInformation = response.data;
+      const informations: AllPlatformInformation = response.data;
       return informations;
     } catch (error) {
       throw new Error("Error fetching all platform information");
@@ -183,7 +192,7 @@ class BotioLivechat implements IBotioLivechat {
         pageID: pageID,
         platform: platform,
         conversationID: conversationID,
-        messageID: response.data.message_id,
+        messageID: response.data.messageID,
         timestamp: response.data.timestamp ?? Date.now(),
         message: text,
         source: {
@@ -202,7 +211,7 @@ class BotioLivechat implements IBotioLivechat {
 
   async sendImageMessage(platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
-    const imageUrl = await this.uploadImage(imageFile);
+    const imageUrl = await this.uploadImage(imageFile, true);
     const body: { attachment: { type: string, payload: { src: string } } } = {
       attachment: {
         type: "image",
@@ -212,14 +221,15 @@ class BotioLivechat implements IBotioLivechat {
       }
     }
     try {
-      const response = await axios.post(url, body);
+      const response = await axios.post<SendMessageResponse>(url, body);
+      const { data } = response
       const message: Message = {
         shopID: this.shopID,
         pageID: pageID,
         platform: platform,
         conversationID: conversationID,
-        messageID: response.data.message_id,
-        timestamp: response.data.timestamp ?? Date.now(),
+        messageID: data.messageID,
+        timestamp: data.timestamp ?? Date.now(),
         message: "",
         source: {
           userID: psid,
@@ -247,7 +257,7 @@ class BotioLivechat implements IBotioLivechat {
     const body = {
       attachment: attachment
     }
-    //console.log(JSON.stringify(body, null, 2))
+    // console.log(JSON.stringify(body, null, 2))
     try {
       await axios.post(url, body);
     } catch (error) {
@@ -258,18 +268,18 @@ class BotioLivechat implements IBotioLivechat {
 
   async searchConversationByName(platform: string, pageID: string, name: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_participants_username: name }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withParticipantsUsername: name }) } })
     return res.data.conversations
   }
   async searchConversationByMessage(platform: string, pageID: string, message: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}` + (platform != 'all' ? `/${pageID}/conversations/` : `/conversations`);
-    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ with_message: message }) } })
+    const res = await axios.get<{ conversations: Conversation[] }>(url, { params: { filter: JSON.stringify({ withMessage: message }) } })
     return res.data.conversations
   }
 
-  async uploadImage(imageFile: File) {
+  async uploadImage(imageFile: File, temporary: boolean = false) {
     const url: string = `${this.botioRestApiUrl}/upload_url`
-    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: false } })
+    const res = await axios.get<{ presignedURL: string }>(url, { params: { temporary: temporary } })
     const presignedURL = res.data.presignedURL
     const uploadRes = await axios.put(presignedURL, imageFile, { headers: { 'Content-Type': imageFile.type } })
     const imageUrl = presignedURL.split("?")[0]
@@ -279,7 +289,7 @@ class BotioLivechat implements IBotioLivechat {
   async searchMessageByText(conversation: Conversation, text: string) {
     const { conversationID, pageID, platform } = conversation
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`
-    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ with_message: text }) } })
+    const res = await axios.get<{ messages: Message[] }>(url, { params: { filter: JSON.stringify({ withMessage: text }) } })
     return res.data.messages
   }
 
@@ -303,4 +313,4 @@ class BotioLivechat implements IBotioLivechat {
   }
 }
 
-export { BotioLivechat };
+export default BotioLivechat

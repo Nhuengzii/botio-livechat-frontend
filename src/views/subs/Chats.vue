@@ -24,22 +24,22 @@
           <div class="mx-6 object-cover h-12 w-12 rounded-full">
 
             <!-- ProfileConversation -->
-            <img :src="currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
+            <img :src="messageStore.currentChat?.conversation.participants[0].profilePic.src" class="rounded-full" />
 
             <!-- show icon platform in ProfileConversation -->
-            <template v-if="currentChat?.conversation.participants[0].username">
+            <template v-if="messageStore.currentChat?.conversation.participants[0].username">
               <div class="absolute top-8 left-8 bg-white rounded-full flex w-[20px] h-[20px] items-center justify-center">
                 <!--show icon facebook -->
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'facebook'" :icon="['fab', 'facebook']"
-                  style="color: #2F58CD;" size="sm" />
+                <font-awesome-icon v-if="messageStore.currentChat.conversation.platform === 'facebook'"
+                  :icon="['fab', 'facebook']" style="color: #2F58CD;" size="sm" />
 
                 <!-- show icon instagram-->
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'instagram'" :icon="['fab', 'instagram']"
-                  style="color: #DF2E38;" size="sm" />
+                <font-awesome-icon v-if="messageStore.currentChat.conversation.platform === 'instagram'"
+                  :icon="['fab', 'instagram']" style="color: #DF2E38;" size="sm" />
 
                 <!-- show icon Line -->
-                <font-awesome-icon v-if="currentChat.conversation.platform === 'line'" :icon="['fab', 'line']"
-                  style="color: #38E54D;" size="sm" />
+                <font-awesome-icon v-if="messageStore.currentChat.conversation.platform === 'line'"
+                  :icon="['fab', 'line']" style="color: #38E54D;" size="sm" />
 
               </div>
             </template>
@@ -48,8 +48,9 @@
           <!-- show picture conversation -->
           <div class="flex-1">
             <div class="px-4 flex items-center justify-center">
-              <template v-if="currentChat?.conversation.participants[0].username">
-                <p class="font-semibold text-[18px] text-[#3C4048]">{{ currentChat?.conversation.participants[0].username
+              <template v-if="messageStore.currentChat?.conversation.participants[0].username">
+                <p class="font-semibold text-[18px] text-[#3C4048]">{{
+                  messageStore.currentChat?.conversation.participants[0].username
                 }}</p>
                 <div class="flex ml-auto items-center">
 
@@ -111,29 +112,28 @@
         ref="conversationRef">
 
         <template v-if="searchMode">
-          <MessageSearchResult :query="query" :conversation="currentChat!.conversation" />
+          <MessageSearchResult :query="query" :conversation="messageStore.currentChat!.conversation" />
         </template>
         <template v-else>
-          <template v-if="currentChat !== null">
+          <template v-if="messageStore.currentChat !== undefined">
             <InfiniteLoading @infinite="loadmore" :firstload="false" :top="true"
-              :identifier="currentChat?.conversation.conversationID">
-
+              :identifier="messageStore.currentChat?.conversation.conversationID">
+              
               <!-- show animation fetch old message-->
               <template #spinner>
-                <div class="flex justify-center pt-5 pb-3" v-if="isLoading">
-                  <span class="loader"></span>
+                <div class="flex justify-center pt-5 pb-3">
+                  <span v-if="messageStore.currentChat?.messages.length > 10" class="loader"></span>
                 </div>
-                <span v-else></span>
               </template>
 
               <!-- if not no more data message show profile -->
               <template #complete>
                 <div class="flex justify-center mt-2">
                   <img class="w-[100px] h-[100px] rounded-full"
-                    :src="currentChat.conversation.participants[0].profilePic.src" />
+                    :src="messageStore.currentChat?.conversation.participants[0].profilePic.src" />
                 </div>
                 <div class="flex justify-center text-[16px] font-bold mt-2">
-                  {{ currentChat.conversation.participants[0].username }}
+                  {{ messageStore.currentChat.conversation.participants[0].username }}
                 </div>
               </template>
 
@@ -141,7 +141,7 @@
           </template>
 
           <div class="grid grid-cols-12 gap-y-0.5" ref="messagesContainerRef">
-            <template v-for="(message, index, timestamp) in currentChat?.messages" :key="message.messageID">
+            <template v-for="(message, index, timestamp) in messageStore.currentChat?.messages" :key="message.messageID">
               <!-- if new messge conversation is not same last message show date-->
               <template v-if="isNewDay(index)">
                 <div class="col-start-5 col-end-9 py-8 px-4">
@@ -153,16 +153,17 @@
 
               <!-- Render the message content from user -->
               <template v-if="message.source.userType === 'user'">
-                <div v-if="currentChat" class="col-start-1 col-end-8 max-w-full">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation"
+                <div v-if="messageStore.currentChat" class="col-start-1 col-end-8 max-w-full" :id="message.messageID">
+                  <MessageBlock :message="message" :conversation="messageStore.currentChat.conversation"
                     :is-show-profile="shouldShowProfilePicture(index)" />
                 </div>
               </template>
 
               <!-- Render the message content from admin -->
               <template v-else>
-                <div v-if="currentChat" class="col-start-6 col-end-13">
-                  <MessageBlock :message="message" :conversation="currentChat.conversation" :is-show-profile="false" />
+                <div v-if="messageStore.currentChat" class="col-start-6 col-end-13" :id="message.messageID">
+                  <MessageBlock :message="message" :conversation="messageStore.currentChat.conversation"
+                    :is-show-profile="false" />
                 </div>
               </template>
 
@@ -173,8 +174,9 @@
       </main>
 
       <!-- send Message&Image create TemplateMessage -->
-      <template v-if="currentChat?.conversation.participants[0].username">
-        <MessageSender :platform="currentChat.conversation.platform" :converstion="currentChat.conversation" />
+      <template v-if="messageStore.currentChat?.conversation.participants[0].username">
+        <MessageSender :platform="messageStore.currentChat.conversation.platform"
+          :converstion="messageStore.currentChat.conversation" />
       </template>
 
     </div>
@@ -182,7 +184,6 @@
 </template>
 
 <script setup lang="ts">
-import { useLivechatStore } from "@/stores/livechat";
 import type { Conversation } from "@/types/conversation";
 import { storeToRefs } from "pinia";
 import { onMounted, onUpdated, ref, type Ref, onBeforeMount, nextTick, defineComponent, reactive, watch, } from "vue";
@@ -191,9 +192,7 @@ import MessageBlock from "@/components/MessageBlock.vue";
 import MessageSender from "@/components/MessageSender.vue";
 import MessageSearchResult from "@/components/MessageSearchResult.vue";
 import { getFormattedDate } from "@/lib/Time"
-const livechatStore = useLivechatStore()
-const { openChatEventBus, botioLivechat, currentChat, } = storeToRefs(livechatStore)
-const isLoading = ref(false)
+const messageStore = useMessageStore()
 const conversationRef = ref<HTMLElement | null>(null);
 const query = ref("");
 const querying = ref(false);
@@ -203,13 +202,13 @@ import "v3-infinite-loading/lib/style.css";
 const isFetchingMore = ref(false);
 const messagesContainerRef = ref<HTMLDivElement | null>(null);
 const searchMode = ref(false);
+const conversationStore = useConversationStore()
 
 
 
-async function loadmore($state) {
-  if (isLoading.value) return;
+async function loadmore($state: any) {
+  if (messageStore.currentChat === undefined) return;
   if (isFetchingMore.value) return;
-  console.log('load more')
   isFetchingMore.value = true;
   await new Promise((resolve) => {
     setTimeout(() => {
@@ -217,13 +216,11 @@ async function loadmore($state) {
     }, 1000);
   });
   isFetchingMore.value = false;
-  const currentSize = currentChat.value?.messages.length;
+  const currentSize = messageStore.currentChat?.messages.length;
   if (!currentSize) return;
-  const olderMessage = await livechatStore.fetchMoreMessages();
+  const olderMessage = await messageStore.fetchMoreMessages();
   $state.loaded()
-
-
-  const lastMid = currentChat.value?.messages[olderMessage?.length ?? 1 - 1].messageID;
+  const lastMid = messageStore.currentChat.messages[olderMessage?.length ?? 1 - 1].messageID;
   if (!lastMid) {
     return
 
@@ -231,14 +228,13 @@ async function loadmore($state) {
   const el = document.getElementById(lastMid);
   if (el) {
     nextTick(() => {
-      el.scrollIntoView({ behavior: "auto" });
+      el.scrollIntoView({});
     });
   };
   if (olderMessage?.length === 0) {
     $state.complete();
 
   }
-  console.log('load more done')
 }
 
 
@@ -246,6 +242,9 @@ async function loadmore($state) {
 import Vue3TabsChrome, { type Tab } from 'vue3-tabs-chrome'
 import '@/assets/vue3-tabs-chrome.css'
 import { onBeforeRouteUpdate } from "vue-router";
+import { useMessageStore } from "@/stores/message";
+import { useConversationStore } from "@/stores/conversation";
+import type { Message } from "@/types/message";
 defineComponent({
   components: {
     Vue3TabsChrome
@@ -259,7 +258,7 @@ const setTabRef = (el: HTMLElement) => {
   tabRef.value = el
 }
 function clearTab() {
-  currentChat.value = null
+  messageStore.$patch({ currentChat: undefined })
   // remove all tabs
   try {
     tabs.splice(0, tabs.length)
@@ -289,30 +288,32 @@ const handleAdd = (conversation: Conversation) => {
 }
 
 const handleClose = (tab: Tab, key: string, index: number) => {
-  livechatStore.closeChat(key)
+  messageStore.closeChat(key)
 }
 
 watch(tabKey, (newTab, oldTab) => {
   if (tabs.length === 0) {
-    livechatStore.currentChat = null;
+    messageStore.$patch({ currentChat: undefined })
     return;
   }
   if (newTab === null) {
     return;
   }
   const [platform, conversationID] = newTab.split("-");
-  livechatStore.markAsReadEventBus.emit(conversationID);
-  livechatStore.openChat(platform, conversationID);
+  const conversation = conversationStore.conversation(platform, conversationID);
+  if (conversation === undefined) {
+    console.warn(`conversation ${newTab} not found`)
+    return;
+  }
+  messageStore.openChat(conversation).then(() => {
+    scrollToLastMessage()
+  });
 })
 
 
 function openChat(conversation: Conversation) {
-  isLoading.value = true
+  // isLoading.value = true
   handleAdd(conversation)
-  livechatStore.fetchMessages(conversation.platform, conversation).then(() => {
-    console.log("fetch message success")
-    isLoading.value = false;
-  })
   setTimeout(() => {
     // scroll to bottom
     const el = document.getElementById("bottom_messages");
@@ -321,7 +322,20 @@ function openChat(conversation: Conversation) {
     }
   }, 1000)
 }
-openChatEventBus.value.on(openChat)
+
+function receiveMessage(message: Message) {
+  for (const tab of tabs) {
+    const [platform, conversationID] = tab.key.split("-");
+    if (conversationID === message.conversationID) {
+      messageStore.addMessage(message)
+      scrollToLastMessage()
+    }
+  }
+}
+messageStore.openChatEventBus.on(openChat)
+conversationStore.receiveMessageEventBus.on(receiveMessage)
+
+
 
 onBeforeRouteUpdate((to, from, next) => {
   console.log("before route update")
@@ -332,9 +346,12 @@ const isNewDay = (index: number): boolean => {
   if (index === 0) {
     return true;
   }
+  if (messageStore.currentChat === undefined) {
+    return true;
+  }
 
-  const previousMessage = currentChat.value?.messages[index - 1];
-  const currentMessage = currentChat.value?.messages[index];
+  const previousMessage = messageStore.currentChat.messages[index - 1];
+  const currentMessage = messageStore.currentChat?.messages[index];
 
   if (!previousMessage || !currentMessage) {
     return true;
@@ -362,8 +379,8 @@ const isNewDay = (index: number): boolean => {
 const shouldShowProfilePicture = (index: number): boolean => {
   if (index === 0) return true;
 
-  const previousMessage = currentChat.value?.messages[index - 1];
-  const currentMessage = currentChat.value?.messages[index];
+  const previousMessage = messageStore.currentChat?.messages[index - 1];
+  const currentMessage = messageStore.currentChat?.messages[index];
 
   if (!previousMessage || !currentMessage) return true; // Add null check
 
@@ -391,32 +408,23 @@ const scrollToLastMessage = () => {
   });
 };
 
-
-
-onMounted(() => {
-  scrollToLastMessage();
-})
-
-
-onUpdated(() => {
-  scrollToLastMessage();
-})
-
 watch([query], ([newQuery], [prevQuery]) => {
-  if (newQuery.length > 0) {
-    console.log('by-message')
-    if (!currentChat.value) {
-      return;
-    }
-    livechatStore.searchConversationByMessage(currentChat?.value.conversation.platform, query.value).then((result) => {
-    }
-    )
-    if (newQuery.length != prevQuery.length) {
-      searchMode.value = false
-    };
-  } else {
-    searchMode.value = false
-  }
+  //TODO
+  return
+  // if (newQuery.length > 0) {
+  //   console.log('by-message')
+  //   if (!messageStore.currentChat) {
+  //     return;
+  //   }
+  //   livechatStore.searchConversationByMessage(currentChat?.value.conversation.platform, query.value).then((result) => {
+  //   }
+  //   )
+  //   if (newQuery.length != prevQuery.length) {
+  //     searchMode.value = false
+  //   };
+  // } else {
+  //   searchMode.value = false
+  // }
 })
 
 </script>

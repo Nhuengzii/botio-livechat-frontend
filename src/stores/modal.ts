@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
+import BotioLivechat from "@/lib/BotioLivechat";
+import type { ShopTemplate } from "@/types/ShopInformation";
+import { useShopStore } from "./shop";
+import Swal from "sweetalert2";
 
-
-type ModalState = {
+interface ModalState {
     name: string;
     selectedTemplate: string;
     selectedFileImage: File;
     imagePreview: string;
     textUserInput: string;
     titleUserInput: string;
-    platform: string
+    platform: string;
     button: {
-        title: string
-        url: string
-    }
+        title: string;
+        url: string;
+    };
 
     buttonList: Button[];
     templateList: Template[];
@@ -20,38 +23,36 @@ type ModalState = {
     amountButton: number;
     isSaveButton: boolean;
     isAddButton: boolean;
-};
-
+    templateListRaw: ShopTemplate[];
+    listTemplateId: string[];
+    isFetchingTemplate: boolean;
+}
 
 type Button = {
-
-    id: number
+    id: number;
     title: string;
     url: string;
-    isSave: boolean
-
-}
+    isSave: boolean;
+};
 
 type Buttons = {
-    id: number
-    title: string
-    url: string
-}
-
+    id: number;
+    title: string;
+    url: string;
+};
 
 type Template = {
-    id: number
-    type: string
-    platform: string
+    id: string;
+    type: string;
+    platform: string;
     name: string;
     elements: {
         title: string;
         message: string;
         picture: string;
-        buttons: Buttons[]
-    }[]
-}
-
+        buttons: Buttons[];
+    }[];
+};
 
 export const useModalStore = defineStore("modal", {
     state: (): ModalState => ({
@@ -64,69 +65,133 @@ export const useModalStore = defineStore("modal", {
         platform: "",
         button: {
             title: "",
-            url: ""
+            url: "",
         },
         buttonList: [],
         templateList: [],
         isShowButtonCreate: false,
         amountButton: 1,
         isSaveButton: false,
-        isAddButton: false
-
+        isAddButton: false,
+        templateListRaw: [],
+        listTemplateId: [],
+        isFetchingTemplate: false,
     }),
+    getters: {
+        getTemplates: (state) => {
+            try {
+                const convertTemplates: Template[] = [];
+                const templates = state.templateListRaw;
+                templates.forEach((template) => {
+                    const parsedPayload = JSON.parse(template.payload);
+                    //console.log(state.platform);
+                    if (parsedPayload.platform === state.platform) {
+                        const templateData: Template = {
+                            id: template.templateID,
+                            type: parsedPayload.type,
+                            platform: parsedPayload.platform,
+                            name: parsedPayload.name,
+                            elements: [],
+                        };
+
+                        if (Array.isArray(parsedPayload.elements)) {
+                            templateData.elements = parsedPayload.elements.map(
+                                (element: any) => {
+                                    return {
+                                        title: element.title,
+                                        message: element.message,
+                                        picture: element.picture,
+                                        buttons: Array.isArray(element.buttons)
+                                            ? element.buttons.map((button: any) => {
+                                                return {
+                                                    id: button.id,
+                                                    title: button.title,
+                                                    url: button.url,
+                                                    isSave: button.isSave,
+                                                };
+                                            })
+                                            : [],
+                                    };
+                                }
+                            );
+                        }
+
+                        convertTemplates.push(templateData);
+                    }
+                });
+                return convertTemplates;
+            } catch (error) {
+                console.error("Error in convertTemplates getter:", error);
+                return [];
+            }
+        },
+    },
+
     actions: {
+        // fetch new templates if has add or delete template
+        async updatedDataTemplate() {
+            try {
+                const shopStore = useShopStore();
+                const botioLivechat = new BotioLivechat(shopStore.shop_id);
+
+                const loadingDelay = 100; // Adjust the delay time as needed
+                await new Promise((resolve) => setTimeout(resolve, loadingDelay));
+                const templateRaw = await botioLivechat.listTemplates();
+                this.templateListRaw.splice(0, this.templateListRaw.length);
+                this.templateListRaw.push(...templateRaw);
+
+            } catch (error) {
+                console.log("error in fetchDataTemplate");
+                console.error("Error occurred while loading template:", error);
+                throw error; // Rethrow the error to propagate it to the caller
+            }
+        },
+        async deleteTemplatebyID(id: string) {
+            console.log(this.templateListRaw)
+            const idx = this.templateListRaw.findIndex((template) => {
+                return template.templateID === id
+            })
+            if (idx === -1){
+                console.log("ssdsadsad")
+                return;
+            }
+            try {
+                // Perform the template deletion
+                const botioLivechat = new BotioLivechat(useShopStore().shop_id)
+                await botioLivechat.deleteTemplate(id)
+                //await modalStore.updatedDataTemplate();
+
+                // remove in template virtualization
+                this.templateListRaw.splice(idx, 1)
+                console.log(`getTtmplates: ${this.getTemplates.length}`)
+                // Show the success message
+            } catch (error) {
+                console.error('Error deleting template:', error);
+                // Show an error message using SweetAlert2
+            }
+        },
+
+        async fetchDataTemplates() {
+            try {
+                // Swal.showLoading();
+                
+                const shopStore = useShopStore();
+                const botioLivechat = new BotioLivechat(shopStore.shop_id);
+                const loadingDelay = 400; // Adjust the delay time as needed
+                await new Promise((resolve) => setTimeout(resolve, loadingDelay));
+                const templateRaw = await botioLivechat.listTemplates();
+                
+                this.templateListRaw.splice(0, this.templateListRaw.length);
+                this.templateListRaw.push(...templateRaw);
+
+            } catch (error) {
+                console.log("error in fetchDataTemplate");
+                console.error("Error occurred while loading template:", error);
+            }
+        },
         // what select template ? button or TextImage
         selectTemplate(template: string) {
             this.selectedTemplate = template;
-        },
-
-        // save value button in list
-        actionSaveButton() {
-            if (this.buttonList.length >= 3) {
-                return;
-            }
-            const newButton = {
-                title: this.button.title,
-                url: this.button.url,
-                id: Date.now(),
-                isSave: true
-
-            };
-
-            // Check if the button already exists in the buttonList
-            this.isSaveButton = true;
-            this.buttonList.push(newButton);
-            console.log("Button saved:", newButton);
-            this.button.url = "";
-            this.button.title = "";
-            // increase num button
-            this.amountButton++;
-            console.log(`isSaveButton: ${this.isSaveButton}`)
-        },
-        actionDeleteButton(index: number): void {
-            if (this.amountButton >= 0) {
-
-                this.buttonList.slice(index, 1)
-                this.amountButton--;
-            }
-            console.log("delete button")
-            console.log(JSON.stringify(this.buttonList, null, 2));
-        },
-
-
-        clickToAddButton() {
-            if (this.buttonList.length >= 3 || this.amountButton >= 3) {
-                this.isAddButton = false;
-                return;
-            }
-
-            this.amountButton++;
-            this.isAddButton = true;
-        },
-        // not use now
-        findTemplateWithId(templateId: number) {
-            const clickedTemplate = this.templateList.find(template => template.id === templateId)
-            return clickedTemplate
         },
 
         // reset state value
@@ -138,13 +203,14 @@ export const useModalStore = defineStore("modal", {
             this.button.title = "";
             this.button.url = "";
             this.name = "";
-            this.platform = "";
             this.buttonList = [];
             this.selectedTemplate = "";
             this.isShowButtonCreate = false;
             this.amountButton = 1;
         },
     },
+
 });
 
-export type { Template , Buttons}
+export type { Template, Buttons };
+

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, } from 'vue-router'
 import Livechat from '../views/Livechat.vue'
-import Empty from '../views/Empty.vue'
 import Root from '../views/Root.vue'
 
 const router = createRouter({
@@ -9,37 +8,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      component: () => Root
-    },
-    {
-      path: '/start',
-      name: 'start',
-      component: () => Empty
-    },
-    {
-      path: '/ordermars',
-      name: 'ordermars',
-      component: () => Empty
-    },
-    {
-      path: '/inventory',
-      name: 'inventory',
-      component: () => Empty
-    },
-    {
-      path: '/orders',
-      name: 'orders',
-      component: () => Empty
-    },
-    {
-      path: '/customize',
-      name: 'customize',
-      component: () => Empty
+      component: Root
     },
     {
       path: '/livechat',
       name: 'livechat',
-      component: () => Livechat
+      component: Livechat,
     },
   ]
 })

@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import { useUIStore } from './stores/UI';
+const uiStore = useUIStore()
+window.onfocus = () => {
+  window.document.title = "botio"
+  uiStore.is_window_focus = true
+}
+window.onblur = () => {
+  uiStore.is_window_focus = false
+}
 </script>
 
 <template >

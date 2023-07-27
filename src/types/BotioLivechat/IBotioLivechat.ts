@@ -1,12 +1,9 @@
-import type { Conversation } from "./conversation"
-import type { AttachmentForSending, Message } from "./message"
-import type { PageInformation, AllPageInformation } from "./pageInformation"
-import type { ShopConfig, ShopInformation, ShopTemplate } from "./ShopInformation"
+import type { Conversation } from "@/types/conversation"
+import type { AttachmentForSending, Message } from "@/types/message"
+import type { AllPlatformInformation, PlatformInformation, ShopConfig, ShopInformation, ShopTemplate } from "@/types/ShopInformation"
 
 interface IBotioLivechat {
   botioRestApiUrl: string
-  botioWebsocketApiUrl: string
-  websocketClient: WebSocket | null
   shopID: string
   listConversation: (platform: string, pageID: string, skip: number, limit: number) => Promise<Conversation[]>
   getConversation: (platform: string, pageID: string, conversationId: string) => Promise<Conversation | null>
@@ -16,19 +13,19 @@ interface IBotioLivechat {
   sendImageMessage: (platform: string, conversationID: string, pageID: string, psid: string, imageFile: File) => Promise<Message>
   sendAttachmentMessage: (platform: string, conversationID: string, pageID: string, psid: string, attachment: AttachmentForSending) => Promise<void>
   broadcastMessage: (platform: string, pageID: string, message: Message) => void
-  getPageInformation: (platform: string, pageID: string) => Promise<PageInformation>
+  getPlatformInformation: (platform: string, pageID: string) => Promise<PlatformInformation>
   getShopConfig: () => Promise<ShopConfig>
   saveTemplate: (payload: string) => Promise<string>
-  listTemplates: () => Promise<{ templates: ShopTemplate[] }>
+  listTemplates: () => Promise<ShopTemplate[]>
   deleteTemplate: (templateID: string) => Promise<void>
-  getAllPageInformation: () => Promise<AllPageInformation>
+  getAllPlatformInformation: () => Promise<AllPlatformInformation>
   searchConversationByName: (platform: string, pageID: string, name: string) => Promise<Conversation[]>
   searchConversationByMessage: (platform: string, pageID: string, message: string) => Promise<Conversation[]>
   searchMessageByText(conversation: Conversation, text: string): Promise<Message[]>
   connect: (onmessageCallback: (event: MessageEvent<any>) => void) => void
   markAsRead: (platform: string, pageID: string, conversationID: string) => Promise<void>
   getShopInformation: (shopID: string) => Promise<ShopInformation>
-  uploadImage: (imageFile: File) => Promise<string>
+  uploadImage: (imageFile: File, temporary: boolean) => Promise<string>
 }
 
 export default IBotioLivechat;

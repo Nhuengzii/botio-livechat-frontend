@@ -36,7 +36,7 @@ type AttachmentForSending = {
 }
 
 type FacebookTemplateGeneric = {
-  fb_template_generic: {
+  facebookTemplateGeneric: {
     title: string,
     message: string,
     picture: string,
@@ -51,7 +51,7 @@ type FacebookTemplateGeneric = {
 }
 
 type LineTemplateButtons = {
-  line_template_buttons: {
+  lineTemplateButtons: {
     altText: string,
     thumbnailImageUrl?: string,
     title?: string,
@@ -68,7 +68,7 @@ type LineTemplateButtons = {
 }
 
 type LineTemplateConfirm = {
-  line_template_confirm: {
+  lineTemplateConfirm: {
     altText: string,
     text: string,
     actions: {
@@ -79,7 +79,7 @@ type LineTemplateConfirm = {
 }
 
 type LineTemplateImageCarousel = {
-  line_template_image_carousel: {
+  lineTemplateImageCarousel: {
     altText: string,
     columns: {
       imageUrl: string,
@@ -92,7 +92,7 @@ type LineTemplateImageCarousel = {
 }
 
 type LineTemplateCarosel = {
-  line_template_carousel: {
+  lineTemplateCarosel: {
     altText: string,
     columns: {
       thumbnailImageUrl: string,
@@ -111,7 +111,7 @@ type LineTemplateCarosel = {
 }
 
 type InstagramTemplateGeneric = {
-  ig_template_generic: {
+  instagramTemplateGeneric: {
     title: string,
     message: string,
     picture: string,

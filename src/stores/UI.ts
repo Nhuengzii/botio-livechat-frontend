@@ -1,6 +1,4 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { PageInformation } from '@/types/pageInformation'
 
 export const useUIStore = defineStore('ui', {
     state: () => ({
@@ -9,9 +7,6 @@ export const useUIStore = defineStore('ui', {
         is_activeConversation: false,
         is_read: false,
         conversationsThreadMode: "normal",
-        availablesPlatforms: new Map<string, PageInformation>([
-            ['all', { unreadConversations: 0, allConversations: 0 }],
-        ]),
         is_activeTemplateMessage: false,
         is_typing: false,
         is_createTemplateMessage: false,
@@ -20,27 +15,14 @@ export const useUIStore = defineStore('ui', {
         is_selectTemplate: false,
         is_finishCreateTemplate: false,
         showEditModal: false,
+        is_window_focus: true
 
     }),
     getters: {
-        pageInformation(state) {
-            return (platform: string) => {
-                if (platform === 'all') {
-                    const sumUnreadConversations = Array.from(state.availablesPlatforms.values()).reduce((acc, cur) => acc + cur.unreadConversations, 0)
-                    const sumAllConversations = Array.from(state.availablesPlatforms.values()).reduce((acc, cur) => acc + cur.allConversations, 0)
-                    return { unreadConversations: sumUnreadConversations, allConversations: sumAllConversations }
-                } else {
-                    return state.availablesPlatforms.get(platform)!
-                }
-            }
-        }
     },
     actions: {
         ToggleMenu() {
             this.is_expanded = !this.is_expanded
-        },
-        addAvailablePlatform(platform: string, pageInformation: PageInformation) {
-            this.availablesPlatforms.set(platform, pageInformation);
         },
         activeButtonNav() {
             this.is_activeButton = !this.is_activeButton
@@ -49,7 +31,7 @@ export const useUIStore = defineStore('ui', {
             this.is_activeConversation = !this.is_activeConversation
         },
         activeTemplateMessage() {
-            this.is_activeTemplateMessage = !this.is_activeTemplateMessage
+            this.is_activeTemplateMessage = true
         },
         activeChagePage() {
             this.is_changePage = !this.is_changePage

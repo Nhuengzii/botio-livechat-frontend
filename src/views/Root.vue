@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import { useLivechatStore } from '@/stores/livechat';
+import { useShopStore } from '@/stores/shop';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-const livechatStore = useLivechatStore()
+const shopStore = useShopStore()
 const router = useRouter()
 function findShopID() {
   // custom logic
@@ -16,8 +16,8 @@ function findShopID() {
 }
 onMounted(() => {
   const shopID = findShopID()
-  livechatStore.setupBotioLivechat(shopID)
-  router.push({ path: "/livechat", query: { platform: "all" } })
+  shopStore.$patch({ shop_id: shopID })
+  router.replace({ path: "/livechat", query: { platform: "all" } })
 })
 </script>
 

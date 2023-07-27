@@ -4,8 +4,8 @@
     <button @click="uiStore.onClickTemplate(template.elements[0].default_action.url)">
       <div class="rounded-xl pt-8 pr-3">
         <template v-if="template.elements[0].image_url">
-          <div class="rounded-t-xl w-80 overflow-hidden">
-            <img :src="template.elements[0].image_url" class="object-cover w-full" alt="" @error="handleImageError(template.elements[0].image_url)">
+          <div class="rounded-t-xl w-80 h-52 overflow-hidden">
+            <img :src="template.elements[0].image_url" class="object-cover w-full h-full" alt="" @error="handleImageError(template.elements[0].image_url)">
           </div>
         </template>
         <div class="rounded-b-xl bg-gray-100 pt-4">

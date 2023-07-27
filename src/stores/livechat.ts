@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
-import { BotioLivechat } from "@/lib/BotioLivechat";
 import type { Conversation } from "@/types/conversation";
 import type { AttachmentForSending, Message } from "@/types/message";
-import type { AllPageInformation, PageInformation } from "@/types/pageInformation";
 import { conversationsMap2SortedArray } from "@/lib/ConversationsMap";
 import { useEventBus } from "@vueuse/core";
 import { computed, ref } from "vue";
@@ -20,6 +18,7 @@ const websocket_api_id = import.meta.env.VITE_BOTIO_WEBSOCKET_API_ID;
 if (websocket_api_id === undefined) {
   throw new Error("VITE_WEBSOCKET_API_ID is undefined");
 }
+
 
 
 export const useLivechatStore = defineStore("livechat", () => {
@@ -377,40 +376,3 @@ export const useLivechatStore = defineStore("livechat", () => {
   }
 })
 
-function messageToActivity(message: Message): string {
-  let activity = "";
-  if (message.attachments.length > 0) {
-    let aType = message.attachments[0].attachmentType;
-    switch (aType) {
-      case "image":
-        activity = "ส่งรูปภาพ";
-        break
-      case "video":
-        activity = "ส่งวิดีโอ";
-        break
-      case "sticker":
-        activity = "ส่งสติกเกอร์";
-        break
-      case "audio":
-        activity = "ส่งข้อความเสียง";
-        break
-      case "file":
-        activity = "ส่งไฟล์";
-        break
-      default:
-        activity = "ส่งเทมเพลต";
-        break;
-    }
-  }
-  else {
-    activity = message.message;
-  }
-  if (message.isDeleted) {
-    activity = "ยกเลิกข้อความ"
-  }
-  if (message.source.userType == 'user') {
-    return activity;
-  } else {
-    return `คุณ: ${activity}`;
-  }
-}

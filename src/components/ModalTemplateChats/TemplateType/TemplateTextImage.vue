@@ -2,13 +2,13 @@
     <div class="flex mx-2 my-4 px-4">
         <div class="bg-white  border-2 rounded-lg">
 
-            <div class="flex items-center justify-center w-72 h-44 bg-blue-700 rounded-t-lg">
+            <div class="flex items-center justify-center w-56 h-44 bg-blue-700 rounded-t-lg">
                 <img :src="modalStore.imagePreview" alt="" class="object-cover h-full w-full rounded-t-lg overflow-hidden" v-if="modalStore.imagePreview">
                 <p class="text-white" v-else>รูป</p>
                 
             </div>
 
-            <div class="border-b-2 flex flex-col items-start w-72">
+            <div class="border-b-2 flex flex-col items-start w-56">
                 <h1 class="break-all px-3 py-2 max-h-20  font-semibold text-ellipsis" v-if=" modalStore.titleUserInput">
                     {{  modalStore.titleUserInput }}
                 </h1>

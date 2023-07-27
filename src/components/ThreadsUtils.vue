@@ -4,7 +4,7 @@
       <div class="flex">
         <h1 class="text-slate-800">ข้อความทั้งหมด</h1>
         <h1 class="ml-5 bg-[#F94A2999] rounded-full px-2 font-semibold text-[#394867]">
-          {{ uiStore.pageInformation(platform)?.allConversations }} </h1>
+          {{ shopStore.platformInformation(platform)?.all_conversations }} </h1>
       </div>
       <div class="relative w-full mr-4 mt-4">
         <div class="absolute inset-y-0  left-0 flex items-center pl-4 pointer-events-none"
@@ -42,7 +42,9 @@
         :class="searchMode == 'by-message' ? 'ml-[15px]' : 'ml-[100px]'"></div>
 
       <div v-for="conversation in searchResult" :key="conversation.conversationID">
-        <Thread :conversation="conversation" :show-platform="platform == 'all'" mode="searching" />
+        <Thread :conversation="conversation" :show-platform="platform == 'all'" mode="searching" @click="() => {
+          messageStore.openChatEventBus.emit(conversation)
+        }" />
       </div>
     </div>
   </template>
@@ -51,12 +53,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useUIStore } from '@/stores/UI';
-import { useLivechatStore } from '@/stores/livechat';
-import { useRoute } from 'vue-router';
 import Thread from './Thread.vue';
 import type { Conversation } from '@/types/conversation';
+import { useShopStore } from '@/stores/shop';
+import type IBotioLivechat from '@/types/BotioLivechat/IBotioLivechat';
+import BotioLivechat from '@/lib/BotioLivechat';
+import { useMessageStore } from '@/stores/message';
 const uiStore = useUIStore();
-const livechatStore = useLivechatStore()
+const shopStore = useShopStore();
+const messageStore = useMessageStore()
 const searchResult = ref([] as Conversation[])
 const searchMode = ref('by-name')
 const query = ref("");
@@ -65,17 +70,23 @@ const { platform, mode } = defineProps<{
   platform: string,
 }>()
 const querying = ref(false)
+const botioLivechat: IBotioLivechat = new BotioLivechat(shopStore.shop_id)
 
 watch([query, searchMode], ([newQuery, newSearchMode], [prevQuery, prevSearchMode]) => {
   if (newQuery.length > 0) {
+    const pageID = shopStore.pageID(platform)
+    if (pageID === undefined) return
     if (newSearchMode === 'by-name') {
       console.log('by-name')
-      livechatStore.searchConversationByName(platform, query.value).then((result) => {
+      botioLivechat.searchConversationByName(platform, pageID, query.value).then((result) => {
+        if (result === undefined || result.length === 0) return;
+        console.log(result)
         searchResult.value = result
       })
     } else if (newSearchMode === 'by-message') {
       console.log('by-message')
-      livechatStore.searchConversationByMessage(platform, query.value).then((result) => {
+      botioLivechat.searchConversationByMessage(platform, pageID, query.value).then((result) => {
+        if (result === undefined || result.length === 0) return;
         searchResult.value = result
       })
     }

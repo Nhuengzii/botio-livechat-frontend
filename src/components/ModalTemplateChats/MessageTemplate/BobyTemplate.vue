@@ -1,281 +1,176 @@
 <template>
-    <div class="py-10 flex items-center">
-        <!-- search chat template -->
-        <div class="flex-[8] basis-auto bg-white py-4 mr-3 rounded-2xl shadow-sm">
-            <p class="px-8 color-gray-100">ค้นหาด้วย ชื่อ หรือรายละเอียดข้อความ</p>
-        </div>
+    <div class="flex flex-wrap">
+        <div v-for="template, index in  modalStoreRef.getTemplates.value" :key="template.id"
+            class="flex flex-col w-72 rounded-xl mx-2 my-2  items-center justify-items-center">
 
-        <!-- create chat template -->
-        <button @click="uiStore.activeCreateTemplateMessage"
-            class="flex flex-[1] basis-auto bg-[#00ABB3] py-2 px-4 justify-center items-center rounded-2xl">
-            <font-awesome-icon :icon="['fas', 'circle-plus']" size="2xl" />
-
-            <div class="rounded-2xl px-2 py-1">
-                <p class="text-white font-medium text-base">สร้างเทมเพลตข้อความสำหรับ</p>
-
-            </div>
-        </button>
-        <!-- end create chat template -->
-
-        <!-- space -->
-        <div class="flex-[5]"></div>
-        <!-- space -->
-    </div>
-    <div class="background-d9-250  flex flex-wrap">
-        <template v-if="shopconfig">
-
-            <div v-for="template, index in templateList" :key="template.id"
-                class="flex basis-auto w-96 bg-white rounded-xl mx-2 my-2 py-1 px-4 items-center">
-
+            <template v-if="template && template.elements && template.elements[0]">
                 <template v-if="template.platform === conversation.platform">
+                    <template v-if="template.type === 'Button'">
+                        <div class="my-4 px-4 bg-gray-200">
+                            <p class="justify-self-start text-center p-2 text-base font-medium bg-gray-200 w-full">{{
+                                template.name }}</p>
+                            <div class="bg-white border-2 rounded-lg">
+                                <div class="flex items-center justify-centerw-56 h-44 bg-blue-700 rounded-t-lg">
+                                    <img :src="template.elements[0].picture" alt=""
+                                        class="object-cover w-56 h-44 overflow-hidden"
+                                        v-if="template.elements[0].picture">
+                                    <p class="text-white" v-else> error cannot load image</p>
+                                </div>
+                                <div class="border-b-2 flex flex-col w-56 items-start px-3">
+                                    <h1 class="break-all  py-2 max-h-20  font-semibold text-ellipsis"
+                                        v-if="template.elements[0].title">
+                                        {{ template.elements[0].title }}
+                                    </h1>
 
-                    <div class="flex flex-[10] basis-auto py-2 justify-center items-center">
-                        <div class="flex justify-center items-center">
-                            <p>{{ template.name }}</p>
+                                    <p class="break-all  pb-4 max-h-32 text-ellipsis overflow-hidden"
+                                        v-if="template.elements[0].message">
+                                        {{ template.elements[0].message }}
+                                    </p>
+                                </div>
+                                <div v-for="( button, index )  in template.elements[0].buttons" :key="button.id"
+                                    class="flex flex-col">
+                                    <button class="bg-gray-100 hover:bg-gray-100 border-b-2 py-2 cursor-default">{{
+                                        button.title
+                                    }}</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center w-full pt-4">
+                                <div class="items-center justify-center">
+                                    <button @click="handleSendTemplate(index, template.platform)"
+                                        class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
+                                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
+                                        <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
+                                    </button>
+                                </div>
+                                <!-- edit template -->
+                                <!-- <div class="flex-[1] px-1 items-center justify-center">
+                                <button @click="" class="flex">
+                                    <font-awesome-icon :icon="['fas', 'pen']" />
+                                </button>
+                            </div> -->
+                            </div>
+                            <div class="flex px-2 pb-4 items-center justify-end w-full">
+                                <button class="flex" @click="handleDeletetemplate(template.id)">
+                                    <font-awesome-icon :icon="['fas', 'trash-can']" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+                    <template v-else-if="template.type === 'TextImage'">
+                        <div class="my-4 px-4 justify-self-end bg-gray-200">
+                            <p class="justify-self-start text-center p-2 text-base font-medium w-full">{{ template.name }}
+                            </p>
+                            <div class="bg-white  border-2 rounded-lg">
+                                <div class="flex items-center justify-center w-56 h-44 bg-blue-700 rounded-t-lg">
+                                    <img :src="template.elements[0].picture" alt=""
+                                        class="object-cover h-full w-full rounded-t-lg overflow-hidden">
+                                </div>
+                                <div class="border-b-2 flex flex-col items-start w-56">
+                                    <h1 class="break-all px-3 py-2 max-h-20  font-semibold text-ellipsis">
+                                        {{ template.elements[0].title }}
+                                    </h1>
+                                    <p class="break-all px-3 pb-4 min-h-32 max-h-48 text-ellipsis overflow-hidden">
+                                        {{ template.elements[0].message }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center w-full pt-4">
+                                <div class="items-center justify-center">
+                                    <button @click="handleSendTemplate(index, template.platform)"
+                                        class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
+                                        <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
+                                        <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
+                                    </button>
+                                </div>
+                                <!-- edit template -->
+                                <!-- <div class="flex-[1] px-1 items-center justify-center">
+                                <button @click="" class="flex">
+                                    <font-awesome-icon :icon="['fas', 'pen']" />
+                                </button>
+                            </div> -->
+                            </div>
+                            <div class="flex px-2 pb-4 items-center justify-end w-full">
+                                <button class="flex" @click="handleDeletetemplate(template.id)">
+                                    <font-awesome-icon :icon="['fas', 'trash-can']" />
+                                </button>
+                            </div>
+                        </div>
 
-                    <div class="flex flex-[2] basis-auto mx-1 justify-center items-center">
-                        <button @click="handleSendTemplate(index, template.platform)"
-                            class="flex py-1 px-1 rounded-2xl bg-blue-dark items-center justify-center hover:bg-blue-700">
-                            <font-awesome-icon icon="paper-plane" style="color: #00abad;" />
-                            <p class="text-sm font-semibold px-2 py-1 text-white">ส่งข้อความ</p>
-                        </button>
-                    </div>
-
-                    <!-- edit template -->
-                    <!-- <div class="flex-[1] px-1 items-center justify-center">
-                        <button @click="" class="flex">
-                            <font-awesome-icon :icon="['fas', 'pen']" />
-                        </button>
-                    </div> -->
-
-                    <!-- delete template-->
-                    <div class="flex-[1] px-1 items-center justify-center">
-                        <button class="flex" @click="deleteTemplatebyIndex(index)">
-                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                        </button>
-                    </div>
+                    </template>
 
                 </template>
-            </div>
-        </template>
-
+            </template>
+            <template v-else>
+                <!-- Handle the case when template or its elements are undefined -->
+                <p>Template data is not available or has an incorrect format.</p>
+                <div class="flex px-2 pb-4 items-center justify-end w-full">
+                    <button class="flex" @click="">
+                        <font-awesome-icon :icon="['fas', 'trash-can']" />
+                    </button>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { Conversation } from '@/types/conversation';
-import type { ShopConfig, ShopTemplate } from '@/types/ShopInformation';
-import type { Template, Buttons } from '@/stores/modal';
+import { useModalStore } from '@/stores/modal';
 import Swal from 'sweetalert2';
 
-const props = defineProps<{
+const { conversation } = defineProps<{
     conversation: Conversation
-    shopconfig: ShopConfig | undefined
-    isFetchTemplate: boolean
 }>()
 
 import type { AttachmentForSending, } from '@/types/message'
+import { useMessageStore } from '@/stores/message';
+import { storeToRefs } from 'pinia';
+const messageStore = useMessageStore()
+const modalStore = useModalStore()
+const modalStoreRef = storeToRefs(modalStore)
 
-import { useUIStore } from '@/stores/UI';
-import { useLivechatStore } from '@/stores/livechat';
-import { computed, reactive, ref, watch } from 'vue';
-
-const livechatstore = useLivechatStore()
-const uiStore = useUIStore()
-
-
-const templateList = ref<Template[]>([]);
-const listTemplateId = ref<string[]>([]);
-const isDelete = ref(false);
-const shopConfig = ref<ShopConfig>()
-const isFetchingTemplate = ref(false)
-//shopConfig.value = props.shopconfig
-
-const fetchNewDataTemplate = async () => {
-    try {
-        //isFetchingTemplate.value = true
-        const shopconfig = await livechatstore.botioLivechat?.getShopConfig();
-        isFetchingTemplate.value = false
-        if (typeof shopconfig !== 'undefined' && shopconfig !== null) {
-            //console.log(shopconfig);
-            return shopconfig;
-        } else {
-            throw new Error("ShopConfig is undefined");
-        }
-
-    } catch (error) {
-        console.log('error in fetchDataTemplate');
-        console.error("Error occurred while loading template:", error);
-        throw error; // Rethrow the error to propagate it to the caller
-    }
-};
-
-
-const platformLoadTemplate = async () => {
-    templateList.value = []
-    listTemplateId.value = []
-    isFetchingTemplate.value = true
-    if (isFetchingTemplate.value){
-        Swal.fire({
-                title: 'Loading Template',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-    }
-    shopConfig.value = await fetchNewDataTemplate();
-    
-    if (props.conversation.platform === "facebook") {
-        loadShopConfig.value(shopConfig.value, "facebook");
-    } else if (props.conversation.platform === "line") {
-        loadShopConfig.value(shopConfig.value, "line");
-    } else if (props.conversation.platform === "instagram") {
-        loadShopConfig.value(shopConfig.value, "instagram");
-    }
+const handleDeletetemplate = async (id: string) => {
+    Swal.fire({
+        title: `กำลังลบเทมเพลต`,
+        //html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    await modalStore.deleteTemplatebyID(id)
+    Swal.close();
+    Swal.fire({
+        icon: 'success',
+        title: 'ลบเทมเพลตสำเร็จ',
+        text: 'ลบเทมเพลตสำเร็จ',
+        timer: 1000,
+        timerProgressBar: true,
+    });
 }
 
 
-
-// loadind shopconfig & parsePayload in showconfig-data
-const loadShopConfig = computed(() => {
-    return (shopConfig?: ShopConfig, platform?: string) => {
-        //console.log(isFetchingTemplate.value)
-        if (shopConfig && !isFetchingTemplate.value) {
-            try {
-
-                shopConfig.templates.forEach((template) => {
-                    const existingTemplate = listTemplateId.value.find(
-                        (item) => item === template.id
-                    );
-                    if (!existingTemplate) {
-
-                        const parsedPayload = JSON.parse(template.payload);
-
-                        if (parsedPayload.platform === platform) {
-                            listTemplateId.value.push(template.id);
-
-                            const templateData: Template = {
-                                id: parsedPayload.id,
-                                type: parsedPayload.type,
-                                platform: parsedPayload.platform,
-                                name: parsedPayload.name,
-                                elements: parsedPayload.elements.map((element: any) => {
-                                    return {
-                                        title: element.title,
-                                        message: element.message,
-                                        picture: element.picture,
-                                        buttons: element.buttons.map((button: any) => {
-                                            return {
-                                                id: button.id,
-                                                title: button.title,
-                                                url: button.url,
-                                                isSave: button.isSave,
-                                            };
-                                        }),
-                                    };
-                                }),
-                            };
-                            // template list for virtualization
-                            templateList.value.push(templateData);
-                        }
-                    }
-
-                });
-
-                // Hide the SweetAlert loading dialog
-                Swal.close();
-            } catch (error) {
-                console.error('Error loading data templates:', error);
-                // Show an alert or notification indicating the error using SweetAlert2
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load data templates',
-                });
-            }
-        }
-    };
-});
-platformLoadTemplate()
-
-
-
-// watch(
-//     () => props.shopconfig, // Watch the shopConfig value
-//     async (newValue, oldValue) => {
-//         console.log(newValue?.templates.length, oldValue?.templates.length)
-//         templateList.value = []
-//         listTemplateId.value = []
-//         await fetchDataTemplate() // Call the loadShopConfig computed function
-//     }
-// );
-
-
-const deleteTemplatebyIndex = async (index: number): Promise<void> => {
-    try {
-        const templateID = listTemplateId.value[index];
-        console.log(`delete template index : ${index}`)
-        // Show the loading dialog
-
-        Swal.fire({
-            title: 'Deleting Template',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            },
-        });
-
-
-        // Perform the template deletion
-        isDelete.value = false
-        await livechatstore.botioLivechat?.deleteTemplate(templateID)
-
-        // remove in template virtualization
-        templateList.value.splice(index, 1)
-        console.log(`templateList : ${templateList}`)
-        console.log(`templateList length : ${templateList.value.length}`)
-
-        await fetchNewDataTemplate()
-        isDelete.value = true
-
-
-        // Show the success message
-        if (isDelete) {
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Template Deleted',
-                text: 'The template has been successfully deleted.',
-            });
-        }
-    } catch (error) {
-        console.error('Error deleting template:', error);
-        // Show an error message using SweetAlert2
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to delete the template.',
-        });
-    }
-}
 
 
 // function send template message to livechat
 const handleSendTemplate = async (index: number, platform: string) => {
-    const clickedTemplate = templateList.value[index]
-    //console.log(JSON.stringify(clickedTemplate.elements, null, 2))
-
+    Swal.fire({
+        title: 'กำลังส่งเทมเพลต',
+        //html: '<div class="d-flex justify-content-center align-items-center"><img src="loading-icon.png" alt="Loading Icon" class="mr-2"/></div>',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        },
+    });
+    const clickedTemplate = modalStore.getTemplates[index]
     if (platform === 'facebook') {
         try {
-            const attachmentFacebook = {
-                type: 'facebook-template-generic',
+            const attachmentFacebook: AttachmentForSending = {
+                type: 'facebookTemplateGeneric',
                 payload: {
-                    fb_template_generic: clickedTemplate.elements.map((element) => ({
+                    facebookTemplateGeneric: clickedTemplate.elements.map((element) => ({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
@@ -286,8 +181,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     })),
                 },
             };
-
-            await livechatstore.sendAttachmentMessage(props.conversation, attachmentFacebook);
+            await messageStore.sendAttachmentMessage(conversation, attachmentFacebook);
         } catch (error) {
             // Handle the error
             console.log('Error sending attachment:', error);
@@ -296,9 +190,9 @@ const handleSendTemplate = async (index: number, platform: string) => {
         if (clickedTemplate.type === 'Button') {
             try {
                 const attachmentLineButton: AttachmentForSending = {
-                    type: 'line-template-buttons',
+                    type: 'lineTemplateButtons',
                     payload: {
-                        line_template_buttons:
+                        lineTemplateButtons:
                         {
                             altText: clickedTemplate.elements[0].title,
                             thumbnailImageUrl: clickedTemplate.elements[0].picture,
@@ -316,7 +210,7 @@ const handleSendTemplate = async (index: number, platform: string) => {
                         }
                     },
                 }
-                livechatstore.sendAttachmentMessage(props.conversation, attachmentLineButton)
+                await messageStore.sendAttachmentMessage(conversation, attachmentLineButton)
 
             } catch (error) {
                 console.log('Error sending attachment:', error);
@@ -327,9 +221,9 @@ const handleSendTemplate = async (index: number, platform: string) => {
     } else if (platform == 'instagram') {
         try {
             const attachmentInstagram: AttachmentForSending = {
-                type: 'instagram-template-generic',
+                type: 'instagramTemplateGeneric',
                 payload: {
-                    ig_template_generic: clickedTemplate.elements.map((element) => ({
+                    instagramTemplateGeneric: clickedTemplate.elements.map((element) => ({
                         title: element.title,
                         message: element.message,
                         picture: element.picture,
@@ -340,11 +234,19 @@ const handleSendTemplate = async (index: number, platform: string) => {
                     }))
                 },
             }
-            livechatstore.sendAttachmentMessage(props.conversation, attachmentInstagram)
+            await messageStore.sendAttachmentMessage(conversation, attachmentInstagram)
         } catch (error) {
             console.log('Error sending attachment:', error);
         }
     }
+    Swal.close();
+    Swal.fire({
+        icon: 'success',
+        title: 'สร้างเทมเพลตสำเร็จ',
+        text: 'สร้างเทมเพลตสำเร็จ',
+        timer: 1000,
+        timerProgressBar: true,
+    });
 
 }
 
