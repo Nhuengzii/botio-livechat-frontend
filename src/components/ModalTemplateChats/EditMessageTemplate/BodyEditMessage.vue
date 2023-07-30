@@ -76,8 +76,7 @@
                 <template v-else>
                     <template v-if="buttonList.length >= 1 && buttonList.length <= 2">
                         <button v-show="amountButton <= 3" @click="clickToAddButton" :disabled="amountButton >= 3"
-                            class="rounded-full bg-gray-300 p-3">+
-                            button</button>
+                            class="rounded-full bg-gray-300 p-3">เพิ่มปุ่ม</button>
                     </template>
                 </template>
                 <div>
