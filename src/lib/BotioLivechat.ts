@@ -53,12 +53,6 @@ class BotioLivechat implements IBotioLivechat {
     }
     this.websocketClient.onmessage = onmessageCallback;
   }
-  /**
-    * Return a PageInformation of a given platform and pageID
-    * @param platform - Platform of the given page
-    * @param pageID - ID of the page
-    * @returns PageInformation of the page with given platform and pageID
-    */
   async getPlatformInformation(platform: string, pageID: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}`;
     try {
@@ -102,14 +96,6 @@ class BotioLivechat implements IBotioLivechat {
       throw new Error("Error fetching all platform information");
     }
   }
-  /**
-    * Return a list of Conversation of a given platform and pageID
-    * @param platform - Platform of the given page
-    * @param pageID - ID of the page
-    * @param skip - Number of conversations to skip
-    * @param limit - Number of conversations to return
-    * @returns List of Conversation of the page with given platform and pageID
-    */
   async listConversation(platform: string, pageID: string, skip: number = 0, limit: number = 50) {
 
     let conversations: Conversation[];
@@ -122,13 +108,6 @@ class BotioLivechat implements IBotioLivechat {
     }
     return conversations;
   }
-  /**
-    * Return a Conversation of a given platform, pageID and conversationID
-    * @param platform - Platform of the given page
-    * @param pageID - ID of the page
-    * @param conversationID - ID of the conversation
-    * @returns Conversation of the page with given platform, pageID and conversationID
-    */
   async getConversation(platform: string, pageID: string, conversationID: string) {
     let conversation: Conversation | null = null;
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}`;
@@ -146,15 +125,6 @@ class BotioLivechat implements IBotioLivechat {
     return conversation;
   }
 
-  /**
-  * Return a list of Message of a given platform, pageID and conversationID
-  * @param platform - Platform of the given page
-    * @param pageID - ID of the page
-    * @param conversationID - ID of the conversation
-    * @param skip - Number of messages to skip
-    * @param limit - Number of messages to return
-    * @returns List of Message of the page with given platform, pageID and conversationID
-  */
   async listMessage(platform: string, pageID: string, conversationID: string, skip: number = 0, limit = 20) {
     let messages: Message[];
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages`;
@@ -173,15 +143,6 @@ class BotioLivechat implements IBotioLivechat {
     return null
   }
 
-  /**
-  * Return a Message delivered to a given platform, pageID and conversationID
-  * @param platform - Platform of the given page
-    * @param pageID - ID of the page
-    * @param conversationID - ID of the conversation
-    * @param psid - PSID of the user
-    * @param text - Text of the message
-    * @returns Message delivered to the page with given platform, pageID and conversationID
-  */
   async sendTextMessage(platform: string, conversationID: string, pageID: string, psid: string, text: string) {
     const url: string = `${this.botioRestApiUrl}/shops/${this.shopID}/${platform}/${pageID}/conversations/${conversationID}/messages?psid=${psid}`;
     const body: { message: string } = { message: text }
