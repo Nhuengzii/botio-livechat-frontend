@@ -28,13 +28,6 @@ const { conversation, mode } = defineProps<{
 }>()
 const conversationStore = useConversationStore()
 const messageStore = useMessageStore()
-// const { currentChat } = storeToRefs(livechatStore)
-// livechatStore.markAsReadEventBus.on((readedConversationID) => {
-//   if (conversation.conversationID === readedConversationID) {
-//     livechatStore.markAsRead(conversation.platform, conversation.conversationID);
-//     conversation.unread = 0;
-//   }
-// })
 
 const updateTimeStatus = computed(() => {
   return getLastActivity(conversation.updatedTime)

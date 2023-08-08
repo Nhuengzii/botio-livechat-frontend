@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { useLivechatStore } from '@/stores/livechat';
 import { useUIStore } from '@/stores/UI';
 import Thread from '@/components/Thread.vue';
 import { storeToRefs } from 'pinia';

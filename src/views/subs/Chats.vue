@@ -408,24 +408,6 @@ const scrollToLastMessage = () => {
   });
 };
 
-watch([query], ([newQuery], [prevQuery]) => {
-  //TODO
-  return
-  // if (newQuery.length > 0) {
-  //   console.log('by-message')
-  //   if (!messageStore.currentChat) {
-  //     return;
-  //   }
-  //   livechatStore.searchConversationByMessage(currentChat?.value.conversation.platform, query.value).then((result) => {
-  //   }
-  //   )
-  //   if (newQuery.length != prevQuery.length) {
-  //     searchMode.value = false
-  //   };
-  // } else {
-  //   searchMode.value = false
-  // }
-})
 
 </script>
 
